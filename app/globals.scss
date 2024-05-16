@@ -1,0 +1,138 @@
+body {
+  margin: 0;
+  background-color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-family: var(--open-sans);
+}
+
+p {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-align: center;
+}
+
+.btn-site-color {
+  background-color: #933230;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: .5em;
+  margin-top: 2em;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@font-face {
+  font-family: 'BankGothic';
+  font-style: normal;
+  font-weight: 400;
+  src: local('BankGothic'), url(/fonts/bankgothic-regular.ttf) format('truetype');
+}
+
+.btn-text {
+  text-decoration: none;
+  display: flex;
+  text-align: center;
+  width: 40%;
+  max-width: 150px;
+  margin: 10px auto;
+  color: #933230;
+  font-size: 14px;
+  font-weight: 400;
+  box-shadow: 2.5px 2.5px 5px #eee;
+  background-color: white;
+  border: none;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.5s;
+  padding: 10px 0;
+
+  &:hover {
+    box-shadow: 0 0 5px #bbb;
+    transition: box-shadow 0.5s;
+  }
+}
+
+.simple-btn {
+  color: #933230 !important;
+  box-shadow: 1px 1px 2.5px #e9e9e9;
+
+  &:hover {
+    background-color: #fff8f8 !important;
+  }
+}
+
+.rdw-option-wrapper {
+  border-radius: 5px !important;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+input:focus-visible {
+  outline: none !important;
+  border-radius: none !important;
+}
+
+select:focus-visible {
+  border: none !important;
+  border-radius: none !important;
+  outline: none !important;
+}
+
+
+.fondo-publicidad {
+  &::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-image: url('/fondo-publi.jpg');
+    z-index: 0;
+    background-size: cover;
+    opacity: 0.2;
+    top: 0;
+    left: 0;
+  }
+}
+
+.blur-style-login {
+
+  background-color: rgba(95, 95, 95, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+.blur-style {
+  background-color: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(3px);
+}
+
+.item-list {
+  width: 100px;
+}
