@@ -1,11 +1,9 @@
 'use client';
-import { Badge, Box, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
+import { Badge, FormControlLabel, Grid, Radio, RadioGroup, Stack, SwipeableDrawer, useTheme } from "@mui/material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaFilter } from "react-icons/fa6";
-import { Negrita, Titulo } from "../componentes/Textos";
-import { BotonOutline, BotonSimple } from "../componentes/Botones";
+import { Titulo } from "../componentes/Textos";
+import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
 import { InputBox, ItemBox } from "../componentes/Datos";
@@ -16,20 +14,9 @@ interface Props {
 
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
-    const pathname = usePathname();
-    const theme = useTheme();
     const params = useSearchParams();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const { control, handleSubmit, setValue } = useForm({
-        defaultValues: {}
-    });
-    const onSubmit = ({ descuento, max, min }: any) => {
-        let filtros = ''
-
-        filtros = filtros + `descuento=${descuento}&max=${max}&min=${min}`
-        router.prefetch(pathname + '?' + filtros);
-        router.replace(pathname + '?' + filtros, { scroll: false });
-    }
+    const tipo = params.get('tipo') || '';
+    const modo = params.get('modo') || '';
 
     return (
         <>
@@ -42,7 +29,6 @@ const Filtros = ({ open, setOpen }: Props) => {
                 <Grid
                     container
                     component={'form'}
-                    onSubmit={handleSubmit(onSubmit)}
                     width={270}
                 >
                     <Grid display='flex' justifyContent='space-between' item xs={12} p={2} borderBottom='1px solid #ddd' >
@@ -50,26 +36,28 @@ const Filtros = ({ open, setOpen }: Props) => {
                             Filtros
                         </Titulo>
                         <Stack direction='row' >
-                            <Badge sx={{
+                            <Badge invisible={params.size == 0} sx={{
                                 '& .MuiBadge-badge': {
                                     right: 7,
                                     top: 7,
                                 },
                             }} color="info" variant="dot">
-                                <BotonSimple>
+                                <BotonSimple onClick={() => router.replace('/eventos')}>
                                     <IoReload fontSize={18} />
                                 </BotonSimple>
                             </Badge>
-                            <BotonSimple>
+                            <BotonSimple onClick={() => setOpen(false)}>
                                 <CgClose fontSize={18} />
                             </BotonSimple>
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
                         <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
-                            Tipo
+                            Modo
                         </Titulo>
-                        <RadioGroup>
+                        <RadioGroup value={modo} onChange={(ev) => {
+                            router.replace(`/eventos?modo=${ev.target.value}${params.has('tipo') ? '&tipo=' + params.get('tipo') : ''}`)
+                        }}>
                             <FormControlLabel
                                 value={'online'}
                                 sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
@@ -88,6 +76,10 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Titulo>
                         <InputBox
                             select
+                            value={tipo}
+                            onChange={(ev) => {
+                                router.replace(`/eventos?tipo=${ev.target.value}${params.has('modo') ? '&modo=' + params.get('modo') : ''}`)
+                            }}
                             SelectProps={{
                                 MenuProps: {
                                     slotProps: {

@@ -1,6 +1,7 @@
 import Cliente from './Cliente';
 import Navbar from '../static/Navbar';
-import { Box, Typography,  } from "@mui/material";
+import { Box, Typography, } from "@mui/material";
+import Footer from '../static/Footer';
 export default function Home() {
     return (
         <Box bgcolor='#f4f6f8'>
@@ -10,6 +11,9 @@ export default function Home() {
             </Box>
 
             <Cliente></Cliente>
+            <Box mt={10}>
+                <Footer />
+            </Box>
         </Box>
     );
 }

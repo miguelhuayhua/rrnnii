@@ -1,11 +1,8 @@
 'use client';
-import { Badge, Box, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaFilter } from "react-icons/fa6";
-import { Negrita, Titulo } from "../componentes/Textos";
-import { BotonOutline, BotonSimple } from "../componentes/Botones";
+import { Badge, FormControlLabel, Grid, Radio, RadioGroup, Stack, SwipeableDrawer } from "@mui/material";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Titulo } from "../componentes/Textos";
+import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
 import { InputBox, ItemBox } from "../componentes/Datos";
@@ -16,9 +13,9 @@ interface Props {
 
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
-    const pathname = usePathname();
-    const theme = useTheme();
     const params = useSearchParams();
+    const tipo = params.get('tipo') || '';
+    const carrera = params.get('carrera') || '';
     return (
         <>
             <SwipeableDrawer
@@ -38,12 +35,12 @@ const Filtros = ({ open, setOpen }: Props) => {
                                     right: 7,
                                     top: 7,
                                 },
-                            }} color="info" variant="dot">
-                                <BotonSimple>
+                            }} color="info" variant="dot" invisible={params.size == 0}>
+                                <BotonSimple onClick={() => router.replace('/convenios')}>
                                     <IoReload fontSize={18} />
                                 </BotonSimple>
                             </Badge>
-                            <BotonSimple>
+                            <BotonSimple onClick={() => setOpen(false)}>
                                 <CgClose fontSize={18} />
                             </BotonSimple>
                         </Stack>
@@ -53,7 +50,12 @@ const Filtros = ({ open, setOpen }: Props) => {
                             Carrera
                         </Titulo>
                         <InputBox
+                            value={carrera}
+                            defaultValue={''}
                             select
+                            onChange={(ev) => {
+                                router.replace(`/convenios?carrera=${ev.target.value}${params.has('tipo') ? '&tipo=' + params.get('tipo') : ''}`)
+                            }}
                             SelectProps={{
                                 MenuProps: {
                                     slotProps: {
@@ -71,21 +73,22 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 }
                             }}
                         >
-
                             <ItemBox value='inge'>Ingeniería de Sistemas</ItemBox>
                         </InputBox>
                         <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
                             Tipo
                         </Titulo>
-                        <RadioGroup>
+                        <RadioGroup value={tipo} onChange={(ev) => {
+                            router.replace(`/convenios?tipo=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}`)
+                        }}>
                             <FormControlLabel
-                                value={'hombre'}
+                                value={'nacional'}
                                 sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Nacionales'}
                             />
                             <FormControlLabel
-                                value={'mujer'}
+                                value={'internacional'}
                                 sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Internacionales'}

@@ -30,6 +30,8 @@ const Filtros = ({ open, setOpen }: Props) => {
         router.prefetch(pathname + '?' + filtros);
         router.replace(pathname + '?' + filtros, { scroll: false });
     }
+    const carrera = params.get('carrera') || '';
+    const duracion = params.get('duracion') || '';
 
     return (
         <>
@@ -55,22 +57,28 @@ const Filtros = ({ open, setOpen }: Props) => {
                                     right: 7,
                                     top: 7,
                                 },
-                            }} color="info" variant="dot">
-                                <BotonSimple>
+                            }} color="info" variant="dot" invisible={params.size == 0}>
+                                <BotonSimple onClick={() => {
+                                    router.replace('/pasantias');
+                                }}>
                                     <IoReload fontSize={18} />
                                 </BotonSimple>
                             </Badge>
-                            <BotonSimple>
+                            <BotonSimple onClick={() => setOpen(false)}>
                                 <CgClose fontSize={18} />
                             </BotonSimple>
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
                         <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
-                            Carrera
+                            Tipo
                         </Titulo>
                         <InputBox
                             select
+                            value={carrera}
+                            onChange={(ev) => {
+                                router.replace(`/pasantias?carrera=${ev.target.value}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
+                            }}
                             SelectProps={{
                                 MenuProps: {
                                     slotProps: {
@@ -94,7 +102,9 @@ const Filtros = ({ open, setOpen }: Props) => {
                         <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
                             Duración
                         </Titulo>
-                        <RadioGroup>
+                        <RadioGroup value={duracion} onChange={(ev) => {
+                            router.replace(`/pasantias?duracion=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}`)
+                        }}>
                             <FormControlLabel
                                 value={'3'}
                                 sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
