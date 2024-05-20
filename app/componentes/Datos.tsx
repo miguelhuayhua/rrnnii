@@ -7,7 +7,7 @@ const InputBox = styled(TextField)(() => {
         },
         width: "100%",
         ".MuiInputBase-root": {
-            borderRadius: 7.5,
+            borderRadius: 12,
             color: '#333',
             fontSize: 14,
             fontWeight: 400,
@@ -27,26 +27,33 @@ const InputBox = styled(TextField)(() => {
             fontSize: 14,
         },
         fieldset: {
-            border: '1px solid #dfdfdf'
+            border: '1px solid #e1e4e7'
         },
         "svg": {
             color: '#999',
             margin: '0 10px 0px 0'
+        },
+        '.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black'
         }
     }
 });
 const ItemBox = styled(MenuItem)(() => {
     return {
         fontSize: 14,
-        "&.Mui-selected": {
+        "&.MuiButtonBase-root": {
             background: 'none',
             borderRadius: 10,
-            width: "98%",
+            width: "95%",
+            margin: 'auto',
             mx: 'auto',
             "&:hover": {
                 background: '#f7f7f7'
             },
-        }
+
+        },
+
+
     }
 });
 export { InputBox, ItemBox };

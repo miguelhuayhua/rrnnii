@@ -19,6 +19,18 @@ const Filtros = ({ open, setOpen }: Props) => {
     const pathname = usePathname();
     const theme = useTheme();
     const params = useSearchParams();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const { control, handleSubmit, setValue } = useForm({
+        defaultValues: {}
+    });
+    const onSubmit = ({ descuento, max, min }: any) => {
+        let filtros = ''
+
+        filtros = filtros + `descuento=${descuento}&max=${max}&min=${min}`
+        router.prefetch(pathname + '?' + filtros);
+        router.replace(pathname + '?' + filtros, { scroll: false });
+    }
+
     return (
         <>
             <SwipeableDrawer
@@ -27,7 +39,12 @@ const Filtros = ({ open, setOpen }: Props) => {
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}
             >
-                <Grid container width={270}>
+                <Grid
+                    container
+                    component={'form'}
+                    onSubmit={handleSubmit(onSubmit)}
+                    width={270}
+                >
                     <Grid display='flex' justifyContent='space-between' item xs={12} p={2} borderBottom='1px solid #ddd' >
                         <Titulo sx={{ fontSize: 15 }}>
                             Filtros
@@ -50,7 +67,24 @@ const Filtros = ({ open, setOpen }: Props) => {
                     </Grid>
                     <Grid item xs={12} p={2}>
                         <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
-                            Carrera
+                            Tipo
+                        </Titulo>
+                        <RadioGroup>
+                            <FormControlLabel
+                                value={'online'}
+                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
+                                control={<Radio />}
+                                label={'Online'}
+                            />
+                            <FormControlLabel
+                                value={'presencial'}
+                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
+                                control={<Radio />}
+                                label={'Presencial'}
+                            />
+                        </RadioGroup>
+                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
+                            Tipo
                         </Titulo>
                         <InputBox
                             select
@@ -71,26 +105,8 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 }
                             }}
                         >
-
-                            <ItemBox value='inge'>Ingeniería de Sistemas</ItemBox>
+                            <ItemBox value='taller'>Taller</ItemBox>
                         </InputBox>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
-                            Tipo
-                        </Titulo>
-                        <RadioGroup>
-                            <FormControlLabel
-                                value={'hombre'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
-                                control={<Radio />}
-                                label={'Nacionales'}
-                            />
-                            <FormControlLabel
-                                value={'mujer'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
-                                control={<Radio />}
-                                label={'Internacionales'}
-                            />
-                        </RadioGroup>
                     </Grid>
                 </Grid>
             </SwipeableDrawer >

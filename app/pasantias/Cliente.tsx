@@ -4,9 +4,10 @@ import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
-import Convenio from "../componentes/items/Convenio";
-import Filtros from "./Filtros";
 import { Suspense, useState } from "react";
+import Evento from "../componentes/items/Eventos";
+import Filtros from "./Filtro";
+import Pasantia from "../componentes/items/Pasantia";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
 
@@ -26,15 +27,15 @@ const Cliente = () => {
                         }}
                         sx={{ height: 52.5, float: 'right' }} endIcon={<FiFilter></FiFilter>}>Filtros</BotonSimple>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Convenio />
+                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <Pasantia />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Convenio />
+                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                    <Pasantia />
                 </Grid>
             </Grid>
             <Suspense>
-                <Filtros open={open} setOpen={setOpen} />
+                <Filtros setOpen={setOpen} open={open} />
             </Suspense>
         </>
     )
