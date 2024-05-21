@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/legacy/image';
 import AppBar from '@mui/material/AppBar';
-import { Button, Tooltip, useScrollTrigger, Typography, Grid, Stack, LinearProgress } from '@mui/material';
+import { Button, Tooltip, useScrollTrigger, Typography, Grid, Stack, LinearProgress, Drawer } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -13,6 +13,8 @@ import { FaUser } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
 import { BotonSimple } from '../componentes/Botones';
 import { Negrita, Normal } from '../componentes/Textos';
+import { HiMiniBars3BottomRight, HiOutlineBars3BottomLeft } from 'react-icons/hi2';
+import ModalLogin from './ModalLogin';
 //estilos
 
 
@@ -28,6 +30,8 @@ const Navbar = () => {
         setY(scrollY)
 
     }, []);
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
         // remove event on unmount to prevent a memory leak with the cleanup
@@ -82,13 +86,13 @@ const Navbar = () => {
                         </Box>
                     </Link>
                     <Box display='flex' alignItems='center'>
-                        <Link href={''}>
-                            <Typography sx={{ color: pathname == '/' ? '#c5080c' : '#2f3842', fontSize: 13, mr: 3 }}>
-                                {pathname == '/' ? <GoDotFill color='inherit' /> : null}
-                                Principal
-                            </Typography>
-                        </Link>
-                        <Stack direction='row' spacing={2} mr={2}>
+                        <Stack display={{ xs: 'none', md: 'flex' }} direction='row' spacing={2} mr={2}>
+                            <Link href={''}>
+                                <Typography sx={{ color: pathname == '/' ? '#c5080c' : '#2f3842', fontSize: 13 }}>
+                                    {pathname == '/' ? <GoDotFill color='inherit' /> : null}
+                                    Principal
+                                </Typography>
+                            </Link>
                             <Tooltip
                                 PopperProps={{
                                     sx: {
@@ -188,13 +192,32 @@ const Navbar = () => {
                                 </Typography>
                             </Link>
                         </Stack>
-                        <BotonSimple>
+                        <BotonSimple onClick={() => {
+                            setOpen2(true);
+                        }}>
                             <FaUser fontSize={20} />
+                        </BotonSimple>
+
+                        <BotonSimple sx={{ height: 40, display: { xs: 'block', md: 'none' } }} onClick={() => {
+                            setOpen(true);
+                        }}>
+                            <HiOutlineBars3BottomLeft fontSize={27} />
                         </BotonSimple>
                     </Box>
                 </Container>
             </AppBar >
 
+            <Drawer open={open} onClose={() => setOpen(false)}>
+                <Link href={''}>
+                    <Typography sx={{ color: pathname == '/' ? '#c5080c' : '#2f3842', fontSize: 13, mr: 3 }}>
+                        {pathname == '/' ? <GoDotFill color='inherit' /> : null}
+                        Principal
+                    </Typography>
+                </Link>
+            </Drawer>
+            <ModalLogin setOpen={setOpen2} open={open2}>
+
+            </ModalLogin>
         </>
     )
 }

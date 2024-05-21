@@ -27,10 +27,10 @@ const Cliente = () => {
                         }}
                         sx={{ height: 52.5, float: 'right' }} endIcon={<FiFilter></FiFilter>}>Filtros</BotonSimple>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                <Grid item xs={12} md={6} lg={4} >
                     <Pasantia />
                 </Grid>
-                <Grid item xs={12} sm={6} lg={4} xl={3}>
+                <Grid item xs={12} md={6} lg={4} >
                     <Pasantia />
                 </Grid>
             </Grid>

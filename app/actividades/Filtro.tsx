@@ -19,10 +19,20 @@ const Filtros = ({ open, setOpen }: Props) => {
     const pathname = usePathname();
     const theme = useTheme();
     const params = useSearchParams();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const { control, handleSubmit, setValue } = useForm({
+        defaultValues: {}
+    });
+    const onSubmit = ({ descuento, max, min }: any) => {
+        let filtros = ''
 
+        filtros = filtros + `descuento=${descuento}&max=${max}&min=${min}`
+        router.prefetch(pathname + '?' + filtros);
+        router.replace(pathname + '?' + filtros, { scroll: false });
+    }
     const carrera = params.get('carrera') || '';
     const duracion = params.get('duracion') || '';
-    const orden = params.get('orden') || '';
+
     return (
         <>
             <SwipeableDrawer
@@ -31,7 +41,12 @@ const Filtros = ({ open, setOpen }: Props) => {
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}
             >
-                <Grid container width={270}>
+                <Grid
+                    container
+                    component={'form'}
+                    onSubmit={handleSubmit(onSubmit)}
+                    width={270}
+                >
                     <Grid display='flex' justifyContent='space-between' item xs={12} p={2} borderBottom='1px solid #ddd' >
                         <Titulo sx={{ fontSize: 15 }}>
                             Filtros
@@ -56,12 +71,14 @@ const Filtros = ({ open, setOpen }: Props) => {
                     </Grid>
                     <Grid item xs={12} p={2}>
                         <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
-                            Carrera
+                            Tipo
                         </Titulo>
                         <InputBox
                             select
                             value={carrera}
-                            onChange={(ev) => { router.replace(`/pasantias?carrera=${ev.target.value}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}${params.has('orden') ? '&orden=' + params.get('orden') : ''}`) }}
+                            onChange={(ev) => {
+                                router.replace(`/pasantias?carrera=${ev.target.value}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
+                            }}
                             SelectProps={{
                                 MenuProps: {
                                     slotProps: {
@@ -80,13 +97,15 @@ const Filtros = ({ open, setOpen }: Props) => {
                             }}
                         >
 
-                            <ItemBox value='inge'>Ingeniería de Sistemas</ItemBox>
+                            <ItemBox value='inge'>Becas</ItemBox>
+                            <ItemBox value='inge'>Noticias</ItemBox>
+                            <ItemBox value='inge'>Idiomas</ItemBox>
                         </InputBox>
                         <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
                             Duración
                         </Titulo>
                         <RadioGroup value={duracion} onChange={(ev) => {
-                            router.replace(`/pasantias?duracion=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('orden') ? '&orden=' + params.get('orden') : ''}`)
+                            router.replace(`/pasantias?duracion=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'3'}
@@ -99,25 +118,6 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'6 meses'}
-                            />
-                        </RadioGroup>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
-                            Orden
-                        </Titulo>
-                        <RadioGroup value={orden} onChange={(ev) => {
-                            router.replace(`/pasantias?orden=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
-                        }}>
-                            <FormControlLabel
-                                value={'reciente'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
-                                control={<Radio />}
-                                label={'Más recientes'}
-                            />
-                            <FormControlLabel
-                                value={'antiguo'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
-                                control={<Radio />}
-                                label={'Más antiguos'}
                             />
                         </RadioGroup>
                     </Grid>

@@ -13,10 +13,7 @@ const Pasantia = () => {
     return (
         <Grid container bgcolor='white' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
             <Grid xs={7} py={3} px={2}>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
-                    <ChipBox sx={{ margin: 0, bgcolor: '#0073b7', color: 'white' }} label='3 meses'></ChipBox>
-                    <Normal sx={{ fontSize: 12 }}>11 May 2024</Normal>
-                </Box>
+                <ChipBox sx={{ margin: 0, bgcolor: '#0073b7', color: 'white' }} label='3 meses'></ChipBox>
                 <Link href='/'>
                     <Negrita sx={{ color: '#212b36' }} mt={2}>
                         Pasantia Productivo para becarios de Francia
@@ -25,11 +22,13 @@ const Pasantia = () => {
                 <Normal py={2}>
                     Vea la última pasantía del siglo
                 </Normal>
-
+                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999' }}>
+                    Válido hasta: 21 feb 2024
+                </Normal>
                 <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999' }}>
                     Publicado el: 23 de Marzo de 2023
                 </Normal>
-                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999', pb: 2 }}>
+                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999', py: 1 }}>
                     <FaBuilding /> Cainco
                 </Normal>
                 <Divider sx={{ borderColor: '#eee' }} />

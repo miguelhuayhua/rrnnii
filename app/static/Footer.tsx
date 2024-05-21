@@ -38,7 +38,7 @@ const Footer = () => {
     }, []);
     return (
         <>
-            <Grid container component='footer' px={16}>
+            <Grid container component='footer' px={{ xs: 1, md: 5, lg: 16 }}>
                 <Grid xs={6}>
                     <BsPhone fontSize={30} color='#888' />
                     <Normal variant='body1'>

@@ -7,6 +7,7 @@ import { FiFilter } from "react-icons/fi";
 import Convenio from "../componentes/items/Convenio";
 import { useState } from "react";
 import Actividad from "../componentes/items/Actividad";
+import Filtros from "./Filtro";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
 
@@ -33,6 +34,7 @@ const Cliente = () => {
                     <Actividad />
                 </Grid>
             </Grid>
+            <Filtros setOpen={setOpen} open={open} />
         </>
     )
 }
