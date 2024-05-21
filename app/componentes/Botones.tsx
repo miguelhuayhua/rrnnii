@@ -12,7 +12,19 @@ const BotonOutline = styled(Button)(() =>
     minWidth: 0,
     "&:hover": { background: '#212b36dd', color: 'white' }
 }));
-
+const BotonFilled = styled(Button)(() =>
+({
+    background: '#212b36',
+    fontSize: 14,
+    px: 2,
+    borderRadius: 12,
+    color: 'white',
+    textTransform: 'none',
+    fontWeight: 700,
+    "&:hover": { background: '#212b36dd' },
+    minWidth:0
+}
+));
 const BotonSimple = styled(Button)(() =>
 ({
     background: 'transparent',
@@ -25,4 +37,4 @@ const BotonSimple = styled(Button)(() =>
     "&:hover": { color: '#666' }
 }));
 
-export { BotonOutline, BotonSimple };
+export { BotonOutline, BotonSimple, BotonFilled };

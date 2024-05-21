@@ -28,7 +28,7 @@ const Cliente = () => {
     }, []);
     return (
         <>
-            <Box display='flex' px={{ xs: 1, md: 5, lg: 20, }} height={{ xs: 600, md: 700, lg: 800 }} position='relative' overflow={'hidden'} >
+            <Box display='flex' px={{ xs: 0, md: 5, lg: 20, }} height={{ xs: 600, md: 700, lg: 800 }} position='relative' overflow={'hidden'} >
                 <Box width="50%" sx={{ opacity: 1 - y * 0.0015, top: y * 0.1 }} position='relative'>
                     <Image alt="fondo monolito" layout="fill" src='/monolito.png' objectFit="fill" className="monolito" style={{ transform: `perspective(500px) rotateX(${y * 0.5}deg) rotateY(25deg)` }} />
                     <Box px={{ xs: 2, xl: 16 }} py={{ xs: 10, sm: 10, md: 20 }} >
@@ -130,13 +130,13 @@ const Cliente = () => {
                 <div className="dec-left third"></div>
             </Box>
             <Box py={10}>
-                <Titulo sx={{ textAlign: 'center', fontSize: 18, py: 2 }}>
+                <Titulo sx={{ textAlign: 'center', fontSize: { xs: 14, md: 18 }, py: 2 }}>
                     ¿Tienes dudas?
                 </Titulo>
                 <Button startIcon={<BsWhatsapp style={{ fontSize: 20 }} />}
                     sx={{ display: 'flex', mx: 'auto', background: '#212b36', fontSize: 14, px: 2, borderRadius: 3, color: 'white', textTransform: 'none', fontWeight: 700, "&:hover": { background: '#212b36dd' } }}
                 >
-                    Contactarme
+                    Contactanos
                 </Button>
             </Box>
             <Footer />

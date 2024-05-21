@@ -17,7 +17,7 @@ const InputBox = styled(TextField)(() => {
             },
         },
         ".MuiFormLabel-root": {
-            color: '#071a28',
+            color: 'black !important',
             fontSize: 14,
             fontfamily: 'inherit',
             fontWeight: 600,

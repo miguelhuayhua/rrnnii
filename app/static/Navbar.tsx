@@ -6,15 +6,20 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Link from 'next/link';
-import { FaAngleDown } from "react-icons/fa";
+import { FaAngleDown, FaNewspaper } from "react-icons/fa";
 import { usePathname } from 'next/navigation';
-import { GoDotFill } from "react-icons/go";
+import { GoDotFill, GoHomeFill } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
 import { BotonSimple } from '../componentes/Botones';
 import { Negrita, Normal } from '../componentes/Textos';
 import { HiMiniBars3BottomRight, HiOutlineBars3BottomLeft } from 'react-icons/hi2';
 import ModalLogin from './ModalLogin';
+import { BiDownArrow, BiHome } from 'react-icons/bi';
+import { RiGalleryView2 } from 'react-icons/ri';
+import { IoPeople } from 'react-icons/io5';
+import { PiDotOutlineFill, PiSquaresFourFill } from 'react-icons/pi';
+import { LuDot } from 'react-icons/lu';
 //estilos
 
 
@@ -32,6 +37,7 @@ const Navbar = () => {
     }, []);
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
+    const [open3, setOpen3] = useState(false);
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
         // remove event on unmount to prevent a memory leak with the cleanup
@@ -79,7 +85,7 @@ const Navbar = () => {
                                 <Normal sx={{ fontSize: 11, textAlign: 'start' }}>
                                     Relaciones  Internacionales
                                 </Normal>
-                                <Negrita sx={{ color: '#666' }}>
+                                <Negrita sx={{ color: '#333' }}>
                                     Universidad Pública de El Alto
                                 </Negrita>
                             </Box>
@@ -174,20 +180,19 @@ const Navbar = () => {
                                     </Grid>
                                 }
                             >
-                                <Link href={''}>
-                                    <Typography sx={{ color: '#2f3842', fontSize: 13, display: 'flex', alignItems: 'center' }}>
-                                        Convocatorias <FaAngleDown />
-                                    </Typography>
-                                </Link>
+                                <Typography sx={{ display: 'flex', alignItems: 'center', color: pathname.includes('/convenios') || pathname.includes('/pasantias') || pathname.includes('/actividades') || pathname.includes('/eventos') ? '#c5080c' : '#2f3842', fontSize: 13 }}>
+                                    Convocatorias <FaAngleDown />
+                                </Typography>
                             </Tooltip>
-                            <Link href={''}>
-                                <Typography sx={{ color: '#2f3842', fontSize: 13 }}>
+                            <Link href={'/galeria'}>
+                                <Typography sx={{ color: pathname == '/galeria' ? '#c5080c' : '#2f3842', fontSize: 13 }}>
                                     {pathname == '/galeria' ? <GoDotFill color='inherit' /> : null}
                                     Galería
                                 </Typography>
                             </Link>
-                            <Link href={''}>
-                                <Typography sx={{ color: '#2f3842', fontSize: 13 }}>
+                            <Link href={'/about'}>
+                                <Typography sx={{ color: pathname == '/about' ? '#c5080c' : '#2f3842', fontSize: 13 }}>
+                                    {pathname == '/about' ? <GoDotFill color='inherit' /> : null}
                                     Sobre Nosotros
                                 </Typography>
                             </Link>
@@ -195,7 +200,7 @@ const Navbar = () => {
                         <BotonSimple onClick={() => {
                             setOpen2(true);
                         }}>
-                            <FaUser fontSize={20} />
+                            <FaUser fontSize={18} />
                         </BotonSimple>
 
                         <BotonSimple sx={{ height: 40, display: { xs: 'block', md: 'none' } }} onClick={() => {
@@ -207,17 +212,63 @@ const Navbar = () => {
                 </Container>
             </AppBar >
 
-            <Drawer open={open} onClose={() => setOpen(false)}>
-                <Link href={''}>
-                    <Typography sx={{ color: pathname == '/' ? '#c5080c' : '#2f3842', fontSize: 13, mr: 3 }}>
-                        {pathname == '/' ? <GoDotFill color='inherit' /> : null}
-                        Principal
-                    </Typography>
-                </Link>
+            <Drawer open={open} onClose={() => setOpen(false)} sx={{ display: { xs: 'block', md: 'none' } }}>
+                <Box py={2} width={220}>
+                    <Box ml={2}>
+                        <Image
+                            width={50}
+                            height={45}
+                            layout='fixed'
+                            src={"/logorrnnii.png"}
+                            alt='logo de UAYUA'
+                        />
+                    </Box>
+                    <br />
+                    <Link href={'/'}>
+                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/' ? '#883944' : '#7d8a96', bgcolor: pathname == '/' ? '#88394411' : 'transparent', fontSize: 13, mt: 1 }} startIcon={<GoHomeFill />} fullWidth>
+                            Principal
+                        </BotonSimple>
+                    </Link>
+                    <BotonSimple
+                        onClick={() => setOpen3(!open3)}
+                        sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == 'f' ? '#883944' : '#7d8a96', bgcolor: pathname == '/g' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<FaNewspaper />} fullWidth>
+                        Convocatorias <BiDownArrow style={{ position: 'absolute', right: 10, transform: open3 ? 'rotateZ(180deg)' : 'rotateZ(0deg)', transition: 'transform 0.5s' }} />
+                    </BotonSimple>
+                    <Box display={open3 || pathname.includes('convenios') || pathname.includes('pasantias') || pathname.includes('actividades') || pathname.includes('eventos') ? 'block' : 'none'}>
+                        <Link href={'/convenios'}>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/convenios' ? '#883944' : '#7d8a96', bgcolor: pathname == '/convenios' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                                Convenios
+                            </BotonSimple>
+                        </Link>
+                        <Link href={'/pasantias'}>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/pasantias' ? '#883944' : '#7d8a96', bgcolor: pathname == '/pasantias' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                                Pasantías
+                            </BotonSimple>
+                        </Link>
+                        <Link href={'/actividades'}>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/actividades' ? '#883944' : '#7d8a96', bgcolor: pathname == '/actividades' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                                Actividades
+                            </BotonSimple>
+                        </Link>
+                        <Link href={'/eventos'}>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/eventos' ? '#883944' : '#7d8a96', bgcolor: pathname == '/eventos' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                                Eventos
+                            </BotonSimple>
+                        </Link>
+                    </Box>
+                    <Link href={'/galeria'}>
+                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/galeria' ? '#883944' : '#7d8a96', bgcolor: pathname == '/galeria' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiSquaresFourFill />} fullWidth>
+                            Galeria
+                        </BotonSimple>
+                    </Link>
+                    <Link href={'/about'}>
+                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/about' ? '#883944' : '#7d8a96', bgcolor: pathname == '/about' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<IoPeople />} fullWidth>
+                            Sobre Nosotros
+                        </BotonSimple>
+                    </Link>
+                </Box>
             </Drawer>
-            <ModalLogin setOpen={setOpen2} open={open2}>
-
-            </ModalLogin>
+            <ModalLogin setOpen={setOpen2} open={open2} />
         </>
     )
 }

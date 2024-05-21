@@ -7,11 +7,14 @@ const Normal = styled(Typography)(() =>
     fontSize: 13
 }));
 
-const Titulo = styled(Typography)(() =>
+const Titulo = styled(Typography)(({ theme }) =>
 ({
     color: '#212b36',
     fontSize: 35,
     fontWeight: 800,
+    [theme.breakpoints.down('sm')]: {
+        fontSize: 20
+    }
 }));
 const Negrita = styled(Typography)(() =>
 ({

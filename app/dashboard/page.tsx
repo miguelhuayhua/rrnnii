@@ -1,8 +1,9 @@
-import Image from "next/image";
-export default function Home() {
+import React from "react";
+import 'react-quill/dist/quill.snow.css';
+export default async function Layout({ children }: any) {
     return (
-        <div>
-            dashboard
-        </div>
-    );
+        <>
+            hola
+        </>
+    )
 }

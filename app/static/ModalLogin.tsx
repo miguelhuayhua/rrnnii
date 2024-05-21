@@ -11,6 +11,8 @@ import React from 'react';
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { Titulo } from "../componentes/Textos";
+import { InputBox } from "../componentes/Datos";
+import { BotonFilled } from "../componentes/Botones";
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
         children: React.ReactElement<any, any>;
@@ -28,35 +30,15 @@ export default function ModalLogin({ open, setOpen }: Props) {
     const [showTransition, setShowTransition] = useState<'password' | 'register' | ''>('');
     const [showPassword, setShowPassword] = React.useState(false);
     //controlador de eventos para el submit
-    const CredencialesForm = useForm<{ usuario: string }>({
-        defaultValues: { usuario: '' }
-    });
-    const PasswordForm = useForm<{ password: string }>({
-        defaultValues: { password: '' }
+
+    const credencialsForm = useForm<{ password: string, usuario: string }>({
+        defaultValues: { password: '', usuario: '' }
     });
     //controlador de visualización de password
     const [loading, setLoading] = useState(false);
     const [mensaje, setMensaje] = useState('');
     const recaptcha = useRef<any>();
 
-
-    const onSubmit2 = ({ password }: { password: string }) => {
-        setLoading(true);
-        signIn('credentials', {
-            redirect: false,
-            callbackUrl: '/dashboard/tienda/principal',
-            usuario: CredencialesForm.getValues('usuario'),
-            password
-        }).then(response => {
-            if (response?.status == 401) {
-                setMensaje('Contraseña inválida');
-                setLoading(false);
-            }
-            else if (response?.status == 200 && response.url) {
-                router.push(response.url);
-            }
-        })
-    }
 
     return (
         <Dialog
@@ -72,88 +54,77 @@ export default function ModalLogin({ open, setOpen }: Props) {
             }}
         >
             <DialogContent sx={{ position: 'relative' }} >
-                <Divider >
-                    <Titulo>
-                        Ingresa tus credenciales
-                    </Titulo>
-                </Divider>
+                <Titulo sx={{ fontSize: 15, textAlign: 'center' }}>
+                    Ingrese sus credenciales
+                </Titulo>
                 <Box
                     display={showTransition == '' ? 'block' : 'none'}
-                    component={'form'}
+
                     py={2}
                 >
                     <Controller
                         rules={{ required: 'No puede quedar vacio' }}
-                        control={CredencialesForm.control}
+                        control={credencialsForm.control}
                         name="usuario"
                         render={({ field }) => (
-                            <Box pt={2}>
-
-                            </Box>
+                            <InputBox
+                                label='Usuario'
+                                disabled={loading}
+                                error={!!credencialsForm.formState.errors.usuario}
+                                {...field}
+                                helperText={credencialsForm.formState.errors.usuario?.message}
+                            >
+                            </InputBox>
                         )}
                     />
-                    <Box
-                        display={'flex'}
-                        justifyContent={'center'}
-                        mb={1}
-                    >
-
-                    </Box>
-
-                </Box>
-
-                {/*APARTADO PARA EL PROCESO DE ACCESO PASSWORD*/}
-                <Box
-                    display={showTransition == 'password' ? 'block' : 'none'}
-                    component={'form'}
-                    onSubmit={PasswordForm.handleSubmit(onSubmit2)}
-                    py={4}
-                >
-
-                </Box>
-                <Box
-                    position={'absolute'}
-                    className={showTransition == 'register' ? 'show' : 'hidde'}
-                    top={40}
-                    width={"92%"}
-                    component={'form'}
-                    onSubmit={PasswordForm.handleSubmit(onSubmit2)}
-                >
-
-                </Box>
-                {/* <Divider>
-                    <H2>
-                        O mediante
-                    </H2>
-                </Divider>
-                <Button
-                    sx={{
-                        display: 'flex',
-                        margin: '10px auto',
-                        background: 'white',
-                        color: 'black',
-                        alignItems: 'center',
-                        borderRadius: 5,
-                        px: 3,
-                        py: 1,
-                        "&:hover": {
-                            backgroundColor: '#f8f8f8'
+                    <Controller
+                        rules={{ required: 'No puede quedar vacio' }}
+                        control={credencialsForm.control}
+                        name="password"
+                        render={({ field }) => (
+                            <InputBox
+                                sx={{ mt: 3 }}
+                                label='Contraseña'
+                                error={!!credencialsForm.formState.errors.password}
+                                disabled={loading}
+                                type={showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment:
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                                        </IconButton>
+                                }}
+                                helperText={credencialsForm.formState.errors.password?.message || mensaje}
+                                {...field}
+                            >
+                            </InputBox>
+                        )}
+                    />
+                    <BotonFilled sx={{ display: 'block', mt: 4, mx: 'auto', px: 4 }} onClick={async () => {
+                        if (await credencialsForm.trigger()) {
+                            setLoading(true);
+                            signIn('credentials', {
+                                redirect: false,
+                                callbackUrl: '/dashboard',
+                                password: credencialsForm.getValues('password'),
+                                usuario: credencialsForm.getValues('usuario')
+                            }).then(response => {
+                                if (response?.status == 401) {
+                                    setMensaje('Usuario o Contraseña inválida');
+                                    setLoading(false);
+                                }
+                                else if (response?.status == 200 && response.url) {
+                                    router.push(response.url);
+                                }
+                            })
                         }
-                    }}
-                    onClick={() => {
-                        signIn('google',
-                            {
-                                callbackUrl: '/dashboard/tienda/principal',
-                                redirect: true
-                            });
-                    }}
-                    startIcon={
-                        <Image alt="logo-google" src={"/assets/google.webp"} width={20} height={20}
-                            layout="fixed" />}
-                    variant="contained"
-                >
-                    ACCEDER CON GOOGLE
-                </Button> */}
+                    }}>
+                        Ingresar
+                    </BotonFilled>
+                </Box>
             </DialogContent>
 
         </Dialog >
