@@ -225,44 +225,44 @@ const Navbar = () => {
                     </Box>
                     <br />
                     <Link href={'/'}>
-                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/' ? '#883944' : '#7d8a96', bgcolor: pathname == '/' ? '#88394411' : 'transparent', fontSize: 13, mt: 1 }} startIcon={<GoHomeFill />} fullWidth>
+                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/' ? '#883944' : '#666', bgcolor: pathname == '/' ? '#88394411' : 'transparent', fontSize: 13, mt: 1 }} startIcon={<GoHomeFill />} fullWidth>
                             Principal
                         </BotonSimple>
                     </Link>
                     <BotonSimple
                         onClick={() => setOpen3(!open3)}
-                        sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == 'f' ? '#883944' : '#7d8a96', bgcolor: pathname == '/g' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<FaNewspaper />} fullWidth>
+                        sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == 'f' ? '#883944' : '#666', bgcolor: pathname == '/g' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<FaNewspaper />} fullWidth>
                         Convocatorias <BiDownArrow style={{ position: 'absolute', right: 10, transform: open3 ? 'rotateZ(180deg)' : 'rotateZ(0deg)', transition: 'transform 0.5s' }} />
                     </BotonSimple>
                     <Box display={open3 || pathname.includes('convenios') || pathname.includes('pasantias') || pathname.includes('actividades') || pathname.includes('eventos') ? 'block' : 'none'}>
                         <Link href={'/convenios'}>
-                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/convenios' ? '#883944' : '#7d8a96', bgcolor: pathname == '/convenios' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/convenios' ? '#883944' : '#666', bgcolor: pathname == '/convenios' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Convenios
                             </BotonSimple>
                         </Link>
                         <Link href={'/pasantias'}>
-                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/pasantias' ? '#883944' : '#7d8a96', bgcolor: pathname == '/pasantias' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/pasantias' ? '#883944' : '#666', bgcolor: pathname == '/pasantias' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Pasantías
                             </BotonSimple>
                         </Link>
                         <Link href={'/actividades'}>
-                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/actividades' ? '#883944' : '#7d8a96', bgcolor: pathname == '/actividades' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/actividades' ? '#883944' : '#666', bgcolor: pathname == '/actividades' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Actividades
                             </BotonSimple>
                         </Link>
                         <Link href={'/eventos'}>
-                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/eventos' ? '#883944' : '#7d8a96', bgcolor: pathname == '/eventos' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/eventos' ? '#883944' : '#666', bgcolor: pathname == '/eventos' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Eventos
                             </BotonSimple>
                         </Link>
                     </Box>
                     <Link href={'/galeria'}>
-                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/galeria' ? '#883944' : '#7d8a96', bgcolor: pathname == '/galeria' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiSquaresFourFill />} fullWidth>
+                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/galeria' ? '#883944' : '#666', bgcolor: pathname == '/galeria' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<PiSquaresFourFill />} fullWidth>
                             Galeria
                         </BotonSimple>
                     </Link>
                     <Link href={'/about'}>
-                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/about' ? '#883944' : '#7d8a96', bgcolor: pathname == '/about' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<IoPeople />} fullWidth>
+                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/about' ? '#883944' : '#666', bgcolor: pathname == '/about' ? '#88394411' : 'transparent', fontSize: 13, }} startIcon={<IoPeople />} fullWidth>
                             Sobre Nosotros
                         </BotonSimple>
                     </Link>
