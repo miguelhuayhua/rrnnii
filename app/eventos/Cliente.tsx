@@ -6,7 +6,7 @@ import { BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import Convenio from "../componentes/items/Convenio";
 import { Suspense, useState } from "react";
-import Evento from "../componentes/items/Eventos";
+import Evento from "../componentes/items/Evento";
 import Filtros from "./Filtro";
 const Cliente = () => {
     const [open, setOpen] = useState(false);

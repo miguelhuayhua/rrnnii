@@ -20,7 +20,8 @@ const handler = NextAuth({
                     where: {
                         usuario
                     }
-                })
+                });
+                
                 if (data) {
                     if (bcrypt.compareSync(password, data.password)) {
                         return {

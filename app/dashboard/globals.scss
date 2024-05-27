@@ -1,0 +1,20 @@
+.editor {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    color:#444 !important;
+    .ql-toolbar {
+        border: none !important;
+        background-color: #fff;
+        border-bottom: 1px solid #eee !important;
+    }
+
+    .ql-container {
+        border: none !important;
+        background-color: #fefefe;
+    }
+
+    .ql-editor {
+        min-height: 140px;
+    }
+}

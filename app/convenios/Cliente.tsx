@@ -9,7 +9,6 @@ import Filtros from "./Filtros";
 import { Suspense, useState } from "react";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
-
     return (
         <>
             <Grid container px={3} spacing={2}>

@@ -4,15 +4,13 @@
 import { Avatar, Box, Chip, Divider, Stack, Typography, } from "@mui/material";
 import Link from "next/link";
 import Image from 'next/legacy/image';
-import { TbWorld } from "react-icons/tb";
-import { BotonSimple } from "../Botones";
-import { FaLink } from "react-icons/fa6";
 import { IoMdEye } from "react-icons/io";
+import { BoxSombra } from "../Mostrar";
 
 const Actividad = () => {
 
     return (
-        <Box sx={{ position: 'relative', overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
+        <BoxSombra>
             <Box position='absolute' top={0} height={"100%"} width="100%" sx={{ filter: 'brightness(.7)' }}>
                 <Image layout="fill" objectFit="cover" src='/eventos.jpg' alt="hola" />
             </Box>
@@ -31,10 +29,9 @@ const Actividad = () => {
                         <IoMdEye fontSize={20} /> 1.95k
                     </Typography>
                     <Chip sx={{ bgcolor: 'transparent', height: 20, borderRadius: 2, fontSize: 11, color: '#a8bdc4', border: '1px solid #a8bdc4', fontWeight: 600 }} label='Beca' />
-
                 </Stack>
             </Box>
-        </Box>
+        </BoxSombra>
     )
 }
 export default Actividad;

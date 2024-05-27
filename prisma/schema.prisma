@@ -16,3 +16,65 @@ model Usuario {
   avatar    String?
   rol       String   @default("tecnico")
 }
+
+model Convenio {
+  id           String   @id @default(dbgenerated("generate_object_id()"))
+  titulo       String
+  finalizacion String?
+  createdAt    DateTime @default(now())
+  estado       Boolean  @default(true)
+  institucion  String?
+  tipo         String   @default("nacional")
+  logo         String?
+  descripcion  String
+  pdf          String
+  imagen       String
+}
+
+model Pasantia {
+  id           String   @id @default(dbgenerated("generate_object_id()"))
+  titulo       String
+  finalizacion String?
+  createdAt    DateTime @default(now())
+  modalidad    String
+  institucion  String?
+  logo         String
+  descripcion  String
+  pdf          String
+  estado       Boolean  @default(true)
+  imagen       String
+}
+
+model Actividad {
+  id          String   @id @default(dbgenerated("generate_object_id()"))
+  titulo      String
+  createdAt   DateTime @default(now())
+  descripcion String
+  pdf         String
+  tipo        String
+  referencia  String?
+  estado      Boolean  @default(true)
+  imagen      String
+}
+
+model Evento {
+  id          String   @id @default(dbgenerated("generate_object_id()"))
+  titulo      String
+  createdAt   DateTime @default(now())
+  inicio      String   @default("")
+  descripcion String
+  pdf         String
+  tipo        String
+  link        String?
+  estado      Boolean  @default(true)
+  imagen      String
+}
+
+model Galeria {
+  id          String   @id @default(dbgenerated("generate_object_id()"))
+  titulo      String
+  createdAt   DateTime @default(now())
+  descripcion String
+  estado      Boolean  @default(true)
+  imagen      String
+}

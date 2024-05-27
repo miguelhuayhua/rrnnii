@@ -1,4 +1,5 @@
 import { MenuItem, Select, TextField, Typography, styled } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const InputBox = styled(TextField)(() => {
     return {
@@ -17,8 +18,8 @@ const InputBox = styled(TextField)(() => {
             },
         },
         ".MuiFormLabel-root": {
-            color: 'black !important',
-            fontSize: 14,
+            color: '#888 !important',
+            fontSize: 15,
             fontfamily: 'inherit',
             fontWeight: 600,
         },
@@ -50,10 +51,35 @@ const ItemBox = styled(MenuItem)(() => {
             "&:hover": {
                 background: '#f7f7f7'
             },
-
         },
-
-
     }
 });
-export { InputBox, ItemBox };
+const DatePickerBox = styled(DatePicker)(() => {
+    return {
+        ":focus-visible": {
+            outline: 'none !important'
+        },
+        margin: '10px 0',
+        width: "100%",
+        ".MuiInputBase-root": {
+            borderRadius: 12,
+            color: '#333',
+            fontSize: 14,
+            fontWeight: 400,
+            fontfamily: 'inherit',
+            ":focus-visible": {
+                outline: 'none !important'
+            },
+        },
+        ".MuiFormLabel-root": {
+            color: '#888 !important',
+            fontSize: 15,
+            fontfamily: 'inherit',
+            fontWeight: 600,
+        },
+        fieldset: {
+            border: '1px solid #e1e4e7'
+        },
+    }
+});
+export { InputBox, ItemBox, DatePickerBox };

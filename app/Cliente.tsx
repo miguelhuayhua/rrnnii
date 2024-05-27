@@ -12,7 +12,7 @@ import Footer from "./static/Footer";
 import { Negrita, Normal, Titulo } from "./componentes/Textos";
 import { BotonOutline } from "./componentes/Botones";
 import Actividad from "./componentes/items/Actividad";
-import Evento from "./componentes/items/Eventos";
+import Evento from "./componentes/items/Evento";
 const Cliente = () => {
     const [y, setY] = useState(0);
     const onScroll = useCallback(() => {

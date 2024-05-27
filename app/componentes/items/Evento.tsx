@@ -7,6 +7,7 @@ import Image from 'next/legacy/image';
 import { TbWorld } from "react-icons/tb";
 import { BotonSimple } from "../Botones";
 import { FaLink } from "react-icons/fa6";
+import { ChipBox } from "../Mostrar";
 
 const Evento = () => {
 
@@ -31,7 +32,7 @@ const Evento = () => {
                 <BotonSimple>
                     <FaLink />
                 </BotonSimple>
-                <Chip sx={{ bgcolor: '#00b614', height: 25, borderRadius: 2, color: 'white', fontWeight: 600, float: 'right' }} label='Evento online' />
+                <ChipBox label='Evento online' />
             </Box>
         </Box >
     )

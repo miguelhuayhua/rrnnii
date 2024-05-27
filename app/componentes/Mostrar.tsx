@@ -1,4 +1,4 @@
-import { Chip, TextField, Typography, styled } from "@mui/material";
+import { Box, Chip, TextField, Typography, styled } from "@mui/material";
 
 const ChipBox = styled(Chip)(() => {
     return {
@@ -10,4 +10,11 @@ const ChipBox = styled(Chip)(() => {
         margin: 2.5
     }
 });
-export { ChipBox };
+const BoxSombra = styled(Box)(() => {
+    return {
+        overflow: 'hidden',
+        borderRadius: 4,
+        boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px'
+    }
+})
+export { ChipBox, BoxSombra };

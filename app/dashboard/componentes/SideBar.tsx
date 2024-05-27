@@ -59,7 +59,7 @@ const SideBar = () => {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     return (
-        <Box position='sticky' bgcolor='#f4f5f7' top={0} borderRight='1px solid #eee' width={75} height={"100vh"} zIndex={20}>
+        <Box position='sticky' bgcolor='#f4f5f7' top={0} borderRight='1px solid #eee' width={{ xs: 65, md: 90 }} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
                 <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
             </Box>
