@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { FaFileWord } from 'react-icons/fa6';
 import Image from 'next/legacy/image';
+import dayjs from 'dayjs';
 interface Props {
     setEvento: any;
     Evento: Evento;
@@ -251,6 +252,7 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
                                     render={({ field: { ref, ...field } }) => (
                                         <DatePickerBox
                                             sx={{ mt: 2 }}
+                                            defaultValue={dayjs(field.value, 'DD/MM/YYYY')}
                                             onChange={(ev: any) => {
                                                 field.onChange(ev?.format('DD/MM/YYYY'))
                                             }}

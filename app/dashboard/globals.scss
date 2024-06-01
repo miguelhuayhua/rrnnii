@@ -18,3 +18,13 @@
         min-height: 140px;
     }
 }
+.list {
+    user-select: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item {
+  
+    cursor: grab;
+}

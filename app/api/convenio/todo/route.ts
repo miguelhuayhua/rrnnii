@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
     let { opcion } = await request.json() as { opcion: string };
-    let convenios = await prisma.convenio.findMany();
+    let convenios = await prisma.convenio.findMany({ include: { Institucion: true } });
     if (opcion == 'activo') {
         convenios = convenios.filter(item => item.estado)
     }

@@ -15,16 +15,14 @@ const POST = async (request: NextRequest) => {
         await writeFile(path.join(process.cwd(), "public/uploads/actividades/img/" + portadan), portadab);
         if (documentob)
             await writeFile(path.join(process.cwd(), "public/uploads/actividades/files/" + documenton), documentob);
-        await prisma.pasantia.create({
+        await prisma.actividad.create({
             data: {
                 titulo: form.get('titulo'),
                 descripcion: form.get('descripcion'),
                 pdf: documento ? `/uploads/actividades/files/${documenton}` : '',
                 imagen: `/uploads/actividades/img/${portadan}`,
-                modalidad: form.get('modalidad'),
-                logo: form.get('logo'),
-                institucion: form.get('institucion'),
-                finalizacion: form.get('finalizacion')
+                tipo: form.get('tipo'),
+                referencia: form.get('referencia')
             }
         });
         return Response.json({ error: false, mensaje: `Actividad creada con éxito` });

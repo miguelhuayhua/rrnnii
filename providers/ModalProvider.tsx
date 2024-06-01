@@ -1,5 +1,5 @@
 'use client';
-import { Box, Dialog, Snackbar, Stack } from '@mui/material';
+import { Box, Dialog, Stack } from '@mui/material';
 import React, { ReactElement, createContext, useContext, useState } from 'react';
 import { Normal, Titulo } from '@/app/componentes/Textos';
 import { BotonFilled, BotonOutline } from '@/app/componentes/Botones';
@@ -19,8 +19,7 @@ const ModalContext = createContext({
 });
 export const ModalProvider = ({ children }: any) => {
     const [open, setOpen] = useState(false);
-    const [openSnack, setOpenSnack] = useState(false);
-    const [mensaje, setMensaje] = useState('');
+    const { openSnackbar } = useSnackbar();
     const [action, setAction] = useState<{
         params: {
             content: ReactElement | string,
@@ -82,8 +81,7 @@ export const ModalProvider = ({ children }: any) => {
                         </BotonFilled>
                         <BotonOutline
                             onClick={async () => {
-                                setMensaje(await action.params.callback());
-                                setOpenSnack(true);
+                                openSnackbar(await action.params.callback());
                                 setOpen(false);
                             }}
                         >
@@ -92,12 +90,7 @@ export const ModalProvider = ({ children }: any) => {
                     </Stack>
                 </Box>
             </Dialog>
-            <Snackbar
-                open={openSnack}
-                autoHideDuration={5000}
-                onClose={() => setOpenSnack(false)}
-                message={mensaje}
-            />
+
         </ModalContext.Provider>
 
 

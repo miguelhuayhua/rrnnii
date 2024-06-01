@@ -1,37 +1,30 @@
 'use client';
 import { Avatar, Box } from "@mui/material";
-import Link from "next/link";
 import { FaBuilding } from "react-icons/fa6";
-import { GiConversation } from "react-icons/gi";
 import { Normal, Titulo } from "@/app/componentes/Textos";
-import { Convenio } from "@prisma/client";
+import { Convenio, Institucion } from "@prisma/client";
+import { ChipBox } from "@/app/componentes/Mostrar";
+import dayjs from "dayjs";
 interface Props {
-    Convenio: Convenio;
+    Convenio: Convenio & { Institucion: Institucion };
 }
 const ConvenioComponent = ({ Convenio }: Props) => {
 
     return (
         <Box p={3} bgcolor='white' borderRadius={4} pb={6}>
-            <Avatar sx={{ bgcolor: '#0074b7', borderRadius: 2, float: 'right' }}>
-                CN
-            </Avatar>
             <Titulo sx={{ fontSize: 15, fontWeight: 600 }}>
                 {Convenio.titulo}
             </Titulo>
             <Normal sx={{ mt: 1, color: '#929fac', fontSize: 12 }}>
-                Termina el: 11 May 2024
+                Termina el: {Convenio.finalizacion}
             </Normal>
             <Normal sx={{ color: '#929fac', fontSize: 12 }}>
-                Publicado el: 13 Ago 2024
+                Publicado el: {dayjs(Convenio.createdAt).format('DD/MM/YYYY - HH:mm:ss')}
             </Normal>
-
-            <Normal sx={{ fontWeight: 600, fontSize: 12 }}>
-                <FaBuilding /> {Convenio.institucion}
+            <Normal sx={{ fontWeight: 600, fontSize: 12, my: 2 }}>
+                <FaBuilding /> {Convenio.Institucion.nombre}
             </Normal>
-            <Normal sx={{ fontWeight: 600, fontSize: 12 }}>
-                <GiConversation /> {Convenio.tipo == 'nacional' ? 'Convenio nacional' : 'Convenio internacional'}
-            </Normal>
-
+            <ChipBox sx={{ bgcolor: Convenio.tipo == 'nacional' ? '#0074b7' : '#09b615', color: 'white', mx: 0 }} label={Convenio.tipo == 'nacional' ? 'Convenio nacional' : 'Convenio internacional'} />
         </Box>
     )
 }

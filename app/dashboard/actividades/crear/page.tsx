@@ -19,6 +19,7 @@ import { useState } from "react";
 import Image from 'next/legacy/image';
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { FaFileWord } from "react-icons/fa6";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Actividad>({
         defaultValues: { titulo: '', tipo: 'becas', descripcion: '', referencia: '' }, shouldFocusError: true
@@ -45,27 +46,33 @@ export default function Page() {
             setValue('pdf', plainFiles[0].name);
         }
     });
+    const { openSnackbar } = useSnackbar();
     const onSubmit = (actividad: Actividad) => {
-        let form = new FormData();
-        form.append('titulo', actividad.titulo);
-        form.append('tipo', actividad.tipo);
-        form.append('pdf', actividad.pdf);
-        form.append('referencia', actividad.referencia!);
-        form.append('descripcion', actividad.descripcion);
-        form.append('portada', portada);
-        form.append('documento', documento);
-        openModal({
-            titulo: '¿Continuar?',
-            content: 'Una nueva actividad se agregará',
-            callback: async () => {
-                let res = await axiosInstance.post('/api/actividad/crear', form);
-                if (!res.data.error) {
-                    router.back();
-                    router.refresh();
+        if (portada) {
+            let form = new FormData();
+            form.append('titulo', actividad.titulo);
+            form.append('tipo', actividad.tipo);
+            form.append('pdf', actividad.pdf);
+            form.append('referencia', actividad.referencia!);
+            form.append('descripcion', actividad.descripcion);
+            form.append('portada', portada);
+            form.append('documento', documento);
+            openModal({
+                titulo: '¿Continuar?',
+                content: 'Una nueva actividad se agregará',
+                callback: async () => {
+                    let res = await axiosInstance.post('/api/actividad/crear', form);
+                    if (!res.data.error) {
+                        router.back();
+                        router.refresh();
+                    }
+                    return res.data.mensaje;
                 }
-                return res.data.mensaje;
-            }
-        });
+            });
+        }
+        else {
+            openSnackbar('Por favor introduzca una imagen de referencia');;
+        }
     }
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>

@@ -13,15 +13,20 @@ import ModalEvento from "./Modal";
 import { RiEditFill } from "react-icons/ri";
 import { IoReload } from "react-icons/io5";
 import EventoComponent from "../componentes/items/Evento";
+import { InputBox } from "@/app/componentes/Datos";
+import { BiSearch } from "react-icons/bi";
+import { filtrarValorEnArray } from "@/utils/data";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [eventos, setEventos] = useState<Evento[]>([]);
+    const [eventos, setEventos] = useState<any>([]);
+    const [prevEventos, setPrevEventos] = useState<any>([]);
     const [evento, setEvento] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
         axiosInstance.post('/api/evento/todo', { opcion }).then(res => {
             setEventos(res.data);
+            setPrevEventos(res.data);
         })
     }, [opcion, evento]);
     return (
@@ -67,8 +72,18 @@ export default function Page() {
                 <TabBox label="Concluídos" value='concluido' />
             </Tabs>
             <Grid container spacing={2} mt={1}>
-                {eventos.map(value => (
-                    <Grid item xs={12} md={6} lg={4} xl={3} position='relative'>
+                <Grid item xs={12}>
+                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                        onChange={(ev) => {
+                            setEventos(filtrarValorEnArray(prevEventos, ev.target.value));
+                        }}
+                        InputProps={{
+                            startAdornment: <BiSearch fontSize={25} />
+                        }}
+                    />
+                </Grid>
+                {eventos.map((value: any) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3} position='relative'>
                         <EventoComponent Evento={value} />
                         <BotonFilled
                             onClick={() => {

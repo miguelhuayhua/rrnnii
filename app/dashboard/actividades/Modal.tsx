@@ -64,7 +64,7 @@ export default function ModalActividad({ setActividad, Actividad }: Props) {
         form.append('id', actividad.id);
         openModal({
             titulo: '¿Continuar?',
-            content: 'Una nueva actividad se agregará',
+            content: 'La actividad será modificada',
             callback: async () => {
                 let res = await axiosInstance.post('/api/actividad/modificar', form);
                 if (!res.data.error) {

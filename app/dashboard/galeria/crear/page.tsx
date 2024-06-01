@@ -17,12 +17,13 @@ import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";
 import { useState } from "react";
 import Image from 'next/legacy/image';
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Galeria>({
         defaultValues: { titulo: '', imagen: '', descripcion: '' }, shouldFocusError: true
     });
-    const [file, setFile] = useState<any>(null);
+    const [portada, setPortada] = useState<any>(null);
     const router = useRouter();
     const [load, setLoad] = useState(false);
     const { openModal } = useModal();
@@ -32,29 +33,35 @@ export default function Page() {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]));
-            setFile(plainFiles[0]);
+            setPortada(plainFiles[0]);
         }
     });
+    const { openSnackbar } = useSnackbar();
     const onSubmit = (galeria: Galeria) => {
-        let formData = new FormData();
-        formData.append('titulo', galeria.titulo);
-        formData.append('imagen', galeria.imagen);
-        formData.append('descripcion', galeria.descripcion);
-        formData.append('file', file);
-        openModal({
-            titulo: '¿Continuar?',
-            content: 'Se añadirá a tu galeria',
-            callback: async () => {
-                setLoad(true);
-                let res = await axiosInstance.post('/api/galeria/crear', formData);
-                if (!res.data.error) {
-                    router.back();
-                    router.refresh();
+        if (portada) {
+            let formData = new FormData();
+            formData.append('titulo', galeria.titulo);
+            formData.append('imagen', galeria.imagen);
+            formData.append('descripcion', galeria.descripcion);
+            formData.append('file', portada);
+            openModal({
+                titulo: '¿Continuar?',
+                content: 'Se añadirá a tu galeria',
+                callback: async () => {
+                    setLoad(true);
+                    let res = await axiosInstance.post('/api/galeria/crear', formData);
+                    if (!res.data.error) {
+                        router.back();
+                        router.refresh();
+                    }
+                    setLoad(false);
+                    return res.data.mensaje;
                 }
-                setLoad(false);
-                return res.data.mensaje;
-            }
-        });
+            });
+        }
+        else {
+            openSnackbar('Por favor introduzca una imagen de referencia');
+        }
     }
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>

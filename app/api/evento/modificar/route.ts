@@ -6,21 +6,21 @@ import path from "path";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const imagen = form.get("imagen");
-    const bufferImg = imagen ? Buffer.from(await imagen.arrayBuffer()) : null;
-    const imagenName = imagen ? Date.now() + imagen.name.replaceAll(" ", "_") : '';
     const doc = form.get('doc');
-    const bufferDoc = doc ? Buffer.from(await doc.arrayBuffer()) : null;
-    const docName = doc ? Date.now() + doc.name.replaceAll(" ", "_") : '';
     try {
-        if (bufferImg) {
-            await writeFile(path.join(process.cwd(), "public/uploads/eventos/img/" + imagenName), bufferImg);
+        if (imagen) {
+            const bufferImg = Buffer.from(await imagen.arrayBuffer());
+            const imagenName = Date.now() + imagen.name.replaceAll(" ", "_");
+            await writeFile(path.join(process.cwd(), "public/uploads/eventos/img/" + imagenName), bufferImg!);
             await prisma.evento.update({
                 data: { imagen: imagen ? `/uploads/eventos/img/${imagenName}` : '' },
                 where: { id: form.get('id') }
             });
         }
-        if (bufferDoc) {
-            await writeFile(path.join(process.cwd(), "public/uploads/eventos/files/" + docName), bufferDoc);
+        if (doc) {
+            const bufferDoc = Buffer.from(await doc.arrayBuffer());
+            const docName = Date.now() + doc.name.replaceAll(" ", "_");
+            await writeFile(path.join(process.cwd(), "public/uploads/eventos/files/" + docName), bufferDoc!);
             await prisma.evento.update({
                 data: { pdf: `/uploads/eventos/files/${docName}` },
                 where: { id: form.get('id') }

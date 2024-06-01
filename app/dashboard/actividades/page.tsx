@@ -1,5 +1,5 @@
 'use client';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tab, Tabs } from "@mui/material";
 import Link from "next/link";
@@ -14,15 +14,20 @@ import ModalActividad from "./Modal";
 import { RiEditFill } from "react-icons/ri";
 import ActividadComponent from "../componentes/items/Actividad";
 import { IoReload } from "react-icons/io5";
+import { InputBox } from "@/app/componentes/Datos";
+import { BiSearch } from "react-icons/bi";
+import { filtrarValorEnArray } from "@/utils/data";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [actividades, setActividades] = useState<Actividad[]>([]);
+    const [actividades, setActividades] = useState<any>([]);
+    const [prevActividades, setPrevActividades] = useState<any>([]);
     const [actividad, setActividad] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
         axiosInstance.post('/api/actividad/todo', { opcion }).then(res => {
             setActividades(res.data);
+            setPrevActividades(res.data);
         })
     }, [opcion, actividad]);
     return (
@@ -68,16 +73,26 @@ export default function Page() {
                 <TabBox label="Concluídos" value='concluido' />
             </Tabs>
             <Grid container spacing={2} mt={1}>
-                {actividades.map(value => (
+                <Grid item xs={12}>
+                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                        onChange={(ev) => {
+                            setActividades(filtrarValorEnArray(prevActividades, ev.target.value));
+                        }}
+                        InputProps={{
+                            startAdornment: <BiSearch fontSize={25} />
+                        }}
+                    />
+                </Grid>
+                {actividades.map((value: any) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} xl={2} position='relative'>
                         <ActividadComponent Actividad={value} />
-                        <BotonFilled
+                        <BotonSimple
                             onClick={() => {
                                 setActividad(value);
                             }}
-                            sx={{ position: 'absolute', bottom: 10, left: 30 }} >
+                            sx={{ position: 'absolute', bottom: 30, left: 30 }} >
                             <RiEditFill fontSize={18} />
-                        </BotonFilled>
+                        </BotonSimple>
                     </Grid>
                 ))}
             </Grid>

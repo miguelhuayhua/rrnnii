@@ -1,5 +1,4 @@
 'use client';
-
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
@@ -13,15 +12,20 @@ import { Pasantia } from "@prisma/client";
 import { RiEditFill } from "react-icons/ri";
 import PasantiaComponent from "../componentes/items/Pasantia";
 import ModalPasantia from "./Modal";
+import { InputBox } from "@/app/componentes/Datos";
+import { BiSearch } from "react-icons/bi";
+import { filtrarValorEnArray } from "@/utils/data";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [Pasantias, setPasantias] = useState<Pasantia[]>([]);
+    const [Pasantias, setPasantias] = useState<any>([]);
+    const [prevPasantias, setPrevPasantias] = useState<any>([]);
     const [Pasantia, setPasantia] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
         axiosInstance.post('/api/pasantia/todo', { opcion }).then(res => {
             setPasantias(res.data);
+            setPrevPasantias(res.data);
         })
     }, [opcion, Pasantia]);
     return (
@@ -65,9 +69,20 @@ export default function Page() {
                 <TabBox label="Concluídos" value='concluido' />
             </Tabs>
             <Grid container spacing={2} mt={1}>
-                {Pasantias.map(value => (
-                    <Grid item xs={12} md={6} lg={4} xl={3} position='relative'>
-                        <PasantiaComponent Pasantia={value} />
+                <Grid item xs={12}>
+                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                        onChange={(ev) => {
+                            setPasantias(filtrarValorEnArray(prevPasantias, ev.target.value));
+                        }}
+                        InputProps={{
+                            startAdornment:
+                                <BiSearch fontSize={25} />
+                        }}
+                    />
+                </Grid>
+                {Pasantias.map((value: any) => (
+                    <Grid item xs={12} sm={6} lg={4} xl={3} position='relative'>
+                        <PasantiaComponent Pasantia={value as any} />
                         <BotonFilled
                             onClick={() => {
                                 setPasantia(value);

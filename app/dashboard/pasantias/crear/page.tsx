@@ -1,7 +1,7 @@
 'use client';
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Typography } from "@mui/material";
+import { Autocomplete, Box, Breadcrumbs, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
@@ -9,19 +9,20 @@ import { BoxSombra } from "../../componentes/Mostrar";
 import { DatePickerBox, InputBox, ItemBox } from "@/app/componentes/Datos";
 import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
-import { Pasantia } from "@prisma/client";
+import { Institucion, Pasantia } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import Editor from 'react-quill';
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from 'next/legacy/image';
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { FaFileWord } from "react-icons/fa6";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia>({
-        defaultValues: { modalidad: '3', titulo: '', descripcion: '', institucion: '', logo: '' }, shouldFocusError: true
+    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion }>({
+        defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' } }, shouldFocusError: true
     });
     const router = useRouter();
     const { openModal } = useModal();
@@ -45,7 +46,8 @@ export default function Page() {
             setValue('pdf', plainFiles[0].name);
         }
     });
-    const onSubmit = (pasantia: Pasantia) => {
+    const { openSnackbar } = useSnackbar();
+    const onSubmit = (pasantia: Pasantia & { Institucion: Institucion }) => {
         let form = new FormData();
         form.append('titulo', pasantia.titulo);
         form.append('pdf', pasantia.pdf);
@@ -53,22 +55,32 @@ export default function Page() {
         form.append('portada', portada);
         form.append('documento', documento);
         form.append('modalidad', pasantia.modalidad);
-        form.append('logo', pasantia.logo);
         form.append('finalizacion', pasantia.finalizacion!);
-        form.append('institucion', pasantia.institucion!);
-        openModal({
-            titulo: '¿Continuar?',
-            content: 'Una nueva pasantia se agregará',
-            callback: async () => {
-                let res = await axiosInstance.post('/api/pasantia/crear', form);
-                if (!res.data.error) {
-                    router.back();
-                    router.refresh();
+        form.append('institucion', pasantia.Institucion.nombre);
+        if (portada) {
+            openModal({
+                titulo: '¿Continuar?',
+                content: 'Una nueva pasantia se agregará',
+                callback: async () => {
+                    let res = await axiosInstance.post('/api/pasantia/crear', form);
+                    if (!res.data.error) {
+                        router.back();
+                        router.refresh();
+                    }
+                    return res.data.mensaje;
                 }
-                return res.data.mensaje;
-            }
-        });
+            });
+        }
+        else {
+            openSnackbar('Por favor introduzca una imagen de referencia');;
+        }
     }
+    const [instituciones, setInstituciones] = useState([]);
+    useEffect(() => {
+        axiosInstance.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
+            setInstituciones(res.data);
+        })
+    }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>
             <BotonOutline onClick={() => router.back()}>
@@ -234,21 +246,31 @@ export default function Page() {
                                 />
 
                                 <Controller
-                                    name="institucion"
+                                    name="Institucion.nombre"
                                     control={control}
+                                    rules={{ required: 'Institución es obligatoria' }}
                                     render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            sx={{ mt: 2 }}
-                                            {...field}
-                                            label='Institución'
-                                            inputRef={ref}
+                                        <Autocomplete
+                                            freeSolo
+                                            multiple={false}
+                                            onChange={(_, value) => field.onChange(value)}
+                                            disableClearable
+                                            options={instituciones.map((value: Institucion) => value.nombre)}
+                                            renderInput={(params) =>
+                                                <InputBox
+                                                    sx={{ mt: 2 }}
+                                                    error={!!errors.Institucion?.nombre}
+                                                    helperText={errors.Institucion?.nombre?.message || 'Es importante involucrar la institución que ofrece la pasantía'}
+                                                    {...params}
+                                                    {...field}
+                                                    label='Institución'
+                                                />}
                                         />
                                     )}
                                 />
                                 <Controller
                                     name="finalizacion"
                                     control={control}
-
                                     render={({ field: { ref, ...field } }) => (
                                         <DatePickerBox
                                             sx={{ mt: 2 }}

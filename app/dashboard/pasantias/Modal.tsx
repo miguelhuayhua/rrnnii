@@ -1,10 +1,10 @@
 'use client';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { Pasantia } from '@prisma/client';
+import { Autocomplete, Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Institucion, Pasantia } from '@prisma/client';
 import { BotonFilled } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { FaFileWord } from 'react-icons/fa6';
+import dayjs from 'dayjs';
 interface Props {
     setPasantia: any;
     Pasantia: Pasantia;
@@ -28,7 +29,7 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
     const theme = useTheme();
     const router = useRouter();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia>({
+    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion }>({
         defaultValues: Pasantia, shouldFocusError: true
     });
     const { openModal } = useModal();
@@ -52,7 +53,7 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
             setValue('pdf', plainFiles[0].name);
         }
     });
-    const onSubmit = (pasantia: Pasantia) => {
+    const onSubmit = (pasantia: Pasantia & { Institucion: Institucion }) => {
         let form = new FormData();
         form.append('titulo', pasantia.titulo);
         form.append('pdf', pasantia.pdf);
@@ -60,9 +61,9 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
         form.append('portada', portada);
         form.append('documento', documento);
         form.append('finalizacion', pasantia.finalizacion!);
-        form.append('institucion', pasantia.institucion!);
         form.append('id', pasantia.id);
         form.append('modalidad', pasantia.modalidad);
+        form.append('institucion', pasantia.Institucion.nombre)
         openModal({
             titulo: '¿Continuar?',
             content: 'Una nueva pasantia se agregará',
@@ -76,6 +77,12 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
             }
         });
     }
+    const [instituciones, setInstituciones] = useState([]);
+    useEffect(() => {
+        axiosInstance.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
+            setInstituciones(res.data);
+        })
+    }, []);
     return (
         <Dialog
             open={!!Pasantia}
@@ -244,27 +251,39 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
                                     )}
                                 />
                                 <Controller
-                                    name="institucion"
+                                    name="Institucion.nombre"
                                     control={control}
+                                    rules={{ required: 'Institución es obligatoria' }}
                                     render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            sx={{ mt: 2 }}
-                                            {...field}
-                                            label='Institución'
-                                            inputRef={ref}
+                                        <Autocomplete
+                                            freeSolo
+                                            multiple={false}
+                                            value={field.value}
+                                            disableClearable
+                                            onChange={(_, value) => field.onChange(value)}
+                                            options={instituciones.map((value: Institucion) => value.nombre)}
+                                            renderInput={(params) =>
+                                                <InputBox
+                                                    error={!!errors.Institucion?.nombre}
+                                                    helperText={errors.Institucion?.nombre?.message || 'Es importante involucrar la institución que ofrece la pasantía'}
+                                                    sx={{ mt: 2 }}
+                                                    {...params}
+                                                    {...field}
+                                                    label='Institución'
+                                                />}
                                         />
                                     )}
                                 />
                                 <Controller
                                     name="finalizacion"
                                     control={control}
-
                                     render={({ field: { ref, ...field } }) => (
                                         <DatePickerBox
                                             sx={{ mt: 2 }}
                                             onChange={(ev: any) => {
                                                 field.onChange(ev?.format('DD/MM/YYYY'))
                                             }}
+                                            defaultValue={dayjs(field.value, 'DD/MM/YYYY')}
                                             slotProps={{
                                                 textField: {
                                                     inputRef: ref,

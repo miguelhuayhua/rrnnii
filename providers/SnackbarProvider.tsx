@@ -1,23 +1,28 @@
 'use client';
-import React, { createContext, useContext } from 'react';
-import { SnackbarProvider as Notistack, useSnackbar as useSnack } from 'notistack';
+import React, { createContext, useContext, useState } from 'react';
+import { Snackbar } from '@mui/material';
 // Creamos un contexto para almacenar el estado del Snackbar
 const SnackbarContext = createContext({
     openSnackbar: (message: string) => {
     }
 });
 export const SnackbarProvider = ({ children }: any) => {
-    const { enqueueSnackbar } = useSnack();
     const openSnackbar = (message: string) => {
-        enqueueSnackbar(message);
+        setMessage(message);
+        setOpen(true);
     };
-
+    const [message, setMessage] = useState('');
+    const [open, setOpen] = useState(false);
     return (
         <SnackbarContext.Provider value={{ openSnackbar }}>
+            <Snackbar
+                open={open}
+                autoHideDuration={5000}
+                onClose={() => setOpen(false)}
+                message={message}
+            />
             {/* Renderizamos el Snackbar aquí */}
-            <Notistack maxSnack={3} style={{ color: '#666', background: 'white', borderRadius: 10, overflow: 'hidden' }} >
                 {children}
-            </Notistack>
         </SnackbarContext.Provider>
     );
 };

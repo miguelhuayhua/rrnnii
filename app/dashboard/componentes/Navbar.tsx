@@ -1,14 +1,14 @@
 'use client';
 import Box from '@mui/material/Box';
-import { Avatar, Button, ClickAwayListener, Divider, Tooltip } from "@mui/material";
+import { Avatar, ClickAwayListener, Divider, Tooltip } from "@mui/material";
 import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import Image from 'next/legacy/image';
 import { useRouter } from 'next/navigation';
+import { BotonSimple } from '@/app/componentes/Botones';
+import { PiSignOutBold } from 'react-icons/pi';
 const Navbar = () => {
     const [open, setOpen] = useState(false);
     const { data } = useSession();
-    const router = useRouter();
     return (
         <Box position={'sticky'} top={0} zIndex={18} width="100%" >
             <Box className='blur-style' p={2} height={30} bgcolor='transparent' position={'relative'} >
@@ -35,8 +35,14 @@ const Navbar = () => {
                         open={open}
                         onClose={() => setOpen(false)}
                         title={
-                            <Box p={1}>
-                                <Divider orientation='horizontal' flexItem sx={{ my: 1 }} />
+                            <Box p={0.5}>
+                                <BotonSimple
+                                    startIcon={<PiSignOutBold />}
+                                    onClick={() => {
+                                        signOut();
+                                    }}>
+                                    Cerrar sesión
+                                </BotonSimple>
                             </Box>
                         }
                     >

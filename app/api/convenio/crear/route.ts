@@ -8,24 +8,46 @@ const POST = async (request: NextRequest) => {
     const portadab = Buffer.from(await portada.arrayBuffer());
     const portadan = Date.now() + portada.name.replaceAll(" ", "_");
     const documento = form.get('documento');
+    const institucion = form.get('institucion');
+    console.log(institucion)
     const documentob = documento ? Buffer.from(await documento.arrayBuffer()) : null;
     const documenton = documento ? Date.now() + documento.name.replaceAll(" ", "_") : '';
     try {
         await writeFile(path.join(process.cwd(), "public/uploads/convenios/img/" + portadan), portadab);
         if (documentob)
             await writeFile(path.join(process.cwd(), "public/uploads/convenios/files/" + documenton), documentob);
-        await prisma.convenio.create({
-            data: {
-                titulo: form.get('titulo'),
-                descripcion: form.get('descripcion'),
-                pdf: documento ? `/uploads/convenios/files/${documenton}` : '',
-                imagen: `/uploads/convenioes/img/${portadan}`,
-                logo: form.get('logo'),
-                institucion: form.get('institucion'),
-                finalizacion: form.get('finalizacion'),
-                tipo: form.get('tipo')
-            }
-        });
+        if (await prisma.institucion.findFirst({ where: { nombre: institucion } })) {
+            await prisma.convenio.create({
+                data: {
+                    titulo: form.get('titulo'),
+                    descripcion: form.get('descripcion'),
+                    pdf: documento ? `/uploads/convenios/files/${documenton}` : '',
+                    imagen: `/uploads/convenios/img/${portadan}`,
+                    finalizacion: form.get('finalizacion'),
+                    tipo: form.get('tipo'),
+                    Institucion: {
+                        connect: { nombre: institucion }
+                    }
+                }
+            });
+        }
+        else {
+            await prisma.convenio.create({
+                data: {
+                    titulo: form.get('titulo'),
+                    descripcion: form.get('descripcion'),
+                    pdf: documento ? `/uploads/convenios/files/${documenton}` : '',
+                    imagen: `/uploads/convenios/img/${portadan}`,
+                    finalizacion: form.get('finalizacion'),
+                    tipo: form.get('tipo'),
+                    Institucion: {
+                        create: { nombre: institucion, logo: '' }
+                    }
+                }
+            });
+        }
+
+
         return Response.json({ error: false, mensaje: `Convenio creado con éxito` });
     } catch (error) {
         console.log(error)

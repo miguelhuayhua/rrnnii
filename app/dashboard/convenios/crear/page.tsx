@@ -1,7 +1,7 @@
 'use client';
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Typography } from "@mui/material";
+import { Autocomplete, Box, Breadcrumbs, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
@@ -9,20 +9,21 @@ import { BoxSombra } from "../../componentes/Mostrar";
 import { DatePickerBox, InputBox, ItemBox } from "@/app/componentes/Datos";
 import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
-import { Convenio } from "@prisma/client";
+import { Convenio, Institucion } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import Editor from 'react-quill';
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { FaFileWord } from "react-icons/fa6";
 import Image from 'next/legacy/image';
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Convenio>({
-        defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', institucion: '' }, shouldFocusError: true
+    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Convenio & { Institucion: Institucion }>({
+        defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', }, shouldFocusError: true
     });
     const router = useRouter();
     const { openModal } = useModal();
@@ -46,27 +47,41 @@ export default function Page() {
             setValue('pdf', plainFiles[0].name);
         }
     });
-    const onSubmit = (convenio: Convenio) => {
-        let form = new FormData();
-        form.append('titulo', convenio.titulo);
-        form.append('tipo', convenio.tipo);
-        form.append('pdf', convenio.pdf);
-        form.append('descripcion', convenio.descripcion);
-        form.append('portada', portada);
-        form.append('documento', documento);
-        openModal({
-            titulo: '¿Continuar?',
-            content: 'Una nueva convenio se agregará',
-            callback: async () => {
-                let res = await axiosInstance.post('/api/convenio/crear', form);
-                if (!res.data.error) {
-                    router.back();
-                    router.refresh();
+    const { openSnackbar } = useSnackbar();
+    const onSubmit = (convenio: Convenio & { Institucion: Institucion }) => {
+        if (portada) {
+            let form = new FormData();
+            form.append('titulo', convenio.titulo);
+            form.append('tipo', convenio.tipo);
+            form.append('pdf', convenio.pdf);
+            form.append('descripcion', convenio.descripcion);
+            form.append('portada', portada);
+            form.append('documento', documento);
+            form.append('institucion', convenio.Institucion.nombre);
+            console.log(convenio)
+            openModal({
+                titulo: '¿Continuar?',
+                content: 'Una nueva convenio se agregará',
+                callback: async () => {
+                    let res = await axiosInstance.post('/api/convenio/crear', form);
+                    if (!res.data.error) {
+                        router.back();
+                        router.refresh();
+                    }
+                    return res.data.mensaje;
                 }
-                return res.data.mensaje;
-            }
-        });
+            });
+        }
+        else {
+            openSnackbar('Por favor introduzca una imagen de referencia');;
+        }
     }
+    const [instituciones, setInstituciones] = useState([]);
+    useEffect(() => {
+        axiosInstance.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
+            setInstituciones(res.data);
+        })
+    }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>
             <BotonOutline onClick={() => router.back()}>
@@ -200,16 +215,26 @@ export default function Page() {
                             </Grid>
                             <Grid item xs={12} lg={6}>
                                 <Controller
-                                    name="institucion"
+                                    name="Institucion.nombre"
                                     control={control}
                                     render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            {...field}
-                                            label='Institución'
-                                            inputRef={ref}
+                                        <Autocomplete
+                                            freeSolo
+                                            multiple={false}
+                                            onChange={(_, value) => field.onChange(value)}
+                                            disableClearable
+                                            options={instituciones.map((value: Institucion) => value.nombre)}
+                                            renderInput={(params) =>
+                                                <InputBox
+                                                    sx={{ mt: 2 }}
+                                                    {...params}
+                                                    {...field}
+                                                    label='Institución'
+                                                />}
                                         />
                                     )}
                                 />
+
                                 <Controller
                                     name="finalizacion"
                                     control={control}

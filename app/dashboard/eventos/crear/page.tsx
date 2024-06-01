@@ -19,12 +19,13 @@ import { useState } from "react";
 import Image from 'next/legacy/image';
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { FaFileWord } from "react-icons/fa6";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Evento>({
         defaultValues: { titulo: '', tipo: 'online', descripcion: '', inicio: '', link: '', pdf: '' }, shouldFocusError: true
     });
-    const [file, setFile] = useState<any>('');
+    const [portada, setPortada] = useState<any>('');
     const [pdf, setPdf] = useState<any>('');
     const router = useRouter();
     const { openModal } = useModal();
@@ -34,7 +35,7 @@ export default function Page() {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]));
-            setFile(plainFiles[0]);
+            setPortada(plainFiles[0]);
         }
     });
     const PDFPicker = useFilePicker({
@@ -45,28 +46,35 @@ export default function Page() {
             setPdf(plainFiles[0]);
         }
     });
+    const { openSnackbar } = useSnackbar();
+
     const onSubmit = (evento: Evento) => {
-        let form = new FormData();
-        form.append('titulo', evento.titulo);
-        form.append('tipo', evento.tipo);
-        form.append('pdf', evento.pdf);
-        form.append('link', evento.link!);
-        form.append('inicio', evento.inicio);
-        form.append('descripcion', evento.descripcion);
-        form.append('imagen', file);
-        form.append('doc', pdf);
-        openModal({
-            titulo: '¿Continuar?',
-            content: 'Un nuevo evento se agregará',
-            callback: async () => {
-                let res = await axiosInstance.post('/api/evento/crear', form);
-                if (!res.data.error) {
-                    router.back();
-                    router.refresh();
+        if (portada) {
+            let form = new FormData();
+            form.append('titulo', evento.titulo);
+            form.append('tipo', evento.tipo);
+            form.append('pdf', evento.pdf);
+            form.append('link', evento.link!);
+            form.append('inicio', evento.inicio);
+            form.append('descripcion', evento.descripcion);
+            form.append('imagen', portada);
+            form.append('doc', pdf);
+            openModal({
+                titulo: '¿Continuar?',
+                content: 'Un nuevo evento se agregará',
+                callback: async () => {
+                    let res = await axiosInstance.post('/api/evento/crear', form);
+                    if (!res.data.error) {
+                        router.back();
+                        router.refresh();
+                    }
+                    return res.data.mensaje;
                 }
-                return res.data.mensaje;
-            }
-        });
+            });
+        }
+        else {
+            openSnackbar('Por favor introduzca una imagen de referencia');
+        }
     }
 
     return (

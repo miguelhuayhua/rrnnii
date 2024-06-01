@@ -42,7 +42,6 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
         }
     });
 
-    const [load, setLoad] = useState(false);
     const onSubmit = (galeria: Galeria) => {
         let formData = new FormData();
         formData.append('titulo', galeria.titulo);
@@ -54,13 +53,11 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
             titulo: '¿Continuar?',
             content: 'La imagen será editada',
             callback: async () => {
-                setLoad(true);
                 let res = await axiosInstance.post('/api/galeria/modificar', formData);
                 if (!res.data.error) {
                     setGaleria(null);
                     router.refresh();
                 }
-                setLoad(false);
                 return res.data.mensaje;
             }
         });
@@ -73,7 +70,6 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
             maxWidth='md'
             onClose={() => { setGaleria(null) }}
         >
-            {load ? <LinearProgress /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
                 <BotonFilled sx={{ position: 'absolute', top: 10, left: 10 }} onClick={() => setGaleria(null)}>
                     <IoClose fontSize={20} />
