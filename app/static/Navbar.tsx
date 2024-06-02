@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/legacy/image';
 import AppBar from '@mui/material/AppBar';
-import { Button, Tooltip, useScrollTrigger, Typography, Grid, Stack, LinearProgress, Drawer } from '@mui/material';
+import { Tooltip, useScrollTrigger, Typography, Grid, Stack, LinearProgress, Drawer } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -10,16 +10,13 @@ import { FaAngleDown, FaNewspaper } from "react-icons/fa";
 import { usePathname } from 'next/navigation';
 import { GoDotFill, GoHomeFill } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
-import { CiUser } from "react-icons/ci";
 import { BotonSimple } from '../componentes/Botones';
 import { Negrita, Normal } from '../componentes/Textos';
-import { HiMiniBars3BottomRight, HiOutlineBars3BottomLeft } from 'react-icons/hi2';
+import { HiOutlineBars3BottomLeft } from 'react-icons/hi2';
 import ModalLogin from './ModalLogin';
 import { BiDownArrow, BiHome } from 'react-icons/bi';
-import { RiGalleryView2 } from 'react-icons/ri';
 import { IoPeople } from 'react-icons/io5';
 import { PiDotOutlineFill, PiSquaresFourFill } from 'react-icons/pi';
-import { LuDot } from 'react-icons/lu';
 //estilos
 
 
@@ -47,14 +44,15 @@ const Navbar = () => {
     }, []);
     return (
         <>
-            <AppBar
-                position="sticky"
+            <Box
                 sx={{
                     boxShadow: trigger ? 'rgba(135, 158, 171, 0.16) 0px 8px 16px 0px' : 'none',
                     zIndex: 1001,
                     bgcolor: trigger ? '#f3f4f6' : '#f4f6f8',
                     transition: 'background .25s',
-
+                    position: 'sticky',
+                    top: 0,
+                    left: 0
                 }}
             >
                 {
@@ -210,7 +208,7 @@ const Navbar = () => {
                         </BotonSimple>
                     </Box>
                 </Container>
-            </AppBar >
+            </Box >
 
             <Drawer open={open} onClose={() => setOpen(false)} sx={{ display: { xs: 'block', md: 'none' } }}>
                 <Box py={2} width={220}>

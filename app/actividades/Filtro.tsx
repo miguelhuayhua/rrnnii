@@ -59,7 +59,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 },
                             }} color="info" variant="dot" invisible={params.size == 0}>
                                 <BotonSimple onClick={() => {
-                                    router.replace('/pasantias');
+                                    router.replace('/actividades');
                                 }}>
                                     <IoReload fontSize={18} />
                                 </BotonSimple>
@@ -70,14 +70,14 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
+                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Tipo
                         </Titulo>
                         <InputBox
                             select
                             value={carrera}
                             onChange={(ev) => {
-                                router.replace(`/pasantias?carrera=${ev.target.value}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
+                                router.replace(`/actividades?carrera=${ev.target.value}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
                             }}
                             SelectProps={{
                                 MenuProps: {
@@ -101,11 +101,11 @@ const Filtros = ({ open, setOpen }: Props) => {
                             <ItemBox value='inge'>Noticias</ItemBox>
                             <ItemBox value='inge'>Idiomas</ItemBox>
                         </InputBox>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
+                        <Titulo sx={{ mt: 1, fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Duración
                         </Titulo>
                         <RadioGroup value={duracion} onChange={(ev) => {
-                            router.replace(`/pasantias?duracion=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}`)
+                            router.replace(`/actividades?duracion=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'3'}

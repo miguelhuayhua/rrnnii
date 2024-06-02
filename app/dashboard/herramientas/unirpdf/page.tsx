@@ -40,7 +40,7 @@ export default function Main() {
             <Titulo sx={{ my: 2, textAlign: 'center' }} >Unir archivos PDF </Titulo>
             <Normal sx={{ mb: 4, textAlign: 'center', fontSize: 20 }}>Combina PDFs en el orden que quieras</Normal>
             <BotonFilled sx={{
-                fontSize: 25,
+                fontSize: 20,
                 my: 6,
                 display: 'flex',
                 mx: 'auto'

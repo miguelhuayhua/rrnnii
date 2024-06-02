@@ -41,19 +41,19 @@ const Footer = () => {
             <Grid container component='footer' px={{ xs: 1, md: 5, lg: 16 }}>
                 <Grid xs={6}>
                     <BsPhone fontSize={30} color='#888' />
-                    <Normal variant='body1'>
+                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
                         Teléfono: 2844177
                     </Normal>
-                    <Normal variant='body1'>
+                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
                         Celular:  76567636-70670980
                     </Normal>
-                    <Normal variant='body1'>
+                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
                         Fax: {`(591-2) 2845800`}
                     </Normal>
                 </Grid>
                 <Grid xs={6}>
                     <CiMail fontSize={30} color='#888' />
-                    <Normal variant='body1'>
+                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
                         Correo: camposugartevictor@gmail.com
                         <br />
                         relaciones.internacionales@upea.bo

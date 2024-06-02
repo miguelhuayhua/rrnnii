@@ -55,7 +55,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
+                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Carrera
                         </Titulo>
                         <InputBox
@@ -82,7 +82,7 @@ const Filtros = ({ open, setOpen }: Props) => {
 
                             <ItemBox value='inge'>Ingeniería de Sistemas</ItemBox>
                         </InputBox>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
+                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600, mt: 1 }}>
                             Duración
                         </Titulo>
                         <RadioGroup value={duracion} onChange={(ev) => {
@@ -101,7 +101,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 label={'6 meses'}
                             />
                         </RadioGroup>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
+                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Orden
                         </Titulo>
                         <RadioGroup value={orden} onChange={(ev) => {

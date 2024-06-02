@@ -1,17 +1,11 @@
-
-
 'use client';
-import { Avatar, Box, Chip, Divider, Stack, Typography, } from "@mui/material";
-import Link from "next/link";
+import { Box, Typography, } from "@mui/material";
 import Image from 'next/legacy/image';
-import { TbWorld } from "react-icons/tb";
-import { BotonFilled, BotonOutline, BotonSimple } from "../Botones";
-import { FaLink } from "react-icons/fa6";
+import { BotonFilled } from "../Botones";
 import { BsEye } from "react-icons/bs";
 import { ChipBox } from "../Mostrar";
 
 const Galeria = () => {
-
     return (
         <Box bgcolor='white !important' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
             <Box position='relative'>

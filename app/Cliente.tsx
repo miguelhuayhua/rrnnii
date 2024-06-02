@@ -1,18 +1,15 @@
 'use client';
-import { Box, Button, Grid, Typography, useScrollTrigger, Stack, Paper, Avatar, Chip } from "@mui/material";
-import { FaLink } from "react-icons/fa6";
-import Image from "next/legacy/image";
-import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { BsEye, BsWhatsapp } from "react-icons/bs";
-import { TbWorld } from "react-icons/tb";
-import { IoMdEye } from "react-icons/io";
+import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { CiSearch } from "react-icons/ci";
 import Footer from "./static/Footer";
+import Image from 'next/legacy/image';
+import Link from 'next/link'
 import { Negrita, Normal, Titulo } from "./componentes/Textos";
 import { BotonOutline } from "./componentes/Botones";
 import Actividad from "./componentes/items/Actividad";
 import Evento from "./componentes/items/Evento";
+import { BsEye, BsWhatsapp } from "react-icons/bs";
+import { useCallback, useEffect, useState } from "react";
 const Cliente = () => {
     const [y, setY] = useState(0);
     const onScroll = useCallback(() => {
@@ -43,10 +40,12 @@ const Cliente = () => {
                             Descubre los convenios y ofertas disponibles para la comunidad universitaria
                         </Typography>
                         <Stack direction='row' spacing={2} justifyContent='center' my={4}>
-                            <Button sx={{ background: '#212b36', fontSize: 14, px: 2, borderRadius: 3, color: 'white', textTransform: 'none', fontWeight: 700, "&:hover": { background: '#212b36dd' } }}>
-                                <BsEye style={{ marginRight: 10, fontSize: 20 }} />
-                                Ver convenios
-                            </Button>
+                            <Link href='/convenios'>
+                                <Button
+                                    sx={{ background: '#212b36', fontSize: 14, px: 2, borderRadius: 3, color: 'white', textTransform: 'none', fontWeight: 700, "&:hover": { background: '#212b36dd' } }}>
+                                    <BsEye style={{ marginRight: 10, fontSize: 20 }} />
+                                    Ver convenios
+                                </Button></Link>
                         </Stack>
                     </Box>
                 </Box>

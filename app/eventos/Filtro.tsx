@@ -52,7 +52,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
+                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Modo
                         </Titulo>
                         <RadioGroup value={modo} onChange={(ev) => {
@@ -71,7 +71,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 label={'Presencial'}
                             />
                         </RadioGroup>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 2 }}>
+                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Tipo
                         </Titulo>
                         <InputBox

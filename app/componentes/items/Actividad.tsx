@@ -10,7 +10,7 @@ import { BoxSombra } from "../Mostrar";
 const Actividad = () => {
 
     return (
-        <BoxSombra>
+        <BoxSombra position='relative' sx={{ borderRadius: 4}}>
             <Box position='absolute' top={0} height={"100%"} width="100%" sx={{ filter: 'brightness(.7)' }}>
                 <Image layout="fill" objectFit="cover" src='/eventos.jpg' alt="hola" />
             </Box>

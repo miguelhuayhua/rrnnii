@@ -25,7 +25,7 @@ const Evento = () => {
                     11 May 2024
                 </Typography>
                 <Link href='/'>
-                    <Typography color='#212b36' fontSize={13} fontWeight={700} py={3}>
+                    <Typography color='#212b36' fontSize={13} fontWeight={700} py={1.5}>
                         Evento Productivo para becarios de Francia
                     </Typography>
                 </Link>

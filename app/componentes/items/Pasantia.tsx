@@ -12,7 +12,7 @@ const Pasantia = () => {
 
     return (
         <Grid container bgcolor='white' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
-            <Grid xs={7} py={3} px={2}>
+            <Grid xs={6} py={3} px={1}>
                 <ChipBox sx={{ margin: 0, bgcolor: '#0073b7', color: 'white' }} label='3 meses'></ChipBox>
                 <Link href='/'>
                     <Negrita sx={{ color: '#212b36' }} mt={2}>
@@ -37,7 +37,7 @@ const Pasantia = () => {
                     <ChipBox label='Medicina'></ChipBox>
                 </Stack>
             </Grid>
-            <Grid xs={5} p={2}>
+            <Grid xs={6} py={2} px={1}>
                 <Box position='relative' borderRadius={2} height={"100%"} overflow='hidden'>
                     <Image objectFit="cover" layout='fill' src='/eventos.jpg' alt="hola" />
                     <Button
