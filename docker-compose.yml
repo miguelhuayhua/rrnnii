@@ -1,0 +1,31 @@
+version: '3.8'  # Versión de Docker Compose que estás utilizando
+
+services:
+  app:
+    container_name: my-app  # Nombre del contenedor para tu aplicación
+    build:
+      context: .
+      dockerfile: Dockerfile  # Ruta al Dockerfile de tu aplicación
+    ports:
+      - "3000:3000"  # Puerto que expone tu aplicación
+    environment:
+      DATABASE_URL: postgres://postgres:miguel@db-rrnnii:5432/rrnnii  # Variables de entorno
+      NEXTAUTH_SECRET: LBMD65oyVIks4iqj9HWSMptNOuvw28u2
+      NEXTAUTH_URL: http://localhost:3000
+    depends_on:
+      - db  # Dependencia del servicio 'db'
+
+  db:
+    container_name: db-rrnnii  # Nombre del contenedor para la base de datos
+    image: postgres:14  # Imagen de PostgreSQL que utilizarás
+    environment:
+      POSTGRES_DB: rrnnii  # Nombre de la base de datos
+      POSTGRES_USER: postgres  # Usuario de PostgreSQL
+      POSTGRES_PASSWORD: miguel  # Contraseña de PostgreSQL
+    ports:
+      - "5432:5432"  # Puerto que expone PostgreSQL
+
+# Opcional: Definir redes y volúmenes si es necesario
+networks:
+  default:
+    driver: bridge
