@@ -1,8 +1,8 @@
 import Cliente from './Cliente';
 import Navbar from '../static/Navbar';
-import { Box, Typography, Container, Grid } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Footer from '../static/Footer';
-export default function Home() {
+export default async function Home() {
     return (
         <Box bgcolor='#f4f6f8'>
             <Navbar />

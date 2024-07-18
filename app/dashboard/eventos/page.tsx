@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
@@ -19,7 +19,7 @@ import { filtrarValorEnArray } from "@/utils/data";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [eventos, setEventos] = useState<any>([]);
+    const [eventos, setEventos] = useState<Evento[]>([]);
     const [prevEventos, setPrevEventos] = useState<any>([]);
     const [evento, setEvento] = useState<any>(null);
     const router = useRouter();
@@ -82,8 +82,8 @@ export default function Page() {
                         }}
                     />
                 </Grid>
-                {eventos.map((value: any) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} position='relative'>
+                {eventos.map((value) => (
+                    <Grid key={value.id} item xs={12} sm={6} md={4} lg={3} position='relative'>
                         <EventoComponent Evento={value} />
                         <BotonFilled
                             onClick={() => {

@@ -18,7 +18,7 @@ import { BiSearch } from "react-icons/bi";
 import { filtrarValorEnArray } from "@/utils/data";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [convenios, setConvenios] = useState<any>([]);
+    const [convenios, setConvenios] = useState<Convenio[]>([]);
     const [convenio, setConvenio] = useState<any>(null);
     const [prevConvenios, setPrevConvenios] = useState<any>([]);
     const router = useRouter();
@@ -79,8 +79,8 @@ export default function Page() {
                         }}
                     />
                 </Grid>
-                {convenios.map((value: any) => (
-                    <Grid item xs={12} md={6} lg={4} xl={3} position='relative'>
+                {convenios.map((value) => (
+                    <Grid key={value.id} item xs={12} md={6} lg={4} xl={3} position='relative'>
                         <ConvenioComponent Convenio={value as any} />
                         <BotonFilled
                             onClick={() => {

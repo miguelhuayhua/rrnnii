@@ -9,7 +9,7 @@ import { BotonFilled } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
-import Editor from 'react-quill';
+const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { BsFileEarmarkPdfFill, BsImageAlt } from 'react-icons/bs';
 import { DatePickerBox, InputBox, ItemBox } from '@/app/componentes/Datos';
@@ -21,6 +21,8 @@ import Image from 'next/legacy/image';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { FaFileWord } from 'react-icons/fa6';
 import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
+import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 interface Props {
     setPasantia: any;
     Pasantia: Pasantia;

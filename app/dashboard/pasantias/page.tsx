@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
@@ -18,7 +18,7 @@ import { filtrarValorEnArray } from "@/utils/data";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [Pasantias, setPasantias] = useState<any>([]);
+    const [Pasantias, setPasantias] = useState<Pasantia[]>([]);
     const [prevPasantias, setPrevPasantias] = useState<any>([]);
     const [Pasantia, setPasantia] = useState<any>(null);
     const router = useRouter();
@@ -80,8 +80,8 @@ export default function Page() {
                         }}
                     />
                 </Grid>
-                {Pasantias.map((value: any) => (
-                    <Grid item xs={12} sm={6} lg={4} xl={3} position='relative'>
+                {Pasantias.map((value: Pasantia) => (
+                    <Grid key={value.id} item xs={12} sm={6} lg={4} xl={3} position='relative'>
                         <PasantiaComponent Pasantia={value as any} />
                         <BotonFilled
                             onClick={() => {

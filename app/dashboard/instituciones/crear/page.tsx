@@ -10,7 +10,6 @@ import { InputBox } from "@/app/componentes/Datos";
 import { BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Institucion } from "@prisma/client";
-import 'react-quill/dist/quill.snow.css';
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";

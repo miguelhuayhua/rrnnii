@@ -18,7 +18,7 @@ import { filtrarValorEnArray } from "@/utils/data";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [galerias, setGalerias] = useState<any>([]);
+    const [galerias, setGalerias] = useState<Galeria[]>([]);
     const [prevGalerias, setPrevGalerias] = useState<any>([]);
     const [galeria, setGaleria] = useState<any>(null);
     const router = useRouter();
@@ -82,8 +82,8 @@ export default function Page() {
                         }}
                     />
                 </Grid>
-                {galerias.map((value: any) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} position='relative'>
+                {galerias.map((value) => (
+                    <Grid key={value.id} item xs={12} sm={6} md={4} lg={3} xl={2} position='relative'>
                         <GaleriaComponent Galeria={value} />
                         <BotonOutline
                             onClick={() => {

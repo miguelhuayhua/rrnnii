@@ -1,23 +1,25 @@
 'use client';
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, LinearProgress, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Grid, LinearProgress, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
+import { MdArrowLeft } from "react-icons/md";
 import { BoxSombra } from "../../componentes/Mostrar";
-import { DatePickerBox, InputBox, ItemBox } from "@/app/componentes/Datos";
+import { InputBox, ItemBox } from "@/app/componentes/Datos";
 import { BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Galeria } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
-import Editor from 'react-quill';
+const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";
 import { useState } from "react";
 import Image from 'next/legacy/image';
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import dynamic from "next/dynamic";
+import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Galeria>({

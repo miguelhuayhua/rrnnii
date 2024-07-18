@@ -1,7 +1,6 @@
 'use client';
 import { Badge, FormControlLabel, Grid, Radio, RadioGroup, Stack, SwipeableDrawer, useTheme } from "@mui/material";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaFilter } from "react-icons/fa6";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Titulo } from "../componentes/Textos";
 import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";

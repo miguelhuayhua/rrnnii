@@ -1,10 +1,9 @@
-'use client';
+"use client";
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tab, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
-import { BoxSombra, TabBox } from "../componentes/Mostrar";
-import Tabla from "../componentes/Tabla";
+import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
@@ -20,7 +19,7 @@ import { filtrarValorEnArray } from "@/utils/data";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [actividades, setActividades] = useState<any>([]);
+    const [actividades, setActividades] = useState<Actividad[]>([]);
     const [prevActividades, setPrevActividades] = useState<any>([]);
     const [actividad, setActividad] = useState<any>(null);
     const router = useRouter();
@@ -83,8 +82,8 @@ export default function Page() {
                         }}
                     />
                 </Grid>
-                {actividades.map((value: any) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} position='relative'>
+                {actividades.map((value) => (
+                    <Grid key={value.id} item xs={12} sm={6} md={4} lg={3} xl={2} position='relative'>
                         <ActividadComponent Actividad={value} />
                         <BotonSimple
                             onClick={() => {

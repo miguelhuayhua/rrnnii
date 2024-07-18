@@ -1,13 +1,15 @@
-'use client';
+"use client";
 import { Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
-import Convenio from "../componentes/items/Convenio";
 import { useState } from "react";
 import Actividad from "../componentes/items/Actividad";
-import Filtros from "./Filtro";
+import dynamic from "next/dynamic";
+import FiltroSkeleton from "../skeletons/FiltroSkeleton";
+const Filtros = dynamic(() => import('./Filtro'), { ssr: false, loading: () => (<FiltroSkeleton />) });
+
 const Cliente = () => {
     const [open, setOpen] = useState(false);
 

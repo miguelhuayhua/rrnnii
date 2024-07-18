@@ -18,7 +18,7 @@ import { filtrarValorEnArray } from "@/utils/data";
 import dayjs from "dayjs";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [instituciones, setInstituciones] = useState<any>([]);
+    const [instituciones, setInstituciones] = useState<Institucion[]>([]);
     const [prevInstituciones, setPrevInstituciones] = useState<any>([]);
     const [institucion, setInstitucion] = useState<any>(null);
     const router = useRouter();
@@ -79,8 +79,8 @@ export default function Page() {
                         }}
                     />
                 </Grid>
-                {instituciones.map((value: any) => (
-                    <Grid item xs={6} sm={4} md={3} lg={2} position='relative'>
+                {instituciones.map((value) => (
+                    <Grid key={value.id} item xs={6} sm={4} md={3} lg={2} position='relative'>
                         <BoxSombra p={2} pb={7} sx={{ bgcolor: '#fefefe', borderRadius: 3 }}>
                             <Titulo sx={{ fontSize: { xs: 11, md: 15 }, fontWeight: 600 }}>
                                 {value.nombre}

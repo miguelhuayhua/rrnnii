@@ -11,7 +11,7 @@ import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Convenio, Institucion } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
-import Editor from 'react-quill';
+const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";
@@ -20,6 +20,8 @@ import { ChipBox } from "@/app/componentes/Mostrar";
 import { FaFileWord } from "react-icons/fa6";
 import Image from 'next/legacy/image';
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import dynamic from "next/dynamic";
+import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Convenio & { Institucion: Institucion }>({
