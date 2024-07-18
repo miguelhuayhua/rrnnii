@@ -4,7 +4,6 @@ import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
 import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { Actividad } from '@prisma/client';
 import { BotonFilled } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
@@ -22,6 +21,7 @@ import { ChipBox } from '@/app/componentes/Mostrar';
 import { FaFileWord } from 'react-icons/fa';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
+import { Actividad } from '@prisma/client';
 interface Props {
     setActividad: any;
     Actividad: Actividad;
