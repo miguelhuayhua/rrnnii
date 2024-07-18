@@ -8,6 +8,10 @@ WORKDIR /app
 COPY package*.json ./
 # Copia el archivo .env al directorio de trabajo
 COPY .env .env
+
+# Copia el resto del código de la aplicación al directorio de trabajo
+COPY . .
+
 # Instala las dependencias del proyecto
 RUN npm install
 
@@ -15,9 +19,6 @@ RUN npm install
 RUN npx prisma db push
 
 RUN npx prisma generate
-
-# Copia el resto del código de la aplicación al directorio de trabajo
-COPY . .
 
 # Construye la aplicación Next.js para producción
 RUN npm run build
