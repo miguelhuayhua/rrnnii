@@ -1,40 +1,41 @@
 import { Button, Typography, styled } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import Link from "next/link";
 const BotonOutline = styled(Button)(() =>
 ({
     background: 'transparent',
-    fontSize: 13,
+    fontSize: 16,
     borderRadius: 12,
-    color: '#212b36',
-    border: '1px solid #888',
+    color: grey[900],
+    border: `1px solid ${grey[800]}`,
     textTransform: 'none',
     fontWeight: 700,
     minWidth: 0,
-    "&:hover": { background: '#ddd' }
+    "&:hover": { background: grey[100] }
 }));
 const BotonFilled = styled(Button)(() =>
 ({
-    background: '#212b36',
-    fontSize: 13,
-    px: 2,
+    background: grey[900],
     borderRadius: 12,
-    color: 'white',
+    color: grey[50],
     textTransform: 'none',
     fontWeight: 700,
-    "&:hover": { background: '#212b36dd' },
-    minWidth: 0
+    minWidth: 0,
+    fontSize: 16,
+    "&:hover": {
+        background: grey[700]
+    }
 }
 ));
 const BotonSimple = styled(Button)(() =>
 ({
-    background: 'transparent',
-    fontSize: 14,
+    background: grey[50],
     borderRadius: 12,
-    color: '#212b36',
+    fontSize: 16,
+    color: grey[900],
     minWidth: 0,
     textTransform: 'none',
     fontWeight: 700,
-    "&:hover": { color: '#666' }
 }));
 
 export { BotonOutline, BotonSimple, BotonFilled };

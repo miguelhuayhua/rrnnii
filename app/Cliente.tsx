@@ -1,15 +1,16 @@
 'use client';
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack } from "@mui/material";
 import { CiSearch } from "react-icons/ci";
 import Footer from "./static/Footer";
 import Image from 'next/legacy/image';
 import Link from 'next/link'
 import { Negrita, Normal, Titulo } from "./componentes/Textos";
-import { BotonOutline } from "./componentes/Botones";
+import { BotonOutline, BotonFilled } from "./componentes/Botones";
 import Actividad from "./componentes/items/Actividad";
 import Evento from "./componentes/items/Evento";
 import { BsEye, BsWhatsapp } from "react-icons/bs";
 import { useCallback, useEffect, useState } from "react";
+import { grey } from "@mui/material/colors";
 const Cliente = () => {
     const [y, setY] = useState(0);
     const onScroll = useCallback(() => {
@@ -29,23 +30,22 @@ const Cliente = () => {
                 <Box width="50%" sx={{ opacity: 1 - y * 0.0015, top: y * 0.1 }} position='relative'>
                     <Image alt="fondo monolito" layout="fill" src='/monolito.png' objectFit="fill" className="monolito" style={{ transform: `perspective(500px) rotateX(${y * 0.5}deg) rotateY(25deg)` }} />
                     <Box px={{ xs: 2, xl: 16 }} py={{ xs: 10, sm: 10, md: 20 }} >
-                        <Typography component='h1' textAlign='center' color={'#212b36'} fontSize={{ xs: 18, sm: 25, md: 30, lg: 40 }} fontWeight={800}  >
+                        <Titulo variant='h1' sx={{ fontSize: 35, textAlign: 'center' }} >
                             Relaciones Internacionales
                             <br />
                             <span className="upea">
                                 UPEA
                             </span>
-                        </Typography>
-                        <Typography component='p' textAlign='center' fontSize={14}>
+                        </Titulo>
+                        <Normal sx={{ textAlign: 'center' }}>
                             Descubre los convenios y ofertas disponibles para la comunidad universitaria
-                        </Typography>
+                        </Normal>
                         <Stack direction='row' spacing={2} justifyContent='center' my={4}>
                             <Link href='/convenios'>
-                                <Button
-                                    sx={{ background: '#212b36', fontSize: 14, px: 2, borderRadius: 3, color: 'white', textTransform: 'none', fontWeight: 700, "&:hover": { background: '#212b36dd' } }}>
-                                    <BsEye style={{ marginRight: 10, fontSize: 20 }} />
+                                <BotonFilled startIcon={<BsEye style={{ fontSize: 20 }} />}>
                                     Ver convenios
-                                </Button></Link>
+                                </BotonFilled>
+                            </Link>
                         </Stack>
                     </Box>
                 </Box>
@@ -59,7 +59,7 @@ const Cliente = () => {
                 <div className="dec-left second"></div>
                 <div className="dec-left third"></div>
             </Box>
-            <Box bgcolor='#fdfdfe' position='relative' >
+            <Box position='relative' >
                 <Negrita sx={{ textAlign: 'center', py: 2 }}>
                     rrnnii.upea.bo
                 </Negrita>
@@ -84,7 +84,7 @@ const Cliente = () => {
                     </Grid>
                 </Grid>
             </Box>
-            <Grid container bgcolor='#fdfdfe' px={2}>
+            <Grid container bgcolor='#fdfdfe' px={2} py={5} borderTop={`1px solid ${grey[400]}`}>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }}>
                     <Image width={100} height={80} src='/revista.png' layout='responsive' />
                 </Grid>
@@ -120,23 +120,13 @@ const Cliente = () => {
                     <Image width={100} height={60} src='/gorro.png' layout='responsive' />
                 </Grid>
             </Grid>
-            <Box position='relative' style={{ transform: 'rotateZ(180deg)' }}>
-                <div className="dec-right first"></div>
-                <div className="dec-right second"></div>
-                <div className="dec-right third"></div>
-                <div className="dec-left first"></div>
-                <div className="dec-left second"></div>
-                <div className="dec-left third"></div>
-            </Box>
             <Box py={10}>
                 <Titulo sx={{ textAlign: 'center', fontSize: { xs: 14, md: 18 }, py: 2 }}>
                     ¿Tienes dudas?
                 </Titulo>
-                <Button startIcon={<BsWhatsapp style={{ fontSize: 20 }} />}
-                    sx={{ display: 'flex', mx: 'auto', background: '#212b36', fontSize: 14, px: 2, borderRadius: 3, color: 'white', textTransform: 'none', fontWeight: 700, "&:hover": { background: '#212b36dd' } }}
-                >
+                <BotonFilled sx={{ display: 'flex', mx: 'auto' }} startIcon={<BsWhatsapp style={{ fontSize: 20 }} />}>
                     Contactanos
-                </Button>
+                </BotonFilled>
             </Box>
             <Footer />
         </>

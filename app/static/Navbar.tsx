@@ -17,6 +17,7 @@ import ModalLogin from './ModalLogin';
 import { BiDownArrow, BiHome } from 'react-icons/bi';
 import { IoPeople } from 'react-icons/io5';
 import { PiDotOutlineFill, PiSquaresFourFill } from 'react-icons/pi';
+import { grey, red } from '@mui/material/colors';
 //estilos
 
 
@@ -48,11 +49,11 @@ const Navbar = () => {
                 sx={{
                     boxShadow: trigger ? 'rgba(135, 158, 171, 0.16) 0px 8px 16px 0px' : 'none',
                     zIndex: 1001,
-                    bgcolor: trigger ? '#f3f4f6' : '#f4f6f8',
+                    bgcolor: trigger ? 'white' : grey[50],
                     transition: 'background .25s',
                     position: 'sticky',
                     top: 0,
-                    left: 0
+                    left: 0,
                 }}
             >
                 {
@@ -70,7 +71,7 @@ const Navbar = () => {
                         transition: 'padding .25s'
                     }}
                 >
-                    <Link href={"/"} style={{ textDecoration: 'none' }}>
+                    <Link href={"/"} style={{ textDecoration: 'none', color: 'inherit' }}>
                         <Box display='flex' alignItems='center'>
                             <Image
                                 width={50}
@@ -83,7 +84,7 @@ const Navbar = () => {
                                 <Normal sx={{ fontSize: 11, textAlign: 'start' }}>
                                     Relaciones  Internacionales
                                 </Normal>
-                                <Negrita sx={{ color: '#333' }}>
+                                <Negrita sx={{ fontSize: 12 }}>
                                     Universidad Pública de El Alto
                                 </Negrita>
                             </Box>
@@ -91,11 +92,11 @@ const Navbar = () => {
                     </Link>
                     <Box display='flex' alignItems='center'>
                         <Stack display={{ xs: 'none', md: 'flex' }} direction='row' spacing={2} mr={2}>
-                            <Link href={''}>
-                                <Typography sx={{ color: pathname == '/' ? '#c5080c' : '#2f3842', fontSize: 13 }}>
+                            <Link href={'/'}>
+                                <Normal sx={{ color: pathname == '/' ? red[700] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/' ? <GoDotFill color='inherit' /> : null}
                                     Principal
-                                </Typography>
+                                </Normal>
                             </Link>
                             <Tooltip
                                 PopperProps={{
@@ -103,13 +104,10 @@ const Navbar = () => {
                                         "& .MuiTooltip-tooltip": {
                                             background: 'linear-gradient(50deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 41%, rgba(255,255,255,1) 60%, rgba(255,240,240,1) 100%)',
                                             borderRadius: 3,
-                                            maxWidth: 750,
+                                            maxWidth: 900,
                                             width: "80vw",
-                                            p: 3,
+                                            p: 2,
                                             boxShadow: '-10px 10px 30px #00000022',
-                                            ".MuiTooltip-arrow": {
-                                                color: 'white'
-                                            },
                                         }
                                     }
                                 }}
@@ -120,55 +118,55 @@ const Navbar = () => {
                                     <Grid container columnSpacing={3} >
                                         <Grid item xs={2}>
                                             <Link href={'/convenios'}>
-                                                <Typography color='black'>
+                                                <Negrita>
                                                     Convenios
-                                                </Typography>
+                                                </Negrita>
                                             </Link>
                                             <Link href={'/convenios?tipo=nacionales'}>
-                                                <Typography sx={{ color: '#586773', fontSize: 13, my: 1 }}>
+                                                <Normal sx={{ my: 1 }}>
                                                     Nacionales
-                                                </Typography>
+                                                </Normal>
                                             </Link>
                                             <Link href={'/convenios?tipo=internacionales'}>
-                                                <Typography sx={{ color: '#586773', fontSize: 13, my: 1 }}>
+                                                <Normal sx={{ my: 1 }}>
                                                     Internacionales
-                                                </Typography>
+                                                </Normal>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Link href={'/pasantias'}>
-                                                <Typography color='black'>
+                                                <Negrita>
                                                     Pasantías
-                                                </Typography>
+                                                </Negrita>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Link href={'/actividades'}>
-                                                <Typography color='black'>
+                                                <Negrita>
                                                     Actividades
-                                                </Typography>
+                                                </Negrita>
                                             </Link>
                                             <Link href={'/actividades?tipo=beca'}>
-                                                <Typography sx={{ color: '#586773', fontSize: 13, my: 1 }}>
+                                                <Normal sx={{ my: 1 }}>
                                                     Becas
-                                                </Typography>
+                                                </Normal>
                                             </Link>
                                             <Link href={'/actividades?tipo=idioma'}>
-                                                <Typography sx={{ color: '#586773', fontSize: 13, my: 1 }}>
+                                                <Normal sx={{ my: 1 }}>
                                                     Idiomas
-                                                </Typography>
+                                                </Normal>
                                             </Link>
                                             <Link href={'/actividades?tipo=noticia'}>
-                                                <Typography sx={{ color: '#586773', fontSize: 13, my: 1 }}>
+                                                <Normal sx={{ my: 1 }}>
                                                     Noticias
-                                                </Typography>
+                                                </Normal>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Link href={'/eventos'}>
-                                                <Typography color='black'>
+                                                <Negrita>
                                                     Eventos
-                                                </Typography>
+                                                </Negrita>
                                             </Link>
 
                                         </Grid>
@@ -178,21 +176,21 @@ const Navbar = () => {
                                     </Grid>
                                 }
                             >
-                                <Typography sx={{ display: 'flex', alignItems: 'center', color: pathname.includes('/convenios') || pathname.includes('/pasantias') || pathname.includes('/actividades') || pathname.includes('/eventos') ? '#c5080c' : '#2f3842', fontSize: 13 }}>
+                                <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.includes('/convenios') || pathname.includes('/pasantias') || pathname.includes('/actividades') || pathname.includes('/eventos') ? red[700] : grey[900] }}>
                                     Convocatorias <FaAngleDown />
-                                </Typography>
+                                </Normal>
                             </Tooltip>
                             <Link href={'/galeria'}>
-                                <Typography sx={{ color: pathname == '/galeria' ? '#c5080c' : '#2f3842', fontSize: 13 }}>
+                                <Normal sx={{ color: pathname == '/galeria' ? red[700] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/galeria' ? <GoDotFill color='inherit' /> : null}
                                     Galería
-                                </Typography>
+                                </Normal>
                             </Link>
                             <Link href={'/about'}>
-                                <Typography sx={{ color: pathname == '/about' ? '#c5080c' : '#2f3842', fontSize: 13 }}>
+                                <Normal sx={{ color: pathname == '/about' ? red[700] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/about' ? <GoDotFill color='inherit' /> : null}
                                     Sobre Nosotros
-                                </Typography>
+                                </Normal>
                             </Link>
                         </Stack>
                         <BotonSimple onClick={() => {
@@ -223,7 +221,7 @@ const Navbar = () => {
                     </Box>
                     <br />
                     <Link href={'/'}>
-                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/' ? '#883944' : '#666', bgcolor: pathname == '/' ? '#88394411' : 'transparent', fontSize: 13, mt: 1 }} startIcon={<GoHomeFill />} fullWidth>
+                        <BotonSimple sx={{ borderRadius: 0, height: 50, justifyContent: 'start', px: 3, color: pathname == '/' ? '#883944' : '#666', bgcolor: pathname == '/' ? '#88394411' : 'transparent', fontSize: 14, mt: 1 }} startIcon={<GoHomeFill />} fullWidth>
                             Principal
                         </BotonSimple>
                     </Link>

@@ -11,13 +11,8 @@ const BoxSombra = styled(Box)(() => {
 const TabBox = styled(Tab)(() => {
     return {
         textTransform: 'none',
-        fontWeight: 700,
-        minWidth: 0,
-        height: 35,
-        minHeight: 0,
-        fontSize: 13,
-        margin: "0 40px 0 0",
-        padding: 0
+        fontWeight: 500,
+        fontSize: 13.5,
     }
 })
 export { BoxSombra, TabBox };

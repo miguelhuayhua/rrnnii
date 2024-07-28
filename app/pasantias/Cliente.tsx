@@ -5,12 +5,10 @@ import { BiSearch } from "react-icons/bi";
 import { BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useState } from "react";
-import Evento from "../componentes/items/Evento";
 import Filtros from "./Filtro";
 import Pasantia from "../componentes/items/Pasantia";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
-
     return (
         <>
             <Grid container px={3} spacing={2}>

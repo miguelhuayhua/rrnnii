@@ -4,16 +4,15 @@ import { Box, Typography, } from "@mui/material";
 import Footer from '../static/Footer';
 export default function Home() {
     return (
-        <Box bgcolor='#f4f6f8'>
+        <>
             <Navbar />
             <Box p={3}>
-                <Typography variant='h1' sx={{ fontWeight: 700, color: '#212b36', fontSize: 18 }}>Convenios</Typography>
+                <Typography variant='h1' sx={{ fontWeight: 800, fontSize: 20 }}>Convenios</Typography>
             </Box>
-
-            <Cliente></Cliente>
+            <Cliente />
             <Box mt={10}>
                 <Footer />
             </Box>
-        </Box>
+        </>
     );
 }

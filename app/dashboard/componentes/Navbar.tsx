@@ -10,7 +10,7 @@ const Navbar = () => {
     const [open, setOpen] = useState(false);
     const { data } = useSession();
     return (
-        <Box position={'sticky'} top={0} zIndex={18} width="100%" >
+        <Box position={'sticky'} top={0} zIndex={18} width="100%" px={1}>
             <Box className='blur-style' p={2} height={30} bgcolor='transparent' position={'relative'} >
                 <ClickAwayListener onClickAway={() => setOpen(false)}>
                     <Tooltip

@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Autocomplete, Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Autocomplete, Box, Grid, Typography, useMediaQuery, useTheme, MenuItem } from '@mui/material';
 import { Convenio, Institucion } from '@prisma/client';
 import { BotonFilled } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
@@ -12,7 +12,7 @@ import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { BsFileEarmarkPdfFill, BsImageAlt } from 'react-icons/bs';
-import { DatePickerBox, InputBox, ItemBox } from '@/app/componentes/Datos';
+import { DatePickerBox, InputBox } from '@/app/componentes/Datos';
 import { MdOutlineAttachFile } from 'react-icons/md';
 import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
@@ -236,8 +236,8 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
                                             options={instituciones.map((value: Institucion) => value.nombre)}
                                             renderInput={(params) =>
                                                 <InputBox
-                                                error={!!errors.Institucion?.nombre}
-                                                helperText={errors.Institucion?.nombre?.message || 'Es importante involucrar la institución que ofrece la pasantía'}
+                                                    error={!!errors.Institucion?.nombre}
+                                                    helperText={errors.Institucion?.nombre?.message || 'Es importante involucrar la institución que ofrece la pasantía'}
                                                     {...params}
                                                     {...field}
                                                     label='Institución'
@@ -275,25 +275,9 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
                                             label='Tipo de convenio'
                                             {...field}
                                             inputRef={ref}
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    slotProps: {
-                                                        paper: {
-                                                            sx: {
-                                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                px: 0,
-                                                                borderRadius: 3,
-                                                                border: "1px solid #f1f1f1",
-                                                                boxShadow: '-10px 10px 30px #00000022',
-                                                                maxHeight: 400
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }}
                                         >
-                                            <ItemBox value='nacional'>Nacional</ItemBox>
-                                            <ItemBox value='internacional'>Internacional</ItemBox>
+                                            <MenuItem value='nacional'>Nacional</MenuItem>
+                                            <MenuItem value='internacional'>Internacional</MenuItem>
                                         </InputBox>
                                     )}
                                 />

@@ -62,7 +62,7 @@
 .dec-right,
 .dec-left {
     backdrop-filter: blur(6px);
-    background-color: rgba(255, 255, 255, 0.328);
+    background-color: rgba(255, 255, 255, 0.1);
     z-index: 9;
     width: 50%;
     position: absolute;
@@ -71,19 +71,19 @@
     &.first {
         right: 0px;
         clip-path: polygon(100% 50%, 0% 100%, 100% 100%);
-        height: 300px;
+        height: 600px;
     }
 
     &.second {
         right: 0px;
         clip-path: polygon(100% 50%, 0% 100%, 100% 100%);
-        height: 200px;
+        height: 400px;
     }
 
     &.third {
         right: 0px;
         clip-path: polygon(100% 50%, 0% 100%, 100% 100%);
-        height: 100px;
+        height: 200px;
     }
 }
 
@@ -92,19 +92,19 @@
     &.first {
         left: 0px;
         clip-path: polygon(100% 100%, 0 50%, 0 100%);
-        height: 300px;
+        height: 600px;
     }
 
     &.second {
         left: 0px;
         clip-path: polygon(100% 100%, 0 50%, 0 100%);
-        height: 200px;
+        height: 400px;
     }
 
     &.third {
         left: 0px;
         clip-path: polygon(100% 100%, 0 50%, 0 100%);
-        height: 100px;
+        height: 200px;
     }
 }
 
@@ -112,5 +112,3 @@
     opacity: 0.1;
     scale: 0.5;
 }
-
-

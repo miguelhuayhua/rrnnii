@@ -1,16 +1,14 @@
-import { Typography, styled } from "@mui/material";
-import Link from "next/link";
+import { Chip, Typography, styled } from "@mui/material";
 const Normal = styled(Typography)(() =>
 ({
-    fontWeight: 500,
-    color: '#687885',
-    fontSize: 13
+    fontWeight: 400,
+    fontSize: 14
 }));
 
 const Titulo = styled(Typography)(({ theme }) =>
 ({
     color: '#212b36',
-    fontSize: 35,
+    fontSize: 25,
     fontWeight: 800,
     [theme.breakpoints.down('sm')]: {
         fontSize: 20
@@ -18,8 +16,10 @@ const Titulo = styled(Typography)(({ theme }) =>
 }));
 const Negrita = styled(Typography)(() =>
 ({
-    color: '#919eab',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 800,
 }));
+
+
+
 export { Normal, Titulo, Negrita };

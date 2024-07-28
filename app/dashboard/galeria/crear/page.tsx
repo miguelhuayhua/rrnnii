@@ -1,12 +1,12 @@
 'use client';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, LinearProgress, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
 import { BoxSombra } from "../../componentes/Mostrar";
-import { InputBox, ItemBox } from "@/app/componentes/Datos";
+import { InputBox } from "@/app/componentes/Datos";
 import { BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Galeria } from "@prisma/client";
@@ -20,6 +20,7 @@ import Image from 'next/legacy/image';
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
+import { grey } from "@mui/material/colors";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Galeria>({
@@ -68,11 +69,13 @@ export default function Page() {
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>
             {load ? <LinearProgress /> : null}
-            <BotonOutline onClick={() => router.back()}>
-                <MdArrowLeft fontSize={20} /> Volver
-            </BotonOutline>
-            <Titulo sx={{ fontSize: 20, mt: 1 }}>
-                Añadir a galeria
+            <BotonSimple
+                startIcon={<MdArrowLeft fontSize={20} />}
+                onClick={() => router.back()}>
+                Regresar
+            </BotonSimple>
+            <Titulo sx={{ mt: 1 }}>
+                Añadir a galería
             </Titulo>
             <Breadcrumbs >
                 <Link href="/dashboard/galerias">
@@ -88,20 +91,20 @@ export default function Page() {
                     <BoxSombra p={2}>
                         <Box sx={{
                             height: 200,
-                            bgcolor: '#f6f7f9',
+                            bgcolor: grey[100],
                             p: 1,
-                            border: '1px dashed #ddd',
+                            border: `1px dashed ${grey[400]}`,
                             flexDirection: 'column',
                             borderRadius: 5,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#919eab',
+                            color: grey[900],
                             transition: 'color 0.25s',
                             position: 'relative',
                             overflow: 'hidden',
                             "&:hover": {
-                                color: '#919eab77',
+                                color: grey[500],
                                 cursor: 'pointer'
                             }
                         }}
@@ -113,7 +116,7 @@ export default function Page() {
                             <BsImageAlt color={'inherit'} fontSize={30} />
                             <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                     </BoxSombra>
                 </Grid>
                 <Grid item xs={12} md={6} lg={8}>
@@ -139,9 +142,9 @@ export default function Page() {
                                     control={control}
                                     render={({ field }) => (
                                         <Box>
-                                            <Negrita sx={{ my: 1, color: '#888888', fontWeight: 600, fontSize: 14 }}>
+                                            <Normal sx={{ fontSize: 16, my: 1, fontWeight: 500 }} >
                                                 Descripción:
-                                            </Negrita>
+                                            </Normal>
                                             <Editor
                                                 value={field.value}
                                                 modules={{

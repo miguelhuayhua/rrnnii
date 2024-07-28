@@ -17,7 +17,8 @@ import { Normal } from '@/app/componentes/Textos';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { InputBox } from '@/app/componentes/Datos';
 import { BotonFilled, BotonOutline, BotonSimple } from '@/app/componentes/Botones';
-import { FaPenToSquare } from 'react-icons/fa6';
+import { FaEye, FaPenToSquare } from 'react-icons/fa6';
+import { grey } from '@mui/material/colors';
 interface Column {
     id: string;
     label: string;
@@ -99,6 +100,7 @@ const Tabla = ({
                 hasSearch ?
                     <Box my={1}>
                         <InputBox
+                            size='small'
                             sx={{
                                 width: "30%",
                                 minWidth: 200
@@ -108,8 +110,8 @@ const Tabla = ({
                             }}
                             placeholder='Buscar'
                             InputProps={{
-                                startAdornment:
-                                    <BiSearch color='#666' fontSize={25} />
+                                endAdornment:
+                                    <BiSearch fontSize={25} />
                             }}
                         />
                     </Box>
@@ -120,8 +122,8 @@ const Tabla = ({
                     {
                         Data.length > 0 ?
                             <Table
+                                size={small ? 'small' : 'medium'}
                                 stickyHeader
-                                aria-label="sticky table"
                             >
                                 <TableHead >
                                     <TableRow key={'head'}>
@@ -130,29 +132,28 @@ const Tabla = ({
                                                 <TableCell
                                                     style={{
                                                         textTransform: 'capitalize',
-                                                        fontSize: 13,
+                                                        fontSize: 16,
+                                                        fontFamily: 'inherit',
                                                         fontWeight: 600,
-                                                        color: '#637381',
                                                         border: 'none'
                                                     }}
-                                                    key={Math.random()}
+                                                    key={column.label}
                                                     align={'left'}
                                                 >
-                                                    {column.label == 'avatar' ? '' : column.label}
+                                                    {column.label}
                                                 </TableCell>
                                             );
                                         })}
                                         {
-                                            onEdit ?
+                                            admin || onRow ?
                                                 <TableCell
                                                     style={{
                                                         textTransform: 'capitalize',
-                                                        fontSize: 14,
-                                                        fontWeight: 500,
+                                                        fontSize: 14.5,
+                                                        fontWeight: 600,
                                                         color: '#637381',
                                                         border: 'none'
                                                     }}
-                                                    key={Math.random()}
                                                     align={'left'}
                                                 >
                                                 </TableCell>
@@ -165,9 +166,19 @@ const Tabla = ({
                                         .slice(rowsPerPage! * page!, rowsPerPage! * page! + rowsPerPage!)
                                         .map((row, index) => {
                                             return (
-                                                <TableRow hover key={Math.random()} >
+                                                <TableRow hover key={index} >
                                                     {cols.map((column) => {
                                                         let value = row[column.id];
+                                                        if (React.isValidElement(value)) {
+                                                            return (
+                                                                <TableCell
+                                                                    sx={{ py: 0, borderBottom: "none" }}
+                                                                    key={Math.random()}
+                                                                >
+                                                                    {value}
+                                                                </TableCell>
+                                                            );
+                                                        }
                                                         if (typeof value == 'boolean') {
                                                             return (
                                                                 <TableCell
@@ -176,7 +187,7 @@ const Tabla = ({
                                                                 >
                                                                     {
                                                                         value ?
-                                                                            <ChipBox label="Sí" sx={{ background: '#22c55e22', color: '#22c55e' }} />
+                                                                            <ChipBox label="Sí" />
                                                                             :
                                                                             <ChipBox label="No" />
                                                                     }
@@ -197,13 +208,13 @@ const Tabla = ({
                                                                 </TableCell>
                                                             )
                                                         }
-                                                        else {
+                                                        else if (typeof value != 'object') {
                                                             return (
                                                                 <TableCell
                                                                     sx={{
                                                                         fontWeight: 500,
                                                                         fontSize: 14,
-                                                                        py: 2,
+                                                                        py: 1,
                                                                         borderBottom: "none",
 
                                                                     }}
@@ -214,27 +225,10 @@ const Tabla = ({
                                                             );
                                                         }
                                                     })}
-                                                    {
-                                                        onEdit ?
-                                                            <TableCell
-                                                                key={Math.random()}
-                                                                sx={{
-                                                                    py: 2,
-                                                                    borderBottom: "none",
-                                                                    width: 50
-                                                                }}
-                                                            >
-                                                                <BotonOutline onClick={() => onEdit(row)}>
-                                                                    <FaPenToSquare fontSize={15} />
-                                                                </BotonOutline>
-                                                            </TableCell>
-                                                            : null
-                                                    }
                                                     {admin || onRow ?
                                                         <TableCell
                                                             key={Math.random()}
-                                                            sx={{ py: 2, borderBottom: "none" }}
-
+                                                            sx={{ py: 1, borderBottom: "none" }}
                                                         >
                                                             <ClickAwayListener touchEvent={false} onClickAway={() => setOpen(null)}>
                                                                 <Box>
@@ -243,12 +237,9 @@ const Tabla = ({
                                                                         PopperProps={{
                                                                             sx: {
                                                                                 "& .MuiTooltip-tooltip": {
-                                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                                    px: 0,
                                                                                     borderRadius: 3,
-                                                                                    border: "1px solid #f1f1f1",
-                                                                                    boxShadow: '-10px 10px 30px #ddd'
-                                                                                }
+                                                                                    background: grey[200]
+                                                                                },
                                                                             }
                                                                         }}
                                                                         placement='left'
@@ -257,11 +248,11 @@ const Tabla = ({
                                                                         disableTouchListener
                                                                         open={open == index}
                                                                         title={
-                                                                            <Box >
+                                                                            <Box py={1} minWidth={150}>
 
                                                                                 {admin ?
-                                                                                    <BotonSimple fullWidth onClick={() => router.push(`${admin}${row.id}`)} >
-                                                                                        <PiEyeBold /> Administrar
+                                                                                    <BotonSimple fullWidth onClick={() => router.push(`${admin}${row.id}`)} sx={{ display: 'flex', justifyContent: 'start' }} >
+                                                                                        <FaEye fontSize={20} style={{ marginRight: 10 }} /> Ver
                                                                                     </BotonSimple>
                                                                                     : null
                                                                                 }
@@ -269,7 +260,7 @@ const Tabla = ({
                                                                                     <BotonSimple onClick={() => {
                                                                                         onRow!(row);
                                                                                         setOpen(null);
-                                                                                    }}>
+                                                                                    }} sx={{ display: 'flex', justifyContent: 'start' }} >
                                                                                         <BsCursorFill /> Realizar acción
                                                                                     </BotonSimple>
                                                                                     : null
@@ -277,9 +268,9 @@ const Tabla = ({
                                                                             </Box>
                                                                         }
                                                                     >
-                                                                        <BotonFilled variant="contained" onClick={() => setOpen(index)}>
-                                                                            <TbDotsVertical fontSize={20} />
-                                                                        </BotonFilled>
+                                                                        <BotonOutline onClick={() => setOpen(index)}>
+                                                                            <TbDotsVertical fontSize={18} />
+                                                                        </BotonOutline>
                                                                     </Tooltip>
                                                                 </Box>
                                                             </ClickAwayListener>
@@ -292,9 +283,7 @@ const Tabla = ({
                                 </TableBody>
                             </Table>
                             :
-                            <Box border='1px solid #ddd' p={2} borderRadius={2}>
-                                <Normal sx={{ textAlign: 'center', py: 2 }}>Sin datos disponibles</Normal>
-                            </Box>
+                            <Normal sx={{ textAlign: 'center', py: 2 }}>Sin datos disponibles</Normal>
                     }
                 </TableContainer >
             </Box>

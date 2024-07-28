@@ -1,12 +1,12 @@
 "use client";
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Grid, MenuItem, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
 import { BoxSombra } from "../../componentes/Mostrar";
-import { DatePickerBox, InputBox, ItemBox } from "@/app/componentes/Datos";
+import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
 import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Evento } from "@prisma/client";
@@ -248,8 +248,8 @@ export default function Page() {
                                                 }
                                             }}
                                         >
-                                            <ItemBox value='online'>Online</ItemBox>
-                                            <ItemBox value='presencial'>Presencial</ItemBox>
+                                            <MenuItem value='online'>Online</MenuItem>
+                                            <MenuItem value='presencial'>Presencial</MenuItem>
                                         </InputBox>
                                     )}
                                 />

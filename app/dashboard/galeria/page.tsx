@@ -1,5 +1,5 @@
 'use client';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
@@ -15,6 +15,8 @@ import GaleriaComponent from "../componentes/items/Galeria";
 import { InputBox } from "@/app/componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { filtrarValorEnArray } from "@/utils/data";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { TbReload } from "react-icons/tb";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -30,10 +32,12 @@ export default function Page() {
     }, [opcion, galeria]);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonOutline onClick={() => router.back()}>
-                <MdArrowLeft fontSize={20} /> Volver
-            </BotonOutline>
-            <Titulo sx={{ fontSize: 20, mt: 1 }}>
+            <BotonSimple
+                startIcon={<MdArrowLeft fontSize={20} />}
+                onClick={() => router.back()}>
+                Regresar
+            </BotonSimple>
+            <Titulo sx={{ mt: 1 }}>
                 Galeria
             </Titulo>
             <Breadcrumbs >
@@ -49,21 +53,17 @@ export default function Page() {
                 <BotonFilled onClick={() => router.push('/dashboard/galeria/crear')}>
                     Añadir galeria
                 </BotonFilled>
-                <BotonOutline onClick={() => router.refresh()}>
-                    <IoReload fontSize={18} />
-                </BotonOutline>
+                <BotonSimple onClick={() => router.refresh()}>
+                    <TbReload fontSize={22} />
+                </BotonSimple>
             </Stack>
             <Tabs
-                sx={{
-                    minHeight: 0,
-                    ".Mui-selected": {
-                        color: '#bc3c3b !important'
-                    },
-                    ".MuiTabs-indicator": {
-                        background: '#bc3c3b',
-                        textTransform: 'none',
-                    }
-                }}
+                ScrollButtonComponent={(props) =>
+                    <BotonSimple  {...props}>
+                        {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
+                    </BotonSimple>}
+                variant="scrollable"
+                allowScrollButtonsMobile
                 value={opcion}
                 onChange={(_, value) => { setOpcion(value) }} >
                 <TabBox label="Todos" value='todo' sx={{ ml: 2 }} />

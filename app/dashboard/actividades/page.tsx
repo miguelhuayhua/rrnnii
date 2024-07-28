@@ -10,12 +10,12 @@ import { MdArrowLeft } from "react-icons/md";
 import { axiosInstance } from "@/globals";
 import { Actividad } from "@prisma/client";
 import ModalActividad from "./Modal";
-import { RiEditFill } from "react-icons/ri";
-import ActividadComponent from "../componentes/items/Actividad";
 import { IoReload } from "react-icons/io5";
 import { InputBox } from "@/app/componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { filtrarValorEnArray } from "@/utils/data";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import Tabla from "../componentes/Tabla";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -31,10 +31,12 @@ export default function Page() {
     }, [opcion, actividad]);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonOutline onClick={() => router.back()}>
-                <MdArrowLeft fontSize={20} /> Volver
-            </BotonOutline>
-            <Titulo sx={{ fontSize: 20, mt: 1 }}>
+            <BotonSimple
+                startIcon={<MdArrowLeft fontSize={20} />}
+                onClick={() => router.back()}>
+                Regresar
+            </BotonSimple>
+            <Titulo sx={{ mt: 1 }}>
                 Actividades
             </Titulo>
             <Breadcrumbs >
@@ -55,46 +57,20 @@ export default function Page() {
                 </BotonOutline>
             </Stack>
             <Tabs
-                sx={{
-                    minHeight: 0,
-                    ".Mui-selected": {
-                        color: '#bc3c3b !important'
-                    },
-                    ".MuiTabs-indicator": {
-                        background: '#bc3c3b',
-                        textTransform: 'none',
-                    }
-                }}
+                sx={{ mb: 4 }}
+                ScrollButtonComponent={(props) =>
+                    <BotonSimple  {...props}>
+                        {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
+                    </BotonSimple>}
+                variant="scrollable"
+                allowScrollButtonsMobile
                 value={opcion}
                 onChange={(_, value) => { setOpcion(value) }} >
                 <TabBox label="Todos" value='todo' sx={{ ml: 2 }} />
                 <TabBox label="Activos" value='activo' />
                 <TabBox label="Concluídos" value='concluido' />
             </Tabs>
-            <Grid container spacing={2} mt={1}>
-                <Grid item xs={12}>
-                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
-                        onChange={(ev) => {
-                            setActividades(filtrarValorEnArray(prevActividades, ev.target.value));
-                        }}
-                        InputProps={{
-                            startAdornment: <BiSearch fontSize={25} />
-                        }}
-                    />
-                </Grid>
-                {actividades.map((value) => (
-                    <Grid key={value.id} item xs={12} sm={6} md={4} lg={3} xl={2} position='relative'>
-                        <ActividadComponent Actividad={value} />
-                        <BotonSimple
-                            onClick={() => {
-                                setActividad(value);
-                            }}
-                            sx={{ position: 'absolute', bottom: 30, left: 30 }} >
-                            <RiEditFill fontSize={18} />
-                        </BotonSimple>
-                    </Grid>
-                ))}
-            </Grid>
+            <Tabla data={actividades} />
             {
                 actividad ?
                     <ModalActividad

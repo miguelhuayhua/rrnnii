@@ -7,31 +7,31 @@ import { FaBuilding, FaLink } from "react-icons/fa6";
 import { Negrita, Normal } from "../Textos";
 import { ChipBox } from "../Mostrar";
 import { IoIosHeart } from "react-icons/io";
+import { blue, grey } from "@mui/material/colors";
 
 const Pasantia = () => {
-
     return (
         <Grid container bgcolor='white' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
-            <Grid xs={6} py={3} px={1}>
-                <ChipBox sx={{ margin: 0, bgcolor: '#0073b7', color: 'white' }} label='3 meses'></ChipBox>
+            <Grid xs={6} p={1}>
+                <ChipBox sx={{ margin: 0, bgcolor: blue[600], color: grey[50] }} label='3 meses'></ChipBox>
                 <Link href='/'>
-                    <Negrita sx={{ color: '#212b36' }} mt={2}>
+                    <Negrita mt={2}>
                         Pasantia Productivo para becarios de Francia
                     </Negrita>
                 </Link>
                 <Normal py={2}>
                     Vea la última pasantía del siglo
                 </Normal>
-                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999' }}>
+                <Normal sx={{ fontSize: 12, color: grey[700] }}>
                     Válido hasta: 21 feb 2024
                 </Normal>
-                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999' }}>
+                <Normal sx={{ fontSize: 12, color: grey[700] }}>
                     Publicado el: 23 de Marzo de 2023
                 </Normal>
-                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999', py: 1 }}>
-                    <FaBuilding /> Cainco
+                <Normal sx={{ fontSize: 12, color: grey[700], display: 'flex', alignItems: 'center' }}>
+                    <FaBuilding style={{ marginRight: 10 }} /> Cainco
                 </Normal>
-                <Divider sx={{ borderColor: '#eee' }} />
+                <Divider sx={{ py: 1 }} />
                 <Stack pt={1} direction='row' flexWrap='wrap'>
                     <ChipBox label='Ingeniería de Sistemas'></ChipBox>
                     <ChipBox label='Medicina'></ChipBox>

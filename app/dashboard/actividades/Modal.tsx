@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, MenuItem, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { BotonFilled } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
@@ -11,7 +11,7 @@ import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { BsFileEarmarkPdfFill, BsImageAlt } from 'react-icons/bs';
-import { InputBox, ItemBox } from '@/app/componentes/Datos';
+import { InputBox } from '@/app/componentes/Datos';
 import { MdOutlineAttachFile } from 'react-icons/md';
 import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
@@ -239,9 +239,9 @@ export default function ModalActividad({ setActividad, Actividad }: Props) {
                                                 }
                                             }}
                                         >
-                                            <ItemBox value='becas'>Becas</ItemBox>
-                                            <ItemBox value='idiomas'>Idiomas</ItemBox>
-                                            <ItemBox value='noticias'>Noticias</ItemBox>
+                                            <MenuItem value='becas'>Becas</MenuItem>
+                                            <MenuItem value='idiomas'>Idiomas</MenuItem>
+                                            <MenuItem value='noticias'>Noticias</MenuItem>
                                         </InputBox>
                                     )}
                                 />

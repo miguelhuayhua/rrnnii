@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import { usePathname, useRouter } from 'next/navigation';
 import { MdWork } from "react-icons/md";
-import { Button, Divider, Tooltip, Typography } from "@mui/material";
+import { Button, Divider, Tooltip } from "@mui/material";
 import { IoImage, IoPeople } from "react-icons/io5";
 import { FaHandsHelping, FaTools } from "react-icons/fa";
 import { FaBuilding, FaBuildingUser } from "react-icons/fa6";
@@ -14,6 +14,8 @@ import { GiMeepleCircle } from 'react-icons/gi';
 import { BsFillCalendar2EventFill } from 'react-icons/bs';
 import { ArrowRightIcon } from '@mui/x-date-pickers';
 import { BotonSimple } from '@/app/componentes/Botones';
+import { Normal } from '@/app/componentes/Textos';
+import { blue, grey, red } from '@mui/material/colors';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
 
 const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: string, active: boolean, onclick?: any }) => {
@@ -27,17 +29,17 @@ const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: 
                 textTransform: 'none',
                 fontSize: 10.5,
                 fontWeight: 700,
-                color: active ? '#a4545b' : '#637381',
+                color: active ? blue[700] : grey[700],
                 mx: 'auto',
                 borderRadius: 2,
                 my: 1,
-                background: active ? '#a4545b11' : 'transparent',
+                background: active ? blue[50] : 'transparent',
                 width: "90%"
             }}>
             <Icon fontSize={25} />
-            <Typography sx={{ color: active ? '#a4545b' : '#777', fontSize: { xs: 8.5, sm: 9, md: 10, lg: 11 }, fontWeight: 700 }}>
+            <Normal sx={{ color: active ? blue[700] : grey[700], fontWeight: 700, fontSize: 12.5 }}>
                 {label}
-            </Typography>
+            </Normal>
         </Button >
     )
 }
@@ -46,7 +48,7 @@ const SideBar = () => {
     const router = useRouter();
     const pathname = usePathname();
     return (
-        <Box position='sticky' bgcolor='#f4f5f7' top={0} borderRight='1px solid #eee' width={{ xs: 65, md: 90 }} height={"100vh"} zIndex={20}>
+        <Box position='sticky' top={0} borderRight='1px solid #eee' width={{ md: 110 }} px={0.5} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
                 <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
             </Box>
@@ -92,7 +94,7 @@ const SideBar = () => {
                     </Box>}>
                 <Box position='relative'>
                     <SideBarItem onclick={() => { }} Icon={IoPeople} label='Personal' active={pathname.includes('/personal')} />
-                    <ArrowRightIcon style={{ position: 'absolute', top: 15, right: 0, fontSize: 20, color: '#888' }}></ArrowRightIcon>
+                    <ArrowRightIcon style={{ position: 'absolute', top: 18, right: 0, fontSize: 20, color: '#888' }}></ArrowRightIcon>
                 </Box>
             </Tooltip>
             <SideBarItem onclick={() => router.push('/dashboard/unidad')} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />

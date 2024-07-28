@@ -54,12 +54,11 @@ export default function ModalLogin({ open, setOpen }: Props) {
             }}
         >
             <DialogContent sx={{ position: 'relative' }} >
-                <Titulo sx={{ fontSize: 15, textAlign: 'center' }}>
+                <Titulo sx={{ textAlign: 'center' }}>
                     Ingrese sus credenciales
                 </Titulo>
                 <Box
                     display={showTransition == '' ? 'block' : 'none'}
-
                     py={2}
                 >
                     <Controller

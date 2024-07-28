@@ -1,11 +1,13 @@
 import { Box, Chip, TextField, Typography, styled } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 const ChipBox = styled(Chip)(() => {
     return {
         height: 20,
         borderRadius: 6,
-        fontSize: 11,
-        color: '#888',
+        fontSize: 12,
+        color: grey[700],
+        background: grey[100],
         fontWeight: 600,
         margin: 2.5
     }

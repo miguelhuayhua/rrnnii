@@ -1,16 +1,18 @@
 
 
 'use client';
-import { Avatar, Box, Chip, Divider, Stack, Typography, } from "@mui/material";
+import { Avatar, Box, Chip, Divider, Stack, } from "@mui/material";
 import Link from "next/link";
 import Image from 'next/legacy/image';
 import { IoMdEye } from "react-icons/io";
-import { BoxSombra } from "../Mostrar";
+import { BoxSombra, ChipBox } from "../Mostrar";
+import { Negrita, Normal } from "../Textos";
+import { blue, grey } from "@mui/material/colors";
 
 const Actividad = () => {
 
     return (
-        <BoxSombra position='relative' sx={{ borderRadius: 4}}>
+        <BoxSombra position='relative' sx={{ borderRadius: 4 }}>
             <Box position='absolute' top={0} height={"100%"} width="100%" sx={{ filter: 'brightness(.7)' }}>
                 <Image layout="fill" objectFit="cover" src='/eventos.jpg' alt="hola" />
             </Box>
@@ -18,17 +20,17 @@ const Actividad = () => {
                 <Avatar sx={{ bgcolor: '#0072b6' }}>
                     B
                 </Avatar>
-                <Typography mt={15} color='#c1a7af' fontSize={12} fontWeight={500} >17 May 2024</Typography>
+                <Normal sx={{ color: grey[100], py: 2, fontSize: 12 }}>17 May 2024</Normal>
                 <Link href='/'>
-                    <Typography mt={1} color='#ffffff' fontSize={14} fontWeight={600}>
+                    <Negrita sx={{ color: grey[50], py: 1 }}>
                         Becas en Rusia
-                    </Typography>
+                    </Negrita>
                 </Link>
                 <Stack mt={2} direction='row' spacing={2}>
-                    <Typography color='#d0bdc1' fontSize={12} display='flex' alignItems='center'>
+                    <Normal sx={{ fontSize: 12, color: blue[50] }} display='flex' alignItems='center'>
                         <IoMdEye fontSize={20} /> 1.95k
-                    </Typography>
-                    <Chip sx={{ bgcolor: 'transparent', height: 20, borderRadius: 2, fontSize: 11, color: '#a8bdc4', border: '1px solid #a8bdc4', fontWeight: 600 }} label='Beca' />
+                    </Normal>
+                    <ChipBox label='Beca' />
                 </Stack>
             </Box>
         </BoxSombra>

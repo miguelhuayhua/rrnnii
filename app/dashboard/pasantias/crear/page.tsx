@@ -1,12 +1,12 @@
 'use client';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Autocomplete, Box, Breadcrumbs, Grid, Typography } from "@mui/material";
+import { Autocomplete, Box, Breadcrumbs, Grid, MenuItem, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
 import { BoxSombra } from "../../componentes/Mostrar";
-import { DatePickerBox, InputBox, ItemBox } from "@/app/componentes/Datos";
+import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
 import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Institucion, Pasantia } from "@prisma/client";
@@ -22,6 +22,7 @@ import { FaFileWord } from "react-icons/fa6";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
+import { grey, red } from "@mui/material/colors";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion }>({
         defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' } }, shouldFocusError: true
@@ -85,11 +86,13 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>
-            <BotonOutline onClick={() => router.back()}>
-                <MdArrowLeft fontSize={20} /> Volver
-            </BotonOutline>
-            <Titulo sx={{ fontSize: 20, mt: 1 }}>
-                Crear nueva pasantia
+            <BotonSimple
+                startIcon={<MdArrowLeft fontSize={20} />}
+                onClick={() => router.back()}>
+                Regresar
+            </BotonSimple>
+            <Titulo sx={{ mt: 1 }}>
+                Crear nueva pasantía
             </Titulo>
             <Breadcrumbs >
                 <Link href="/dashboard/pasantias">
@@ -105,20 +108,20 @@ export default function Page() {
                     <BoxSombra p={2}>
                         <Box sx={{
                             height: 200,
-                            bgcolor: '#f6f7f9',
+                            bgcolor: grey[200],
                             p: 1,
-                            border: '1px dashed #ddd',
+                            border: `1px dashed ${grey[400]}`,
                             flexDirection: 'column',
                             borderRadius: 5,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#919eab',
+                            color: grey[900],
                             transition: 'color 0.25s',
                             position: 'relative',
                             overflow: 'hidden',
                             "&:hover": {
-                                color: '#919eab77',
+                                color: grey[500],
                                 cursor: 'pointer'
                             }
                         }}
@@ -130,25 +133,25 @@ export default function Page() {
                             <BsImageAlt color={'inherit'} fontSize={30} />
                             <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
-                            height: 35,
-                            p: 1,
-                            border: '1px solid #e9eaed',
-                            flexDirection: 'column',
+                            p: 2,
+                            border: `1px solid ${grey[500]}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                             borderRadius: 3,
+                            color: grey[900],
                             position: 'relative',
-                            color: '#969696',
-                            transition: 'color 0.25s',
+                            transition: 'border .5s',
                             "&:hover": {
-                                color: '#919eab77',
-                                cursor: 'pointer'
+                                border: `1px solid ${red[300]}`
                             }
                         }}
                             onClick={() => PDFPicker.openFilePicker()}
                         >
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, fontSize: 14, mt: 1, ml: 1 }}>PDF o Word de Referencia</Normal>
-                            <MdOutlineAttachFile style={{ position: 'absolute', right: 10, top: 18, fontSize: 20 }} />
+                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
+                            <MdOutlineAttachFile style={{ fontSize: 20 }} />
                         </Box>
                         {
                             documento ?
@@ -241,8 +244,8 @@ export default function Page() {
                                                 }
                                             }}
                                         >
-                                            <ItemBox value='3'>3 meses</ItemBox>
-                                            <ItemBox value='6'>6 meses</ItemBox>
+                                            <MenuItem value='3'>3 meses</MenuItem>
+                                            <MenuItem value='6'>6 meses</MenuItem>
                                         </InputBox>
                                     )}
                                 />
@@ -279,6 +282,7 @@ export default function Page() {
                                             onChange={(ev: any) => {
                                                 field.onChange(ev?.format('DD/MM/YYYY'))
                                             }}
+                                            disablePast
                                             slotProps={{
                                                 textField: {
                                                     inputRef: ref,
