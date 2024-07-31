@@ -221,6 +221,22 @@ export default function Page() {
                                             label='Tipo de actividad'
                                             {...field}
                                             inputRef={ref}
+                                            SelectProps={{
+                                                MenuProps: {
+                                                    slotProps: {
+                                                        paper: {
+                                                            sx: {
+                                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                                px: 0,
+                                                                borderRadius: 3,
+                                                                border: "1px solid #f1f1f1",
+                                                                boxShadow: '-10px 10px 30px #00000022',
+                                                                maxHeight: 400
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }}
                                         >
                                             <MenuItem value='becas'>Becas</MenuItem>
                                             <MenuItem value='idiomas'>Idiomas</MenuItem>

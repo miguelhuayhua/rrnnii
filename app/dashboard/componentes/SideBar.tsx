@@ -80,17 +80,16 @@ const SideBar = () => {
                 leaveTouchDelay={0}
                 title={
                     <Box>
-                        <Link
-
-                            href={'/dashboard/personal/usuarios'}>
-                            <BotonSimple sx={{ fontSize: 12 }} fullWidth>
-                                Usuarios
-                            </BotonSimple>
-                            <br />
-                            <BotonSimple sx={{ fontSize: 12 }}>
-                                Información Personal
-                            </BotonSimple>
-                        </Link>
+                        <BotonSimple onClick={() => {
+                            router.push('/dashboard/personal/usuarios');
+                        }} fullWidth>
+                            Usuarios
+                        </BotonSimple>
+                        <BotonSimple onClick={() => {
+                            router.push('/dashboard/personal/usuarios');
+                        }} fullWidth>
+                            Información Personal
+                        </BotonSimple>
                     </Box>}>
                 <Box position='relative'>
                     <SideBarItem onclick={() => { }} Icon={IoPeople} label='Personal' active={pathname.includes('/personal')} />
@@ -120,15 +119,14 @@ const SideBar = () => {
                     <Box>
                         <BotonSimple onClick={() => {
                             router.push('/dashboard/herramientas/unirpdf')
-                        }} sx={{ fontSize: 12 }} fullWidth>
+                        }} fullWidth>
                             Unir PDF
                         </BotonSimple>
-                        <Link
-                            href={'/dashboard/herramientas/imagenpdf'}>
-                            <BotonSimple sx={{ fontSize: 12 }} fullWidth>
-                                Imagen a PDF
-                            </BotonSimple>
-                        </Link>
+                        <BotonSimple onClick={() => {
+                            router.push('/dashboard/herramientas/imagenpdf')
+                        }} fullWidth>
+                            Imagen a PDF
+                        </BotonSimple>
                     </Box>}>
                 <Box position='relative'>
                     <SideBarItem onclick={() => { }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} />

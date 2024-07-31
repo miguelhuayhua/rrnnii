@@ -30,10 +30,8 @@ const Cliente = () => {
                         sx={{ height: 52.5, float: 'right' }} endIcon={<FiFilter></FiFilter>}>Filtros</BotonSimple>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Actividad />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Actividad />
                 </Grid>
             </Grid>
             <Filtros setOpen={setOpen} open={open} />

@@ -1,9 +1,24 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import 'react-quill/dist/quill.snow.css';
-export default async function Layout({ children }: any) {
+import { BotonFilled } from "../componentes/Botones";
+import axios from "axios";
+import { Normal } from "../componentes/Textos";
+export default function Layout({ children }: any) {
+    const [descripcion, setDescripcion] = useState('');
     return (
         <>
-            hola
+            <Normal>
+                {descripcion}
+            </Normal>
+            <BotonFilled onClick={() => {
+                axios.post('/api/ai').then(res => {
+                    console.log(res.data)
+                    setDescripcion(res.data.descripcion);
+                })
+            }} >
+                click
+            </BotonFilled>
         </>
     )
 }

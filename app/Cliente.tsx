@@ -1,90 +1,112 @@
 'use client';
-import { Box, Button, Grid, Stack } from "@mui/material";
+import { Box, Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { CiSearch } from "react-icons/ci";
 import Footer from "./static/Footer";
 import Image from 'next/legacy/image';
 import Link from 'next/link'
 import { Negrita, Normal, Titulo } from "./componentes/Textos";
-import { BotonOutline, BotonFilled } from "./componentes/Botones";
-import Actividad from "./componentes/items/Actividad";
-import Evento from "./componentes/items/Evento";
+import { BotonOutline, BotonFilled, BotonSimple } from "./componentes/Botones";
+import ActividadItem from "./componentes/items/Actividad";
+import EventoItem from "./componentes/items/Evento";
 import { BsEye, BsWhatsapp } from "react-icons/bs";
 import { useCallback, useEffect, useState } from "react";
-import { grey } from "@mui/material/colors";
+import { blueGrey, grey } from "@mui/material/colors";
+import { Gradient } from '@/utils/Gradient.ts'
+import { ChipBox } from "./componentes/Mostrar";
+import { FaAngleRight } from "react-icons/fa";
+import axios from "axios";
+import { Actividad, Evento } from "@prisma/client";
 const Cliente = () => {
+    const theme = useTheme();
+    const downsm = useMediaQuery(theme.breakpoints.down('md'));
     const [y, setY] = useState(0);
+    const [Eventos, setEventos] = useState<Evento[]>([]);
+    const [Actividades, setActividades] = useState<Actividad[]>([]);
     const onScroll = useCallback(() => {
         const { scrollY } = window;
         setY(scrollY)
     }, []);
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
-        // remove event on unmount to prevent a memory leak with the cleanup
+        var gradient = new Gradient() as any;
+        gradient.initGradient('#gradient-canvas');
         return () => {
             window.removeEventListener("scroll", onScroll);
         }
     }, []);
+
+    useEffect(() => {
+        axios.post('/api/evento/todo', { take: 4 }).then(res => {
+            setEventos(res.data);
+        });
+        axios.post('/api/actividad/todo', { take: 4 }).then(res => {
+            setActividades(res.data);
+        });
+    }, []);
     return (
         <>
-            <Box display='flex' px={{ xs: 0, md: 5, lg: 20, }} height={{ xs: 600, md: 700, lg: 800 }} position='relative' overflow={'hidden'} >
-                <Box width="50%" sx={{ opacity: 1 - y * 0.0015, top: y * 0.1 }} position='relative'>
-                    <Image alt="fondo monolito" layout="fill" src='/monolito.png' objectFit="fill" className="monolito" style={{ transform: `perspective(500px) rotateX(${y * 0.5}deg) rotateY(25deg)` }} />
-                    <Box px={{ xs: 2, xl: 16 }} py={{ xs: 10, sm: 10, md: 20 }} >
-                        <Titulo variant='h1' sx={{ fontSize: 35, textAlign: 'center' }} >
-                            Relaciones Internacionales
+            <canvas id="gradient-canvas" style={{ width: "100vw", height: downsm ? 400 : 500, position: 'absolute', top: 0, clipPath: 'polygon(100% 0, 100% 18%, 0 100%, 0 0)' }}></canvas >
+            <Grid container>
+                <Grid item sx={{ opacity: 1 - y * 0.0015, top: y * 0.1, zIndex: 20, }} xs={12} md={6} pt={{ xs: 7, md: 0 }}>
+                    <Box pl={{ xs: 5, sm: 10, md: 10, xl: 40 }} pr={{ xs: 5, sm: 10, md: 2 }} >
+                        <ChipBox label='Encargada de: ' sx={{ mb: 2, background: '#00000055', fontWeight: 700, fontSize: 14, color: 'white', borderRadius: 5, py: 2 }} />
+                        <Titulo variant='h1' sx={{ color: blueGrey[50], fontSize: { xs: 16, sm: 20, md: 25, lg: 35 }, background: '#00000055', backdropFilter: 'blur(6px)', p: 2, borderRadius: 3 }} >
+                            Unidad de Relaciones Internacionales
                             <br />
-                            <span className="upea">
-                                UPEA
+                            <span className="upea" style={{ fontSize: "2em", marginTop: 2 }} >
+                                UNIVERSIDAD PÚBLICA DE EL ALTO
                             </span>
                         </Titulo>
-                        <Normal sx={{ textAlign: 'center' }}>
-                            Descubre los convenios y ofertas disponibles para la comunidad universitaria
+                        <Normal sx={{ fontSize: 17, pt: 10 }}>
+                            Descubre los convenios y ofertas disponibles para toda la comunidad universitaria, no olvides que puedes
+                            pasar a nuestra oficinas para mayor información.
                         </Normal>
                         <Stack direction='row' spacing={2} justifyContent='center' my={4}>
                             <Link href='/convenios'>
-                                <BotonFilled startIcon={<BsEye style={{ fontSize: 20 }} />}>
+                                <BotonFilled endIcon={<FaAngleRight />}>
                                     Ver convenios
                                 </BotonFilled>
                             </Link>
+                            <Link href='/convenios'>
+                                <BotonSimple endIcon={<FaAngleRight />}>
+                                    Contactarme
+                                </BotonSimple>
+                            </Link>
                         </Stack>
                     </Box>
-                </Box>
-                <Box width="50%" height={"100%"} position={'relative'} className="imagen-container" sx={{ opacity: 1 - y * 0.0015 }}>
-                    <Box className='imagen' ></Box>
-                </Box>
-                <div className="dec-right first"></div>
-                <div className="dec-right second"></div>
-                <div className="dec-right third"></div>
-                <div className="dec-left first"></div>
-                <div className="dec-left second"></div>
-                <div className="dec-left third"></div>
-            </Box>
-            <Box position='relative' >
+                </Grid>
+                <Grid item xs={6} px={15} zIndex={-1} display={{ xs: 'none', md: 'block' }}>
+                    <Box sx={{ borderRadius: 4, zIndex: -1, opacity: 1 - y * 0.0015, position: 'relative', top: y * 0.2 }} >
+                        <Image width={10} height={7} layout="responsive" src={'/upea-border.png'} />
+                    </Box>
+                </Grid>
+            </Grid>
+            <Box position='relative'>
                 <Negrita sx={{ textAlign: 'center', py: 2 }}>
                     rrnnii.upea.bo
                 </Negrita>
                 <Titulo sx={{ textAlign: 'center' }} variant="h3">Próximos eventos</Titulo>
                 <Grid container spacing={2} px={{ xs: 1, sm: 10, md: 1, lg: 5, xl: 20 }} py={4}>
-                    <Grid item xs={6} md={3} >
-                        <Evento />
-                    </Grid>
-                    <Grid item xs={6} md={3} >
-                        <Evento />
-                    </Grid>
+                    {
+                        Eventos.map(value => (
+                            <Grid item xs={6} md={3} key={value.id}>
+                                <EventoItem value={value} />
+                            </Grid>))
+                    }
                 </Grid>
                 <Titulo textAlign='center' variant="h3">
                     Últimas actividades
                 </Titulo>
                 <Grid container spacing={2} px={{ xs: 1, sm: 10, md: 1, lg: 5, xl: 20 }} py={4}>
-                    <Grid item xs={6} md={3} >
-                        <Actividad></Actividad>
-                    </Grid>
-                    <Grid item xs={6} md={3} >
-                        <Actividad></Actividad>
-                    </Grid>
+                    {
+                        Actividades.map(value => (
+                            <Grid item xs={6} md={3} key={value.id}>
+                                <ActividadItem value={value} />
+                            </Grid>))
+                    }
                 </Grid>
             </Box>
-            <Grid container bgcolor='#fdfdfe' px={2} py={5} borderTop={`1px solid ${grey[400]}`}>
+            <Grid container bgcolor='#fff' px={2} py={5} borderTop={`1px solid ${grey[400]}`}>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }}>
                     <Image width={100} height={80} src='/revista.png' layout='responsive' />
                 </Grid>

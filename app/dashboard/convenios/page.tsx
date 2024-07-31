@@ -1,22 +1,26 @@
 'use client';
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
-import { Normal, Titulo } from "@/app/componentes/Textos";
+import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import Tabla from "../componentes/Tabla";
+import Image from 'next/legacy/image';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
 import { axiosInstance } from "@/globals";
-import { Convenio } from "@prisma/client";
+import { Convenio, Institucion } from "@prisma/client";
 import ModalConvenio from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import dayjs from "dayjs";
+import 'dayjs/locale/es';
+dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
-    const [convenios, setConvenios] = useState<Convenio[]>([]);
+    const [convenios, setConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
     const [convenio, setConvenio] = useState<any>(null);
-    const [prevConvenios, setPrevConvenios] = useState<any>([]);
+    const [prevConvenios, setPrevConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
     const router = useRouter();
     useEffect(() => {
         axiosInstance.post('/api/convenio/todo', { opcion }).then(res => {
@@ -57,12 +61,52 @@ export default function Page() {
                 variant="scrollable"
                 allowScrollButtonsMobile
                 value={opcion}
-                onChange={(_, value) => { setOpcion(value) }} >
+                onChange={(_, value) => {
+                    setOpcion(value);
+                    if (value == 'todo')
+                        setConvenios(prevConvenios);
+                    else if (value == 'activo')
+                        setConvenios(prevConvenios.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0))
+                    else if (value == 'concluido')
+                        setConvenios(prevConvenios.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) < 0))
+
+                }} >
                 <TabBox label="Todos" value='todo' />
                 <TabBox label="Activos" value='activo' />
                 <TabBox label="Concluídos" value='concluido' />
             </Tabs>
-            <Tabla data={convenios} />
+            <Tabla skipColumns={{ nombre: true }} hasPagination data={convenios.map(value => (
+                {
+                    id: value.id,
+                    nombre: value.titulo,
+                    Convenio: (
+                        <Box display='flex' minWidth={300} py={0.35}>
+                            <Box minWidth={90} width={90} height={90} position='relative'>
+                                <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            </Box>
+                            <Box px={2}>
+                                <Negrita sx={{ fontSize: 16 }}>{value.titulo}</Negrita>
+                                <Normal >{value.tipo.toUpperCase()}</Normal>
+                            </Box>
+                        </Box>
+                    ),
+                    "Creado el": (
+                        <Box minWidth={100}>
+                            <Negrita sx={{ fontSize: 13 }}>
+                                {dayjs(value.createdAt).format('DD/MM/YYYY')}
+                            </Negrita>
+                            <Normal sx={{ fontSize: 11 }}>
+                                {dayjs(value.createdAt).format('HH:mm:ss')}
+                            </Normal>
+                        </Box>
+                    ),
+                    "Institución": value.Institucion.nombre,
+                    "Finaliza el": dayjs(value.finalizacion, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY'),
+                    "": (<BotonOutline onClick={() => {
+                        setConvenio(value);
+                    }}>Modificar</BotonOutline>)
+                }
+            ))} />
             {
                 convenio ?
                     <ModalConvenio

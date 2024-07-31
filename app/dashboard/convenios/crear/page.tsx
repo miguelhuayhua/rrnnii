@@ -26,7 +26,7 @@ import { grey, red } from "@mui/material/colors";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Convenio & { Institucion: Institucion }>({
-        defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', }, shouldFocusError: true
+        defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' } }, shouldFocusError: true
     });
     const router = useRouter();
     const { openModal } = useModal();
@@ -61,7 +61,7 @@ export default function Page() {
             form.append('portada', portada);
             form.append('documento', documento);
             form.append('institucion', convenio.Institucion.nombre);
-            console.log(convenio)
+            form.append('finalizacion', convenio.finalizacion!);
             openModal({
                 titulo: '¿Continuar?',
                 content: 'Una nueva convenio se agregará',
@@ -157,10 +157,10 @@ export default function Page() {
                         {
                             documento ?
                                 <ChipBox icon={documento.type.includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <FaFileWord fontSize={20} color='#1951b2' />}
+                                    <BsFileEarmarkPdfFill fontSize={20} color={red[400]} /> : <FaFileWord fontSize={20} color='#1951b2' />}
                                     sx={{
                                         mt: 2,
-                                        border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
+                                        border: `1px solid ${documento.type.includes('pdf') ? red[400] : '#1951b2'}`,
                                         height: 40,
                                         bgcolor: 'white'
                                     }}
@@ -221,6 +221,7 @@ export default function Page() {
                                 <Controller
                                     name="Institucion.nombre"
                                     control={control}
+                                    rules={{ required: 'Institución no puede quedar vacío' }}
                                     render={({ field: { ref, ...field } }) => (
                                         <Autocomplete
                                             freeSolo
@@ -232,6 +233,8 @@ export default function Page() {
                                                 <InputBox
                                                     {...params}
                                                     {...field}
+                                                    error={!!errors.Institucion?.nombre}
+                                                    helperText={errors.Institucion?.nombre?.message}
                                                     label='Institución'
                                                 />}
                                         />
@@ -241,7 +244,7 @@ export default function Page() {
                                 <Controller
                                     name="finalizacion"
                                     control={control}
-
+                                    rules={{ required: 'Finalización de convenio requerida' }}
                                     render={({ field: { ref, ...field } }) => (
                                         <DatePickerBox
                                             sx={{ mt: 2 }}
@@ -253,6 +256,8 @@ export default function Page() {
                                                 textField: {
                                                     inputRef: ref,
                                                     label: 'Finalización del convenio',
+                                                    error: !!errors.finalizacion,
+                                                    helperText: errors.finalizacion?.message
                                                 }
                                             }}
                                         />
@@ -274,11 +279,9 @@ export default function Page() {
                                                         paper: {
                                                             sx: {
                                                                 background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                px: 0,
                                                                 borderRadius: 3,
                                                                 border: "1px solid #f1f1f1",
                                                                 boxShadow: '-10px 10px 30px #00000022',
-                                                                maxHeight: 400
                                                             }
                                                         }
                                                     }

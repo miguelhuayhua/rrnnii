@@ -12,9 +12,9 @@ const POST = async (request: NextRequest) => {
     const documentob = documento ? Buffer.from(await documento.arrayBuffer()) : null;
     const documenton = documento ? Date.now() + documento.name.replaceAll(" ", "_") : '';
     try {
-        await writeFile(path.join(process.cwd(), "public/uploads/actividades/img/" + portadan), portadab);
+        await writeFile(path.join(process.cwd(), "public/uploads/actividades/img/" + portadan), portadab as any);
         if (documentob)
-            await writeFile(path.join(process.cwd(), "public/uploads/actividades/files/" + documenton), documentob);
+            await writeFile(path.join(process.cwd(), "public/uploads/actividades/files/" + documenton), documentob as any);
         await prisma.actividad.create({
             data: {
                 titulo: form.get('titulo'),

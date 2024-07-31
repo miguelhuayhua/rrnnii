@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery, useTheme, MenuItem } from '@mui/material';
 import { Evento } from '@prisma/client';
 import { BotonFilled } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
@@ -12,7 +12,7 @@ import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { BsFileEarmarkPdfFill, BsImageAlt } from 'react-icons/bs';
-import { DatePickerBox, InputBox, ItemBox } from '@/app/componentes/Datos';
+import { DatePickerBox, InputBox } from '@/app/componentes/Datos';
 import { MdOutlineAttachFile } from 'react-icons/md';
 import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
@@ -243,8 +243,8 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
                                                 }
                                             }}
                                         >
-                                            <ItemBox value='online'>Online</ItemBox>
-                                            <ItemBox value='presencial'>Presencial</ItemBox>
+                                            <MenuItem value='online'>Online</MenuItem>
+                                            <MenuItem value='presencial'>Presencial</MenuItem>
                                         </InputBox>
                                     )}
                                 />

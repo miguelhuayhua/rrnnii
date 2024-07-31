@@ -5,17 +5,16 @@ import path from "path";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
-    const portadab = Buffer.from(await portada.arrayBuffer());
+    const portadab = Buffer.from(await portada.arrayBuffer())
     const portadan = Date.now() + portada.name.replaceAll(" ", "_");
     const documento = form.get('documento');
     const institucion = form.get('institucion');
-    console.log(institucion)
     const documentob = documento ? Buffer.from(await documento.arrayBuffer()) : null;
     const documenton = documento ? Date.now() + documento.name.replaceAll(" ", "_") : '';
     try {
-        await writeFile(path.join(process.cwd(), "public/uploads/convenios/img/" + portadan), portadab);
+        await writeFile(path.join(process.cwd(), "public/uploads/convenios/img/" + portadan), portadab as any);
         if (documentob)
-            await writeFile(path.join(process.cwd(), "public/uploads/convenios/files/" + documenton), documentob);
+            await writeFile(path.join(process.cwd(), "public/uploads/convenios/files/" + documenton), documentob as any);
         if (await prisma.institucion.findFirst({ where: { nombre: institucion } })) {
             await prisma.convenio.create({
                 data: {

@@ -7,7 +7,7 @@ import { Negrita, Titulo } from "../componentes/Textos";
 import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
-import { InputBox, ItemBox } from "../componentes/Datos";
+import { InputBox } from "../componentes/Datos";
 interface Props {
     open: boolean;
     setOpen: any
@@ -96,9 +96,9 @@ const Filtros = ({ open, setOpen }: Props) => {
                             }}
                         >
 
-                            <ItemBox value='inge'>Becas</ItemBox>
-                            <ItemBox value='inge'>Noticias</ItemBox>
-                            <ItemBox value='inge'>Idiomas</ItemBox>
+                            <MenuItem value='inge'>Becas</MenuItem>
+                            <MenuItem value='inge'>Noticias</MenuItem>
+                            <MenuItem value='inge'>Idiomas</MenuItem>
                         </InputBox>
                         <Titulo sx={{ mt: 1, fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Duración

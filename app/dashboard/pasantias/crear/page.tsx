@@ -196,9 +196,9 @@ export default function Page() {
                                     control={control}
                                     render={({ field }) => (
                                         <Box>
-                                            <Negrita sx={{ my: 1, color: '#888888', fontWeight: 600, fontSize: 14 }}>
+                                            <Normal sx={{ fontSize: 16, my: 1, fontWeight: 500 }} >
                                                 Descripción:
-                                            </Negrita>
+                                            </Normal>
                                             <Editor
                                                 value={field.value}
                                                 modules={{

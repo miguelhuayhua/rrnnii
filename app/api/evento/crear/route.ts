@@ -8,13 +8,12 @@ const POST = async (request: NextRequest) => {
     const bufferImg = Buffer.from(await imagen.arrayBuffer());
     const imagenName = Date.now() + imagen.name.replaceAll(" ", "_");
     const doc = form.get('doc');
-    console.log(typeof doc)
     const bufferDoc = doc ? Buffer.from(await doc.arrayBuffer()) : null;
     const docName = doc ? Date.now() + doc.name.replaceAll(" ", "_") : '';
     try {
-        await writeFile(path.join(process.cwd(), "public/uploads/eventos/img/" + imagenName), bufferImg);
+        await writeFile(path.join(process.cwd(), "public/uploads/eventos/img/" + imagenName), bufferImg as any);
         if (bufferDoc)
-            await writeFile(path.join(process.cwd(), "public/uploads/eventos/files/" + docName), bufferDoc);
+            await writeFile(path.join(process.cwd(), "public/uploads/eventos/files/" + docName), bufferDoc as any);
         await prisma.evento.create({
             data: {
                 titulo: form.get('titulo'),

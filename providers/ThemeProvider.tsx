@@ -17,7 +17,7 @@ function ThemeProviderCustom({ children }: any) {
             error: { main: red[600] },
         },
         typography: {
-            fontFamily: karla.style.fontFamily
+            fontFamily: karla.style.fontFamily,
         }
     })
     return (

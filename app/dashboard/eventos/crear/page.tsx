@@ -1,7 +1,7 @@
 "use client";
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, MenuItem, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Grid, MenuItem } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
@@ -22,13 +22,14 @@ import { FaFileWord } from "react-icons/fa6";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
+import { grey, red, blue } from "@mui/material/colors";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Evento>({
         defaultValues: { titulo: '', tipo: 'online', descripcion: '', inicio: '', link: '', pdf: '' }, shouldFocusError: true
     });
     const [portada, setPortada] = useState<any>('');
-    const [pdf, setPdf] = useState<any>('');
+    const [documento, setDocumento] = useState<any>('');
     const router = useRouter();
     const { openModal } = useModal();
     const { openFilePicker } = useFilePicker({
@@ -45,7 +46,7 @@ export default function Page() {
         accept: '.pdf, .doc, .docx',
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setPdf(plainFiles[0]);
+            setDocumento(plainFiles[0]);
         }
     });
     const { openSnackbar } = useSnackbar();
@@ -60,7 +61,7 @@ export default function Page() {
             form.append('inicio', evento.inicio);
             form.append('descripcion', evento.descripcion);
             form.append('imagen', portada);
-            form.append('doc', pdf);
+            form.append('doc', documento);
             openModal({
                 titulo: '¿Continuar?',
                 content: 'Un nuevo evento se agregará',
@@ -81,10 +82,12 @@ export default function Page() {
 
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>
-            <BotonOutline onClick={() => router.back()}>
-                <MdArrowLeft fontSize={20} /> Volver
-            </BotonOutline>
-            <Titulo sx={{ fontSize: 20, mt: 1 }}>
+            <BotonSimple
+                startIcon={<MdArrowLeft fontSize={20} />}
+                onClick={() => router.back()}>
+                Regresar
+            </BotonSimple>
+            <Titulo sx={{ mt: 1 }}>
                 Crear nuevo evento
             </Titulo>
             <Breadcrumbs >
@@ -100,21 +103,21 @@ export default function Page() {
                 <Grid item xs={12} md={6} lg={4}>
                     <BoxSombra p={2}>
                         <Box sx={{
-                            height: 200,
-                            bgcolor: '#f6f7f9',
+                            height: 300,
+                            bgcolor: grey[200],
                             p: 1,
-                            border: '1px dashed #ddd',
+                            border: `1px dashed ${grey[400]}`,
                             flexDirection: 'column',
                             borderRadius: 5,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#919eab',
+                            color: grey[900],
                             transition: 'color 0.25s',
                             position: 'relative',
                             overflow: 'hidden',
                             "&:hover": {
-                                color: '#919eab77',
+                                color: grey[500],
                                 cursor: 'pointer'
                             }
                         }}
@@ -126,49 +129,41 @@ export default function Page() {
                             <BsImageAlt color={'inherit'} fontSize={30} />
                             <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
-                            height: 35,
-                            p: 1,
-                            border: '1px solid #e9eaed',
-                            flexDirection: 'column',
+                            p: 2,
+                            border: `1px solid ${grey[400]}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                             borderRadius: 3,
+                            color: grey[900],
                             position: 'relative',
-                            color: '#969696',
-                            transition: 'color 0.25s',
+                            transition: 'border .5s',
                             "&:hover": {
-                                color: '#919eab77',
-                                cursor: 'pointer'
+                                border: `1px solid ${red[300]}`
                             }
                         }}
                             onClick={() => PDFPicker.openFilePicker()}
                         >
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, fontSize: 14, mt: 1, ml: 1 }}>PDF o Word de Referencia</Normal>
-                            <MdOutlineAttachFile style={{ position: 'absolute', right: 10, top: 18, fontSize: 20 }} />
+                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
+                            <MdOutlineAttachFile style={{ fontSize: 20 }} />
                         </Box>
                         {
-                            watch('pdf') ?
-                                <ChipBox icon={watch('pdf').includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <FaFileWord fontSize={20} color='#1951b2' />}
+                            documento ?
+                                <ChipBox icon={documento.type.includes('pdf') ?
+                                    <BsFileEarmarkPdfFill fontSize={20} color={red[700]} /> : <FaFileWord fontSize={20} color={blue[700]} />}
                                     sx={{
                                         mt: 2,
-                                        border: `1px solid ${watch('pdf').includes('pdf') ? '#e62c31' : '#1951b2'}`,
+                                        border: `1px solid ${documento.type.includes('pdf') ? red[700] : blue[700]}`,
                                         height: 40,
-                                        bgcolor: 'white',
-                                        "&:hover": {
-                                            cursor: 'pointer'
-                                        }
+                                        borderRadius: 3,
+                                        bgcolor: 'white'
+
                                     }}
-                                    onClick={() => {
-                                        let a = document.createElement('a');
-                                        a.download = watch('pdf');
-                                        a.href = watch('pdf');
-                                        a.click();
-                                        a.remove();
-                                    }}
-                                    label={'Descargar'}
+                                    label={documento.name}
                                     onDelete={() => {
-                                        setValue('pdf', '');
+                                        setDocumento(null);
                                     }}
                                 />
                                 : null
@@ -226,7 +221,6 @@ export default function Page() {
                                     control={control}
                                     render={({ field: { ref, ...field } }) => (
                                         <InputBox
-                                            sx={{ mt: 1 }}
                                             select
                                             label='Modalidad'
                                             {...field}
@@ -256,17 +250,20 @@ export default function Page() {
                                 <Controller
                                     name="inicio"
                                     control={control}
-
+                                    rules={{ required: 'Inicio de evento requerido' }}
                                     render={({ field: { ref, ...field } }) => (
                                         <DatePickerBox
                                             sx={{ mt: 2 }}
+                                            disablePast
                                             onChange={(ev: any) => {
                                                 field.onChange(ev?.format('DD/MM/YYYY'))
                                             }}
                                             slotProps={{
                                                 textField: {
                                                     inputRef: ref,
-                                                    label: 'Inicio del evento',
+                                                    label: 'Inicio de evento',
+                                                    error: !!errors.inicio,
+                                                    helperText: errors.inicio?.message
                                                 }
                                             }}
                                         />

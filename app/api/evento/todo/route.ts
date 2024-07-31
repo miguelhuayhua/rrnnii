@@ -2,17 +2,14 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
-    let { opcion } = await request.json() as { opcion: string };
-
+    let { take } = await request.json();
     try {
-        let eventos = await prisma.evento.findMany();
+        let eventos = await prisma.evento.findMany({ take });
 
         return Response.json(eventos);
     } catch (error) {
         console.log(error)
-        return Response.json({
-            error: true,
-        });
+        return Response.json([]);
     }
 }
 

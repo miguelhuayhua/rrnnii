@@ -1,6 +1,6 @@
 "use client";
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
-import { Normal, Titulo } from "@/app/componentes/Textos";
+import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
@@ -13,9 +13,12 @@ import ModalEvento from "./Modal";
 import { RiEditFill } from "react-icons/ri";
 import { IoReload } from "react-icons/io5";
 import EventoComponent from "../componentes/items/Evento";
-import { InputBox } from "@/app/componentes/Datos";
+import Image from 'next/legacy/image';
 import { BiSearch } from "react-icons/bi";
 import { filtrarValorEnArray } from "@/utils/data";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import Tabla from "../componentes/Tabla";
+import dayjs from "dayjs";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -31,10 +34,12 @@ export default function Page() {
     }, [opcion, evento]);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonOutline onClick={() => router.back()}>
-                <MdArrowLeft fontSize={20} /> Volver
-            </BotonOutline>
-            <Titulo sx={{ fontSize: 20, mt: 1 }}>
+            <BotonSimple
+                startIcon={<MdArrowLeft fontSize={20} />}
+                onClick={() => router.back()}>
+                Regresar
+            </BotonSimple>
+            <Titulo sx={{ mt: 1 }}>
                 Eventos
             </Titulo>
             <Breadcrumbs >
@@ -55,46 +60,49 @@ export default function Page() {
                 </BotonOutline>
             </Stack>
             <Tabs
-                sx={{
-                    minHeight: 0,
-                    ".Mui-selected": {
-                        color: '#bc3c3b !important'
-                    },
-                    ".MuiTabs-indicator": {
-                        background: '#bc3c3b',
-                        textTransform: 'none',
-                    }
-                }}
+                sx={{ mb: 4 }}
+                ScrollButtonComponent={(props) =>
+                    <BotonSimple  {...props}>
+                        {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
+                    </BotonSimple>}
+                variant="scrollable"
+                allowScrollButtonsMobile
                 value={opcion}
                 onChange={(_, value) => { setOpcion(value) }} >
                 <TabBox label="Todos" value='todo' sx={{ ml: 2 }} />
                 <TabBox label="Activos" value='activo' />
                 <TabBox label="Concluídos" value='concluido' />
             </Tabs>
-            <Grid container spacing={2} mt={1}>
-                <Grid item xs={12}>
-                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
-                        onChange={(ev) => {
-                            setEventos(filtrarValorEnArray(prevEventos, ev.target.value));
-                        }}
-                        InputProps={{
-                            startAdornment: <BiSearch fontSize={25} />
-                        }}
-                    />
-                </Grid>
-                {eventos.map((value) => (
-                    <Grid key={value.id} item xs={12} sm={6} md={4} lg={3} position='relative'>
-                        <EventoComponent Evento={value} />
-                        <BotonFilled
-                            onClick={() => {
-                                setEvento(value);
-                            }}
-                            sx={{ position: 'absolute', bottom: 30, left: 25 }} >
-                            <RiEditFill fontSize={18} />
-                        </BotonFilled>
-                    </Grid>
-                ))}
-            </Grid>
+            <Tabla skipColumns={{ nombre: true }} hasPagination data={eventos.map(value => (
+                {
+                    id: value.id,
+                    nombre: value.titulo,
+                    Actividad: (
+                        <Box display='flex' minWidth={300} py={0.35}>
+                            <Box minWidth={90} width={90} height={90} position='relative'>
+                                <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            </Box>
+                            <Box px={2}>
+                                <Negrita sx={{ fontSize: 16 }}>{value.titulo}</Negrita>
+                                <Normal >{value.tipo.toUpperCase()}</Normal>
+                            </Box>
+                        </Box>
+                    ),
+                    "Creado el": (
+                        <Box minWidth={100}>
+                            <Negrita sx={{ fontSize: 13 }}>
+                                {dayjs(value.createdAt).format('DD/MM/YYYY')}
+                            </Negrita>
+                            <Normal sx={{ fontSize: 11 }}>
+                                {dayjs(value.createdAt).format('HH:mm:ss')}
+                            </Normal>
+                        </Box>
+                    ),
+                    "": (<BotonOutline onClick={() => {
+                        setEvento(value);
+                    }}>Modificar</BotonOutline>)
+                }
+            ))} />
             {
                 evento ?
                     <ModalEvento

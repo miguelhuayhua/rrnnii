@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@huggingface/inference": "^2.8.0",
     "@mui/material": "^5.15.15",
     "@mui/material-nextjs": "^5.15.11",
     "@mui/x-date-pickers": "^7.5.0",
@@ -22,6 +23,7 @@
     "next": "14.2.3",
     "next-auth": "^4.24.7",
     "notistack": "^3.0.1",
+    "openai": "^4.53.2",
     "pdf-merger-js": "^5.1.1",
     "prisma": "^5.13.0",
     "react": "^18",

@@ -1,7 +1,7 @@
 'use client';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
+import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Grid } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
@@ -16,6 +16,7 @@ import { axiosInstance } from "@/globals";
 import { useState } from "react";
 import Image from 'next/legacy/image';
 import { parseNumber } from "@/utils/data";
+import { grey } from "@mui/material/colors";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Institucion & { Institucion: Institucion }>({
@@ -54,17 +55,19 @@ export default function Page() {
     }
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }}>
-            <BotonOutline onClick={() => router.back()}>
-                <MdArrowLeft fontSize={20} /> Volver
-            </BotonOutline>
-            <Titulo sx={{ fontSize: 20, mt: 1 }}>
-                Añadir institucion
+            <BotonSimple
+                startIcon={<MdArrowLeft fontSize={20} />}
+                onClick={() => router.back()}>
+                Regresar
+            </BotonSimple>
+            <Titulo sx={{ mt: 1 }}>
+                Añadir institución
             </Titulo>
             <Breadcrumbs >
-                <Link href="/dashboard/institucions">
+                <Link href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
-                <Link href="/dashboard/institucions">
+                <Link href="/dashboard/instituciones">
                     <Normal>Instituciones</Normal>
                 </Link>
                 <Normal>Crear</Normal>
@@ -74,20 +77,20 @@ export default function Page() {
                     <BoxSombra p={2}>
                         <Box sx={{
                             height: 200,
-                            bgcolor: '#f6f7f9',
+                            bgcolor: grey[200],
                             p: 1,
-                            border: '1px dashed #ddd',
+                            border: `1px dashed ${grey[400]}`,
                             flexDirection: 'column',
                             borderRadius: 5,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#919eab',
+                            color: grey[900],
                             transition: 'color 0.25s',
                             position: 'relative',
                             overflow: 'hidden',
                             "&:hover": {
-                                color: '#919eab77',
+                                color: grey[500],
                                 cursor: 'pointer'
                             }
                         }}
@@ -97,11 +100,9 @@ export default function Page() {
                                 watch('logo') ? <Image src={watch('logo')} layout='fill' objectFit='cover' /> : null
                             }
                             <BsImageAlt color={'inherit'} fontSize={30} />
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir logo</Normal>
+                            <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
-
-
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                     </BoxSombra>
                 </Grid>
                 <Grid item xs={12} md={6} lg={8}>

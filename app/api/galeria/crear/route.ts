@@ -1,4 +1,3 @@
-
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 import { writeFile } from "fs/promises";
@@ -9,7 +8,7 @@ const POST = async (request: NextRequest) => {
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = Date.now() + file.name.replaceAll(" ", "_");
     try {
-        await writeFile(path.join(process.cwd(), "public/uploads/" + filename), buffer);
+        await writeFile(path.join(process.cwd(), "public/uploads/" + filename), buffer as any);
         await prisma.galeria.create({
             data: {
                 titulo: form.get('titulo'),

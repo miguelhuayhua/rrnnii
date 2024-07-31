@@ -17,7 +17,7 @@ const Titulo = styled(Typography)(({ theme }) =>
 const Negrita = styled(Typography)(() =>
 ({
     fontSize: 14,
-    fontWeight: 800,
+    fontWeight: 700,
 }));
 
 
