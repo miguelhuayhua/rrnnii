@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import { usePathname, useRouter } from 'next/navigation';
 import { MdWork } from "react-icons/md";
-import { Button, Divider, Tooltip } from "@mui/material";
+import { Button, Divider, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 import { IoImage, IoPeople } from "react-icons/io5";
 import { FaHandsHelping, FaTools } from "react-icons/fa";
 import { FaBuilding, FaBuildingUser } from "react-icons/fa6";
@@ -16,6 +16,8 @@ import { ArrowRightIcon } from '@mui/x-date-pickers';
 import { BotonSimple } from '@/app/componentes/Botones';
 import { Normal } from '@/app/componentes/Textos';
 import { blue, grey, red } from '@mui/material/colors';
+import { useState } from 'react';
+import { CgMenuLeft } from 'react-icons/cg';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
 
 const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: string, active: boolean, onclick?: any }) => {
@@ -47,7 +49,10 @@ const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: 
 const SideBar = () => {
     const router = useRouter();
     const pathname = usePathname();
-    return (
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
+    const [move, setMove] = useState(false);
+    const Side = () => (
         <Box position='sticky' top={0} borderRight='1px solid #eee' width={{ md: 110 }} px={0.5} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
                 <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
@@ -60,81 +65,35 @@ const SideBar = () => {
             <SideBarItem onclick={() => router.push('/dashboard/galeria')} Icon={IoImage} label='Galeria' active={pathname.includes('/galeria')} />
             <SideBarItem onclick={() => router.push('/dashboard/instituciones')} Icon={FaBuilding} label='Instituciones' active={pathname.includes('/instituciones')} />
             <Divider sx={{ borderColor: '#eee' }} />
-            <Tooltip
-                arrow
-                PopperProps={{
-                    sx: {
-                        "& .MuiTooltip-tooltip": {
-                            background: 'linear-gradient(50deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 41%, rgba(255,255,255,1) 60%, rgba(255,240,240,1) 100%)',
-                            borderRadius: 3,
-                            p: 1,
-                            boxShadow: '-10px 10px 30px #00000022',
-                            ".MuiTooltip-arrow": {
-                                color: 'white'
-                            },
-                        }
-                    }
-                }}
-                placement='right'
-                enterTouchDelay={0}
-                leaveTouchDelay={0}
-                title={
-                    <Box>
-                        <BotonSimple onClick={() => {
-                            router.push('/dashboard/personal/usuarios');
-                        }} fullWidth>
-                            Usuarios
-                        </BotonSimple>
-                        <BotonSimple onClick={() => {
-                            router.push('/dashboard/personal/usuarios');
-                        }} fullWidth>
-                            Información Personal
-                        </BotonSimple>
-                    </Box>}>
-                <Box position='relative'>
-                    <SideBarItem onclick={() => { }} Icon={IoPeople} label='Personal' active={pathname.includes('/personal')} />
-                    <ArrowRightIcon style={{ position: 'absolute', top: 18, right: 0, fontSize: 20, color: '#888' }}></ArrowRightIcon>
-                </Box>
-            </Tooltip>
+            <SideBarItem onclick={() => { router.push('/dashboard/usuarios') }} Icon={IoPeople} label='Personal y usuarios' active={pathname.includes('/usuarios')} />
             <SideBarItem onclick={() => router.push('/dashboard/unidad')} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />
-            <Tooltip
-                arrow
-                PopperProps={{
-                    sx: {
-                        "& .MuiTooltip-tooltip": {
-                            background: 'linear-gradient(50deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 41%, rgba(255,255,255,1) 60%, rgba(255,240,240,1) 100%)',
-                            borderRadius: 3,
-                            p: 1,
-                            boxShadow: '-10px 10px 30px #00000022',
-                            ".MuiTooltip-arrow": {
-                                color: 'white'
-                            },
-                        }
-                    }
-                }}
-                placement='right'
-                enterTouchDelay={0}
-                leaveTouchDelay={0}
-                title={
-                    <Box>
-                        <BotonSimple onClick={() => {
-                            router.push('/dashboard/herramientas/unirpdf')
-                        }} fullWidth>
-                            Unir PDF
-                        </BotonSimple>
-                        <BotonSimple onClick={() => {
-                            router.push('/dashboard/herramientas/imagenpdf')
-                        }} fullWidth>
-                            Imagen a PDF
-                        </BotonSimple>
-                    </Box>}>
-                <Box position='relative'>
-                    <SideBarItem onclick={() => { }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} />
-                    <ArrowRightIcon style={{ position: 'absolute', top: 15, right: 0, fontSize: 20, color: '#888' }}></ArrowRightIcon>
-                </Box>
-            </Tooltip>
-        </Box>
 
+            <SideBarItem onclick={() => { router.push('/dashboard/herramientas') }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} />
+        </Box>
+    )
+    return (
+        <>
+            <BotonSimple
+                onClick={() => { setMove(!move); }}
+                sx={{ position: 'fixed', top: 17, left: 15, zIndex: 20 }}>
+                <CgMenuLeft fontSize={27} />
+            </BotonSimple>
+            {
+                md ?
+                    <SwipeableDrawer
+                        anchor={'left'}
+                        open={move}
+                        onClose={() => {
+                            setMove(false);
+                        }}
+                        onOpen={() => setMove(true)}
+                    >
+                        <Side />
+                    </SwipeableDrawer>
+                    :
+                    <Side />
+            }
+        </>
     )
 }
 

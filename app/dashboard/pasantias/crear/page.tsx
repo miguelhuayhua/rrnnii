@@ -275,6 +275,7 @@ export default function Page() {
                                 />
                                 <Controller
                                     name="finalizacion"
+                                    rules={{ required: 'Finalización es obligatoria' }}
                                     control={control}
                                     render={({ field: { ref, ...field } }) => (
                                         <DatePickerBox
@@ -285,6 +286,8 @@ export default function Page() {
                                             disablePast
                                             slotProps={{
                                                 textField: {
+                                                    error: !!errors.finalizacion,
+                                                    helperText: errors.finalizacion?.message,
                                                     inputRef: ref,
                                                     label: 'Finalización del pasantia',
                                                 }

@@ -2,8 +2,7 @@
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
-import { IoClose } from "react-icons/io5";
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, Stack, useMediaQuery, useTheme } from '@mui/material';
 import { Institucion } from '@prisma/client';
 import { BotonFilled } from '@/app/componentes/Botones';
 import { Normal, Titulo } from '@/app/componentes/Textos';
@@ -11,11 +10,13 @@ import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
 import { useFilePicker } from 'use-file-picker';
 import { BsImageAlt } from 'react-icons/bs';
-import { DatePickerBox, InputBox, ItemBox } from '@/app/componentes/Datos';
+import { InputBox, SwitchBox } from '@/app/componentes/Datos';
 import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
 import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
+import { grey } from '@mui/material/colors';
+import { useSnackbar } from '@/providers/SnackbarProvider';
 interface Props {
     setInstitucion: any;
     Institucion: Institucion;
@@ -27,6 +28,7 @@ export default function ModalInstitucion({ setInstitucion, Institucion }: Props)
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Institucion>({
         defaultValues: Institucion, shouldFocusError: true
     });
+    const { openSnackbar } = useSnackbar();
     const { openModal } = useModal();
     const [portada, setPortada] = useState<any>('');
     const { openFilePicker } = useFilePicker({
@@ -53,7 +55,6 @@ export default function ModalInstitucion({ setInstitucion, Institucion }: Props)
                 let res = await axiosInstance.post('/api/institucion/modificar', form);
                 if (!res.data.error) {
                     setInstitucion(null);
-                    router.refresh();
                 }
                 return res.data.mensaje;
             }
@@ -68,30 +69,27 @@ export default function ModalInstitucion({ setInstitucion, Institucion }: Props)
             onClose={() => { setInstitucion(null) }}
         >
             <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <BotonFilled sx={{ position: 'absolute', top: 10, left: 10 }} onClick={() => setInstitucion(null)}>
-                    <IoClose fontSize={20} />
-                </BotonFilled>
-                <Titulo sx={{ fontSize: 16, mt: 4, mb: 2 }}>
+                <Titulo sx={{ fontSize: 20, mb: 3, textAlign: 'center' }}>
                     Información sobre el institucion
                 </Titulo>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4}>
                         <Box sx={{
                             height: 200,
-                            bgcolor: '#f6f7f9',
+                            bgcolor: grey[100],
                             p: 1,
-                            border: '1px dashed #ddd',
+                            border: `1px dashed ${grey[400]}`,
                             flexDirection: 'column',
                             borderRadius: 5,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#919eab',
+                            color: grey[900],
                             transition: 'color 0.25s',
                             position: 'relative',
                             overflow: 'hidden',
                             "&:hover": {
-                                color: '#919eab77',
+                                color: grey[500],
                                 cursor: 'pointer'
                             }
                         }}
@@ -103,9 +101,7 @@ export default function ModalInstitucion({ setInstitucion, Institucion }: Props)
                             <BsImageAlt color={'inherit'} fontSize={30} />
                             <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir logo</Normal>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
-
-
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
@@ -142,6 +138,7 @@ export default function ModalInstitucion({ setInstitucion, Institucion }: Props)
 
                             <Grid item xs={12}>
                                 <BotonFilled type="submit" sx={{ float: 'right' }}>Modificar Institucion</BotonFilled>
+
                             </Grid>
                         </Grid>
                     </Grid>

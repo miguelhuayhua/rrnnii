@@ -18,9 +18,11 @@ export default async function Layout({ children }: any) {
                     <ModalProvider>
                         <Box display='flex'>
                             <SideBar />
-                            <Box width={"100%"}>
+                            <Box width={"100%"} >
                                 <Navbar />
-                                {children}
+                                <Box mt={5}>
+                                    {children}
+                                </Box>
                             </Box>
                         </Box>
                     </ModalProvider>

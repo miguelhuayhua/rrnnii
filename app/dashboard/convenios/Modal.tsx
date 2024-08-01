@@ -96,10 +96,7 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
             onClose={() => { setConvenio(null) }}
         >
             <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <BotonFilled sx={{ position: 'absolute', top: 10, left: 10 }} onClick={() => setConvenio(null)}>
-                    <IoClose fontSize={20} />
-                </BotonFilled>
-                <Titulo sx={{ fontSize: 16, mt: 4 }}>
+                <Titulo sx={{ fontSize: 20, mb: 3, textAlign: 'center' }}>
                     Información sobre el convenio
                 </Titulo>
                 <Grid container spacing={2}>

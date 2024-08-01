@@ -1,7 +1,7 @@
 'use client';
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
-import { Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
+import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -10,26 +10,26 @@ import { MdArrowLeft } from "react-icons/md";
 import { axiosInstance } from "@/globals";
 import { Institucion } from "@prisma/client";
 import ModalInstitucion from "./Modal";
-import { RiEditFill } from "react-icons/ri";
-import { BoxSombra } from "@/app/componentes/Mostrar";
-import { InputBox } from "@/app/componentes/Datos";
-import { BiSearch } from "react-icons/bi";
-import { filtrarValorEnArray } from "@/utils/data";
+import Image from 'next/legacy/image';
 import dayjs from "dayjs";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
+import { TbReload } from "react-icons/tb";
+import { SwitchBox } from "@/app/componentes/Datos";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
+    const { openSnackbar } = useSnackbar();
     const [instituciones, setInstituciones] = useState<Institucion[]>([]);
-    const [prevInstituciones, setPrevInstituciones] = useState<any>([]);
+    const [prevInstituciones, setPrevInstituciones] = useState<Institucion[]>([]);
     const [institucion, setInstitucion] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/institucion/todo', { opcion }).then(res => {
+        axiosInstance.post('/api/institucion/todo', {}).then(res => {
             setInstituciones(res.data);
             setPrevInstituciones(res.data);
-        })
-    }, [opcion, institucion]);
+        });
+    }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
             <BotonSimple
@@ -40,7 +40,7 @@ export default function Page() {
             <Titulo sx={{ mt: 1 }}>
                 Instituciones
             </Titulo>
-            <Breadcrumbs >
+            <Breadcrumbs>
                 <Link href="/dashboard/instituciones">
                     <Normal>Principal</Normal>
                 </Link>
@@ -49,10 +49,18 @@ export default function Page() {
                 </Link>
                 <Normal>Listado</Normal>
             </Breadcrumbs>
-            <Stack direction='row' my={2} >
+            <Stack direction='row' my={2} spacing={2}>
                 <BotonFilled onClick={() => router.push('/dashboard/instituciones/crear')}>
                     Añadir institución
                 </BotonFilled>
+                <BotonSimple onClick={() => {
+                    axiosInstance.post('/api/institucion/todo', {}).then(res => {
+                        setInstituciones(res.data);
+                        setPrevInstituciones(res.data);
+                    });
+                }}>
+                    <TbReload fontSize={22} />
+                </BotonSimple>
             </Stack>
             <Tabs
                 sx={{ mb: 4 }}
@@ -63,12 +71,61 @@ export default function Page() {
                 variant="scrollable"
                 allowScrollButtonsMobile
                 value={opcion}
-                onChange={(_, value) => { setOpcion(value) }} >
-                <TabBox label="Todos" value='todo' sx={{ ml: 2 }} />
+                onChange={(_, value) => {
+                    setOpcion(value);
+                    if (value == 'todo')
+                        setInstituciones(prevInstituciones);
+                    else if (value == 'activo')
+                        setInstituciones(prevInstituciones.filter(value => value.estado))
+                    else if (value == 'inactivo')
+                        setInstituciones(prevInstituciones.filter(value => !value.estado))
+                }}  >
+                <TabBox label="Todos" value='todo' />
                 <TabBox label="Activos" value='activo' />
-                <TabBox label="Concluídos" value='concluido' />
+                <TabBox label="Inactivos" value='inactivo' />
             </Tabs>
-            <Tabla data={instituciones} />
+            <Tabla skipColumns={{ nombre: true }} data={instituciones.map(value => (
+                {
+                    nombre: value.nombre,
+                    "Institución": (<Box display='flex' minWidth={200} py={0.35}>
+                        <Box minWidth={90} width={90} height={90} position='relative'>
+                            <Image src={value.logo || '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                        </Box>
+                        <Box px={2}>
+                            <Negrita sx={{ fontSize: 16 }}>{value.nombre}</Negrita>
+                            <Normal >{value.contacto || 'Sin contacto'}</Normal>
+                        </Box>
+                    </Box>
+                    ),
+                    "Creado el": (
+                        <Box minWidth={90}>
+                            <Negrita sx={{ fontSize: 13 }}>
+                                {dayjs(value.createdAt).format('DD/MM/YYYY')}
+                            </Negrita>
+                            <Normal sx={{ fontSize: 11 }}>
+                                {dayjs(value.createdAt).format('HH:mm:ss')}
+                            </Normal>
+                        </Box>
+                    ),
+                    "": (<>
+                        <Stack direction='row' spacing={2}>
+                            <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
+                                setInstitucion(value);
+                            }}>Modificar</BotonOutline>
+
+                            <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                                axiosInstance.post('/api/institucion/estado', { estado: checked, id: value.id }).then(res => {
+                                    openSnackbar(res.data.mensaje);
+                                    axiosInstance.post('/api/institucion/todo', {}).then(res => {
+                                        setInstituciones(res.data);
+                                        setPrevInstituciones(res.data);
+                                    });
+                                });
+                            }} />
+                        </Stack>
+                    </>)
+                }
+            ))} />
             {
                 institucion ?
                     <ModalInstitucion

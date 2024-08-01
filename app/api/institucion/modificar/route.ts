@@ -10,18 +10,16 @@ const POST = async (request: NextRequest) => {
     const portadan = portada ? Date.now() + portada.name.replaceAll(" ", "_") : '';
     try {
         if (portadab) {
-            await writeFile(path.join(process.cwd(), "public/uploads/instituciones/img/" + portadan), portadab);
+            await writeFile(path.join(process.cwd(), "public/uploads/instituciones/img/" + portadan), portadab as any);
             await prisma.institucion.update({
                 data: { logo: portada ? `/uploads/instituciones/img/${portadan}` : '' },
                 where: { id: form.get('id') }
             });
         }
-      
         await prisma.institucion.update({
             data: {
                 nombre: form.get('nombre'),
                 contacto: +form.get('contacto'),
-                
             },
             where: { id: form.get('id') }
         });

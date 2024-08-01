@@ -16,14 +16,16 @@ import EventoComponent from "../componentes/items/Evento";
 import Image from 'next/legacy/image';
 import { BiSearch } from "react-icons/bi";
 import { filtrarValorEnArray } from "@/utils/data";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaFileWord } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
+import { TbPdf, TbReload } from "react-icons/tb";
+import { blue, red } from "@mui/material/colors";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [eventos, setEventos] = useState<Evento[]>([]);
-    const [prevEventos, setPrevEventos] = useState<any>([]);
+    const [prevEventos, setPrevEventos] = useState<Evento[]>([]);
     const [evento, setEvento] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
@@ -55,9 +57,9 @@ export default function Page() {
                 <BotonFilled onClick={() => router.push('/dashboard/eventos/crear')}>
                     Añadir evento
                 </BotonFilled>
-                <BotonOutline onClick={() => router.refresh()}>
-                    <IoReload fontSize={18} />
-                </BotonOutline>
+                <BotonSimple onClick={() => router.refresh()}>
+                    <TbReload fontSize={22} />
+                </BotonSimple>
             </Stack>
             <Tabs
                 sx={{ mb: 4 }}
@@ -68,10 +70,18 @@ export default function Page() {
                 variant="scrollable"
                 allowScrollButtonsMobile
                 value={opcion}
-                onChange={(_, value) => { setOpcion(value) }} >
-                <TabBox label="Todos" value='todo' sx={{ ml: 2 }} />
+                onChange={(_, value) => {
+                    setOpcion(value);
+                    if (value == 'todo')
+                        setEventos(prevEventos);
+                    else if (value == 'activo')
+                        setEventos(prevEventos.filter(value => value.estado))
+                    else if (value == 'inactivo')
+                        setEventos(prevEventos.filter(value => !value.estado))
+                }}  >
+                <TabBox label="Todos" value='todo' />
                 <TabBox label="Activos" value='activo' />
-                <TabBox label="Concluídos" value='concluido' />
+                <TabBox label="Inactivos" value='inactivo' />
             </Tabs>
             <Tabla skipColumns={{ nombre: true }} hasPagination data={eventos.map(value => (
                 {
@@ -98,9 +108,27 @@ export default function Page() {
                             </Normal>
                         </Box>
                     ),
-                    "": (<BotonOutline onClick={() => {
-                        setEvento(value);
-                    }}>Modificar</BotonOutline>)
+                    "": (<Stack direction='row' spacing={2}>
+                        <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
+                            setEvento(value);
+                        }}>Modificar</BotonOutline>
+                        {
+                            value.pdf ?
+                                <BotonFilled
+                                    onClick={() => {
+                                        let a = document.createElement('a');
+                                        a.download = value.pdf;
+                                        a.href = value.pdf;
+                                        a.click();
+                                        a.remove();
+                                    }}
+                                    sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                    {
+                                        value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <FaFileWord />
+                                    }
+                                </BotonFilled> : null
+                        }
+                    </Stack>)
                 }
             ))} />
             {

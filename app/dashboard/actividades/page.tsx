@@ -14,22 +14,24 @@ import { IoReload } from "react-icons/io5";
 import { InputBox } from "@/app/componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import Image from 'next/legacy/image';
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaFileWord } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
+import { TbPdf, TbReload } from "react-icons/tb";
+import { blue, red } from "@mui/material/colors";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [actividades, setActividades] = useState<Actividad[]>([]);
-    const [prevActividades, setPrevActividades] = useState<any>([]);
+    const [prevActividades, setPrevActividades] = useState<Actividad[]>([]);
     const [actividad, setActividad] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/actividad/todo', { opcion }).then(res => {
+        axiosInstance.post('/api/actividad/todo', {}).then(res => {
             setActividades(res.data);
             setPrevActividades(res.data);
         })
-    }, [opcion, actividad]);
+    }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
             <BotonSimple
@@ -53,9 +55,9 @@ export default function Page() {
                 <BotonFilled onClick={() => router.push('/dashboard/actividades/crear')}>
                     Añadir actividad
                 </BotonFilled>
-                <BotonOutline onClick={() => router.refresh()}>
-                    <IoReload fontSize={18} />
-                </BotonOutline>
+                <BotonSimple onClick={() => router.refresh()}>
+                    <TbReload fontSize={22} />
+                </BotonSimple>
             </Stack>
             <Tabs
                 sx={{ mb: 4 }}
@@ -66,10 +68,18 @@ export default function Page() {
                 variant="scrollable"
                 allowScrollButtonsMobile
                 value={opcion}
-                onChange={(_, value) => { setOpcion(value) }} >
-                <TabBox label="Todos" value='todo' sx={{ ml: 2 }} />
+                onChange={(_, value) => {
+                    setOpcion(value);
+                    if (value == 'todo')
+                        setActividades(prevActividades);
+                    else if (value == 'activo')
+                        setActividades(prevActividades.filter(value => value.estado))
+                    else if (value == 'inactivo')
+                        setActividades(prevActividades.filter(value => !value.estado))
+                }} >
+                <TabBox label="Todos" value='todo' />
                 <TabBox label="Activos" value='activo' />
-                <TabBox label="Concluídos" value='concluido' />
+                <TabBox label="Inactivos" value='inactivo' />
             </Tabs>
             <Tabla skipColumns={{ nombre: true }} hasPagination data={actividades.map(value => (
                 {
@@ -96,9 +106,29 @@ export default function Page() {
                             </Normal>
                         </Box>
                     ),
-                    "": (<BotonOutline onClick={() => {
-                        setActividad(value);
-                    }}>Modificar</BotonOutline>)
+                    "": (
+                        <Stack direction='row' spacing={2}>
+                            <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
+                                setActividad(value);
+                            }}>Modificar</BotonOutline>
+                            {
+                                value.pdf ?
+                                    <BotonFilled
+                                        onClick={() => {
+                                            let a = document.createElement('a');
+                                            a.download = value.pdf;
+                                            a.href = value.pdf;
+                                            a.click();
+                                            a.remove();
+                                        }}
+                                        sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                        {
+                                            value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <FaFileWord />
+                                        }
+                                    </BotonFilled> : null
+                            }
+                        </Stack>
+                    )
                 }
             ))} />
             {

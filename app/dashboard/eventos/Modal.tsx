@@ -23,6 +23,7 @@ import Image from 'next/legacy/image';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
+import { grey, red } from '@mui/material/colors';
 interface Props {
     setEvento: any;
     Evento: Evento;
@@ -98,20 +99,20 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
                     <Grid item xs={12} md={4}>
                         <Box sx={{
                             height: 200,
-                            bgcolor: '#f6f7f9',
+                            bgcolor: grey[100],
                             p: 1,
-                            border: '1px dashed #ddd',
+                            border: `1px dashed ${grey[400]}`,
                             flexDirection: 'column',
                             borderRadius: 5,
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#919eab',
+                            color: grey[900],
                             transition: 'color 0.25s',
                             position: 'relative',
                             overflow: 'hidden',
                             "&:hover": {
-                                color: '#919eab77',
+                                color: grey[500],
                                 cursor: 'pointer'
                             }
                         }}
@@ -123,54 +124,43 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
                             <BsImageAlt color={'inherit'} fontSize={30} />
                             <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
-                            height: 35,
-                            p: 1,
-                            border: '1px solid #e9eaed',
-                            flexDirection: 'column',
+                            p: 2,
+                            border: `1px solid ${grey[400]}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                             borderRadius: 3,
+                            color: grey[900],
                             position: 'relative',
-                            color: '#969696',
-                            transition: 'color 0.25s',
+                            transition: 'border .5s',
                             "&:hover": {
-                                color: '#919eab77',
-                                cursor: 'pointer'
+                                border: `1px solid ${red[300]}`
                             }
                         }}
                             onClick={() => PDFPicker.openFilePicker()}
                         >
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, fontSize: 14, mt: 1, ml: 1 }}>PDF o Word de Referencia</Normal>
-                            <MdOutlineAttachFile style={{ position: 'absolute', right: 10, top: 18, fontSize: 20 }} />
+                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
+                            <MdOutlineAttachFile style={{ fontSize: 20 }} />
                         </Box>
                         {
-                            watch('pdf') ?
-                                <ChipBox icon={watch('pdf').includes('pdf') ?
+                            documento ?
+                                <ChipBox icon={documento.type.includes('pdf') ?
                                     <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <FaFileWord fontSize={20} color='#1951b2' />}
                                     sx={{
                                         mt: 2,
-                                        border: `1px solid ${watch('pdf').includes('pdf') ? '#e62c31' : '#1951b2'}`,
+                                        border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
                                         height: 40,
-                                        bgcolor: 'white',
-                                        "&:hover": {
-                                            cursor: 'pointer'
-                                        }
+                                        bgcolor: 'white'
                                     }}
-                                    onClick={() => {
-                                        let a = document.createElement('a');
-                                        a.download = watch('pdf');
-                                        a.href = watch('pdf');
-                                        a.click();
-                                        a.remove();
-                                    }}
-                                    label={'Descargar'}
+                                    label={documento.name}
                                     onDelete={() => {
-                                        setValue('pdf', '');
+                                        setDocumento(null);
                                     }}
                                 />
                                 : null
                         }
-
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>

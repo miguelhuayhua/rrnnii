@@ -66,9 +66,9 @@ export default function Page() {
                 allowScrollButtonsMobile
                 value={opcion}
                 onChange={(_, value) => { setOpcion(value) }} >
-                <TabBox label="Todos" value='todo' sx={{ ml: 2 }} />
+                <TabBox label="Todos" value='todo' />
                 <TabBox label="Activos" value='activo' />
-                <TabBox label="Concluídos" value='concluido' />
+                <TabBox label="Inactivos" value='inactivos' />
             </Tabs>
             <Grid container spacing={2} mt={1}>
                 <Grid item xs={12}>
