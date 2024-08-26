@@ -13,34 +13,36 @@ const POST = async (request: NextRequest) => {
     const documenton = documento ? Date.now() + documento.name.replaceAll(" ", "_") : '';
     try {
         if (portadab) {
-            await writeFile(path.join(process.cwd(), "public/uploads/actividades/img/" + portadan), portadab);
+            await writeFile(path.join(process.cwd(), "public/uploads/actividades/img/" + portadan), portadab as any);
             await prisma.actividad.update({
-                data: { imagen: portada ? `/uploads/actividades/img/${portadan}` : '' },
+                data: {
+                    imagen: portada ? `/uploads/actividades/img/${portadan}` : '',
+                },
                 where: { id: form.get('id') }
             });
         }
         if (documentob) {
-            await writeFile(path.join(process.cwd(), "public/uploads/actividades/files/" + documenton), documentob);
+            await writeFile(path.join(process.cwd(), "public/uploads/actividades/files/" + documenton), documentob as any);
             await prisma.actividad.update({
-                data: { pdf: `/uploads/actividades/files/${documenton}` },
+                data: {
+                    pdf: `/uploads/actividades/files/${documenton}`,
+                    titulo: form.get('titulo'),
+                    descripcion: form.get('descripcion'),
+                    tipo: form.get('tipo'),
+                },
                 where: { id: form.get('id') }
             });
         }
         else {
             await prisma.actividad.update({
-                data: { pdf: '' },
+                data: {
+                    pdf: '', titulo: form.get('titulo'),
+                    descripcion: form.get('descripcion'),
+                    tipo: form.get('tipo'),
+                },
                 where: { id: form.get('id') }
             });
         }
-        await prisma.actividad.update({
-            data: {
-                titulo: form.get('titulo'),
-                descripcion: form.get('descripcion'),
-                tipo: form.get('tipo'),
-            },
-            where: { id: form.get('id') }
-        });
-
         return Response.json({ error: false, mensaje: `Actividad modificada con éxito` });
     } catch (error) {
         console.log(error)

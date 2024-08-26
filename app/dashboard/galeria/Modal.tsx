@@ -2,10 +2,9 @@
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
-import { IoClose } from "react-icons/io5";
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, LinearProgress } from '@mui/material';
 import { Galeria } from '@prisma/client';
-import { BotonFilled } from '@/app/componentes/Botones';
+import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
@@ -19,26 +18,30 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import dynamic from 'next/dynamic';
+import { IoClose } from 'react-icons/io5';
+import { grey } from '@mui/material/colors';
+import { useSnackbar } from '@/providers/SnackbarProvider';
 interface Props {
     setGaleria: any;
     Galeria: Galeria;
 }
 export default function ModalGaleria({ setGaleria, Galeria }: Props) {
-    const theme = useTheme();
+    const [load, setLoad] = useState(false);
     const router = useRouter();
     const [file, setFile] = useState<any>(null);
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Galeria>({
+    const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Galeria>({
         defaultValues: Galeria, shouldFocusError: true,
     });
+    const { openSnackbar } = useSnackbar();
     const { openModal } = useModal();
     const { openFilePicker } = useFilePicker({
         readAs: 'DataURL',
         accept: 'image/*',
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setValue('imagen', URL.createObjectURL(plainFiles[0]));
+            setValue('imagen', URL.createObjectURL(plainFiles[0]), { shouldDirty: true });
             setFile(plainFiles[0]);
+            openSnackbar('Imagen modificada con éxito');
         }
     });
 
@@ -53,11 +56,13 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
             titulo: '¿Continuar?',
             content: 'La imagen será editada',
             callback: async () => {
+                setLoad(true);
                 let res = await axiosInstance.post('/api/galeria/modificar', formData);
                 if (!res.data.error) {
                     setGaleria(null);
                     router.refresh();
                 }
+                setLoad(false);
                 return res.data.mensaje;
             }
         });
@@ -65,52 +70,53 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
     return (
         <Dialog
             open={!!Galeria}
-            fullScreen={fullScreen}
             keepMounted={false}
             maxWidth='md'
             onClose={() => { setGaleria(null) }}
         >
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <BotonFilled sx={{ position: 'absolute', top: 10, left: 10 }} onClick={() => setGaleria(null)}>
-                    <IoClose fontSize={20} />
-                </BotonFilled>
-                <Titulo sx={{ fontSize: 16, mt: 4, mb: 2 }}>
-                    Editar imagen de galería
+                <BotonSimple onClick={() => setGaleria(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
+                    <IoClose fontSize={25} />
+                </BotonSimple>
+                <Titulo sx={{ fontSize: 20, mb: 3 }}>
+                    Editar imagen
                 </Titulo>
                 <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
-                    <Grid item xs={6} mx='auto' md={4}>
-                        <Box sx={{
-                            height: 200,
-                            bgcolor: '#f6f7f9',
-                            p: 1,
-                            border: '1px dashed #ddd',
-                            flexDirection: 'column',
-                            borderRadius: 5,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            color: '#919eab',
-                            transition: 'color 0.25s',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            "&:hover": {
-                                color: '#919eab77',
-                                cursor: 'pointer'
-                            }
-                        }}
-                            onClick={() => openFilePicker()}
-                        >
-                            {
-                                watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
-                            }
-                            <BsImageAlt color={'inherit'} fontSize={30} />
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                    <Grid item xs={12} sm={6}>
+                        <Box px={{ xs: 10, sm: 0 }}>
+                            <Box sx={{
+                                aspectRatio: 1,
+                                bgcolor: grey[100],
+                                p: 1,
+                                border: `1px dashed ${grey[400]}`,
+                                flexDirection: 'column',
+                                borderRadius: 5,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                color: grey[900],
+                                transition: 'color 0.25s',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                "&:hover": {
+                                    color: grey[500],
+                                    cursor: 'pointer'
+                                }
+                            }}
+                                onClick={() => openFilePicker()}
+                            >
+                                {
+                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                }
+                                <BsImageAlt color={'inherit'} fontSize={30} />
+                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                            </Box>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
 
                     </Grid>
-                    <Grid item xs={12} md={8} >
-
+                    <Grid item xs={12} sm={6}>
                         <Controller
                             name="titulo"
                             control={control}
@@ -130,7 +136,7 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
                             control={control}
                             render={({ field }) => (
                                 <Box>
-                                    <Negrita sx={{ my: 1, color: '#888888', fontWeight: 600, fontSize: 14 }}>
+                                    <Negrita sx={{ my: 1, fontWeight: 600, fontSize: 14 }}>
                                         Descripción:
                                     </Negrita>
                                     <Editor
@@ -153,9 +159,12 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                     </Grid>
-                    <Grid item xs={12}>
-                        <BotonFilled type="submit" sx={{ float: 'right' }}>Modificar Galeria</BotonFilled>
-                    </Grid>
+                    {
+                        isDirty ?
+                            <Grid item xs={12}>
+                                <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >Modificar Galeria</BotonFilled>
+                            </Grid> : null
+                    }
                 </Grid>
             </DialogContent>
 

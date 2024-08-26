@@ -14,7 +14,7 @@ import ModalPasantia from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
-import { TbPdf } from "react-icons/tb";
+import { TbPdf, TbReload } from "react-icons/tb";
 import { red } from "@mui/material/colors";
 import 'dayjs/locale/es';
 import { SwitchBox } from "@/app/componentes/Datos";
@@ -31,8 +31,8 @@ export default function Page() {
         axiosInstance.post('/api/pasantia/todo', { opcion }).then(res => {
             setPasantias(res.data);
             setPrevPasantias(res.data);
-        })
-    }, [opcion, Pasantia]);
+        });
+    }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
             <BotonSimple
@@ -52,10 +52,19 @@ export default function Page() {
                 </Link>
                 <Normal>Listado</Normal>
             </Breadcrumbs>
-            <Stack direction='row' my={2} >
+            <Stack direction='row' my={2} spacing={2} >
                 <BotonFilled onClick={() => router.push('/dashboard/pasantias/crear')}>
                     Añadir Pasantia
                 </BotonFilled>
+                <BotonSimple onClick={() => {
+                    axiosInstance.post('/api/pasantia/todo', { opcion }).then(res => {
+                        setPasantias(res.data);
+                        setPrevPasantias(res.data);
+                        setOpcion('todo');
+                    });
+                }}>
+                    <TbReload fontSize={22} />
+                </BotonSimple>
             </Stack>
             <Tabs
                 sx={{ mb: 4 }}
@@ -70,21 +79,27 @@ export default function Page() {
                     setOpcion(value);
                     if (value == 'todo')
                         setPasantias(prevPasantias);
-                    else if (value == 'activo')
+                    else if (value == 'vigente')
                         setPasantias(prevPasantias.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0))
+                    else if (value == 'activo')
+                        setPasantias(prevPasantias.filter(value => value.estado))
                     else if (value == 'concluido')
                         setPasantias(prevPasantias.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) < 0))
+                    else if (value == 'inactivo')
+                        setPasantias(prevPasantias.filter(value => !value.estado))
                 }}>
                 <TabBox label="Todos" value='todo' />
-                <TabBox label="Activos" value='activo' />
+                <TabBox label="Vigentes" value='vigente' />
                 <TabBox label="Concluídos" value='concluido' />
+                <TabBox label="Activos" value='activo' />
+                <TabBox label="Inactivos" value='inactivo' />
             </Tabs>
             <Tabla skipColumns={{ nombre: true }} data={Pasantias.map(value => (
                 {
                     id: value.id,
                     nombre: value.titulo,
-                    Convenio: (
-                        <Box display='flex' minWidth={200} py={0.35}>
+                    Pasantia: (
+                        <Box display='flex' minWidth={200} py={0.35} alignItems='center'>
                             <Box minWidth={90} width={90} height={90} position='relative'>
                                 <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
@@ -132,7 +147,9 @@ export default function Page() {
                                     axiosInstance.post('/api/pasantia/todo', {}).then(res => {
                                         setPasantias(res.data);
                                         setPrevPasantias(res.data);
+                                        setOpcion('todo');
                                     });
+
                                 });
                             }} />
                         </Stack>

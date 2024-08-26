@@ -11,7 +11,7 @@ const POST = async (request: NextRequest) => {
         if (imagen) {
             const bufferImg = Buffer.from(await imagen.arrayBuffer());
             const imagenName = Date.now() + imagen.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/eventos/img/" + imagenName), bufferImg!);
+            await writeFile(path.join(process.cwd(), "public/uploads/eventos/img/" + imagenName), bufferImg as any);
             await prisma.evento.update({
                 data: { imagen: imagen ? `/uploads/eventos/img/${imagenName}` : '' },
                 where: { id: form.get('id') }
@@ -20,7 +20,7 @@ const POST = async (request: NextRequest) => {
         if (doc) {
             const bufferDoc = Buffer.from(await doc.arrayBuffer());
             const docName = Date.now() + doc.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/eventos/files/" + docName), bufferDoc!);
+            await writeFile(path.join(process.cwd(), "public/uploads/eventos/files/" + docName), bufferDoc as any);
             await prisma.evento.update({
                 data: { pdf: `/uploads/eventos/files/${docName}` },
                 where: { id: form.get('id') }

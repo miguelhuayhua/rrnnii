@@ -57,6 +57,7 @@ export default function Page() {
                     axiosInstance.post('/api/institucion/todo', {}).then(res => {
                         setInstituciones(res.data);
                         setPrevInstituciones(res.data);
+                        setOpcion('todo');
                     });
                 }}>
                     <TbReload fontSize={22} />
@@ -87,7 +88,7 @@ export default function Page() {
             <Tabla skipColumns={{ nombre: true }} data={instituciones.map(value => (
                 {
                     nombre: value.nombre,
-                    "Institución": (<Box display='flex' minWidth={200} py={0.35}>
+                    "Institución": (<Box display='flex' alignItems='center' minWidth={200} py={0.35}>
                         <Box minWidth={90} width={90} height={90} position='relative'>
                             <Image src={value.logo || '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                         </Box>
@@ -108,7 +109,7 @@ export default function Page() {
                         </Box>
                     ),
                     "": (<>
-                        <Stack direction='row' spacing={2}>
+                        <Stack direction='row' spacing={2} alignItems='center'>
                             <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
                                 setInstitucion(value);
                             }}>Modificar</BotonOutline>
@@ -119,6 +120,7 @@ export default function Page() {
                                     axiosInstance.post('/api/institucion/todo', {}).then(res => {
                                         setInstituciones(res.data);
                                         setPrevInstituciones(res.data);
+                                        setOpcion('todo');
                                     });
                                 });
                             }} />

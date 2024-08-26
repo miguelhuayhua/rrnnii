@@ -9,15 +9,14 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Box, ClickAwayListener, Tooltip, Typography } from '@mui/material';
-import { BiEdit, BiSearch } from 'react-icons/bi';
-import { PiEyeBold } from "react-icons/pi";
+import { BiSearch } from 'react-icons/bi';
 import Image from 'next/legacy/image';
 import { BsCursorFill } from "react-icons/bs"; import { useRouter } from 'next/navigation';
 import { Normal } from '@/app/componentes/Textos';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { InputBox } from '@/app/componentes/Datos';
-import { BotonFilled, BotonOutline, BotonSimple } from '@/app/componentes/Botones';
-import { FaEye, FaPenToSquare } from 'react-icons/fa6';
+import { BotonOutline, BotonSimple } from '@/app/componentes/Botones';
+import { FaEye } from 'react-icons/fa6';
 import { grey } from '@mui/material/colors';
 interface Column {
     id: string;
@@ -51,7 +50,6 @@ interface Props {
     take?: number;
     admin?: string;
     skip?: number;
-    onEdit?: (item: any) => void | undefined;
     small?: boolean;
     onRow?: (item: any) => void | undefined;
     skipColumns?: { [key: string]: boolean };
@@ -63,7 +61,6 @@ const Tabla = ({
     data,
     skip = 0,
     take = 10,
-    onEdit = undefined,
     small = true,
     admin = undefined,
     onRow = undefined,
@@ -118,7 +115,7 @@ const Tabla = ({
                     : null
             }
             <Box>
-                <TableContainer sx={{ maxHeight: 500 }} >
+                <TableContainer sx={{ maxHeight: 1000 }} >
                     {
                         Data.length > 0 ?
                             <Table

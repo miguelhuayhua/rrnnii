@@ -18,6 +18,7 @@ import { Normal } from '@/app/componentes/Textos';
 import { blue, grey, red } from '@mui/material/colors';
 import { useState } from 'react';
 import { CgMenuLeft } from 'react-icons/cg';
+import { BiSolidInstitution } from 'react-icons/bi';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
 
 const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: string, active: boolean, onclick?: any }) => {
@@ -34,7 +35,7 @@ const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: 
                 color: active ? blue[700] : grey[700],
                 mx: 'auto',
                 borderRadius: 2,
-                my: 1,
+                my: 0.5,
                 background: active ? blue[50] : 'transparent',
                 width: "90%"
             }}>
@@ -53,7 +54,7 @@ const SideBar = () => {
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const [move, setMove] = useState(false);
     const Side = () => (
-        <Box position='sticky' top={0} borderRight='1px solid #eee' width={{ md: 110 }} px={0.5} height={"100vh"} zIndex={20}>
+        <Box position='sticky' top={0} borderRight='1px solid #eee' width={{ xs: 110 }} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
                 <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
             </Box>
@@ -64,6 +65,7 @@ const SideBar = () => {
             <SideBarItem onclick={() => router.push('/dashboard/eventos')} Icon={BsFillCalendar2EventFill} label='Eventos' active={pathname.includes('/eventos')} />
             <SideBarItem onclick={() => router.push('/dashboard/galeria')} Icon={IoImage} label='Galeria' active={pathname.includes('/galeria')} />
             <SideBarItem onclick={() => router.push('/dashboard/instituciones')} Icon={FaBuilding} label='Instituciones' active={pathname.includes('/instituciones')} />
+            <SideBarItem onclick={() => router.push('/dashboard/carreras')} Icon={BiSolidInstitution} label='Carreras' active={pathname.includes('/carreras')} />
             <Divider sx={{ borderColor: '#eee' }} />
             <SideBarItem onclick={() => { router.push('/dashboard/usuarios') }} Icon={IoPeople} label='Personal y usuarios' active={pathname.includes('/usuarios')} />
             <SideBarItem onclick={() => router.push('/dashboard/unidad')} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />
@@ -73,23 +75,24 @@ const SideBar = () => {
     )
     return (
         <>
-            <BotonSimple
-                onClick={() => { setMove(!move); }}
-                sx={{ position: 'fixed', top: 17, left: 15, zIndex: 20 }}>
-                <CgMenuLeft fontSize={27} />
-            </BotonSimple>
             {
                 md ?
-                    <SwipeableDrawer
-                        anchor={'left'}
-                        open={move}
-                        onClose={() => {
-                            setMove(false);
-                        }}
-                        onOpen={() => setMove(true)}
-                    >
-                        <Side />
-                    </SwipeableDrawer>
+                    <>
+                        <BotonSimple
+                            onClick={() => { setMove(!move); }}
+                            sx={{ position: 'fixed', top: 17, left: 15, zIndex: 20 }}>
+                            <CgMenuLeft fontSize={27} />
+                        </BotonSimple>
+                        <SwipeableDrawer
+                            sx={{ overflowY: 'scroll' }}
+                            anchor={'left'}
+                            open={move}
+                            onClose={() => { setMove(false); }}
+                            onOpen={() => setMove(true)}
+                        >
+                            <Side />
+                        </SwipeableDrawer>
+                    </>
                     :
                     <Side />
             }

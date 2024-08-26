@@ -15,13 +15,16 @@ import { Gradient } from '@/utils/Gradient.ts'
 import { ChipBox } from "./componentes/Mostrar";
 import { FaAngleRight } from "react-icons/fa";
 import axios from "axios";
-import { Actividad, Evento } from "@prisma/client";
+import { Actividad, Evento, Galeria } from "@prisma/client";
+import { BiPhone } from "react-icons/bi";
+import { MdPhone } from "react-icons/md";
 const Cliente = () => {
     const theme = useTheme();
     const downsm = useMediaQuery(theme.breakpoints.down('md'));
     const [y, setY] = useState(0);
     const [Eventos, setEventos] = useState<Evento[]>([]);
     const [Actividades, setActividades] = useState<Actividad[]>([]);
+    const [Galeria, setGaleria] = useState<Galeria[]>([]);
     const onScroll = useCallback(() => {
         const { scrollY } = window;
         setY(scrollY)
@@ -42,12 +45,15 @@ const Cliente = () => {
         axios.post('/api/actividad/todo', { take: 4 }).then(res => {
             setActividades(res.data);
         });
+        axios.post('/api/galeria/activo', { take: 6 }).then(res => {
+            setGaleria(res.data);
+        })
     }, []);
     return (
         <>
             <canvas id="gradient-canvas" style={{ width: "100vw", height: downsm ? 400 : 500, position: 'absolute', top: 0, clipPath: 'polygon(100% 0, 100% 18%, 0 100%, 0 0)' }}></canvas >
             <Grid container>
-                <Grid item sx={{ opacity: 1 - y * 0.0015, top: y * 0.1, zIndex: 20, }} xs={12} md={6} pt={{ xs: 7, md: 0 }}>
+                <Grid item sx={{ opacity: 1 - y * 0.0015, top: y * 0.1, zIndex: 20, }} xs={12} md={6} pt={{ xs: 5, md: 0 }}>
                     <Box pl={{ xs: 5, sm: 10, md: 10, xl: 40 }} pr={{ xs: 5, sm: 10, md: 2 }} >
                         <ChipBox label='Encargada de: ' sx={{ mb: 2, background: '#00000055', fontWeight: 700, fontSize: 14, color: 'white', borderRadius: 5, py: 2 }} />
                         <Titulo variant='h1' sx={{ color: blueGrey[50], fontSize: { xs: 16, sm: 20, md: 25, lg: 35 }, background: '#00000055', backdropFilter: 'blur(6px)', p: 2, borderRadius: 3 }} >
@@ -68,16 +74,30 @@ const Cliente = () => {
                                 </BotonFilled>
                             </Link>
                             <Link href='/convenios'>
-                                <BotonSimple endIcon={<FaAngleRight />}>
+                                <BotonSimple endIcon={<MdPhone />}>
                                     Contactarme
                                 </BotonSimple>
                             </Link>
                         </Stack>
                     </Box>
                 </Grid>
-                <Grid item xs={6} px={15} zIndex={-1} display={{ xs: 'none', md: 'block' }}>
-                    <Box sx={{ borderRadius: 4, zIndex: -1, opacity: 1 - y * 0.0015, position: 'relative', top: y * 0.2 }} >
-                        <Image width={10} height={7} layout="responsive" src={'/upea-border.png'} />
+                <Grid item xs={12} md={6} display={{ xs: 'none', md: 'block' }} px={{ xs: 1, md: 4, lg: 10, xl: 14 }} zIndex={20} >
+                    <Box sx={{
+                        borderRadius: 4,
+                        p: 2,
+                        overflow: 'hidden',
+                        boxShadow: '10px 10px 20px  #00000011',
+                        position: 'relative', marginTop: { xs: 0, md: 6 }, bgcolor: '#ffffff66', backdropFilter: "blur(3px)",
+                        animation: 'wave 2s ease-in-out infinite',
+                    }} >
+                        <Grid container spacing={1}>
+                            {
+                                Galeria.map(value => (
+                                    <Grid key={value.id} item xs={2} md={4} >
+                                        <Image style={{ borderRadius: 8 }} src={value.imagen} width={100} height={100} objectFit='cover' layout='responsive' />
+                                    </Grid>))
+                            }
+                        </Grid>
                     </Box>
                 </Grid>
             </Grid>

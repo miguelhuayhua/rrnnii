@@ -8,15 +8,15 @@ const POST = async (request: NextRequest) => {
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = Date.now() + file.name.replaceAll(" ", "_");
     try {
-        await writeFile(path.join(process.cwd(), "public/uploads/" + filename), buffer as any);
+        await writeFile(path.join(process.cwd(), "public/uploads/galeria/" + filename), buffer as any);
         await prisma.galeria.create({
             data: {
                 titulo: form.get('titulo'),
                 descripcion: form.get('descripcion'),
-                imagen: `/uploads/${filename}`,
+                imagen: `/uploads/galeria/${filename}`,
             }
         });
-        return Response.json({ error: false, mensaje: `Imagen creado con éxito` });
+        return Response.json({ error: false, mensaje: `Imagen creada con éxito` });
     } catch (error) {
         console.log(error)
         return Response.json({

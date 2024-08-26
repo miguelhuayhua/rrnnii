@@ -12,23 +12,27 @@ import { MdArrowLeft } from "react-icons/md";
 import { axiosInstance } from "@/globals";
 import { Convenio, Institucion } from "@prisma/client";
 import ModalConvenio from "./Modal";
-import { FaAngleLeft, FaAngleRight, FaFileWord } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
-import { TbPdf } from "react-icons/tb";
+import { TbPdf, TbReload } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
+import { SwitchBox } from "@/app/componentes/Datos";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { RiFileWord2Line } from "react-icons/ri";
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [convenios, setConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
     const [convenio, setConvenio] = useState<any>(null);
     const [prevConvenios, setPrevConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
+    const { openSnackbar } = useSnackbar();
     const router = useRouter();
     useEffect(() => {
         axiosInstance.post('/api/convenio/todo', {}).then(res => {
             setConvenios(res.data);
             setPrevConvenios(res.data);
-        })
+        });
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
@@ -49,16 +53,24 @@ export default function Page() {
                 </Link>
                 <Normal>Listado</Normal>
             </Breadcrumbs>
-            <Stack direction='row' my={2} >
+            <Stack direction='row' my={2} spacing={2} >
                 <BotonFilled onClick={() => router.push('/dashboard/convenios/crear')}>
                     Añadir convenio
                 </BotonFilled>
+                <BotonSimple onClick={() => {
+                    axiosInstance.post('/api/convenio/todo', {}).then(res => {
+                        setConvenios(res.data);
+                        setPrevConvenios(res.data);
+                        setOpcion('todo');
+                    });
+                }}>
+                    <TbReload fontSize={22} />
+                </BotonSimple>
             </Stack>
             <Tabs sx={{ mb: 4 }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
-                        {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />
-                        }
+                        {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
                     </BotonSimple>}
                 variant="scrollable"
                 allowScrollButtonsMobile
@@ -67,15 +79,20 @@ export default function Page() {
                     setOpcion(value);
                     if (value == 'todo')
                         setConvenios(prevConvenios);
-                    else if (value == 'activo')
-                        setConvenios(prevConvenios.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0))
+                    else if (value == 'vigente')
+                        setConvenios(prevConvenios.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0));
                     else if (value == 'concluido')
-                        setConvenios(prevConvenios.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) < 0))
-
+                        setConvenios(prevConvenios.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) < 0));
+                    else if (value == 'activo')
+                        setConvenios(prevConvenios.filter(value => value.estado));
+                    else if (value == 'inactivo')
+                        setConvenios(prevConvenios.filter(value => !value.estado));
                 }} >
                 <TabBox label="Todos" value='todo' />
-                <TabBox label="Activos" value='activo' />
+                <TabBox label="Vigentes" value='vigente' />
                 <TabBox label="Concluídos" value='concluido' />
+                <TabBox label="Activos" value='activo' />
+                <TabBox label="Inactivos" value='inactivo' />
             </Tabs>
             <Tabla skipColumns={{ nombre: true }} hasPagination data={convenios.map(value => (
                 {
@@ -105,7 +122,7 @@ export default function Page() {
                     "Institución": value.Institucion.nombre,
                     "Finaliza el": dayjs(value.finalizacion, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY'),
                     "": (<>
-                        <Stack direction='row' spacing={2}>
+                        <Stack direction='row' spacing={2} alignItems='center'>
                             <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
                                 setConvenio(value);
                             }}>Modificar</BotonOutline>
@@ -121,10 +138,20 @@ export default function Page() {
                                         }}
                                         sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
                                         {
-                                            value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <FaFileWord />
+                                            value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                         }
                                     </BotonFilled> : null
                             }
+                            <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                                axiosInstance.post('/api/convenio/estado', { estado: checked, id: value.id }).then(res => {
+                                    openSnackbar(res.data.mensaje);
+                                    axiosInstance.post('/api/convenio/todo', {}).then(res => {
+                                        setConvenios(res.data);
+                                        setPrevConvenios(res.data);
+                                        setOpcion('todo');
+                                    });
+                                });
+                            }} />
                         </Stack>
                     </>)
                 }

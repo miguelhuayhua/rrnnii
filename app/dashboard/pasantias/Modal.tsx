@@ -3,9 +3,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Autocomplete, Box, Grid, MenuItem, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Autocomplete, Box, Grid, LinearProgress, MenuItem, useTheme } from '@mui/material';
 import { Institucion, Pasantia } from '@prisma/client';
-import { BotonFilled } from '@/app/componentes/Botones';
+import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
@@ -19,20 +19,19 @@ import { useModal } from '@/providers/ModalProvider';
 import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
 import { ChipBox } from '@/app/componentes/Mostrar';
-import { FaFileWord } from 'react-icons/fa6';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import { grey, red } from '@mui/material/colors';
+import { RiFileWord2Line } from 'react-icons/ri';
 interface Props {
     setPasantia: any;
     Pasantia: Pasantia;
 }
 export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
-    const theme = useTheme();
     const router = useRouter();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion }>({
+    const [load, setLoad] = useState(false);
+    const { control, formState: { errors, isDirty }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion }>({
         defaultValues: Pasantia, shouldFocusError: true
     });
     const { openModal } = useModal();
@@ -69,12 +68,14 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
         form.append('institucion', pasantia.Institucion.nombre)
         openModal({
             titulo: '¿Continuar?',
-            content: 'Una nueva pasantia se agregará',
+            content: 'La pasantía se modificará',
             callback: async () => {
+                setLoad(true);
                 let res = await axiosInstance.post('/api/pasantia/modificar', form);
                 if (!res.data.error) {
                     setPasantia(null);
                     router.refresh();
+                    setLoad(false);
                 }
                 return res.data.mensaje;
             }
@@ -89,43 +90,48 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
     return (
         <Dialog
             open={!!Pasantia}
-            fullScreen={fullScreen}
             keepMounted={false}
             maxWidth='md'
             onClose={() => { setPasantia(null) }}
         >
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <Titulo sx={{ fontSize: 20, mt: 2, mb: 3, textAlign: 'center' }}>
-                    Información sobre el Pasantia
+                <BotonSimple onClick={() => setPasantia(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
+                    <IoClose fontSize={25} />
+                </BotonSimple>
+                <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
+                    Información sobre {Pasantia.titulo}
                 </Titulo>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                        <Box sx={{
-                            height: 200,
-                            bgcolor: grey[100],
-                            p: 1,
-                            border: `1px dashed ${grey[400]}`,
-                            flexDirection: 'column',
-                            borderRadius: 5,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            color: grey[900],
-                            transition: 'color 0.25s',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            "&:hover": {
-                                color: grey[500],
-                                cursor: 'pointer'
-                            }
-                        }}
-                            onClick={() => openFilePicker()}
-                        >
-                            {
-                                watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
-                            }
-                            <BsImageAlt color={'inherit'} fontSize={30} />
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                    <Grid item xs={12} mx='auto' sm={6}>
+                        <Box px={{ xs: 10, sm: 0 }}>
+                            <Box sx={{
+                                aspectRatio: 1,
+                                bgcolor: grey[100],
+                                p: 1,
+                                border: `1px dashed ${grey[400]}`,
+                                flexDirection: 'column',
+                                borderRadius: 5,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                color: grey[900],
+                                transition: 'color 0.25s',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                "&:hover": {
+                                    color: grey[500],
+                                    cursor: 'pointer'
+                                }
+                            }}
+                                onClick={() => openFilePicker()}
+                            >
+                                {
+                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                }
+                                <BsImageAlt color={'inherit'} fontSize={30} />
+                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                            </Box>
                         </Box>
                         <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
@@ -150,7 +156,7 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
                         {
                             documento ?
                                 <ChipBox icon={documento.type.includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <FaFileWord fontSize={20} color='#1951b2' />}
+                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
                                     sx={{
                                         mt: 2,
                                         border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
@@ -165,130 +171,131 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
                                 : null
                         }
                     </Grid>
-                    <Grid item xs={12} md={8}>
-                        <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
-                            <Grid item xs={12} sm={6}>
-                                <Controller
-                                    name="titulo"
-                                    control={control}
-                                    rules={{ required: 'Título es obligatorio' }}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            {...field}
-                                            label='Título'
-                                            error={!!errors.titulo}
-                                            helperText={errors.titulo?.message || 'Este es el título principal que será visible en el Pasantia'}
-                                            inputRef={ref}
-                                        />
-                                    )}
+                    <Grid item xs={12} sm={6}>
+                        <Controller
+                            name="titulo"
+                            control={control}
+                            rules={{ required: 'Título es obligatorio' }}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    {...field}
+                                    label='Título'
+                                    error={!!errors.titulo}
+                                    helperText={errors.titulo?.message || 'Este es el título principal que será visible en el Pasantia'}
+                                    inputRef={ref}
                                 />
-                                <Controller
-                                    name="descripcion"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Box>
-                                            <Negrita sx={{ my: 1, fontWeight: 600, fontSize: 14 }}>
-                                                Descripción:
-                                            </Negrita>
-                                            <Editor
-                                                value={field.value}
-                                                modules={{
-                                                    toolbar: [
-                                                        [{ 'header': [2, 3, 4, 5, false] }],
-                                                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                        ['link'],
-                                                    ]
-                                                }}
-                                                preserveWhitespace
-                                                className="editor"
-                                                onChange={(value) => { field.onChange(value) }}
-                                            />
-                                        </Box>
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Controller
-                                    name="modalidad"
-                                    control={control}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            select
-                                            label='Tiempo de duración'
-                                            {...field}
-                                            inputRef={ref}
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    slotProps: {
-                                                        paper: {
-                                                            sx: {
-                                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                px: 0,
-                                                                borderRadius: 3,
-                                                                border: "1px solid #f1f1f1",
-                                                                boxShadow: '-10px 10px 30px #00000022',
-                                                                maxHeight: 400
-                                                            }
-                                                        }
+                            )}
+                        />
+                        <Controller
+                            name="descripcion"
+                            control={control}
+                            render={({ field }) => (
+                                <Box mb={2}>
+                                    <Negrita sx={{ my: 1, fontWeight: 600, fontSize: 14 }}>
+                                        Descripción:
+                                    </Negrita>
+                                    <Editor
+                                        value={field.value}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [2, 3, 4, 5, false] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link'],
+                                            ]
+                                        }}
+                                        preserveWhitespace
+                                        className="editor"
+                                        onChange={(value) => { field.onChange(value) }}
+                                    />
+                                </Box>
+                            )}
+                        />
+
+                        <Controller
+                            name="modalidad"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    select
+                                    label='Tiempo de duración'
+                                    {...field}
+                                    inputRef={ref}
+                                    SelectProps={{
+                                        MenuProps: {
+                                            slotProps: {
+                                                paper: {
+                                                    sx: {
+                                                        background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                        px: 0,
+                                                        borderRadius: 3,
+                                                        border: "1px solid #f1f1f1",
+                                                        boxShadow: '-10px 10px 30px #00000022',
+                                                        maxHeight: 400
                                                     }
                                                 }
-                                            }}
-                                        >
-                                            <MenuItem value='3'>3 meses</MenuItem>
-                                            <MenuItem value='6'>6 meses</MenuItem>
-                                        </InputBox>
-                                    )}
-                                />
-                                <Controller
-                                    name="Institucion.nombre"
-                                    control={control}
-                                    rules={{ required: 'Institución es obligatoria' }}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <Autocomplete
-                                            freeSolo
-                                            multiple={false}
-                                            value={field.value}
-                                            disableClearable
-                                            onChange={(_, value) => field.onChange(value)}
-                                            options={instituciones.map((value: Institucion) => value.nombre)}
-                                            renderInput={(params) =>
-                                                <InputBox
-                                                    error={!!errors.Institucion?.nombre}
-                                                    helperText={errors.Institucion?.nombre?.message || 'Es importante involucrar la institución que ofrece la pasantía'}
-                                                    sx={{ mt: 2 }}
-                                                    {...params}
-                                                    {...field}
-                                                    label='Institución'
-                                                />}
-                                        />
-                                    )}
-                                />
-                                <Controller
-                                    name="finalizacion"
-                                    control={control}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <DatePickerBox
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <MenuItem value='3'>3 meses</MenuItem>
+                                    <MenuItem value='6'>6 meses</MenuItem>
+                                </InputBox>
+                            )}
+                        />
+                        <Controller
+                            name="Institucion.nombre"
+                            control={control}
+                            rules={{ required: 'Institución es obligatoria' }}
+                            render={({ field: { ref, ...field } }) => (
+                                <Autocomplete
+                                    freeSolo
+                                    multiple={false}
+                                    value={field.value}
+                                    disableClearable
+                                    onChange={(_, value) => field.onChange(value)}
+                                    options={instituciones.map((value: Institucion) => value.nombre)}
+                                    renderInput={(params) =>
+                                        <InputBox
+                                            error={!!errors.Institucion?.nombre}
+                                            helperText={errors.Institucion?.nombre?.message || 'Es importante involucrar la institución que ofrece la pasantía'}
                                             sx={{ mt: 2 }}
-                                            onChange={(ev: any) => {
-                                                field.onChange(ev?.format('DD/MM/YYYY'))
-                                            }}
-                                            defaultValue={dayjs(field.value, 'DD/MM/YYYY')}
-                                            slotProps={{
-                                                textField: {
-                                                    inputRef: ref,
-                                                    label: 'Finalización del Pasantia',
-                                                }
-                                            }}
-                                        />
-                                    )}
+                                            {...params}
+                                            {...field}
+                                            label='Institución'
+                                        />}
                                 />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <BotonFilled type="submit" sx={{ float: 'right' }}>Modificar Pasantia</BotonFilled>
-                            </Grid>
-                        </Grid>
+                            )}
+                        />
+                        <Controller
+                            name="finalizacion"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <DatePickerBox
+                                    sx={{ mt: 2 }}
+                                    onChange={(ev: any) => {
+                                        field.onChange(ev?.format('DD/MM/YYYY'))
+                                    }}
+                                    defaultValue={dayjs(field.value, 'DD/MM/YYYY')}
+                                    slotProps={{
+                                        textField: {
+                                            inputRef: ref,
+                                            label: 'Finalización del Pasantia',
+                                        }
+                                    }}
+                                />
+                            )}
+                        />
+
                     </Grid>
+                    {
+                        isDirty ?
+                            <Grid item xs={12}>
+                                <BotonFilled
+                                    sx={{ float: 'right' }}
+                                    onClick={handleSubmit(onSubmit)} >Modificar Pasantia</BotonFilled>
+                            </Grid> : null
+                    }
                 </Grid>
             </DialogContent>
 

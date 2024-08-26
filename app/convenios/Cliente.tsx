@@ -9,13 +9,20 @@ import Filtros from "./Filtros";
 import { Suspense, useEffect, useState } from "react";
 import { Convenio } from "@prisma/client";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
+    const params = useSearchParams();
+
     const [Convenios, setConvenios] = useState<Convenio[]>([]);
     useEffect(() => {
-        axios.post('/api/convenio/todo', { take: 10 }).then(res => {
-            setConvenios(res.data);
-        })
+        axios.post('/api/convenio/listar',
+            {
+                tipo: params.get('tipo') || undefined,
+                carrera: params.get('carrera') || undefined
+            }).then(res => {
+                setConvenios(res.data);
+            })
     }, []);
     return (
         <>

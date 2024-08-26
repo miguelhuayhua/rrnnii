@@ -3,8 +3,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Box, Grid, MenuItem, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { BotonFilled } from '@/app/componentes/Botones';
+import { Box, Grid, LinearProgress, MenuItem, useTheme } from '@mui/material';
+import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
@@ -17,32 +17,35 @@ import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
 import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
-import { ChipBox } from '@/app/componentes/Mostrar';
-import { FaFileWord } from 'react-icons/fa';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import { Actividad } from '@prisma/client';
+import { grey, red } from '@mui/material/colors';
+import { useSnackbar } from '@/providers/SnackbarProvider';
+import { RiFileWord2Line } from 'react-icons/ri';
+import { ChipBox } from '@/app/componentes/Mostrar';
 interface Props {
     setActividad: any;
     Actividad: Actividad;
 }
 export default function ModalActividad({ setActividad, Actividad }: Props) {
-    const theme = useTheme();
     const router = useRouter();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Actividad>({
+    const { control, formState: { errors, isDirty }, handleSubmit, watch, setValue } = useForm<Actividad>({
         defaultValues: Actividad, shouldFocusError: true
     });
     const { openModal } = useModal();
+    const [load, setLoad] = useState(false);
     const [portada, setPortada] = useState<any>('');
+    const { openSnackbar } = useSnackbar();
     const [documento, setDocumento] = useState<any>('');
     const { openFilePicker } = useFilePicker({
         readAs: 'DataURL',
         accept: 'image/*',
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setValue('imagen', URL.createObjectURL(plainFiles[0]));
+            setValue('imagen', URL.createObjectURL(plainFiles[0]), { shouldDirty: true });
             setPortada(plainFiles[0]);
+            openSnackbar('Imagen actualizada con éxito');
         }
     });
     const PDFPicker = useFilePicker({
@@ -51,7 +54,8 @@ export default function ModalActividad({ setActividad, Actividad }: Props) {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setDocumento(plainFiles[0]);
-            setValue('pdf', plainFiles[0].name);
+            setValue('pdf', plainFiles[0].name, { shouldDirty: true });
+            openSnackbar('Documento actualizado con éxito');
         }
     });
     const onSubmit = (actividad: Actividad) => {
@@ -68,11 +72,13 @@ export default function ModalActividad({ setActividad, Actividad }: Props) {
             titulo: '¿Continuar?',
             content: 'La actividad será modificada',
             callback: async () => {
+                setLoad(true);
                 let res = await axiosInstance.post('/api/actividad/modificar', form);
                 if (!res.data.error) {
                     setActividad(null);
                     router.refresh();
                 }
+                setLoad(false);
                 return res.data.mensaje;
             }
         });
@@ -80,177 +86,167 @@ export default function ModalActividad({ setActividad, Actividad }: Props) {
     return (
         <Dialog
             open={!!Actividad}
-            fullScreen={fullScreen}
             keepMounted={false}
             maxWidth='md'
             onClose={() => { setActividad(null) }}
         >
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <BotonFilled sx={{ position: 'absolute', top: 10, left: 10 }} onClick={() => setActividad(null)}>
-                    <IoClose fontSize={20} />
-                </BotonFilled>
-                <Titulo sx={{ fontSize: 16, mt: 4, mb: 2 }}>
-                    Información sobre el actividad
+                <BotonSimple onClick={() => setActividad(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
+                    <IoClose fontSize={25} />
+                </BotonSimple>
+                <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
+                    Información sobre {Actividad.titulo}
                 </Titulo>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                        <Box sx={{
-                            height: 200,
-                            bgcolor: '#f6f7f9',
-                            p: 1,
-                            border: '1px dashed #ddd',
-                            flexDirection: 'column',
-                            borderRadius: 5,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            color: '#919eab',
-                            transition: 'color 0.25s',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            "&:hover": {
-                                color: '#919eab77',
-                                cursor: 'pointer'
-                            }
-                        }}
-                            onClick={() => openFilePicker()}
-                        >
-                            {
-                                watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
-                            }
-                            <BsImageAlt color={'inherit'} fontSize={30} />
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                    <Grid item xs={12} sm={6}>
+                        <Box px={{ xs: 10, sm: 0 }}>
+                            <Box sx={{
+                                aspectRatio: 1,
+                                bgcolor: grey[100],
+                                p: 1,
+                                border: `1px dashed ${grey[400]}`,
+                                flexDirection: 'column',
+                                borderRadius: 5,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                color: grey[900],
+                                transition: 'color 0.25s',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                "&:hover": {
+                                    color: grey[500],
+                                    cursor: 'pointer'
+                                }
+                            }}
+                                onClick={() => openFilePicker()}
+                            >
+                                {
+                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                }
+                                <BsImageAlt color={'inherit'} fontSize={30} />
+                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                            </Box>
                         </Box>
-                        <Typography sx={{ fontSize: 13, color: '#a6b0bb', textAlign: 'center', my: 1, fontWeight: 500 }}>Permitido: .png, .jpeg, .jpg</Typography>
+                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
-                            height: 35,
-                            p: 1,
-                            border: '1px solid #e9eaed',
-                            flexDirection: 'column',
+                            p: 2,
+                            border: `1px solid ${grey[400]}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                             borderRadius: 3,
+                            color: grey[900],
                             position: 'relative',
-                            color: '#969696',
-                            transition: 'color 0.25s',
+                            transition: 'border .5s',
                             "&:hover": {
-                                color: '#919eab77',
-                                cursor: 'pointer'
+                                border: `1px solid ${red[300]}`
                             }
                         }}
                             onClick={() => PDFPicker.openFilePicker()}
                         >
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, fontSize: 14, mt: 1, ml: 1 }}>PDF o Word de Referencia</Normal>
-                            <MdOutlineAttachFile style={{ position: 'absolute', right: 10, top: 18, fontSize: 20 }} />
+                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
+                            <MdOutlineAttachFile style={{ fontSize: 20 }} />
                         </Box>
                         {
-                            watch('pdf') ?
-                                <ChipBox icon={watch('pdf').includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <FaFileWord fontSize={20} color='#1951b2' />}
+                            documento ?
+                                <ChipBox icon={documento.type.includes('pdf') ?
+                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
                                     sx={{
                                         mt: 2,
-                                        border: `1px solid ${watch('pdf').includes('pdf') ? '#e62c31' : '#1951b2'}`,
+                                        border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
                                         height: 40,
-                                        bgcolor: 'white',
-                                        "&:hover": {
-                                            cursor: 'pointer'
-                                        }
+                                        bgcolor: 'white'
                                     }}
-                                    onClick={() => {
-                                        let a = document.createElement('a');
-                                        a.download = watch('pdf');
-                                        a.href = watch('pdf');
-                                        a.click();
-                                        a.remove();
-                                    }}
-                                    label={'Descargar'}
+                                    label={documento.name}
                                     onDelete={() => {
-                                        setValue('pdf', '');
+                                        setDocumento(null);
                                     }}
                                 />
                                 : null
                         }
                     </Grid>
-                    <Grid item xs={12} md={8}>
-                        <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
-                            <Grid item xs={12} sm={6}>
-                                <Controller
-                                    name="titulo"
-                                    control={control}
-                                    rules={{ required: 'Título es obligatorio' }}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            {...field}
-                                            label='Título'
-                                            error={!!errors.titulo}
-                                            helperText={errors.titulo?.message || 'Este es el título principal que será visible en el actividad'}
-                                            inputRef={ref}
-                                        />
-                                    )}
+                    <Grid item xs={12} sm={6}>
+                        <Controller
+                            name="titulo"
+                            control={control}
+                            rules={{ required: 'Título es obligatorio' }}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    {...field}
+                                    label='Título'
+                                    error={!!errors.titulo}
+                                    helperText={errors.titulo?.message || 'Este es el título principal que será visible en el actividad'}
+                                    inputRef={ref}
                                 />
-                                <Controller
-                                    name="descripcion"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Box>
-                                            <Negrita sx={{ my: 1, color: '#888888', fontWeight: 600, fontSize: 14 }}>
-                                                Descripción:
-                                            </Negrita>
-                                            <Editor
-                                                value={field.value}
-                                                modules={{
-                                                    toolbar: [
-                                                        [{ 'header': [2, 3, 4, 5, false] }],
-                                                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                        ['link'],
-                                                    ]
-                                                }}
-                                                preserveWhitespace
-                                                className="editor"
-                                                onChange={(value) => { field.onChange(value) }}
-                                            />
-                                        </Box>
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Controller
-                                    name="tipo"
-                                    control={control}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            select
-                                            label='Tipo de actividad'
-                                            {...field}
-                                            inputRef={ref}
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    slotProps: {
-                                                        paper: {
-                                                            sx: {
-                                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                px: 0,
-                                                                borderRadius: 3,
-                                                                border: "1px solid #f1f1f1",
-                                                                boxShadow: '-10px 10px 30px #00000022',
-                                                                maxHeight: 400
-                                                            }
-                                                        }
+                            )}
+                        />
+                        <Controller
+                            name="descripcion"
+                            control={control}
+                            render={({ field }) => (
+                                <Box mb={2}>
+                                    <Negrita sx={{ my: 1 }}>
+                                        Descripción:
+                                    </Negrita>
+                                    <Editor
+                                        value={field.value}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [2, 3, 4, 5, false] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link'],
+                                            ]
+                                        }}
+                                        preserveWhitespace
+                                        className="editor"
+                                        onChange={(value) => { field.onChange(value) }}
+                                    />
+                                </Box>
+                            )}
+                        />
+                        <Controller
+                            name="tipo"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    select
+                                    label='Tipo de actividad'
+                                    {...field}
+                                    inputRef={ref}
+                                    SelectProps={{
+                                        MenuProps: {
+                                            slotProps: {
+                                                paper: {
+                                                    sx: {
+                                                        background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                        px: 0,
+                                                        borderRadius: 3,
+                                                        border: "1px solid #f1f1f1",
+                                                        boxShadow: '-10px 10px 30px #00000022',
+                                                        maxHeight: 400
                                                     }
                                                 }
-                                            }}
-                                        >
-                                            <MenuItem value='becas'>Becas</MenuItem>
-                                            <MenuItem value='idiomas'>Idiomas</MenuItem>
-                                            <MenuItem value='noticias'>Noticias</MenuItem>
-                                        </InputBox>
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <BotonFilled type="submit" sx={{ float: 'right' }}>Modificar Actividad</BotonFilled>
-                            </Grid>
-                        </Grid>
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <MenuItem value='becas'>Becas</MenuItem>
+                                    <MenuItem value='idiomas'>Idiomas</MenuItem>
+                                    <MenuItem value='noticias'>Noticias</MenuItem>
+                                </InputBox>
+                            )}
+                        />
                     </Grid>
+                    {
+                        isDirty ?
+                            <Grid item xs={12}>
+                                <BotonFilled onClick={handleSubmit(onSubmit)} sx={{ float: 'right' }}>Modificar Actividad</BotonFilled>
+                            </Grid>
+                            : null
+                    }
                 </Grid>
             </DialogContent>
 

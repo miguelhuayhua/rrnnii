@@ -32,3 +32,12 @@ a {
   --gradient-color-3: #1f3ea4;
   --gradient-color-4: #90000c;
 }
+
+@keyframes wave {
+  0%, 100% {
+      transform: translateY(0);
+  }
+  50% {
+      transform: translateY(-10px);
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -10,30 +10,29 @@ import { MdArrowLeft } from "react-icons/md";
 import { axiosInstance } from "@/globals";
 import { Evento } from "@prisma/client";
 import ModalEvento from "./Modal";
-import { RiEditFill } from "react-icons/ri";
-import { IoReload } from "react-icons/io5";
-import EventoComponent from "../componentes/items/Evento";
+import { RiFileWord2Line } from "react-icons/ri";
 import Image from 'next/legacy/image';
-import { BiSearch } from "react-icons/bi";
-import { filtrarValorEnArray } from "@/utils/data";
-import { FaAngleLeft, FaAngleRight, FaFileWord } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
+import { SwitchBox } from "@/app/componentes/Datos";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [eventos, setEventos] = useState<Evento[]>([]);
     const [prevEventos, setPrevEventos] = useState<Evento[]>([]);
     const [evento, setEvento] = useState<any>(null);
+    const { openSnackbar } = useSnackbar();
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/evento/todo', { opcion }).then(res => {
+        axiosInstance.post('/api/evento/todo').then(res => {
             setEventos(res.data);
             setPrevEventos(res.data);
-        })
-    }, [opcion, evento]);
+        });
+    }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
             <BotonSimple
@@ -57,7 +56,13 @@ export default function Page() {
                 <BotonFilled onClick={() => router.push('/dashboard/eventos/crear')}>
                     Añadir evento
                 </BotonFilled>
-                <BotonSimple onClick={() => router.refresh()}>
+                <BotonSimple onClick={() => {
+                    axiosInstance.post('/api/evento/todo', { opcion }).then(res => {
+                        setEventos(res.data);
+                        setPrevEventos(res.data);
+                        setOpcion('todo');
+                    });
+                }}>
                     <TbReload fontSize={22} />
                 </BotonSimple>
             </Stack>
@@ -74,12 +79,18 @@ export default function Page() {
                     setOpcion(value);
                     if (value == 'todo')
                         setEventos(prevEventos);
+                    else if (value == 'vigente')
+                        setEventos(prevEventos.filter(value => dayjs(value.inicio, 'DD/MM/YYYY').diff(dayjs()) > 0));
+                    else if (value == 'concluido')
+                        setEventos(prevEventos.filter(value => dayjs(value.inicio, 'DD/MM/YYYY').diff(dayjs()) < 0));
                     else if (value == 'activo')
-                        setEventos(prevEventos.filter(value => value.estado))
+                        setEventos(prevEventos.filter(value => value.estado));
                     else if (value == 'inactivo')
-                        setEventos(prevEventos.filter(value => !value.estado))
+                        setEventos(prevEventos.filter(value => !value.estado));
                 }}  >
                 <TabBox label="Todos" value='todo' />
+                <TabBox label="Vigentes" value='vigente' />
+                <TabBox label="Concluidos" value='concluido' />
                 <TabBox label="Activos" value='activo' />
                 <TabBox label="Inactivos" value='inactivo' />
             </Tabs>
@@ -87,15 +98,22 @@ export default function Page() {
                 {
                     id: value.id,
                     nombre: value.titulo,
-                    Actividad: (
-                        <Box display='flex' minWidth={300} py={0.35}>
+                    Evento: (
+                        <Box display='flex' minWidth={300} py={0.35} alignItems='center'>
                             <Box minWidth={90} width={90} height={90} position='relative'>
                                 <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
                             <Box px={2}>
                                 <Negrita sx={{ fontSize: 16 }}>{value.titulo}</Negrita>
-                                <Normal >{value.tipo.toUpperCase()}</Normal>
+                                <Normal><b>Tipo: </b>{value.tipo.toUpperCase()}</Normal>
                             </Box>
+                        </Box>
+                    ),
+                    "Inicia el": (
+                        <Box minWidth={100}>
+                            <Negrita sx={{ fontSize: 13 }}>
+                                {value.inicio}
+                            </Negrita>
                         </Box>
                     ),
                     "Creado el": (
@@ -108,7 +126,7 @@ export default function Page() {
                             </Normal>
                         </Box>
                     ),
-                    "": (<Stack direction='row' spacing={2}>
+                    "": (<Stack direction='row' spacing={2} alignItems='center'>
                         <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
                             setEvento(value);
                         }}>Modificar</BotonOutline>
@@ -122,12 +140,22 @@ export default function Page() {
                                         a.click();
                                         a.remove();
                                     }}
-                                    sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                    sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700], px: 1.4 }}>
                                     {
-                                        value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <FaFileWord />
+                                        value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                     }
                                 </BotonFilled> : null
                         }
+                        <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                            axiosInstance.post('/api/convenio/estado', { estado: checked, id: value.id }).then(res => {
+                                openSnackbar(res.data.mensaje);
+                                axiosInstance.post('/api/evento/todo', { opcion }).then(res => {
+                                    setEventos(res.data);
+                                    setPrevEventos(res.data);
+                                    setOpcion('todo');
+                                });
+                            });
+                        }} />
                     </Stack>)
                 }
             ))} />

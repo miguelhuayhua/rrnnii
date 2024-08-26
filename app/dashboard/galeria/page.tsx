@@ -10,26 +10,27 @@ import { MdArrowLeft, MdEdit } from "react-icons/md";
 import { axiosInstance } from "@/globals";
 import { Galeria } from "@prisma/client";
 import ModalGaleria from "./Modal";
-import { IoReload } from "react-icons/io5";
 import GaleriaComponent from "../componentes/items/Galeria";
-import { InputBox } from "@/app/componentes/Datos";
+import { InputBox, SwitchBox } from "@/app/componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { filtrarValorEnArray } from "@/utils/data";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [galerias, setGalerias] = useState<Galeria[]>([]);
-    const [prevGalerias, setPrevGalerias] = useState<any>([]);
+    const [prevGalerias, setPrevGalerias] = useState<Galeria[]>([]);
     const [galeria, setGaleria] = useState<any>(null);
     const router = useRouter();
+    const { openSnackbar } = useSnackbar();
     useEffect(() => {
         axiosInstance.post('/api/galeria/todo', { opcion }).then(res => {
             setGalerias(res.data);
             setPrevGalerias(res.data);
-        })
-    }, [opcion, galeria]);
+        });
+    }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
             <BotonSimple
@@ -53,7 +54,13 @@ export default function Page() {
                 <BotonFilled onClick={() => router.push('/dashboard/galeria/crear')}>
                     Añadir galeria
                 </BotonFilled>
-                <BotonSimple onClick={() => router.refresh()}>
+                <BotonSimple onClick={() => {
+                    axiosInstance.post('/api/galeria/todo', { opcion }).then(res => {
+                        setGalerias(res.data);
+                        setPrevGalerias(res.data);
+                        setOpcion('todo');
+                    });
+                }}>
                     <TbReload fontSize={22} />
                 </BotonSimple>
             </Stack>
@@ -65,33 +72,57 @@ export default function Page() {
                 variant="scrollable"
                 allowScrollButtonsMobile
                 value={opcion}
-                onChange={(_, value) => { setOpcion(value) }} >
+                onChange={(_, value) => {
+                    setOpcion(value);
+                    if (value == 'todo')
+                        setGalerias(prevGalerias);
+                    else if (value == 'activo')
+                        setGalerias(prevGalerias.filter(value => value.estado));
+                    else if (value == 'inactivo')
+                        setGalerias(prevGalerias.filter(value => !value.estado));
+                }} >
                 <TabBox label="Todos" value='todo' />
                 <TabBox label="Activos" value='activo' />
-                <TabBox label="Inactivos" value='inactivos' />
+                <TabBox label="Inactivos" value='inactivo' />
             </Tabs>
             <Grid container spacing={2} mt={1}>
                 <Grid item xs={12}>
-                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                    <InputBox size='small'
+                        sx={{
+                            width: "30%",
+                            minWidth: 200,
+                            mt: 1
+                        }} placeholder='Buscar'
                         onChange={(ev) => {
                             setGalerias(filtrarValorEnArray(prevGalerias, ev.target.value));
                         }}
                         InputProps={{
-                            startAdornment:
+                            endAdornment:
                                 <BiSearch fontSize={25} />
                         }}
                     />
                 </Grid>
                 {galerias.map((value) => (
-                    <Grid key={value.id} item xs={12} sm={6} md={4} lg={3} xl={2} position='relative'>
+                    <Grid key={value.id} item xs={6} sm={6} md={4} lg={3} xl={2} position='relative'>
                         <GaleriaComponent Galeria={value} />
-                        <BotonOutline
-                            onClick={() => {
-                                setGaleria(value);
-                            }}
-                            sx={{ position: 'absolute', bottom: 35, left: 42.75, border: 'none', zIndex: 20, borderRadius: "50%" }} >
-                            <MdEdit fontSize={18} />
-                        </BotonOutline>
+                        <Stack direction='row' bgcolor='white' borderRadius={3} p={0.5}  alignItems='center' position='absolute' top={25} right={10} spacing={1} >
+                            <BotonOutline
+                                onClick={() => {
+                                    setGaleria(value);
+                                }}>
+                                <MdEdit fontSize={18} />
+                            </BotonOutline>
+                            <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                                axiosInstance.post('/api/galeria/estado', { estado: checked, id: value.id }).then(res => {
+                                    openSnackbar(res.data.mensaje);
+                                    axiosInstance.post('/api/galeria/todo', { opcion }).then(res => {
+                                        setGalerias(res.data);
+                                        setPrevGalerias(res.data);
+                                        setOpcion('todo');
+                                    });
+                                });
+                            }} />
+                        </Stack>
                     </Grid>
                 ))}
             </Grid>

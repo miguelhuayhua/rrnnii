@@ -1,7 +1,7 @@
 "use client";
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -10,27 +10,28 @@ import { MdArrowLeft } from "react-icons/md";
 import { axiosInstance } from "@/globals";
 import { Actividad } from "@prisma/client";
 import ModalActividad from "./Modal";
-import { IoReload } from "react-icons/io5";
-import { InputBox } from "@/app/componentes/Datos";
-import { BiSearch } from "react-icons/bi";
 import Image from 'next/legacy/image';
-import { FaAngleLeft, FaAngleRight, FaFileWord } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
+import { SwitchBox } from "@/app/componentes/Datos";
+import { useSnackbar } from "@/providers/SnackbarProvider";
+import { RiFileWord2Line } from "react-icons/ri";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [actividades, setActividades] = useState<Actividad[]>([]);
     const [prevActividades, setPrevActividades] = useState<Actividad[]>([]);
+    const { openSnackbar } = useSnackbar();
     const [actividad, setActividad] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
         axiosInstance.post('/api/actividad/todo', {}).then(res => {
             setActividades(res.data);
             setPrevActividades(res.data);
-        })
+        });
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
@@ -55,7 +56,13 @@ export default function Page() {
                 <BotonFilled onClick={() => router.push('/dashboard/actividades/crear')}>
                     Añadir actividad
                 </BotonFilled>
-                <BotonSimple onClick={() => router.refresh()}>
+                <BotonSimple onClick={() => {
+                    axiosInstance.post('/api/actividad/todo', {}).then(res => {
+                        setActividades(res.data);
+                        setPrevActividades(res.data);
+                        setOpcion('todo');
+                    });
+                }}>
                     <TbReload fontSize={22} />
                 </BotonSimple>
             </Stack>
@@ -86,7 +93,7 @@ export default function Page() {
                     id: value.id,
                     nombre: value.titulo,
                     Actividad: (
-                        <Box display='flex' minWidth={300} py={0.35}>
+                        <Box display='flex' minWidth={300} py={0.35} alignItems='center'>
                             <Box minWidth={90} width={90} height={90} position='relative'>
                                 <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
@@ -107,7 +114,7 @@ export default function Page() {
                         </Box>
                     ),
                     "": (
-                        <Stack direction='row' spacing={2}>
+                        <Stack direction='row' spacing={2} alignItems='center'>
                             <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
                                 setActividad(value);
                             }}>Modificar</BotonOutline>
@@ -123,10 +130,20 @@ export default function Page() {
                                         }}
                                         sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
                                         {
-                                            value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <FaFileWord />
+                                            value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                         }
                                     </BotonFilled> : null
                             }
+                            <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                                axiosInstance.post('/api/actividad/estado', { estado: checked, id: value.id }).then(res => {
+                                    openSnackbar(res.data.mensaje);
+                                    axiosInstance.post('/api/actividad/todo', {}).then(res => {
+                                        setActividades(res.data);
+                                        setPrevActividades(res.data);
+                                        setOpcion('todo');
+                                    });
+                                });
+                            }} />
                         </Stack>
                     )
                 }

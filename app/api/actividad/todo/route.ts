@@ -3,7 +3,7 @@ import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
     let { take } = await request.json();
     try {
-        let actividades = await prisma.actividad.findMany({ take });
+        let actividades = await prisma.actividad.findMany({ take, orderBy: { id: 'desc' } });
         return Response.json(actividades);
     } catch (error) {
         console.log(error)

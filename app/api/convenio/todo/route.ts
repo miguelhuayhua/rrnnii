@@ -1,9 +1,11 @@
-
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-const POST = async (request: NextRequest) => {
-    let { take, skip } = await request.json();
-    let convenios = await prisma.convenio.findMany({ include: { Institucion: true } });
+const POST = async () => {
+    let convenios = await prisma.convenio.findMany({
+        include: { Institucion: true }, orderBy: {
+            createdAt: 'desc'
+        }
+    });
     try {
         return Response.json(convenios);
     } catch (error) {

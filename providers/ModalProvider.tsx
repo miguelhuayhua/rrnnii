@@ -70,7 +70,7 @@ export const ModalProvider = ({ children }: any) => {
                     </Titulo>
                     {
                         typeof action.params.content == 'string' ?
-                            <Normal sx={{ my: 2 }}>
+                            <Normal sx={{ my: 2, textAlign: 'center' }}>
                                 {action.params.content}
                             </Normal>
                             : action.params.content

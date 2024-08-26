@@ -5,16 +5,15 @@ import { writeFile } from "fs/promises";
 import path from "path";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
-    const file = form.get("portada");
+    const file = form.get("file");
     try {
         if (file) {
-
             const buffer = Buffer.from(await file.arrayBuffer());
             const filename = Date.now() + file.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/" + filename), buffer);
+            await writeFile(path.join(process.cwd(), "public/uploads/galeria/" + filename), buffer as any);
             await prisma.galeria.update({
                 data: {
-                    imagen: `/uploads/${filename}`,
+                    imagen: `/uploads/galeria/${filename}`,
                 },
                 where: { id: form.get('id') }
             });

@@ -1,4 +1,3 @@
-
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 import { writeFile } from "fs/promises";
@@ -18,7 +17,7 @@ const POST = async (request: NextRequest) => {
         }
         await prisma.institucion.update({
             data: {
-                nombre: form.get('nombre'),
+                nombre: form.get('nombre').toUpperCase(),
                 contacto: +form.get('contacto'),
             },
             where: { id: form.get('id') }

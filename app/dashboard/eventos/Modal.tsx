@@ -3,9 +3,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Box, Grid, Typography, useMediaQuery, useTheme, MenuItem } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery, useTheme, MenuItem, LinearProgress } from '@mui/material';
 import { Evento } from '@prisma/client';
-import { BotonFilled } from '@/app/componentes/Botones';
+import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
@@ -18,33 +18,35 @@ import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
 import { useRouter } from 'next/navigation';
 import { ChipBox } from '@/app/componentes/Mostrar';
-import { FaFileWord } from 'react-icons/fa6';
 import Image from 'next/legacy/image';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import { grey, red } from '@mui/material/colors';
+import { useSnackbar } from '@/providers/SnackbarProvider';
+import { RiFileWord2Line } from 'react-icons/ri';
 interface Props {
     setEvento: any;
     Evento: Evento;
 }
 export default function ModalEvento({ setEvento, Evento }: Props) {
-    const theme = useTheme();
     const router = useRouter();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Evento>({
+    const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Evento>({
         defaultValues: Evento, shouldFocusError: true
     });
     const [portada, setPortada] = useState<any>('');
     const [documento, setDocumento] = useState<any>('');
     const { openModal } = useModal();
+    const [load, setLoad] = useState(false);
+    const { openSnackbar } = useSnackbar();
     const { openFilePicker } = useFilePicker({
         readAs: 'DataURL',
         accept: 'image/*',
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setValue('imagen', URL.createObjectURL(plainFiles[0]));
+            setValue('imagen', URL.createObjectURL(plainFiles[0]), { shouldDirty: true });
             setPortada(plainFiles[0]);
+            openSnackbar('Imagen actualizada con éxito');
         }
     });
     const PDFPicker = useFilePicker({
@@ -53,7 +55,8 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setDocumento(plainFiles[0]);
-            setValue('pdf', plainFiles[0].name);
+            setValue('pdf', plainFiles[0].name, { shouldDirty: true });
+            openSnackbar('Documento actualizado con éxito');
         }
     });
     const onSubmit = (evento: Evento) => {
@@ -83,46 +86,48 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
     return (
         <Dialog
             open={!!Evento}
-            fullScreen={fullScreen}
             keepMounted={false}
             maxWidth='md'
             onClose={() => { setEvento(null) }}
         >
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <BotonFilled sx={{ position: 'absolute', top: 10, left: 10 }} onClick={() => setEvento(null)}>
-                    <IoClose fontSize={20} />
-                </BotonFilled>
-                <Titulo sx={{ fontSize: 16, mt: 4, mb: 2 }}>
-                    Información sobre el evento
+                <BotonSimple onClick={() => setEvento(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
+                    <IoClose fontSize={25} />
+                </BotonSimple>
+                <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
+                    Información sobre {Evento.titulo}
                 </Titulo>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                        <Box sx={{
-                            height: 200,
-                            bgcolor: grey[100],
-                            p: 1,
-                            border: `1px dashed ${grey[400]}`,
-                            flexDirection: 'column',
-                            borderRadius: 5,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            color: grey[900],
-                            transition: 'color 0.25s',
-                            position: 'relative',
-                            overflow: 'hidden',
-                            "&:hover": {
-                                color: grey[500],
-                                cursor: 'pointer'
-                            }
-                        }}
-                            onClick={() => openFilePicker()}
-                        >
-                            {
-                                watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
-                            }
-                            <BsImageAlt color={'inherit'} fontSize={30} />
-                            <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                    <Grid item xs={12} mx='auto' sm={6}>
+                        <Box px={{ xs: 10, sm: 0 }}>
+                            <Box sx={{
+                                aspectRatio: 1,
+                                bgcolor: grey[100],
+                                p: 1,
+                                border: `1px dashed ${grey[400]}`,
+                                flexDirection: 'column',
+                                borderRadius: 5,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                color: grey[900],
+                                transition: 'color 0.25s',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                "&:hover": {
+                                    color: grey[500],
+                                    cursor: 'pointer'
+                                }
+                            }}
+                                onClick={() => openFilePicker()}
+                            >
+                                {
+                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                }
+                                <BsImageAlt color={'inherit'} fontSize={30} />
+                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                            </Box>
                         </Box>
                         <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
@@ -147,7 +152,7 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
                         {
                             documento ?
                                 <ChipBox icon={documento.type.includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <FaFileWord fontSize={20} color='#1951b2' />}
+                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
                                     sx={{
                                         mt: 2,
                                         border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
@@ -162,107 +167,105 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
                                 : null
                         }
                     </Grid>
-                    <Grid item xs={12} md={8}>
-                        <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
-                            <Grid item xs={12} sm={6}>
-                                <Controller
-                                    name="titulo"
-                                    control={control}
-                                    rules={{ required: 'Título es obligatorio' }}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            {...field}
-                                            label='Título'
-                                            error={!!errors.titulo}
-                                            helperText={errors.titulo?.message || 'Este es el título principal que será visible en el evento'}
-                                            inputRef={ref}
-                                        />
-                                    )}
+                    <Grid item xs={12} sm={6}>
+                        <Controller
+                            name="titulo"
+                            control={control}
+                            rules={{ required: 'Título es obligatorio' }}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    {...field}
+                                    label='Título'
+                                    error={!!errors.titulo}
+                                    helperText={errors.titulo?.message || 'Este es el título principal que será visible en el evento'}
+                                    inputRef={ref}
                                 />
-                                <Controller
-                                    name="descripcion"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Box>
-                                            <Negrita sx={{ my: 1, color: '#888888', fontWeight: 600, fontSize: 14 }}>
-                                                Descripción:
-                                            </Negrita>
-                                            <Editor
-                                                value={field.value}
-                                                modules={{
-                                                    toolbar: [
-                                                        [{ 'header': [2, 3, 4, 5, false] }],
-                                                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                        ['link'],
-                                                    ]
-                                                }}
-                                                preserveWhitespace
-                                                className="editor"
-                                                onChange={(value) => { field.onChange(value) }}
-                                            />
-                                        </Box>
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <Controller
-                                    name="tipo"
-                                    control={control}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <InputBox
-                                            sx={{ mt: 1 }}
-                                            select
-                                            label='Modalidad'
-                                            {...field}
-                                            inputRef={ref}
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    slotProps: {
-                                                        paper: {
-                                                            sx: {
-                                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                px: 0,
-                                                                borderRadius: 3,
-                                                                border: "1px solid #f1f1f1",
-                                                                boxShadow: '-10px 10px 30px #00000022',
-                                                                maxHeight: 400
-                                                            }
-                                                        }
+                            )}
+                        />
+                        <Controller
+                            name="descripcion"
+                            control={control}
+                            render={({ field }) => (
+                                <Box mb={1}>
+                                    <Negrita sx={{ my: 1 }}>
+                                        Descripción:
+                                    </Negrita>
+                                    <Editor
+                                        value={field.value}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [2, 3, 4, 5, false] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link'],
+                                            ]
+                                        }}
+                                        preserveWhitespace
+                                        className="editor"
+                                        onChange={(value) => { field.onChange(value) }}
+                                    />
+                                </Box>
+                            )}
+                        />
+                        <Controller
+                            name="tipo"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    sx={{ mt: 1 }}
+                                    select
+                                    label='Modalidad'
+                                    {...field}
+                                    inputRef={ref}
+                                    SelectProps={{
+                                        MenuProps: {
+                                            slotProps: {
+                                                paper: {
+                                                    sx: {
+                                                        background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                        px: 0,
+                                                        borderRadius: 3,
+                                                        border: "1px solid #f1f1f1",
+                                                        boxShadow: '-10px 10px 30px #00000022',
+                                                        maxHeight: 400
                                                     }
                                                 }
-                                            }}
-                                        >
-                                            <MenuItem value='online'>Online</MenuItem>
-                                            <MenuItem value='presencial'>Presencial</MenuItem>
-                                        </InputBox>
-                                    )}
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <MenuItem value='online'>Online</MenuItem>
+                                    <MenuItem value='presencial'>Presencial</MenuItem>
+                                </InputBox>
+                            )}
+                        />
+                        <Controller
+                            name="inicio"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <DatePickerBox
+                                    sx={{ mt: 2 }}
+                                    defaultValue={dayjs(field.value, 'DD/MM/YYYY')}
+                                    onChange={(ev: any) => {
+                                        field.onChange(ev?.format('DD/MM/YYYY'))
+                                    }}
+                                    slotProps={{
+                                        textField: {
+                                            inputRef: ref,
+                                            label: 'Inicio del evento',
+                                        }
+                                    }}
                                 />
-                                <Controller
-                                    name="inicio"
-                                    control={control}
-                                    render={({ field: { ref, ...field } }) => (
-                                        <DatePickerBox
-                                            sx={{ mt: 2 }}
-                                            defaultValue={dayjs(field.value, 'DD/MM/YYYY')}
-                                            onChange={(ev: any) => {
-                                                field.onChange(ev?.format('DD/MM/YYYY'))
-                                            }}
-                                            slotProps={{
-                                                textField: {
-                                                    inputRef: ref,
-                                                    label: 'Inicio del evento',
-                                                }
-                                            }}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <BotonFilled type="submit" sx={{ float: 'right' }}>Modificar Evento</BotonFilled>
-                            </Grid>
-                        </Grid>
+                            )}
+                        />
                     </Grid>
+                    {
+                        isDirty ?
+                            <Grid item xs={12}>
+                                <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >Modificar Evento</BotonFilled>
+                            </Grid>
+                            : null
+                    }
                 </Grid>
             </DialogContent>
 
