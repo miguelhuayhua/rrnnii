@@ -93,7 +93,7 @@ const Navbar = () => {
                     <Box display='flex' alignItems='center'>
                         <Stack display={{ xs: 'none', md: 'flex' }} direction='row' spacing={2} mr={2}>
                             <Link href={'/'}>
-                                <Normal sx={{ color: trigger ? grey[900] : grey[50], alignItems: 'center', display: 'flex' }}>
+                                <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/' ? <GoDotFill color='inherit' /> : null}
                                     Principal
                                 </Normal>
@@ -173,7 +173,7 @@ const Navbar = () => {
                                     </Grid>
                                 }
                             >
-                                <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
+                                <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/convenios') ? trigger ? red[800] : red[800] : grey[50] }}>
                                     Convocatorias <FaAngleDown />
                                 </Normal>
                             </Tooltip>

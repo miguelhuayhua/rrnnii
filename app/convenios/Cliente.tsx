@@ -1,5 +1,5 @@
 'use client';
-import { Grid, } from "@mui/material";
+import { Box, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonSimple } from "../componentes/Botones";
@@ -10,10 +10,10 @@ import { Suspense, useEffect, useState } from "react";
 import { Convenio } from "@prisma/client";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import { Normal } from "../componentes/Textos";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
-
     const [Convenios, setConvenios] = useState<Convenio[]>([]);
     useEffect(() => {
         axios.post('/api/convenio/listar',
@@ -23,27 +23,36 @@ const Cliente = () => {
             }).then(res => {
                 setConvenios(res.data);
             })
-    }, []);
+    }, [params]);
     return (
         <>
-            <Grid container px={3} spacing={2}>
+            <Grid container p={2} spacing={2} >
                 <Grid item xs={12}>
-                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
-                        InputProps={{
-                            startAdornment:
-                                <BiSearch fontSize={25} />
-                        }}
-                    />
-                    <BotonSimple
-                        onClick={() => {
-                            setOpen(true);
-                        }}
-                        sx={{ height: 52.5, float: 'right' }} endIcon={<FiFilter></FiFilter>}>Filtros</BotonSimple>
+                    <Box px={2}>
+                        <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                            InputProps={{
+                                size: 'small',
+                                startAdornment:
+                                    <BiSearch fontSize={25} />
+                            }}
+                        />
+                        <BotonSimple
+                            onClick={() => {
+                                setOpen(true);
+                            }}
+                            sx={{ float: 'right' }} endIcon={<FiFilter></FiFilter>}>Filtros</BotonSimple>
+                    </Box>
                 </Grid>
-                {Convenios.map(value => (
-                    <Grid item xs={12} sm={6} md={4} lg={3}>
-                        <ConvenioItem value={value as any} />
-                    </Grid>))}
+                {
+                    Convenios.length > 0 ?
+                        Convenios.map(value => (
+                            <Grid key={value.id} item xs={6} sm={4} lg={3}>
+                                <ConvenioItem value={value as any} />
+                            </Grid>))
+                        : <Normal ml={4} my={4}>
+                            Convenios no encontrados
+                        </Normal>
+                }
             </Grid>
             <Suspense>
                 <Filtros open={open} setOpen={setOpen} />

@@ -1,11 +1,11 @@
 'use client';
-import { Badge, FormControlLabel, Grid, Radio, RadioGroup, Stack, SwipeableDrawer, useTheme } from "@mui/material";
+import { Badge, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer, useTheme } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Titulo } from "../componentes/Textos";
 import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
-import { InputBox, ItemBox } from "../componentes/Datos";
+import { InputBox } from "../componentes/Datos";
 interface Props {
     open: boolean;
     setOpen: any
@@ -96,7 +96,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 }
                             }}
                         >
-                            <ItemBox value='taller'>Taller</ItemBox>
+                            <MenuItem value='taller'>Taller</MenuItem>
                         </InputBox>
                     </Grid>
                 </Grid>

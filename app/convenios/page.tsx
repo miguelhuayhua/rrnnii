@@ -6,10 +6,12 @@ export default function Home() {
     return (
         <>
             <Navbar />
-            <Box p={3}>
-                <Typography variant='h1' sx={{ fontWeight: 800, fontSize: 20 }}>Convenios</Typography>
+            <Box sx={{ bgcolor: '#f2f2f2' }}>
+                <Box p={3}>
+                    <Typography variant='h1' sx={{ fontWeight: 800, fontSize: 20 }}>Convenios</Typography>
+                </Box>
+                <Cliente />
             </Box>
-            <Cliente />
             <Box mt={10}>
                 <Footer />
             </Box>

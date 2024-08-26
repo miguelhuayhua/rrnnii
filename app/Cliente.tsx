@@ -54,12 +54,12 @@ const Cliente = () => {
             <canvas id="gradient-canvas" style={{ width: "100vw", height: downsm ? 400 : 500, position: 'absolute', top: 0, clipPath: 'polygon(100% 0, 100% 18%, 0 100%, 0 0)' }}></canvas >
             <Grid container>
                 <Grid item sx={{ opacity: 1 - y * 0.0015, top: y * 0.1, zIndex: 20, }} xs={12} md={6} pt={{ xs: 5, md: 0 }}>
-                    <Box pl={{ xs: 5, sm: 10, md: 10, xl: 40 }} pr={{ xs: 5, sm: 10, md: 2 }} >
+                    <Box pl={{ xs: 5, sm: 10, md: 10, xl: 35 }} pr={{ xs: 5, sm: 10, md: 2 }} >
                         <ChipBox label='Encargada de: ' sx={{ mb: 2, background: '#00000055', fontWeight: 700, fontSize: 14, color: 'white', borderRadius: 5, py: 2 }} />
-                        <Titulo variant='h1' sx={{ color: blueGrey[50], fontSize: { xs: 16, sm: 20, md: 25, lg: 35 }, background: '#00000055', backdropFilter: 'blur(6px)', p: 2, borderRadius: 3 }} >
+                        <Titulo variant='h1' sx={{ color: blueGrey[50], fontSize: { xs: 16, sm: 20, md: 25, lg: 30 }, background: '#00000055', backdropFilter: 'blur(6px)', p: 2, borderRadius: 3 }} >
                             Unidad de Relaciones Internacionales
                             <br />
-                            <span className="upea" style={{ fontSize: "2em", marginTop: 2 }} >
+                            <span className="upea" style={{ fontSize: "1.9em", marginTop: 2 }} >
                                 UNIVERSIDAD PÚBLICA DE EL ALTO
                             </span>
                         </Titulo>

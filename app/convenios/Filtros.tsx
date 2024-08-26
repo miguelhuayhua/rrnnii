@@ -1,11 +1,15 @@
 'use client';
-import { Badge, FormControlLabel, Grid, Radio, RadioGroup, Stack, SwipeableDrawer, MenuItem } from "@mui/material";
+import { Badge, FormControlLabel, Box, Grid, Radio, RadioGroup, Stack, SwipeableDrawer, MenuItem } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Titulo } from "../componentes/Textos";
+import { Titulo, Negrita } from "../componentes/Textos";
 import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
 import { InputBox } from "../componentes/Datos";
+import { useEffect, useState } from "react";
+import { axiosInstance } from "@/globals";
+import { Carrera } from "@prisma/client";
+import Image from 'next/legacy/image';
 interface Props {
     open: boolean;
     setOpen: any
@@ -14,8 +18,14 @@ interface Props {
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
     const params = useSearchParams();
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
     const tipo = params.get('tipo') || '';
     const carrera = params.get('carrera') || '';
+    useEffect(() => {
+        axiosInstance.post('/api/carrera/listar').then(res => {
+            setCarreras(res.data);
+        })
+    }, []);
     return (
         <>
             <SwipeableDrawer
@@ -73,7 +83,18 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 }
                             }}
                         >
-                            <MenuItem value='inge'>Ingeniería de Sistemas</MenuItem>
+                            {
+                                carreras.map(value => (
+                                    <MenuItem value={value.id}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Box sx={{ width: 40, aspectRatio: 1, position: 'relative', mr: 1 }}>
+                                                <Image layout='fill' src={value.logo} style={{ borderRadius: 10 }} />
+                                            </Box>
+                                            <Negrita>{value.nombre}</Negrita>
+                                        </Box>
+                                    </MenuItem>
+                                ))
+                            }
                         </InputBox>
                         <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Tipo
