@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
 import { Autocomplete, Box, Grid, useTheme, MenuItem, LinearProgress } from '@mui/material';
-import { Convenio, Institucion } from '@prisma/client';
+import { Carrera, Convenio, ConvenioCarrera, Institucion } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
@@ -27,13 +27,14 @@ import { ChipBox } from '@/app/componentes/Mostrar';
 import { RiFileWord2Line } from 'react-icons/ri';
 interface Props {
     setConvenio: any;
-    Convenio: Convenio;
+    Convenio: Convenio & { ConvenioCarrera: ConvenioCarrera[] };
 }
 export default function ModalConvenio({ setConvenio, Convenio }: Props) {
     const router = useRouter();
-    const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Convenio & { Institucion: Institucion }>({
-        defaultValues: Convenio, shouldFocusError: true
-    });
+    const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } =
+        useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
+            defaultValues: { ...Convenio, carreras: Convenio.ConvenioCarrera.map(value => value.carreraId) }, shouldFocusError: true
+        });
     const { openModal } = useModal();
     const [portada, setPortada] = useState<any>('');
     const [load, setLoad] = useState(false);
@@ -59,7 +60,13 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
             openSnackbar('Documento actualizado con éxito');
         }
     });
-    const onSubmit = (convenio: Convenio & { Institucion: Institucion }) => {
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
+    useEffect(() => {
+        axiosInstance.post('/api/carrera/listar').then(res => {
+            setCarreras(res.data);
+        })
+    }, []);
+    const onSubmit = (convenio: Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }) => {
         let form = new FormData();
         form.append('titulo', convenio.titulo);
         form.append('tipo', convenio.tipo);
@@ -71,6 +78,7 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
         form.append('portada', portada);
         form.append('documento', documento);
         form.append('id', convenio.id);
+        form.append('carreras', JSON.stringify(convenio.carreras))
         openModal({
             titulo: '¿Continuar?',
             content: 'El convenio será modificado',
@@ -239,7 +247,45 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
                                 />
                             )}
                         />
-
+                        <Controller
+                            name="carreras"
+                            control={control}
+                            rules={{
+                                validate: (value) => value.length > 0 || 'Seleccione al menos una carrera'
+                            }}
+                            render={({ field: { ref, ...field }, fieldState }) => (
+                                <InputBox
+                                    {...field}
+                                    label='Carreras'
+                                    select
+                                    inputRef={ref}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                    SelectProps={{
+                                        multiple: true,
+                                        MenuProps: {
+                                            slotProps: {
+                                                paper: {
+                                                    sx: {
+                                                        background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                        borderRadius: 3,
+                                                        border: "1px solid #f1f1f1",
+                                                        boxShadow: '-10px 10px 30px #00000022',
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }}
+                                >
+                                    {
+                                        carreras.map(value => (
+                                            <MenuItem value={value.id}>
+                                                {value.nombre}
+                                            </MenuItem>))
+                                    }
+                                </InputBox>
+                            )}
+                        />
                         <Controller
                             name="finalizacion"
                             control={control}

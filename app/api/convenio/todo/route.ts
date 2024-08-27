@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async () => {
     let convenios = await prisma.convenio.findMany({
-        include: { Institucion: true }, orderBy: {
+        include: { Institucion: true, ConvenioCarrera: true }, orderBy: {
             createdAt: 'desc'
         }
     });

@@ -9,18 +9,19 @@ const POST = async (request: NextRequest) => {
     let pathdoc = '';
     let pathimg = '';
     const institucion = form.get('institucion');
+    const carreras = JSON.parse(form.get('carreras')) as string[];
     try {
         if (portada) {
             const portadab = Buffer.from(await portada.arrayBuffer());
             const portadan = Date.now() + portada.name.replaceAll(" ", "_");
-            pathimg = "public/uploads/pasantias/img/" + portadan;
-            await writeFile(path.join(process.cwd(), pathimg), portadab as any);
+            pathimg = "/uploads/pasantias/img/" + portadan;
+            await writeFile(path.join(process.cwd(), "public" + pathimg), portadab as any);
         }
         if (documento) {
             const documentob = Buffer.from(await documento.arrayBuffer());
             const documenton = Date.now() + documento.name.replaceAll(" ", "_");
-            pathdoc = "public/uploads/pasantias/files/" + documenton;
-            await writeFile(path.join(process.cwd(), pathdoc), documentob as any);
+            pathdoc = "/uploads/pasantias/files/" + documenton;
+            await writeFile(path.join(process.cwd(), "public" + pathdoc), documentob as any);
         }
         if (await prisma.institucion.findFirst({ where: { nombre: institucion } })) {
             await prisma.pasantia.create({
@@ -31,7 +32,13 @@ const POST = async (request: NextRequest) => {
                     imagen: pathimg,
                     modalidad: form.get('modalidad'),
                     finalizacion: form.get('finalizacion'),
-                    Institucion: { connect: { nombre: institucion } }
+                    Institucion: { connect: { nombre: institucion } },
+                    PasantiaCarrera: {
+                        createMany: {
+                            data: carreras.map((value) => ({ carreraId: value })),
+                            skipDuplicates: true
+                        },
+                    }
                 },
             });
         } else {
@@ -43,7 +50,13 @@ const POST = async (request: NextRequest) => {
                     imagen: pathimg,
                     modalidad: form.get('modalidad'),
                     finalizacion: form.get('finalizacion'),
-                    Institucion: { create: { nombre: institucion, logo: '' } }
+                    Institucion: { create: { nombre: institucion, logo: '' } },
+                    PasantiaCarrera: {
+                        createMany: {
+                            data: carreras.map((value) => ({ carreraId: value })),
+                            skipDuplicates: true
+                        },
+                    }
                 },
             });
         }

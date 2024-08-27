@@ -1,15 +1,14 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
-import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
+import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, MenuItem, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
-import { BoxSombra } from "../../componentes/Mostrar";
 import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
 import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
-import { Institucion, Pasantia } from "@prisma/client";
+import { Carrera, Institucion, Pasantia } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
@@ -24,8 +23,8 @@ import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion }>({
-        defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' } }, shouldFocusError: true
+    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
+        defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
     });
     const router = useRouter();
     const { openModal } = useModal();
@@ -38,6 +37,7 @@ export default function Page() {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]));
+            openSnackbar('Imagen modificada con éxito');
             setPortada(plainFiles[0]);
         }
     });
@@ -47,11 +47,12 @@ export default function Page() {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setDocumento(plainFiles[0]);
+            openSnackbar('Documento modificado con éxito');
             setValue('pdf', plainFiles[0].name);
         }
     });
     const { openSnackbar } = useSnackbar();
-    const onSubmit = (pasantia: Pasantia & { Institucion: Institucion }) => {
+    const onSubmit = (pasantia: Pasantia & { Institucion: Institucion, carreras: string[] }) => {
         let form = new FormData();
         form.append('titulo', pasantia.titulo);
         form.append('pdf', pasantia.pdf);
@@ -61,6 +62,7 @@ export default function Page() {
         form.append('modalidad', pasantia.modalidad);
         form.append('finalizacion', pasantia.finalizacion!);
         form.append('institucion', pasantia.Institucion.nombre);
+        form.append('carreras', JSON.stringify(pasantia.carreras));
         if (portada) {
             openModal({
                 titulo: '¿Continuar?',
@@ -85,6 +87,13 @@ export default function Page() {
     useEffect(() => {
         axiosInstance.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
             setInstituciones(res.data);
+        })
+    }, []);
+
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
+    useEffect(() => {
+        axiosInstance.post('/api/carrera/listar').then(res => {
+            setCarreras(res.data);
         })
     }, []);
     return (
@@ -255,7 +264,45 @@ export default function Page() {
                                             </InputBox>
                                         )}
                                     />
-
+                                    <Controller
+                                        name="carreras"
+                                        control={control}
+                                        rules={{
+                                            validate: (value) => value.length > 0 || 'Seleccione al menos una carrera'
+                                        }}
+                                        render={({ field: { ref, ...field }, fieldState }) => (
+                                            <InputBox
+                                                {...field}
+                                                label='Carreras'
+                                                select
+                                                inputRef={ref}
+                                                error={!!fieldState.error}
+                                                helperText={fieldState.error?.message}
+                                                SelectProps={{
+                                                    multiple: true,
+                                                    MenuProps: {
+                                                        slotProps: {
+                                                            paper: {
+                                                                sx: {
+                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                                    borderRadius: 3,
+                                                                    border: "1px solid #f1f1f1",
+                                                                    boxShadow: '-10px 10px 30px #00000022',
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }}
+                                            >
+                                                {
+                                                    carreras.map(value => (
+                                                        <MenuItem value={value.id}>
+                                                            {value.nombre}
+                                                        </MenuItem>))
+                                                }
+                                            </InputBox>
+                                        )}
+                                    />
                                     <Controller
                                         name="Institucion.nombre"
                                         control={control}

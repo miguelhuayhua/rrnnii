@@ -9,6 +9,7 @@ const POST = async (request: NextRequest) => {
     const portadan = Date.now() + portada.name.replaceAll(" ", "_");
     const documento = form.get('documento');
     const institucion = form.get('institucion');
+    const carreras = JSON.parse(form.get('carreras')) as string[];
     const documentob = documento ? Buffer.from(await documento.arrayBuffer()) : null;
     const documenton = documento ? Date.now() + documento.name.replaceAll(" ", "_") : '';
     try {
@@ -26,6 +27,12 @@ const POST = async (request: NextRequest) => {
                     tipo: form.get('tipo'),
                     Institucion: {
                         connect: { nombre: institucion }
+                    },
+                    ConvenioCarrera: {
+                        createMany: {
+                            data: carreras.map((value) => ({ carreraId: value })),
+                            skipDuplicates: true
+                        },
                     }
                 }
             });
@@ -41,6 +48,12 @@ const POST = async (request: NextRequest) => {
                     tipo: form.get('tipo'),
                     Institucion: {
                         create: { nombre: institucion, logo: '' }
+                    },
+                    ConvenioCarrera: {
+                        createMany: {
+                            data: carreras.map((value) => ({ carreraId: value })),
+                            skipDuplicates: true
+                        },
                     }
                 }
             });

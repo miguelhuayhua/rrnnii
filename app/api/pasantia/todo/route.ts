@@ -1,10 +1,8 @@
-
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
-    let { opcion } = await request.json() as { opcion: string };
     try {
-        let pasantias = await prisma.pasantia.findMany({ include: { Institucion: true } });
+        let pasantias = await prisma.pasantia.findMany({ include: { Institucion: true, PasantiaCarrera: true }, orderBy: { id: 'desc' } });
         return Response.json(pasantias);
     } catch (error) {
         console.log(error)

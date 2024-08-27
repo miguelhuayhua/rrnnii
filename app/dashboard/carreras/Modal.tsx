@@ -45,6 +45,7 @@ export default function ModalCarrera({ setCarrera, Carrera }: Props) {
         let form = new FormData();
         form.append('nombre', carrera.nombre);
         form.append('logo', carrera.logo!);
+        form.append('contacto', carrera.contacto!.toString());
         form.append('portada', portada);
         form.append('id', carrera.id);
         openModal({

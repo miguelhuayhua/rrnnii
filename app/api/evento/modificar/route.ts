@@ -26,12 +26,6 @@ const POST = async (request: NextRequest) => {
                 where: { id: form.get('id') }
             });
         }
-        else {
-            await prisma.evento.update({
-                data: { pdf: '' },
-                where: { id: form.get('id') }
-            });
-        }
         await prisma.evento.update({
             data: {
                 titulo: form.get('titulo'),

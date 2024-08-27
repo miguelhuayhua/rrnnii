@@ -8,7 +8,7 @@ import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
 import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
 import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
-import { Convenio, Institucion } from "@prisma/client";
+import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
@@ -24,11 +24,13 @@ import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Convenio & { Institucion: Institucion }>({
-        defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' } }, shouldFocusError: true
-    });
+    const { control, formState: { errors }, handleSubmit, setValue, watch } =
+        useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
+            defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' }, ConvenioCarrera: [], carreras: [] }, shouldFocusError: true
+        });
     const router = useRouter();
     const [load, setLoad] = useState(false);
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
     const { openModal } = useModal();
     const [portada, setPortada] = useState<any>('');
     const [documento, setDocumento] = useState<any>('');
@@ -51,7 +53,12 @@ export default function Page() {
         }
     });
     const { openSnackbar } = useSnackbar();
-    const onSubmit = (convenio: Convenio & { Institucion: Institucion }) => {
+    useEffect(() => {
+        axiosInstance.post('/api/carrera/listar').then(res => {
+            setCarreras(res.data);
+        })
+    }, []);
+    const onSubmit = (convenio: Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }) => {
         if (portada) {
             let form = new FormData();
             form.append('titulo', convenio.titulo);
@@ -62,6 +69,7 @@ export default function Page() {
             form.append('documento', documento);
             form.append('institucion', convenio.Institucion.nombre);
             form.append('finalizacion', convenio.finalizacion!);
+            form.append('carreras', JSON.stringify(convenio.carreras))
             openModal({
                 titulo: '¿Continuar?',
                 content: 'Un nuevo convenio se agregará',
@@ -246,14 +254,51 @@ export default function Page() {
                                             />
                                         )}
                                     />
-
+                                    <Controller
+                                        name="carreras"
+                                        control={control}
+                                        rules={{
+                                            validate: (value) => value.length > 0 || 'Seleccione al menos una carrera'
+                                        }}
+                                        render={({ field: { ref, ...field }, fieldState }) => (
+                                            <InputBox
+                                                {...field}
+                                                label='Carreras'
+                                                select
+                                                inputRef={ref}
+                                                error={!!fieldState.error}
+                                                helperText={fieldState.error?.message}
+                                                SelectProps={{
+                                                    multiple: true,
+                                                    MenuProps: {
+                                                        slotProps: {
+                                                            paper: {
+                                                                sx: {
+                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                                    borderRadius: 3,
+                                                                    border: "1px solid #f1f1f1",
+                                                                    boxShadow: '-10px 10px 30px #00000022',
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }}
+                                            >
+                                                {
+                                                    carreras.map(value => (
+                                                        <MenuItem value={value.id}>
+                                                            {value.nombre}
+                                                        </MenuItem>))
+                                                }
+                                            </InputBox>
+                                        )}
+                                    />
                                     <Controller
                                         name="finalizacion"
                                         control={control}
                                         rules={{ required: 'Finalización de convenio requerida' }}
                                         render={({ field: { ref, ...field } }) => (
                                             <DatePickerBox
-                                                sx={{ mt: 2 }}
                                                 disablePast
                                                 onChange={(ev: any) => {
                                                     field.onChange(ev?.format('DD/MM/YYYY'))
@@ -274,7 +319,6 @@ export default function Page() {
                                         control={control}
                                         render={({ field: { ref, ...field } }) => (
                                             <InputBox
-                                                sx={{ mt: 1 }}
                                                 select
                                                 label='Tipo de convenio'
                                                 {...field}
@@ -299,9 +343,7 @@ export default function Page() {
                                             </InputBox>
                                         )}
                                     />
-
                                 </Grid>
-
                                 <Grid item xs={12}>
                                     <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Convenio</BotonFilled>
                                 </Grid>

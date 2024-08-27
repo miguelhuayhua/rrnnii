@@ -5,7 +5,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 const InputBox = styled(TextField)(() => {
     return {
         width: "100%",
-        marginBottom: 8,
+        marginBottom: 16,
         '& .MuiOutlinedInput-root': {
             borderRadius: 14,
             '&:hover fieldset': {
@@ -25,7 +25,7 @@ const InputBox = styled(TextField)(() => {
 });
 const DatePickerBox = styled(DatePicker)(() => {
     return {
-        margin: '10px 0',
+        marginBottom: 16,
         width: "100%",
         ".MuiInputBase-root": {
             borderRadius: 12,

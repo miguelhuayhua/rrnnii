@@ -26,7 +26,7 @@ const POST = async (request: NextRequest) => {
             else {
                 await prisma.carrera.create({
                     data: {
-                        nombre: form.get('nombre'),
+                        nombre: form.get('nombre').toUpperCase(),
                         contacto: +form.get('contacto'),
                         logo: ''
                     }

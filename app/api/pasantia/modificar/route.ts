@@ -9,58 +9,64 @@ const POST = async (request: NextRequest) => {
     const documentob = documento ? Buffer.from(await documento.arrayBuffer()) : null;
     const documenton = documento ? Date.now() + documento.name.replaceAll(" ", "_") : '';
     const institucion = form.get('institucion');
+    const carreras = JSON.parse(form.get('carreras')) as string[];
     try {
         if (portada) {
             const portadab = Buffer.from(await portada.arrayBuffer());
             const portadan = Date.now() + portada.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/pasantias/img/" + portadan), portadab);
+            await writeFile(path.join(process.cwd(), "public/uploads/pasantias/img/" + portadan), portadab as any);
             await prisma.pasantia.update({
                 data: { imagen: portada ? `/uploads/pasantias/img/${portadan}` : '' },
                 where: { id: form.get('id') }
             });
         }
         if (documentob) {
-            await writeFile(path.join(process.cwd(), "public/uploads/pasantias/files/" + documenton), documentob);
+            await writeFile(path.join(process.cwd(), "public/uploads/pasantias/files/" + documenton), documentob as any);
             await prisma.pasantia.update({
                 data: { pdf: `/uploads/pasantias/files/${documenton}` },
                 where: { id: form.get('id') }
             });
         }
-        else {
+        if (await prisma.institucion.findFirst({ where: { nombre: institucion } })) {
             await prisma.pasantia.update({
-                data: { pdf: '' },
+                data: {
+                    titulo: form.get('titulo'),
+                    descripcion: form.get('descripcion'),
+                    modalidad: form.get('modalidad'),
+                    finalizacion: form.get('finalizacion'),
+                    Institucion: { connect: { nombre: institucion } },
+                    PasantiaCarrera: {
+                        createMany: {
+                            data: carreras.map((value) => ({ carreraId: value })),
+                            skipDuplicates: true
+                        },
+                    }
+                },
+                where: { id: form.get('id') }
+            });
+        } else {
+            await prisma.pasantia.update({
+                data: {
+                    titulo: form.get('titulo'),
+                    descripcion: form.get('descripcion'),
+                    modalidad: form.get('modalidad'),
+                    finalizacion: form.get('finalizacion'),
+                    Institucion: { create: { nombre: institucion, logo: '' } },
+                    PasantiaCarrera: {
+                        createMany: {
+                            data: carreras.map((value) => ({ carreraId: value })),
+                            skipDuplicates: true
+                        },
+                    }
+                },
                 where: { id: form.get('id') }
             });
         }
-        if (institucion) {
-            if (await prisma.institucion.findFirst({ where: { nombre: institucion } })) {
-                await prisma.pasantia.update({
-                    data: {
-                        titulo: form.get('titulo'),
-                        descripcion: form.get('descripcion'),
-                        modalidad: form.get('modalidad'),
-                        finalizacion: form.get('finalizacion'),
-                        Institucion: { connect: { nombre: institucion } }
-                    },
-                    where: { id: form.get('id') }
-                });
-            } else {
-                await prisma.pasantia.update({
-                    data: {
-                        titulo: form.get('titulo'),
-                        descripcion: form.get('descripcion'),
-                        modalidad: form.get('modalidad'),
-                        finalizacion: form.get('finalizacion'),
-                        Institucion: { create: { nombre: institucion, logo: '' } }
-                    },
-                    where: { id: form.get('id') }
-                });
-            }
-            return Response.json({ error: false, mensaje: `Pasantia modificado con éxito` });
-        }
-        else {
-            return Response.json({ error: true, mensaje: `No se pudo modificar. (sin institución)` });
-        }
+        await prisma.pasantiaCarrera.deleteMany({
+            where: { carreraId: { notIn: carreras } }
+        });
+        return Response.json({ error: false, mensaje: `Pasantia modificado con éxito` });
+
     } catch (error) {
         console.log(error)
         return Response.json({

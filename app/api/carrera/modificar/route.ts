@@ -17,7 +17,7 @@ const POST = async (request: NextRequest) => {
         }
         await prisma.carrera.update({
             data: {
-                nombre: form.get('nombre'),
+                nombre: form.get('nombre').toUpperCase(),
                 contacto: +form.get('contacto'),
             },
             where: { id: form.get('id') }

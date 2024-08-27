@@ -36,7 +36,7 @@ const POST = async (request: NextRequest) => {
         else {
             await prisma.actividad.update({
                 data: {
-                    pdf: '', titulo: form.get('titulo'),
+                    titulo: form.get('titulo'),
                     descripcion: form.get('descripcion'),
                     tipo: form.get('tipo'),
                 },

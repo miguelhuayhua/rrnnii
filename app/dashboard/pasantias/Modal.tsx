@@ -4,7 +4,7 @@ import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
 import { Autocomplete, Box, Grid, LinearProgress, MenuItem, useTheme } from '@mui/material';
-import { Institucion, Pasantia } from '@prisma/client';
+import { Carrera, Institucion, Pasantia, PasantiaCarrera } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
@@ -24,15 +24,17 @@ import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import { grey, red } from '@mui/material/colors';
 import { RiFileWord2Line } from 'react-icons/ri';
+import { useSnackbar } from '@/providers/SnackbarProvider';
 interface Props {
     setPasantia: any;
-    Pasantia: Pasantia;
+    Pasantia: Pasantia & { PasantiaCarrera: PasantiaCarrera[] };
 }
 export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
     const router = useRouter();
+    const { openSnackbar } = useSnackbar();
     const [load, setLoad] = useState(false);
-    const { control, formState: { errors, isDirty }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion }>({
-        defaultValues: Pasantia, shouldFocusError: true
+    const { control, formState: { errors, isDirty }, handleSubmit, watch, setValue } = useForm<Pasantia & { PasantiaCarrera: PasantiaCarrera[], Institucion: Institucion, carreras: string[] }>({
+        defaultValues: { ...Pasantia, carreras: Pasantia.PasantiaCarrera.map(value => value.carreraId) }, shouldFocusError: true
     });
     const { openModal } = useModal();
     const [portada, setPortada] = useState<any>('');
@@ -42,7 +44,8 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
         accept: 'image/*',
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setValue('imagen', URL.createObjectURL(plainFiles[0]));
+            setValue('imagen', URL.createObjectURL(plainFiles[0]), { shouldDirty: true });
+            openSnackbar('Imagen modificada con éxito');
             setPortada(plainFiles[0]);
         }
     });
@@ -52,10 +55,17 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setDocumento(plainFiles[0]);
-            setValue('pdf', plainFiles[0].name);
+            setValue('pdf', plainFiles[0].name, { shouldDirty: true });
+            openSnackbar('Documento modificado con éxito');
         }
     });
-    const onSubmit = (pasantia: Pasantia & { Institucion: Institucion }) => {
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
+    useEffect(() => {
+        axiosInstance.post('/api/carrera/listar').then(res => {
+            setCarreras(res.data);
+        })
+    }, []);
+    const onSubmit = (pasantia: Pasantia & { Institucion: Institucion, carreras: string[] }) => {
         let form = new FormData();
         form.append('titulo', pasantia.titulo);
         form.append('pdf', pasantia.pdf);
@@ -65,7 +75,8 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
         form.append('finalizacion', pasantia.finalizacion!);
         form.append('id', pasantia.id);
         form.append('modalidad', pasantia.modalidad);
-        form.append('institucion', pasantia.Institucion.nombre)
+        form.append('institucion', pasantia.Institucion.nombre);
+        form.append('carreras', JSON.stringify(pasantia.carreras));
         openModal({
             titulo: '¿Continuar?',
             content: 'La pasantía se modificará',
@@ -240,6 +251,45 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
                                 >
                                     <MenuItem value='3'>3 meses</MenuItem>
                                     <MenuItem value='6'>6 meses</MenuItem>
+                                </InputBox>
+                            )}
+                        />
+                        <Controller
+                            name="carreras"
+                            control={control}
+                            rules={{
+                                validate: (value) => value.length > 0 || 'Seleccione al menos una carrera'
+                            }}
+                            render={({ field: { ref, ...field }, fieldState }) => (
+                                <InputBox
+                                    {...field}
+                                    label='Carreras'
+                                    select
+                                    inputRef={ref}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                    SelectProps={{
+                                        multiple: true,
+                                        MenuProps: {
+                                            slotProps: {
+                                                paper: {
+                                                    sx: {
+                                                        background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                        borderRadius: 3,
+                                                        border: "1px solid #f1f1f1",
+                                                        boxShadow: '-10px 10px 30px #00000022',
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }}
+                                >
+                                    {
+                                        carreras.map(value => (
+                                            <MenuItem value={value.id}>
+                                                {value.nombre}
+                                            </MenuItem>))
+                                    }
                                 </InputBox>
                             )}
                         />
