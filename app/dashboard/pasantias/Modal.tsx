@@ -286,7 +286,7 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
                                 >
                                     {
                                         carreras.map(value => (
-                                            <MenuItem value={value.id}>
+                                            <MenuItem key={value.id} value={value.id}>
                                                 {value.nombre}
                                             </MenuItem>))
                                     }

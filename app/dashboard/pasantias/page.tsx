@@ -99,12 +99,12 @@ export default function Page() {
                     id: value.id,
                     nombre: value.titulo,
                     Pasantia: (
-                        <Box display='flex' minWidth={200} py={0.35} alignItems='center'>
-                            <Box minWidth={90} width={90} height={90} position='relative'>
+                        <Box display='flex' width={350} minWidth={300} py={0.35}>
+                            <Box minWidth={80} width={80} height={90} position='relative'>
                                 <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
                             <Box px={2}>
-                                <Negrita sx={{ fontSize: 16 }}>{value.titulo}</Negrita>
+                                <Negrita sx={{ fontSize: 13 }}>{value.titulo}</Negrita>
                                 <Normal >Duración: {value.modalidad} meses</Normal>
                             </Box>
                         </Box>

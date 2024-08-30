@@ -1,18 +1,25 @@
-
 import { prisma } from "@/app/api/client";
 import Navbar from "@/app/static/Navbar";
-import { Box, Typography, Container, Grid } from "@mui/material";
+import { Box } from "@mui/material";
+import { Convenio } from "@prisma/client";
+import Cliente from "./Cliente";
+import Footer from "@/app/static/Footer";
 const get = async (id: string) => {
-    return await prisma.convenio.findUnique({ where: { id } });
+    return await prisma.convenio.findUnique({
+        where: { id },
+        include: {
+            Institucion: true,
+            ConvenioCarrera: { include: { Carrera: true } }
+        }
+    });
 }
-export default function Home(props: any) {
-    console.log(props)
+export default async function Home(props: any) {
+    const convenio = await get(props.params.id) as Convenio;
     return (
         <Box bgcolor='#f4f6f8'>
             <Navbar />
-            <Box p={3}>
-                <Typography variant='h1' sx={{ fontWeight: 700, color: '#212b36', fontSize: 18 }}>Convenios</Typography>
-            </Box>
+            <Cliente value={convenio} />
+            <Footer />
         </Box>
     );
 }

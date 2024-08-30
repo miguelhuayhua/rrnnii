@@ -17,12 +17,17 @@ import Image from 'next/legacy/image';
 import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { IoClose } from 'react-icons/io5';
+import axios from 'axios';
 interface Props {
     setCarrera: any;
     Carrera: Carrera;
+    setCarreras: any;
+    setPrevCarreras: any;
 }
-export default function ModalCarrera({ setCarrera, Carrera }: Props) {
-    const theme = useTheme();
+export default function ModalCarrera({ setCarrera, Carrera,
+    setCarreras, setPrevCarreras
+}: Props) {
+
     const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Carrera>({
         defaultValues: Carrera, shouldFocusError: true
     });
@@ -45,7 +50,7 @@ export default function ModalCarrera({ setCarrera, Carrera }: Props) {
         let form = new FormData();
         form.append('nombre', carrera.nombre);
         form.append('logo', carrera.logo!);
-        form.append('contacto', carrera.contacto!.toString());
+        form.append('contacto', carrera.contacto!.toString() || '0');
         form.append('portada', portada);
         form.append('id', carrera.id);
         openModal({
@@ -56,6 +61,10 @@ export default function ModalCarrera({ setCarrera, Carrera }: Props) {
                 let res = await axiosInstance.post('/api/carrera/modificar', form);
                 if (!res.data.error) {
                     setCarrera(null);
+                    axios.post('/api/carrera/todo', {}).then(res => {
+                        setCarreras(res.data);
+                        setPrevCarreras(res.data);
+                    });
                 }
                 setLoad(false);
                 return res.data.mensaje;

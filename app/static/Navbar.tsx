@@ -173,7 +173,8 @@ const Navbar = () => {
                                     </Grid>
                                 }
                             >
-                                <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/convenios') ? trigger ? red[800] : red[800] : grey[50] }}>
+                                <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
+                                    {(pathname == '/convenios') ? <GoDotFill color='inherit' /> : null}
                                     Convocatorias <FaAngleDown />
                                 </Normal>
                             </Tooltip>

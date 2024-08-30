@@ -2,7 +2,7 @@
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Box, Grid, useTheme, MenuItem, LinearProgress } from '@mui/material';
+import { Autocomplete, Box, Grid, MenuItem, LinearProgress } from '@mui/material';
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
@@ -15,7 +15,6 @@ import { DatePickerBox, InputBox } from '@/app/componentes/Datos';
 import { MdOutlineAttachFile } from 'react-icons/md';
 import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
-import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
@@ -25,12 +24,15 @@ import { IoClose } from 'react-icons/io5';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { RiFileWord2Line } from 'react-icons/ri';
+import axios from 'axios';
 interface Props {
     setConvenio: any;
     Convenio: Convenio & { ConvenioCarrera: ConvenioCarrera[] };
+    setConvenios: any;
+    setPrevConvenios: any;
+    setOpcion: any;
 }
-export default function ModalConvenio({ setConvenio, Convenio }: Props) {
-    const router = useRouter();
+export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setConvenios, setPrevConvenios }: Props) {
     const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } =
         useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
             defaultValues: { ...Convenio, carreras: Convenio.ConvenioCarrera.map(value => value.carreraId) }, shouldFocusError: true
@@ -78,16 +80,23 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
         form.append('portada', portada);
         form.append('documento', documento);
         form.append('id', convenio.id);
-        form.append('carreras', JSON.stringify(convenio.carreras))
+        form.append('carreras', JSON.stringify(convenio.carreras));
+        form.append('convenioCarrera', JSON.stringify(convenio.carreras.map(carreraId => {
+            return { carreraId, id: convenio.ConvenioCarrera.find(value => value.carreraId == carreraId)?.id || '' }
+        })))
         openModal({
             titulo: '¿Continuar?',
             content: 'El convenio será modificado',
             callback: async () => {
                 setLoad(true);
-                let res = await axiosInstance.post('/api/convenio/modificar', form);
+                let res = await axios.post('/api/convenio/modificar', form);
                 if (!res.data.error) {
                     setConvenio(null);
-                    router.refresh();
+                    axios.post('/api/convenio/todo', {}).then(res => {
+                        setConvenios(res.data);
+                        setPrevConvenios(res.data);
+                        setOpcion('todo');
+                    });
                 }
                 setLoad(false);
                 return res.data.mensaje;
@@ -96,7 +105,7 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
     }
     const [instituciones, setInstituciones] = useState([]);
     useEffect(() => {
-        axiosInstance.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
+        axios.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
             setInstituciones(res.data);
         })
     }, []);
@@ -107,7 +116,7 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
             maxWidth='md'
             onClose={() => { setConvenio(null) }}
         >
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%", zIndex: 10 }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
                 <BotonSimple onClick={() => setConvenio(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
                     <IoClose fontSize={25} />
@@ -279,7 +288,7 @@ export default function ModalConvenio({ setConvenio, Convenio }: Props) {
                                 >
                                     {
                                         carreras.map(value => (
-                                            <MenuItem value={value.id}>
+                                            <MenuItem key={value.id} value={value.id}>
                                                 {value.nombre}
                                             </MenuItem>))
                                     }

@@ -1,5 +1,3 @@
-
-import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async () => {
     try {
@@ -11,9 +9,7 @@ const POST = async () => {
         return Response.json(carreras);
     } catch (error) {
         console.log(error)
-        return Response.json({
-            error: true,
-        });
+        return Response.json([]);
     }
 }
 

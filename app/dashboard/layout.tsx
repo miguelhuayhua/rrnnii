@@ -18,7 +18,7 @@ export default async function Layout({ children }: any) {
                     <ModalProvider>
                         <Box display='flex'>
                             <SideBar />
-                            <Box width={"100%"} >
+                            <Box sx={{ width: { xs: "100%", md: "calc(100% -95px)" }, overflow:'hidden' }}>
                                 <Navbar />
                                 <Box mt={5}>
                                     {children}

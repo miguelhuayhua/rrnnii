@@ -16,31 +16,33 @@ interface Props {
 }
 
 const ConvenioItem = ({ value }: Props) => {
-
+    console.log(value)
     return (
         <Box bgcolor='white' borderRadius={4} overflow='hidden' border={`1px solid ${grey[100]}`} position='relative'>
             <Grid container>
-                <Grid item xs={12} lg={6} >
-                    <Image src={value.imagen} height={100} objectFit="cover" width={100} layout="responsive" />
+                <Grid item xs={6} >
+                    <Link href={`/convenios/${value.id}`}>
+                        <Image src={value.imagen} height={100} objectFit="cover" width={100} layout="responsive" />
+                    </Link>
                 </Grid>
-                <Grid item xs={12} lg={6} py={0.5} px={{ xs: 0.5, md: 2 }}>
+                <Grid item xs={6} p={1}>
                     <Avatar sx={{ bgcolor: value.tipo == 'nacional' ? blue[600] : green[600], borderRadius: 2, position: 'absolute', top: 5, left: 5, zIndex: 10 }}>
                         C{value.tipo.charAt(0).toUpperCase()}
                     </Avatar>
-                    <Link href='/'>
-                        <Negrita>
+                    <Link href={`/convenios/${value.id}`}>
+                        <Negrita sx={{ fontSize: 12 }}>
                             {value.titulo}
                         </Negrita>
                     </Link>
                     <Normal sx={{ mt: 1, fontSize: 11 }}>
                         Termina el: {value.finalizacion}
                     </Normal>
-                    <Normal sx={{ fontSize: 11 }}>
+                    <Normal sx={{ fontSize: 11, mb: 1 }}>
                         Publicado el: {dayjs(value.createdAt).format('DD/MM/YYYY')}
                     </Normal>
-                    <Negrita sx={{ py: 1, fontWeight: 600, color: green[500], fontSize: 12, display: 'flex', alignItems: 'center' }}>
+                    {/* <Negrita sx={{ py: 1, fontWeight: 600, color: green[500], fontSize: 12, display: 'flex', alignItems: 'center' }}>
                         <RiGroup3Fill /> <i style={{ marginLeft: 5 }}>12 candidatos</i>
-                    </Negrita>
+                    </Negrita> */}
                     <Normal sx={{ fontWeight: 600, fontSize: 12, display: 'flex', alignItems: 'center' }}>
                         <FaBuilding style={{ marginRight: 5 }} /> <i>{value.Institucion.nombre}</i>
                     </Normal>
@@ -51,10 +53,11 @@ const ConvenioItem = ({ value }: Props) => {
 
             </Grid>
             <Divider sx={{ borderColor: '#eee' }}></Divider>
-            <Stack direction='row' px={0.5} flexWrap='wrap'>
+            <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>
                 {
                     value.ConvenioCarrera.map(value =>
-                        (<ChipBox key={value.id} label={value.Carrera.nombre} />)
+                    (<ChipBox key={value.id} avatar={<Image src={value.Carrera.logo} width={20} height={20}
+                        layout='fixed' />} label={<Normal sx={{ fontSize: 10, ml: -1 }}>{value.Carrera.nombre}</Normal>} />)
                     )
                 }
             </Stack>

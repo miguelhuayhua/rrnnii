@@ -46,7 +46,7 @@ const Cliente = () => {
                 {
                     Convenios.length > 0 ?
                         Convenios.map(value => (
-                            <Grid key={value.id} item xs={6} sm={4} lg={3}>
+                            <Grid key={value.id} item xs={12} sm={8} md={6} lg={4} mx='auto'>
                                 <ConvenioItem value={value as any} />
                             </Grid>))
                         : <Normal ml={4} my={4}>

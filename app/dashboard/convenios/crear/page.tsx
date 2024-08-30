@@ -22,11 +22,12 @@ import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
+import axios from "axios";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } =
         useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
-            defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' }, ConvenioCarrera: [], carreras: [] }, shouldFocusError: true
+            defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' }, ConvenioCarrera: [], carreras: ['66d12318f08d4603551ca1b1'] }, shouldFocusError: true
         });
     const router = useRouter();
     const [load, setLoad] = useState(false);
@@ -41,6 +42,7 @@ export default function Page() {
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]));
             setPortada(plainFiles[0]);
+            openSnackbar('Imagen modificada con éxito');
         }
     });
     const PDFPicker = useFilePicker({
@@ -50,11 +52,12 @@ export default function Page() {
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setDocumento(plainFiles[0]);
             setValue('pdf', plainFiles[0].name);
+            openSnackbar('Documento modificado con éxito');
         }
     });
     const { openSnackbar } = useSnackbar();
     useEffect(() => {
-        axiosInstance.post('/api/carrera/listar').then(res => {
+        axios.post('/api/carrera/listar').then(res => {
             setCarreras(res.data);
         })
     }, []);
@@ -75,7 +78,7 @@ export default function Page() {
                 content: 'Un nuevo convenio se agregará',
                 callback: async () => {
                     setLoad(true);
-                    let res = await axiosInstance.post('/api/convenio/crear', form);
+                    let res = await axios.post('/api/convenio/crear', form);
                     if (!res.data.error) {
                         router.back();
                         router.refresh();
@@ -140,7 +143,8 @@ export default function Page() {
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
                                 }
                                 <BsImageAlt color={'inherit'} fontSize={30} />
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
@@ -286,7 +290,7 @@ export default function Page() {
                                             >
                                                 {
                                                     carreras.map(value => (
-                                                        <MenuItem value={value.id}>
+                                                        <MenuItem key={value.id} value={value.id}>
                                                             {value.nombre}
                                                         </MenuItem>))
                                                 }
@@ -352,7 +356,7 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', bottom: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
         </>
     )
 }

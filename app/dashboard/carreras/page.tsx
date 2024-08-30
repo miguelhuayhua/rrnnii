@@ -17,6 +17,7 @@ import { TbReload } from "react-icons/tb";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import ModalCarrera from "./Modal";
+import axios from "axios";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -25,7 +26,7 @@ export default function Page() {
     const [carrera, setCarrera] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/carrera/todo', {}).then(res => {
+        axios.post('/api/carrera/todo', {}).then(res => {
             setCarreras(res.data);
             setPrevCarreras(res.data);
         });
@@ -92,7 +93,7 @@ export default function Page() {
                             <Image src={value.logo || '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                         </Box>
                         <Normal ml={1}>
-                            <b>Carrera: </b>{value.nombre}
+                            {value.nombre}
                         </Normal>
                     </Box>
                     ),
@@ -130,6 +131,8 @@ export default function Page() {
                     <ModalCarrera
                         Carrera={carrera}
                         setCarrera={setCarrera}
+                        setCarreras={setCarreras}
+                        setPrevCarreras={setPrevCarreras}
                     />
                     : null
             }

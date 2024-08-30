@@ -99,12 +99,12 @@ export default function Page() {
                     id: value.id,
                     nombre: value.titulo,
                     Convenio: (
-                        <Box display='flex' minWidth={200} py={0.35}>
-                            <Box minWidth={90} width={90} height={90} position='relative'>
+                        <Box display='flex' width={350} minWidth={300} py={0.35}>
+                            <Box minWidth={80} width={80} height={90} position='relative'>
                                 <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
-                            <Box px={2}>
-                                <Negrita sx={{ fontSize: 16 }}>{value.titulo}</Negrita>
+                            <Box px={1}>
+                                <Negrita sx={{ fontSize: 13 }}>{value.titulo}</Negrita>
                                 <Normal >{value.tipo.toUpperCase()}</Normal>
                             </Box>
                         </Box>
@@ -161,6 +161,9 @@ export default function Page() {
                     <ModalConvenio
                         Convenio={convenio}
                         setConvenio={setConvenio}
+                        setConvenios={setConvenios}
+                        setPrevConvenios={setPrevConvenios}
+                        setOpcion={setOpcion}
                     />
                     : null
             }

@@ -24,7 +24,7 @@ import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
-        defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
+        defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: ['66d12318f08d4603551ca1b1'] }, shouldFocusError: true
     });
     const router = useRouter();
     const { openModal } = useModal();
@@ -296,7 +296,7 @@ export default function Page() {
                                             >
                                                 {
                                                     carreras.map(value => (
-                                                        <MenuItem value={value.id}>
+                                                        <MenuItem key={value.id} value={value.id}>
                                                             {value.nombre}
                                                         </MenuItem>))
                                                 }
@@ -358,7 +358,7 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', bottom: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
         </>
     )
 }

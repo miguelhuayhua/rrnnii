@@ -1,4 +1,4 @@
-import { Chip, Typography, styled } from "@mui/material";
+import { Typography, styled } from "@mui/material";
 const Normal = styled(Typography)(() =>
 ({
     fontWeight: 400,
@@ -16,7 +16,7 @@ const Titulo = styled(Typography)(({ theme }) =>
 }));
 const Negrita = styled(Typography)(() =>
 ({
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: 700,
 }));
 

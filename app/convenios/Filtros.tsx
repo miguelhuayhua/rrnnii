@@ -18,9 +18,9 @@ interface Props {
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
     const params = useSearchParams();
-    const [carreras, setCarreras] = useState<Carrera[]>([]);
     const tipo = params.get('tipo') || '';
     const carrera = params.get('carrera') || '';
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
     useEffect(() => {
         axiosInstance.post('/api/carrera/listar').then(res => {
             setCarreras(res.data);
@@ -61,6 +61,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Titulo>
                         <InputBox
                             value={carrera}
+                            sx={{ ".MuiTypography-root": { fontSize: 11 } }}
                             defaultValue={''}
                             select
                             onChange={(ev) => {
@@ -85,12 +86,12 @@ const Filtros = ({ open, setOpen }: Props) => {
                         >
                             {
                                 carreras.map(value => (
-                                    <MenuItem value={value.id}>
+                                    <MenuItem key={value.id} value={value.id}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <Box sx={{ width: 40, aspectRatio: 1, position: 'relative', mr: 1 }}>
+                                            <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
                                                 <Image layout='fill' src={value.logo} style={{ borderRadius: 10 }} />
                                             </Box>
-                                            <Negrita>{value.nombre}</Negrita>
+                                            <Negrita sx={{ fontSize: 12 }}>{value.nombre}</Negrita>
                                         </Box>
                                     </MenuItem>
                                 ))

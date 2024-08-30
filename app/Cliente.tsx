@@ -63,7 +63,7 @@ const Cliente = () => {
                                 UNIVERSIDAD PÚBLICA DE EL ALTO
                             </span>
                         </Titulo>
-                        <Normal sx={{ fontSize: 17, pt: 10 }}>
+                        <Normal sx={{ fontSize: 17, pt: 14 }}>
                             Descubre los convenios y ofertas disponibles para toda la comunidad universitaria, no olvides que puedes
                             pasar a nuestra oficinas para mayor información.
                         </Normal>
@@ -92,10 +92,15 @@ const Cliente = () => {
                     }} >
                         <Grid container spacing={1}>
                             {
-                                Galeria.map(value => (
-                                    <Grid key={value.id} item xs={2} md={4} >
-                                        <Image style={{ borderRadius: 8 }} src={value.imagen} width={100} height={100} objectFit='cover' layout='responsive' />
-                                    </Grid>))
+                                Galeria.length > 0 ?
+
+                                    Galeria.map(value => (
+                                        <Grid key={value.id} item xs={2} md={4} >
+                                            <Image style={{ borderRadius: 8 }} src={value.imagen} width={100} height={100} objectFit='cover' layout='responsive' />
+                                        </Grid>))
+                                    : <Grid item xs={6} mx='auto'>
+                                        <Image style={{ borderRadius: 8 }} src='/upea-border.png' width={100} height={100} objectFit='cover' layout='responsive' />
+                                    </Grid>
                             }
                         </Grid>
                     </Box>

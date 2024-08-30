@@ -3,12 +3,14 @@ import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 import { writeFile } from "fs/promises";
 import path from "path";
+import { ConvenioCarrera } from "@prisma/client";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
     const documento = form.get('documento');
     const institucion = form.get('institucion');
     const carreras = JSON.parse(form.get('carreras')) as string[];
+    const convenioCarrera = JSON.parse(form.get('convenioCarrera')) as ConvenioCarrera[];
     try {
         if (portada) {
             const portadab = Buffer.from(await portada.arrayBuffer());
@@ -19,7 +21,7 @@ const POST = async (request: NextRequest) => {
                 where: { id: form.get('id') }
             });
         }
-        if (documento) {
+        if (documento != 'null' && documento) {
             const documentob = Buffer.from(await documento.arrayBuffer());
             const documenton = Date.now() + documento.name.replaceAll(" ", "_");
             await writeFile(path.join(process.cwd(), "public/uploads/convenios/files/" + documenton), documentob as any);
@@ -40,7 +42,7 @@ const POST = async (request: NextRequest) => {
                     },
                     ConvenioCarrera: {
                         createMany: {
-                            data: carreras.map((value) => ({ carreraId: value })),
+                            data: convenioCarrera.map(value => ({ carreraId: value.carreraId, ...(value.id ? { id: value.id } : null) })),
                             skipDuplicates: true
                         },
                     }
@@ -60,9 +62,9 @@ const POST = async (request: NextRequest) => {
                     },
                     ConvenioCarrera: {
                         createMany: {
-                            data: carreras.map((value) => ({ carreraId: value })),
+                            data: convenioCarrera.map(value => ({ carreraId: value.carreraId, ...(value.id ? { id: value.id } : null) })),
                             skipDuplicates: true
-                        }
+                        },
                     }
                 },
                 where: { id: form.get('id') }

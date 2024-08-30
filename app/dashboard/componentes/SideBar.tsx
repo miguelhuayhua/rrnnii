@@ -54,7 +54,7 @@ const SideBar = () => {
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const [move, setMove] = useState(false);
     const Side = () => (
-        <Box position='sticky' top={0} borderRight='1px solid #eee' width={{ xs: 110 }} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
+        <Box position='sticky' top={0} borderRight='1px solid #eee' width={95} minWidth={95} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
                 <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
             </Box>

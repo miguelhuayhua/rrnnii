@@ -1,7 +1,7 @@
 'use client';
 import { Badge, Box, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
+import Image from 'next/legacy/image';
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaFilter } from "react-icons/fa6";
 import { Negrita, Titulo } from "../componentes/Textos";
@@ -9,6 +9,8 @@ import { BotonOutline, BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
 import { InputBox } from "../componentes/Datos";
+import { axiosInstance } from "@/globals";
+import { Carrera } from "@prisma/client";
 interface Props {
     open: boolean;
     setOpen: any
@@ -16,13 +18,16 @@ interface Props {
 
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
-    const pathname = usePathname();
-    const theme = useTheme();
     const params = useSearchParams();
-
+    const duracion = params.get('d') || '';
     const carrera = params.get('carrera') || '';
-    const duracion = params.get('duracion') || '';
-    const orden = params.get('orden') || '';
+    const orden = params.get('s');
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
+    useEffect(() => {
+        axiosInstance.post('/api/carrera/listar').then(res => {
+            setCarreras(res.data);
+        })
+    }, []);
     return (
         <>
             <SwipeableDrawer
@@ -59,9 +64,13 @@ const Filtros = ({ open, setOpen }: Props) => {
                             Carrera
                         </Titulo>
                         <InputBox
-                            select
                             value={carrera}
-                            onChange={(ev) => { router.replace(`/pasantias?carrera=${ev.target.value}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}${params.has('orden') ? '&orden=' + params.get('orden') : ''}`) }}
+                            sx={{ ".MuiTypography-root": { fontSize: 11 } }}
+                            defaultValue={''}
+                            select
+                            onChange={(ev) => {
+                                router.replace(`/pasantias?carrera=${ev.target.value}${params.has('d') ? '&d=' + params.get('d') : ''}${params.has('s') ? '&s=' + params.get('s') : ''}`)
+                            }}
                             SelectProps={{
                                 MenuProps: {
                                     slotProps: {
@@ -79,14 +88,24 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 }
                             }}
                         >
-
-                            <MenuItem value='inge'>Ingeniería de Sistemas</MenuItem>
+                            {
+                                carreras.map(value => (
+                                    <MenuItem value={value.id}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
+                                                <Image layout='fill' src={value.logo} style={{ borderRadius: 10 }} />
+                                            </Box>
+                                            <Negrita sx={{ fontSize: 12 }}>{value.nombre}</Negrita>
+                                        </Box>
+                                    </MenuItem>
+                                ))
+                            }
                         </InputBox>
                         <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600, mt: 1 }}>
                             Duración
                         </Titulo>
                         <RadioGroup value={duracion} onChange={(ev) => {
-                            router.replace(`/pasantias?duracion=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('orden') ? '&orden=' + params.get('orden') : ''}`)
+                            router.replace(`/pasantias?${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('d') ? '&d=' + ev.target.value : ''}${params.has('s') ? '&s=' + params.get('s') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'3'}
@@ -108,13 +127,13 @@ const Filtros = ({ open, setOpen }: Props) => {
                             router.replace(`/pasantias?orden=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
                         }}>
                             <FormControlLabel
-                                value={'reciente'}
+                                value={'0'}
                                 sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Más recientes'}
                             />
                             <FormControlLabel
-                                value={'antiguo'}
+                                value={'1'}
                                 sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Más antiguos'}
