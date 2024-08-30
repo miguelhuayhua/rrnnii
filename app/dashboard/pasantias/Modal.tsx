@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Autocomplete, Box, Grid, LinearProgress, MenuItem, useTheme } from '@mui/material';
+import { Autocomplete, Box, Grid, LinearProgress, MenuItem } from '@mui/material';
 import { Carrera, Institucion, Pasantia, PasantiaCarrera } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
@@ -16,7 +16,6 @@ import { DatePickerBox, InputBox } from '@/app/componentes/Datos';
 import { MdOutlineAttachFile } from 'react-icons/md';
 import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
-import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import dayjs from 'dayjs';
@@ -25,12 +24,14 @@ import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import { grey, red } from '@mui/material/colors';
 import { RiFileWord2Line } from 'react-icons/ri';
 import { useSnackbar } from '@/providers/SnackbarProvider';
+import axios from 'axios';
 interface Props {
     setPasantia: any;
     Pasantia: Pasantia & { PasantiaCarrera: PasantiaCarrera[] };
+    setPasantias : any;
+    setPrevPasantias:any;
 }
-export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
-    const router = useRouter();
+export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, setPrevPasantias }: Props) {
     const { openSnackbar } = useSnackbar();
     const [load, setLoad] = useState(false);
     const { control, formState: { errors, isDirty }, handleSubmit, watch, setValue } = useForm<Pasantia & { PasantiaCarrera: PasantiaCarrera[], Institucion: Institucion, carreras: string[] }>({
@@ -61,7 +62,7 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
     });
     const [carreras, setCarreras] = useState<Carrera[]>([]);
     useEffect(() => {
-        axiosInstance.post('/api/carrera/listar').then(res => {
+        axios.post('/api/carrera/listar').then(res => {
             setCarreras(res.data);
         })
     }, []);
@@ -82,10 +83,13 @@ export default function ModalPasantia({ setPasantia, Pasantia }: Props) {
             content: 'La pasantía se modificará',
             callback: async () => {
                 setLoad(true);
-                let res = await axiosInstance.post('/api/pasantia/modificar', form);
+                let res = await axios.post('/api/pasantia/modificar', form);
                 if (!res.data.error) {
                     setPasantia(null);
-                    router.refresh();
+                    axios.post('/api/pasantia/todo').then(res => {
+                        setPasantias(res.data);
+                        setPrevPasantias(res.data);
+                    });
                     setLoad(false);
                 }
                 return res.data.mensaje;

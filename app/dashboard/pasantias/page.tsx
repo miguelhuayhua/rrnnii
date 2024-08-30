@@ -1,7 +1,7 @@
 "use client";
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -16,10 +16,9 @@ import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
 import { red } from "@mui/material/colors";
-import 'dayjs/locale/es';
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-dayjs.locale('es');
+import axios from "axios";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [Pasantias, setPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
@@ -28,7 +27,7 @@ export default function Page() {
     const { openSnackbar } = useSnackbar();
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/pasantia/todo', { opcion }).then(res => {
+        axios.post('/api/pasantia/todo').then(res => {
             setPasantias(res.data);
             setPrevPasantias(res.data);
         });
@@ -161,6 +160,8 @@ export default function Page() {
                     <ModalPasantia
                         Pasantia={Pasantia}
                         setPasantia={setPasantia}
+                        setPasantias={setPasantias}
+                        setPrevPasantias={setPrevPasantias}
                     />
                     : null
             }

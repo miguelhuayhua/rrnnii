@@ -15,12 +15,13 @@ const Cliente = () => {
     const [open, setOpen] = useState(false);
     const [Pasantias, setPasantias] = useState<Pasantia[]>([]);
     const params = useSearchParams();
+
     useEffect(() => {
+        const duracion = params.get('d') || '';
+        const carrera = params.get('carrera') || '';
+        const orden = params.get('s');
         axios.post('/api/pasantia/listar',
-            {
-                tipo: params.get('tipo') || undefined,
-                carrera: params.get('carrera') || undefined
-            }).then(res => {
+            { duracion, carrera, orden }).then(res => {
                 setPasantias(res.data);
             })
     }, [params]);

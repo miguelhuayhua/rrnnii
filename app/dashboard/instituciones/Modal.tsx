@@ -17,11 +17,14 @@ import Image from 'next/legacy/image';
 import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { IoClose } from 'react-icons/io5';
+import axios from 'axios';
 interface Props {
     setInstitucion: any;
     Institucion: Institucion;
+    setInstituciones: any;
+    setPrevInstituciones: any;
 }
-export default function ModalInstitucion({ setInstitucion, Institucion }: Props) {
+export default function ModalInstitucion({ setInstitucion, Institucion, setInstituciones, setPrevInstituciones }: Props) {
     const [load, setLoad] = useState(false);
     const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Institucion>({
         defaultValues: Institucion, shouldFocusError: true
@@ -52,9 +55,13 @@ export default function ModalInstitucion({ setInstitucion, Institucion }: Props)
             content: 'La institución será modificada',
             callback: async () => {
                 setLoad(true);
-                let res = await axiosInstance.post('/api/institucion/modificar', form);
+                let res = await axios.post('/api/institucion/modificar', form);
                 if (!res.data.error) {
                     setInstitucion(null);
+                    axios.post('/api/institucion/todo', {}).then(res => {
+                        setInstituciones(res.data);
+                        setPrevInstituciones(res.data);
+                    });
                 }
                 setLoad(false);
                 return res.data.mensaje;

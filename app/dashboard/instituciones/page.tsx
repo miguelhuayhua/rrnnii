@@ -17,6 +17,7 @@ import Tabla from "../componentes/Tabla";
 import { TbReload } from "react-icons/tb";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import axios from "axios";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -25,7 +26,7 @@ export default function Page() {
     const [institucion, setInstitucion] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/institucion/todo', {}).then(res => {
+        axios.post('/api/institucion/todo', {}).then(res => {
             setInstituciones(res.data);
             setPrevInstituciones(res.data);
         });
@@ -133,6 +134,8 @@ export default function Page() {
                     <ModalInstitucion
                         Institucion={institucion}
                         setInstitucion={setInstitucion}
+                        setInstituciones={setInstituciones}
+                        setPrevInstituciones={setPrevInstituciones}
                     />
                     : null
             }

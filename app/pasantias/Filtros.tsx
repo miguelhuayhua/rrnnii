@@ -105,7 +105,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                             Duración
                         </Titulo>
                         <RadioGroup value={duracion} onChange={(ev) => {
-                            router.replace(`/pasantias?${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('d') ? '&d=' + ev.target.value : ''}${params.has('s') ? '&s=' + params.get('s') : ''}`)
+                            router.replace(`/pasantias?${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}&d=${ev.target.value}${params.has('s') ? '&s=' + params.get('s') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'3'}
@@ -124,7 +124,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                             Orden
                         </Titulo>
                         <RadioGroup value={orden} onChange={(ev) => {
-                            router.replace(`/pasantias?orden=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
+                            router.replace(`/pasantias?s=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('d') ? '&d=' + params.get('d') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'0'}

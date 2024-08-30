@@ -1,7 +1,7 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Divider, Grid, Stack } from "@mui/material";
-import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
+import { Carrera, Institucion, Pasantia, PasantiaCarrera } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
@@ -9,18 +9,16 @@ import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ConvenioItem from "@/app/componentes/items/Convenio";
+import PasantiaItem from "@/app/componentes/items/Pasantia";
 interface Props {
-    value: Convenio & { ConvenioCarrera: (ConvenioCarrera & { Carrera: Carrera })[], Institucion: Institucion };
+    value: Pasantia & { PasantiaCarrera: (PasantiaCarrera & { Carrera: Carrera })[], Institucion: Institucion };
 }
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
-import 'dayjs/locale/es';
-dayjs.locale('es');
 export default function Cliente({ value }: Props) {
-    const [convenios, setConvenios] = useState([]);
+    const [convenios, setPasantias] = useState([]);
     useEffect(() => {
         axios.post('/api/convenio/listar', { skip: 1 }).then(res => {
-            setConvenios(res.data);
+            setPasantias(res.data);
         });
     }, []);
     return (
@@ -32,9 +30,9 @@ export default function Cliente({ value }: Props) {
                     </Link>,
                     <Link
                         color="inherit"
-                        href="/material-ui/getting-started/installation/"
+                        href="/pasantias"
                     >
-                        Convenios
+                        Pasantias
                     </Link>,
                     <Negrita sx={{ fontSize: 16 }}>
                         Ver
@@ -43,7 +41,7 @@ export default function Cliente({ value }: Props) {
 
             </Grid>
             <Grid item xs={12} md={7}>
-                <ChipBox label={`Convenio ${value.tipo}`} sx={{ fontSize: 13, bgcolor: 'white', border: '1px solid #ddd' }} />
+                <ChipBox label={`Duración: ${value.modalidad} meses`} sx={{ fontSize: 13, bgcolor: 'white', border: '1px solid #ddd' }} />
                 <i style={{ float: 'right' }}>
                     <Normal sx={{ fontSize: 12 }}>
                         {dayjs(value.createdAt).format('DD [de] MMMM [del] YYYY')}
@@ -56,7 +54,7 @@ export default function Cliente({ value }: Props) {
                             style={{ borderRadius: 10 }}
                             layout='responsive' width={100} height={80} />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} >
                         <Box sx={{ display: 'flex', alignItems: 'center', my: 1 }}>
                             <Image src={value.Institucion.logo || '/default-image.jpg'}
                                 objectFit="cover"
@@ -80,7 +78,7 @@ export default function Cliente({ value }: Props) {
                             <Normal sx={{ fontSize: 12 }}>
                                 Finaliza el: {dayjs(value.finalizacion, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY')}
                             </Normal>
-                            <Normal sx={{ fontSize: 20, fontWeight: 600 }}>
+                            <Normal sx={{ fontSize: 22, fontWeight: 600 }}>
                                 {value.titulo}
                             </Normal>
                             <Box sx={{ fontSize: 14 }}>
@@ -89,9 +87,10 @@ export default function Cliente({ value }: Props) {
                                 }
                             </Box>
                         </BoxSombra>
+                        <Divider sx={{ borderColor: '#eee' }}></Divider>
                         <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>
                             {
-                                value.ConvenioCarrera.map(value =>
+                                value.PasantiaCarrera.map(value =>
                                 (<ChipBox
                                     sx={{ bgcolor: 'white', height: 35, borderRadius: 3 }}
                                     key={value.id} avatar={<Image src={value.Carrera.logo} width={25} height={25}
@@ -104,17 +103,17 @@ export default function Cliente({ value }: Props) {
             </Grid>
             <Grid item xs={12} md={5}>
                 <Titulo sx={{ textAlign: 'center' }}>
-                    Más convenios
+                    Más pasantias
                 </Titulo>
                 <Grid container spacing={2}>
                     {
                         convenios.length == 0 ?
                             <Grid item xs={12} >
-                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
+                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más pasantias disponibles</Normal>
                             </Grid> :
                             convenios.map((value: any) => (
                                 <Grid key={value.id} item xs={10} mx='auto'>
-                                    <ConvenioItem value={value} />
+                                    <PasantiaItem value={value} />
                                 </Grid>
                             ))
                     }

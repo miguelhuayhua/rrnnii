@@ -1,7 +1,6 @@
 "use client";
 import Image from 'next/legacy/image';
-import AppBar from '@mui/material/AppBar';
-import { Tooltip, useScrollTrigger, Typography, Grid, Stack, LinearProgress, Drawer } from '@mui/material';
+import { Tooltip, useScrollTrigger, Grid, Stack, LinearProgress, Drawer } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -9,12 +8,11 @@ import Link from 'next/link';
 import { FaAngleDown, FaAngleRight, FaNewspaper } from "react-icons/fa";
 import { usePathname } from 'next/navigation';
 import { GoDotFill, GoHomeFill } from "react-icons/go";
-import { FaUser } from "react-icons/fa";
 import { BotonSimple } from '../componentes/Botones';
 import { Negrita, Normal } from '../componentes/Textos';
 import { HiOutlineBars3BottomLeft } from 'react-icons/hi2';
 import ModalLogin from './ModalLogin';
-import { BiDownArrow, BiHome } from 'react-icons/bi';
+import { BiDownArrow } from 'react-icons/bi';
 import { IoPeople } from 'react-icons/io5';
 import { PiDotOutlineFill, PiSquaresFourFill } from 'react-icons/pi';
 import { grey, red } from '@mui/material/colors';
@@ -92,7 +90,7 @@ const Navbar = () => {
                     </Link>
                     <Box display='flex' alignItems='center'>
                         <Stack display={{ xs: 'none', md: 'flex' }} direction='row' spacing={2} mr={2}>
-                            <Link href={'/'}>
+                            <Link style={{ textDecoration: 'none' }} href={'/'}>
                                 <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/' ? <GoDotFill color='inherit' /> : null}
                                     Principal
@@ -174,17 +172,17 @@ const Navbar = () => {
                                 }
                             >
                                 <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
-                                    {(pathname == '/convenios') ? <GoDotFill color='inherit' /> : null}
+                                    {(pathname.startsWith('/convenios') || pathname.startsWith('/pasantias')) ? <GoDotFill color='inherit' /> : null}
                                     Convocatorias <FaAngleDown />
                                 </Normal>
                             </Tooltip>
-                            <Link href={'/galeria'}>
+                            <Link style={{ textDecoration: 'none' }} href={'/galeria'}>
                                 <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/galeria' ? <GoDotFill color='inherit' /> : null}
                                     Galería
                                 </Normal>
                             </Link>
-                            <Link href={'/about'}>
+                            <Link style={{ textDecoration: 'none' }} href={'/about'}>
                                 <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/about' ? <GoDotFill color='inherit' /> : null}
                                     Sobre Nosotros

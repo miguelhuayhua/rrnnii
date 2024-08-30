@@ -1,11 +1,11 @@
 import { prisma } from "../../client";
-const POST = async () => {
+const POST = async (request: Request) => {
     try {
         let carreras = await prisma.carrera.findMany({
             orderBy: {
                 nombre: 'asc',
             },
-            where: { estado: true }
+            where: { estado: true,  }
         });
         return Response.json(carreras);
     } catch (error) {

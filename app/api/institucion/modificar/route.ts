@@ -17,7 +17,7 @@ const POST = async (request: NextRequest) => {
         }
         await prisma.institucion.update({
             data: {
-                nombre: form.get('nombre').toUpperCase(),
+                nombre: form.get('nombre'),
                 contacto: +form.get('contacto'),
             },
             where: { id: form.get('id') }

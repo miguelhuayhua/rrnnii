@@ -3,18 +3,7 @@ body {
   background-color: #f4f6f8;
 }
 
-a {
-  text-decoration: none;
 
-  * {
-    transition: color 0.5s;
-
-    &:hover {
-      color: #777 !important;
-      transition: color 0.5s;
-    }
-  }
-}
 
 .dec {
   width: 88px;

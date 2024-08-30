@@ -21,7 +21,7 @@ const PasantiaItem = ({ value }: Props) => {
             <Grid xs={6} p={1}>
                 <ChipBox sx={{ margin: 0, bgcolor: blue[600], borderRadius: 1.5, color: grey[50] }}
                     label={`${value.modalidad} meses`} />
-                <Link href='/'>
+                <Link href={`/pasantias/${value.id}`}>
                     <Negrita mt={2}>
                         {value.titulo}
                     </Negrita>
@@ -47,7 +47,9 @@ const PasantiaItem = ({ value }: Props) => {
             </Grid>
             <Grid xs={6} py={1} px={1}>
                 <Box position='relative' borderRadius={2} height={"100%"} overflow='hidden'>
-                    <Image objectFit="contain" layout='fill' src={value.imagen} alt='' />
+                    <Link href={`/pasantias/${value.id}`}>
+                        <Image objectFit="contain" layout='fill' src={value.imagen} alt='' />
+                    </Link>
                     <Button
                         onClick={() => {
                         }}
