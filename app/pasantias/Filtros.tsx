@@ -90,7 +90,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                         >
                             {
                                 carreras.map(value => (
-                                    <MenuItem value={value.id}>
+                                    <MenuItem key={value.id} value={value.id}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
                                                 <Image layout='fill' src={value.logo} style={{ borderRadius: 10 }} />
