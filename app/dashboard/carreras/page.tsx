@@ -94,6 +94,8 @@ export default function Page() {
                         </Box>
                         <Normal ml={1}>
                             {value.nombre}
+                            <br />
+                            {value.contacto || ''}
                         </Normal>
                     </Box>
                     ),

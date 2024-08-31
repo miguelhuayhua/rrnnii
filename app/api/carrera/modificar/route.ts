@@ -22,7 +22,7 @@ const POST = async (request: NextRequest) => {
             },
             where: { id: form.get('id') }
         });
-        return Response.json({ error: false, mensaje: `Institución modificada con éxito` });
+        return Response.json({ error: false, mensaje: `Carrera modificada con éxito` });
     } catch (error) {
         console.log(error)
         return Response.json({

@@ -69,7 +69,7 @@ const Navbar = () => {
                         transition: 'padding .25s'
                     }}
                 >
-                    <Link href={"/"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Link style={{ textDecoration: 'none' }} href={"/"} >
                         <Box display='flex' alignItems='center'>
                             <Image
                                 width={50}
@@ -115,53 +115,53 @@ const Navbar = () => {
                                 title={
                                     <Grid container columnSpacing={3} >
                                         <Grid item xs={2}>
-                                            <Link href={'/convenios'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios'}>
                                                 <Negrita>
                                                     Convenios
                                                 </Negrita>
                                             </Link>
-                                            <Link href={'/convenios?tipo=nacionales'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?tipo=nacionales'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Nacionales
                                                 </Normal>
                                             </Link>
-                                            <Link href={'/convenios?tipo=internacionales'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?tipo=internacionales'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Internacionales
                                                 </Normal>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={2}>
-                                            <Link href={'/pasantias'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/pasantias'}>
                                                 <Negrita>
                                                     Pasantías
                                                 </Negrita>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={2}>
-                                            <Link href={'/actividades'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/actividades'}>
                                                 <Negrita>
                                                     Actividades
                                                 </Negrita>
                                             </Link>
-                                            <Link href={'/actividades?tipo=beca'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?tipo=beca'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Becas
                                                 </Normal>
                                             </Link>
-                                            <Link href={'/actividades?tipo=idioma'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?tipo=idioma'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Idiomas
                                                 </Normal>
                                             </Link>
-                                            <Link href={'/actividades?tipo=noticia'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?tipo=noticia'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Noticias
                                                 </Normal>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={2}>
-                                            <Link href={'/eventos'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/eventos'}>
                                                 <Negrita>
                                                     Eventos
                                                 </Negrita>
@@ -206,7 +206,7 @@ const Navbar = () => {
 
             <Drawer anchor='top' open={open} onClose={() => setOpen(false)} sx={{ display: { xs: 'block', md: 'none' } }}>
                 <Box py={1}>
-                    <Link href={'/'}>
+                    <Link style={{ textDecoration: 'none' }} href={'/'}>
                         <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/' ? red[700] : grey[800] }} startIcon={<GoHomeFill />} fullWidth>
                             Principal
                         </BotonSimple>
@@ -217,33 +217,33 @@ const Navbar = () => {
                         Convocatorias <BiDownArrow style={{ position: 'absolute', right: 10, transform: open3 ? 'rotateZ(180deg)' : 'rotateZ(0deg)', transition: 'transform 0.5s' }} />
                     </BotonSimple>
                     <Box display={open3 || pathname.includes('convenios') || pathname.includes('pasantias') || pathname.includes('actividades') || pathname.includes('eventos') ? 'block' : 'none'}>
-                        <Link href={'/convenios'}>
+                        <Link style={{ textDecoration: 'none' }} href={'/convenios'}>
                             <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/convenios' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Convenios
                             </BotonSimple>
                         </Link>
-                        <Link href={'/pasantias'}>
+                        <Link style={{ textDecoration: 'none' }} href={'/pasantias'}>
                             <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/pasantias' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Pasantías
                             </BotonSimple>
                         </Link>
-                        <Link href={'/actividades'}>
+                        <Link style={{ textDecoration: 'none' }} href={'/actividades'}>
                             <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/actividades' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Actividades
                             </BotonSimple>
                         </Link>
-                        <Link href={'/eventos'}>
+                        <Link style={{ textDecoration: 'none' }} href={'/eventos'}>
                             <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/eventos' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Eventos
                             </BotonSimple>
                         </Link>
                     </Box>
-                    <Link href={'/galeria'}>
+                    <Link style={{ textDecoration: 'none' }} href={'/galeria'}>
                         <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/galeria' ? red[700] : grey[800] }} startIcon={<PiSquaresFourFill />} fullWidth>
                             Galeria
                         </BotonSimple>
                     </Link>
-                    <Link href={'/about'}>
+                    <Link style={{ textDecoration: 'none' }} href={'/about'}>
                         <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/about' ? red[700] : grey[800] }} startIcon={<IoPeople />} fullWidth>
                             Sobre Nosotros
                         </BotonSimple>

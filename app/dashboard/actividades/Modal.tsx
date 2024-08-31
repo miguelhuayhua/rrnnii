@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Box, Grid, LinearProgress, MenuItem, useTheme } from '@mui/material';
+import { Box, Grid, LinearProgress, MenuItem } from '@mui/material';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
@@ -13,9 +13,7 @@ import { useFilePicker } from 'use-file-picker';
 import { BsFileEarmarkPdfFill, BsImageAlt } from 'react-icons/bs';
 import { InputBox } from '@/app/componentes/Datos';
 import { MdOutlineAttachFile } from 'react-icons/md';
-import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
-import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
@@ -24,12 +22,14 @@ import { grey, red } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { RiFileWord2Line } from 'react-icons/ri';
 import { ChipBox } from '@/app/componentes/Mostrar';
+import axios from 'axios';
 interface Props {
     setActividad: any;
     Actividad: Actividad;
+    setActividades: any;
+    setPrevActividades: any;
 }
-export default function ModalActividad({ setActividad, Actividad }: Props) {
-    const router = useRouter();
+export default function ModalActividad({ setActividad, Actividad, setActividades, setPrevActividades }: Props) {
     const { control, formState: { errors, isDirty }, handleSubmit, watch, setValue } = useForm<Actividad>({
         defaultValues: Actividad, shouldFocusError: true
     });
@@ -73,10 +73,13 @@ export default function ModalActividad({ setActividad, Actividad }: Props) {
             content: 'La actividad será modificada',
             callback: async () => {
                 setLoad(true);
-                let res = await axiosInstance.post('/api/actividad/modificar', form);
+                let res = await axios.post('/api/actividad/modificar', form);
                 if (!res.data.error) {
                     setActividad(null);
-                    router.refresh();
+                    axios.post('/api/actividad/todo', {}).then(res => {
+                        setActividades(res.data);
+                        setPrevActividades(res.data);
+                    });
                 }
                 setLoad(false);
                 return res.data.mensaje;

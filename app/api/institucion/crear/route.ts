@@ -14,7 +14,7 @@ const POST = async (request: NextRequest) => {
                 await writeFile(path.join(process.cwd(), "public/uploads/instituciones/img/" + portadan), portadab as any);
                 await prisma.institucion.create({
                     data: {
-                        nombre: form.get('nombre').toUpperCase(),
+                        nombre: form.get('nombre'),
                         contacto: +form.get('contacto'),
                         logo: portada ? `/uploads/instituciones/img/${portadan}` : ''
                     }
@@ -23,7 +23,7 @@ const POST = async (request: NextRequest) => {
             else {
                 await prisma.institucion.create({
                     data: {
-                        nombre: form.get('nombre').toUpperCase(),
+                        nombre: form.get('nombre'),
                         contacto: +form.get('contacto'),
                         logo: ''
                     }

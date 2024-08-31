@@ -1,9 +1,7 @@
 'use client';
-import { Badge, Box, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaFilter } from "react-icons/fa6";
-import { Negrita, Titulo } from "../componentes/Textos";
+import { Badge, Grid, MenuItem, Stack, SwipeableDrawer } from "@mui/material";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Titulo } from "../componentes/Textos";
 import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
@@ -15,23 +13,8 @@ interface Props {
 
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
-    const pathname = usePathname();
-    const theme = useTheme();
     const params = useSearchParams();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const { control, handleSubmit, setValue } = useForm({
-        defaultValues: {}
-    });
-    const onSubmit = ({ descuento, max, min }: any) => {
-        let filtros = ''
-
-        filtros = filtros + `descuento=${descuento}&max=${max}&min=${min}`
-        router.prefetch(pathname + '?' + filtros);
-        router.replace(pathname + '?' + filtros, { scroll: false });
-    }
-    const carrera = params.get('carrera') || '';
-    const duracion = params.get('duracion') || '';
-
+    const t = params.get('t') || '';
     return (
         <>
             <SwipeableDrawer
@@ -43,7 +26,6 @@ const Filtros = ({ open, setOpen }: Props) => {
                 <Grid
                     container
                     component={'form'}
-                    onSubmit={handleSubmit(onSubmit)}
                     width={270}
                 >
                     <Grid display='flex' justifyContent='space-between' item xs={12} p={2} borderBottom='1px solid #ddd' >
@@ -74,9 +56,9 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Titulo>
                         <InputBox
                             select
-                            value={carrera}
+                            value={t}
                             onChange={(ev) => {
-                                router.replace(`/actividades?carrera=${ev.target.value}${params.has('duracion') ? '&duracion=' + params.get('duracion') : ''}`)
+                                router.replace(`/actividades?t=${ev.target.value}${params.has('d') ? '&d=' + params.get('d') : ''}`)
                             }}
                             SelectProps={{
                                 MenuProps: {
@@ -95,30 +77,11 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 }
                             }}
                         >
-
-                            <MenuItem value='inge'>Becas</MenuItem>
-                            <MenuItem value='inge'>Noticias</MenuItem>
-                            <MenuItem value='inge'>Idiomas</MenuItem>
+                            <MenuItem value='becas'>Becas</MenuItem>
+                            <MenuItem value='noticias'>Noticias</MenuItem>
+                            <MenuItem value='idiomas'>Idiomas</MenuItem>
                         </InputBox>
-                        <Titulo sx={{ mt: 1, fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
-                            Duración
-                        </Titulo>
-                        <RadioGroup value={duracion} onChange={(ev) => {
-                            router.replace(`/actividades?duracion=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}`)
-                        }}>
-                            <FormControlLabel
-                                value={'3'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
-                                control={<Radio />}
-                                label={'3 meses'}
-                            />
-                            <FormControlLabel
-                                value={'6'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
-                                control={<Radio />}
-                                label={'6 meses'}
-                            />
-                        </RadioGroup>
+
                     </Grid>
                 </Grid>
             </SwipeableDrawer >

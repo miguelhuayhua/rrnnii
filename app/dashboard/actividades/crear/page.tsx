@@ -21,12 +21,13 @@ import { ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
-import { blue, grey, red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Actividad>({
         defaultValues: { titulo: '', tipo: 'becas', descripcion: '', referencia: '' }, shouldFocusError: true
     });
+    const { openSnackbar } = useSnackbar();
     const router = useRouter();
     const [load, setLoad] = useState(false);
     const { openModal } = useModal();
@@ -39,6 +40,7 @@ export default function Page() {
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]), { shouldDirty: true });
             setPortada(plainFiles[0]);
+            openSnackbar('Imagen actualizada con éxito');
         }
     });
     const PDFPicker = useFilePicker({
@@ -48,9 +50,10 @@ export default function Page() {
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setDocumento(plainFiles[0]);
             setValue('pdf', plainFiles[0].name, { shouldDirty: true });
+            openSnackbar('Documento actualizado con éxito');
         }
     });
-    const { openSnackbar } = useSnackbar();
+
     const onSubmit = (actividad: Actividad) => {
         if (portada) {
             let form = new FormData();
@@ -258,7 +261,7 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', bottom: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
         </>
     )
 }

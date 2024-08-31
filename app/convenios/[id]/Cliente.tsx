@@ -28,7 +28,7 @@ export default function Cliente({ value }: Props) {
             <Grid item xs={12}>
                 <Breadcrumbs sx={{ mb: 4 }} separator="›" aria-label="breadcrumb">
                     <Link color="inherit" href="/" >
-                        Actividades
+                        Convocatorias
                     </Link>,
                     <Link
                         color="inherit"

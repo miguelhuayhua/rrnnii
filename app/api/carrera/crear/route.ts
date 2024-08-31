@@ -32,14 +32,14 @@ const POST = async (request: NextRequest) => {
                     }
                 });
             }
-            return Response.json({ error: false, mensaje: `Institución añadida con éxito` });
+            return Response.json({ error: false, mensaje: `Carrera añadida con éxito` });
 
         }
     } catch (error) {
         console.log(error)
         return Response.json({
             error: true,
-            mensaje: 'Error al añadir la institución'
+            mensaje: 'Error al añadir la carrera'
         });
     }
 }

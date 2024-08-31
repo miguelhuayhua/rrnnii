@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
 import { IoClose } from "react-icons/io5";
-import { Box, Grid, Typography, useMediaQuery, useTheme, MenuItem, LinearProgress } from '@mui/material';
+import { Box, Grid, MenuItem, LinearProgress } from '@mui/material';
 import { Evento } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
@@ -14,9 +14,7 @@ import { useFilePicker } from 'use-file-picker';
 import { BsFileEarmarkPdfFill, BsImageAlt } from 'react-icons/bs';
 import { DatePickerBox, InputBox } from '@/app/componentes/Datos';
 import { MdOutlineAttachFile } from 'react-icons/md';
-import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
-import { useRouter } from 'next/navigation';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import Image from 'next/legacy/image';
 import dayjs from 'dayjs';
@@ -25,12 +23,14 @@ import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import { grey, red } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { RiFileWord2Line } from 'react-icons/ri';
+import axios from 'axios';
 interface Props {
     setEvento: any;
     Evento: Evento;
+    setEventos: any;
+    setPrevEventos: any;
 }
-export default function ModalEvento({ setEvento, Evento }: Props) {
-    const router = useRouter();
+export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEventos }: Props) {
     const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Evento>({
         defaultValues: Evento, shouldFocusError: true
     });
@@ -74,10 +74,15 @@ export default function ModalEvento({ setEvento, Evento }: Props) {
             titulo: '¿Continuar?',
             content: 'Un nuevo evento se agregará',
             callback: async () => {
-                let res = await axiosInstance.post('/api/evento/modificar', form);
+                setLoad(true);
+                let res = await axios.post('/api/evento/modificar', form);
                 if (!res.data.error) {
-                    router.refresh();
+                    axios.post('/api/evento/todo').then(res => {
+                        setEventos(res.data);
+                        setPrevEventos(res.data);
+                    });
                     setEvento(null);
+                    setLoad(false);
                 }
                 return res.data.mensaje;
             }

@@ -11,7 +11,6 @@ import 'react-quill/dist/quill.snow.css';
 import { useFilePicker } from 'use-file-picker';
 import { BsImageAlt } from 'react-icons/bs';
 import { InputBox } from '@/app/componentes/Datos';
-import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
 import Image from 'next/legacy/image';
 import { grey } from '@mui/material/colors';

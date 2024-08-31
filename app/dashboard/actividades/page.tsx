@@ -19,6 +19,7 @@ import { blue, red } from "@mui/material/colors";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { RiFileWord2Line } from "react-icons/ri";
+import axios from "axios";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -28,7 +29,7 @@ export default function Page() {
     const [actividad, setActividad] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/actividad/todo', {}).then(res => {
+        axios.post('/api/actividad/todo', {}).then(res => {
             setActividades(res.data);
             setPrevActividades(res.data);
         });
@@ -135,9 +136,9 @@ export default function Page() {
                                     </BotonFilled> : null
                             }
                             <SwitchBox checked={value.estado} onChange={(ev, checked) => {
-                                axiosInstance.post('/api/actividad/estado', { estado: checked, id: value.id }).then(res => {
+                                axios.post('/api/actividad/estado', { estado: checked, id: value.id }).then(res => {
                                     openSnackbar(res.data.mensaje);
-                                    axiosInstance.post('/api/actividad/todo', {}).then(res => {
+                                    axios.post('/api/actividad/todo', {}).then(res => {
                                         setActividades(res.data);
                                         setPrevActividades(res.data);
                                         setOpcion('todo');
@@ -153,6 +154,8 @@ export default function Page() {
                     <ModalActividad
                         Actividad={actividad}
                         setActividad={setActividad}
+                        setActividades={setActividades}
+                        setPrevActividades={setPrevActividades}
                     />
                     : null
             }

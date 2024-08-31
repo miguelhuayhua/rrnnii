@@ -17,7 +17,7 @@ import { filtrarValorEnArray } from "@/utils/data";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-
+import axios from "axios";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [galerias, setGalerias] = useState<Galeria[]>([]);
@@ -26,7 +26,7 @@ export default function Page() {
     const router = useRouter();
     const { openSnackbar } = useSnackbar();
     useEffect(() => {
-        axiosInstance.post('/api/galeria/todo', { opcion }).then(res => {
+        axios.post('/api/galeria/todo', {}).then(res => {
             setGalerias(res.data);
             setPrevGalerias(res.data);
         });
@@ -55,7 +55,7 @@ export default function Page() {
                     Añadir galeria
                 </BotonFilled>
                 <BotonSimple onClick={() => {
-                    axiosInstance.post('/api/galeria/todo', { opcion }).then(res => {
+                    axios.post('/api/galeria/todo', {}).then(res => {
                         setGalerias(res.data);
                         setPrevGalerias(res.data);
                         setOpcion('todo');
@@ -105,7 +105,7 @@ export default function Page() {
                 {galerias.map((value) => (
                     <Grid key={value.id} item xs={6} sm={6} md={4} lg={3} xl={2} position='relative'>
                         <GaleriaComponent Galeria={value} />
-                        <Stack direction='row' bgcolor='white' borderRadius={3} p={0.5}  alignItems='center' position='absolute' top={25} right={10} spacing={1} >
+                        <Stack direction='row' bgcolor='white' borderRadius={3} p={0.5} alignItems='center' position='absolute' top={25} right={10} spacing={1} >
                             <BotonOutline
                                 onClick={() => {
                                     setGaleria(value);
@@ -129,6 +129,8 @@ export default function Page() {
             {
                 galeria ?
                     <ModalGaleria
+                        setGalerias={setGalerias}
+                        setPrevGalerias={setPrevGalerias}
                         Galeria={galeria}
                         setGaleria={setGaleria}
                     />

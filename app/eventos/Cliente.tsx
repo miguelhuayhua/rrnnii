@@ -4,18 +4,31 @@ import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
-import Convenio from "../componentes/items/Convenio";
-import { Suspense, useState } from "react";
-import Evento from "../componentes/items/Evento";
+import { Suspense, useEffect, useState } from "react";
+import EventoItem from "../componentes/items/Evento";
 import Filtros from "./Filtro";
+import { useSearchParams } from "next/navigation";
+import axios from "axios";
+import { Evento } from "@prisma/client";
+import { Normal } from "../componentes/Textos";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
-
+    const params = useSearchParams();
+    const [Eventos, setEventos] = useState<Evento[]>([]);
+    useEffect(() => {
+        axios.post('/api/evento/listar',
+            {
+                tipo: params.get('tipo') || undefined,
+                carrera: params.get('carrera') || undefined
+            }).then(res => {
+                setEventos(res.data);
+            })
+    }, [params]);
     return (
         <>
             <Grid container px={3} spacing={2}>
                 <Grid item xs={12}>
-                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                    <InputBox size='small' sx={{ width: 200 }} placeholder='Buscar'
                         InputProps={{
                             startAdornment:
                                 <BiSearch fontSize={25} />
@@ -25,14 +38,18 @@ const Cliente = () => {
                         onClick={() => {
                             setOpen(true);
                         }}
-                        sx={{ height: 52.5, float: 'right' }} endIcon={<FiFilter></FiFilter>}>Filtros</BotonSimple>
+                        sx={{ float: 'right' }} endIcon={<FiFilter />}>Filtros</BotonSimple>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Evento />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Evento />
-                </Grid>
+                {
+                    Eventos.length > 0 ?
+                        Eventos.map(value => (
+                            <Grid key={value.id} item xs={11} sm={8} md={6} lg={4} mx='auto'>
+                                <EventoItem value={value as any} />
+                            </Grid>))
+                        : <Normal ml={4} my={4}>
+                            Eventos no encontrados
+                        </Normal>
+                }
             </Grid>
             <Suspense>
                 <Filtros setOpen={setOpen} open={open} />

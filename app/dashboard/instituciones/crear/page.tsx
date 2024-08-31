@@ -39,7 +39,6 @@ export default function Page() {
     });
 
     const onSubmit = (institucion: Institucion) => {
-        setLoad(true);
         let form = new FormData();
         form.append('nombre', institucion.nombre);
         form.append('contacto', institucion.contacto?.toString()!);
@@ -48,6 +47,7 @@ export default function Page() {
             titulo: '¿Continuar?',
             content: 'Una nueva institucion se agregará',
             callback: async () => {
+                setLoad(true);
                 let res = await axiosInstance.post('/api/institucion/crear', form);
                 if (!res.data.error) {
                     router.back();

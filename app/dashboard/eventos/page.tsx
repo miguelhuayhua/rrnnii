@@ -19,6 +19,7 @@ import { TbPdf, TbReload } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import axios from "axios";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -28,7 +29,7 @@ export default function Page() {
     const { openSnackbar } = useSnackbar();
     const router = useRouter();
     useEffect(() => {
-        axiosInstance.post('/api/evento/todo').then(res => {
+        axios.post('/api/evento/todo').then(res => {
             setEventos(res.data);
             setPrevEventos(res.data);
         });
@@ -164,6 +165,8 @@ export default function Page() {
                     <ModalEvento
                         Evento={evento}
                         setEvento={setEvento}
+                        setEventos={setEventos}
+                        setPrevEventos={setPrevEventos}
                     />
                     : null
             }

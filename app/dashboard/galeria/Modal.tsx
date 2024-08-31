@@ -14,21 +14,22 @@ import { BsImageAlt } from 'react-icons/bs';
 import { InputBox } from '@/app/componentes/Datos';
 import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
-import { useRouter } from 'next/navigation';
 import Image from 'next/legacy/image';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import dynamic from 'next/dynamic';
 import { IoClose } from 'react-icons/io5';
 import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
+import axios from 'axios';
 interface Props {
     setGaleria: any;
     Galeria: Galeria;
+    setGalerias: any;
+    setPrevGalerias: any;
 }
-export default function ModalGaleria({ setGaleria, Galeria }: Props) {
+export default function ModalGaleria({ setGaleria, Galeria, setGalerias, setPrevGalerias }: Props) {
     const [load, setLoad] = useState(false);
-    const router = useRouter();
-    const [file, setFile] = useState<any>(null);
+    const [file, setFile] = useState<any>('');
     const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Galeria>({
         defaultValues: Galeria, shouldFocusError: true,
     });
@@ -44,7 +45,6 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
             openSnackbar('Imagen modificada con éxito');
         }
     });
-
     const onSubmit = (galeria: Galeria) => {
         let formData = new FormData();
         formData.append('titulo', galeria.titulo);
@@ -60,7 +60,10 @@ export default function ModalGaleria({ setGaleria, Galeria }: Props) {
                 let res = await axiosInstance.post('/api/galeria/modificar', formData);
                 if (!res.data.error) {
                     setGaleria(null);
-                    router.refresh();
+                    axios.post('/api/galeria/todo', {}).then(res => {
+                        setGalerias(res.data);
+                        setPrevGalerias(res.data);
+                    });
                 }
                 setLoad(false);
                 return res.data.mensaje;

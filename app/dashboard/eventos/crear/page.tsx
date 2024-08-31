@@ -32,6 +32,7 @@ export default function Page() {
     const [portada, setPortada] = useState<any>('');
     const [documento, setDocumento] = useState<any>('');
     const router = useRouter();
+    const { openSnackbar } = useSnackbar();
     const { openModal } = useModal();
     const { openFilePicker } = useFilePicker({
         readAs: 'DataURL',
@@ -40,6 +41,7 @@ export default function Page() {
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]));
             setPortada(plainFiles[0]);
+            openSnackbar('Imagen actualizada con éxito');
         }
     });
     const PDFPicker = useFilePicker({
@@ -48,9 +50,9 @@ export default function Page() {
         multiple: false,
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setDocumento(plainFiles[0]);
+            openSnackbar('Documento actualizado con éxito');
         }
     });
-    const { openSnackbar } = useSnackbar();
 
     const onSubmit = (evento: Evento) => {
         if (portada) {
@@ -282,7 +284,7 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', bottom: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
         </>
     )
 }

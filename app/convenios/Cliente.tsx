@@ -40,7 +40,7 @@ const Cliente = () => {
                             onClick={() => {
                                 setOpen(true);
                             }}
-                            sx={{ float: 'right' }} endIcon={<FiFilter></FiFilter>}>Filtros</BotonSimple>
+                            sx={{ float: 'right' }} endIcon={<FiFilter />}>Filtros</BotonSimple>
                     </Box>
                 </Grid>
                 {

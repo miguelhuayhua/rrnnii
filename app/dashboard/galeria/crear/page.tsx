@@ -38,7 +38,7 @@ export default function Page() {
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]));
             setPortada(plainFiles[0]);
-            openSnackbar('Imagen subida con éxito');
+            openSnackbar('Imagen modificada con éxito');
         }
     });
     const onSubmit = (galeria: Galeria) => {
@@ -175,7 +175,7 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', bottom: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
         </>
     )
 }

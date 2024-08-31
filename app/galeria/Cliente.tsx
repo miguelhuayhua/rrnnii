@@ -5,7 +5,7 @@ import { BiSearch } from "react-icons/bi";
 import { BotonSimple } from "../componentes/Botones";
 import { useState } from "react";
 import Galeria from "../componentes/items/Galeria";
-import { BsArrowDown, BsArrowUp } from "react-icons/bs";
+import { BsArrowDown } from "react-icons/bs";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
 

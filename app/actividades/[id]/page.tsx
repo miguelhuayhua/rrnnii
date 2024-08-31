@@ -12,7 +12,7 @@ export default async function Home(props: any) {
     return (
         <>
             <Navbar />
-            <Cliente Actividad={Actividad as any} />
+            <Cliente value={Actividad as any} />
             <Footer />
         </>
     );
