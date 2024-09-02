@@ -51,12 +51,10 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
-                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
-                            Tipo
-                        </Titulo>
                         <InputBox
                             select
                             value={t}
+                            label='Tipo'
                             onChange={(ev) => {
                                 router.replace(`/actividades?t=${ev.target.value}${params.has('d') ? '&d=' + params.get('d') : ''}`)
                             }}

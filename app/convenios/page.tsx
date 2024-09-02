@@ -2,6 +2,7 @@ import Cliente from './Cliente';
 import Navbar from '../static/Navbar';
 import { Box, Typography, } from "@mui/material";
 import Footer from '../static/Footer';
+import { Suspense } from 'react';
 export const metadata = {
     title: 'Convenios'
 }
@@ -17,7 +18,9 @@ export default function Home() {
                     Convenios
                 </Typography>
             </Box>
-            <Cliente />
+            <Suspense>
+                <Cliente />
+            </Suspense>
             <Box mt={10}>
                 <Footer />
             </Box>

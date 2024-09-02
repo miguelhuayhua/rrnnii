@@ -20,3 +20,18 @@
         background-position: 200% center;
     }
 }
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(100%);
+    }
+
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+.slide-up {
+    animation: slideUp 30s linear infinite;
+    
+}

@@ -2,6 +2,7 @@ import Cliente from './Cliente';
 import Navbar from '../static/Navbar';
 import { Box, Typography } from "@mui/material";
 import Footer from '../static/Footer';
+import { Suspense } from 'react';
 
 export default function Home() {
     return (
@@ -10,7 +11,9 @@ export default function Home() {
             <Box p={3}>
                 <Typography variant='h1' sx={{ fontWeight: 800, fontSize: 20 }}>Galeria</Typography>
             </Box >
-            <Cliente />
+            <Suspense >
+                <Cliente />
+            </Suspense>
             <Box mt={10}>
                 <Footer />
             </Box>

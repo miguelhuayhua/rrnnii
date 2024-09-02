@@ -18,8 +18,8 @@ const Cliente = () => {
     useEffect(() => {
         axios.post('/api/convenio/listar',
             {
-                tipo: params.get('tipo') || undefined,
-                carrera: params.get('carrera') || undefined
+                tipo: params.get('t') || undefined,
+                carrera: params.get('c') || undefined
             }).then(res => {
                 setConvenios(res.data);
             })

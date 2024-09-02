@@ -2,6 +2,7 @@ import Cliente from './Cliente';
 import Navbar from '../static/Navbar';
 import { Box, Typography } from "@mui/material";
 import Footer from '../static/Footer';
+import { Suspense } from 'react';
 
 export default function Home() {
     return (
@@ -12,7 +13,9 @@ export default function Home() {
                     Eventos
                 </Typography>
             </Box>
-            <Cliente></Cliente>
+            <Suspense>
+                <Cliente />
+            </Suspense>
             <Box mt={10}>
                 <Footer />
             </Box>

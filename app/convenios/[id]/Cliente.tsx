@@ -1,6 +1,6 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Divider, Grid, Stack } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack } from "@mui/material";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
@@ -15,11 +15,15 @@ interface Props {
 }
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
+import { BotonFilled } from "@/app/componentes/Botones";
+import { blue, red } from "@mui/material/colors";
+import { TbPdf } from "react-icons/tb";
+import { RiFileWord2Line } from "react-icons/ri";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [convenios, setConvenios] = useState([]);
     useEffect(() => {
-        axios.post('/api/convenio/listar', { skip: 1 }).then(res => {
+        axios.post('/api/convenio/listar', { id: value.id }).then(res => {
             setConvenios(res.data);
         });
     }, []);
@@ -32,7 +36,7 @@ export default function Cliente({ value }: Props) {
                     </Link>,
                     <Link
                         color="inherit"
-                        href="/material-ui/getting-started/installation/"
+                        href="/convenios"
                     >
                         Convenios
                     </Link>,
@@ -50,7 +54,7 @@ export default function Cliente({ value }: Props) {
                     </Normal>
                 </i>
                 <Grid container spacing={2}>
-                    <Grid item xs={6} mx='auto'>
+                    <Grid item xs={10} sm={8} lg={6} mx='auto'>
                         <Image src={value.imagen}
                             objectFit="cover"
                             style={{ borderRadius: 10 }}
@@ -88,6 +92,25 @@ export default function Cliente({ value }: Props) {
                                     parse(value.descripcion)
                                 }
                             </Box>
+                            {
+                                value.pdf ?
+                                    <BotonFilled
+                                        startIcon={
+                                            value.pdf.includes('pdf') ?
+                                                <TbPdf fontSize={22} />
+                                                : <RiFileWord2Line fontSize={22} />
+                                        }
+                                        onClick={() => {
+                                            let a = document.createElement('a');
+                                            a.download = value.pdf;
+                                            a.href = value.pdf;
+                                            a.click();
+                                            a.remove();
+                                        }}
+                                        sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700], fontSize: 12 }}>
+                                        Descargar documento
+                                    </BotonFilled> : null
+                            }
                         </BoxSombra>
                         <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>
                             {
@@ -103,7 +126,7 @@ export default function Cliente({ value }: Props) {
                 </Grid>
             </Grid>
             <Grid item xs={12} md={5}>
-                <Titulo sx={{ textAlign: 'center' }}>
+                <Titulo sx={{ textAlign: 'center', mb: 1 }}>
                     Más convenios
                 </Titulo>
                 <Grid container spacing={2}>

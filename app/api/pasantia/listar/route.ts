@@ -2,12 +2,13 @@ import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
     try {
-        const { duracion, orden, carrera } = await request.json();
+        const { duracion, orden, carrera, id } = await request.json();
         let pasantias = await prisma.pasantia.findMany({
             include: { Institucion: true, PasantiaCarrera: { include: { Carrera: true } } },
             where: {
                 modalidad: duracion || undefined,
-                PasantiaCarrera: { some: { carreraId: carrera || undefined } }
+                PasantiaCarrera: { some: { carreraId: carrera || undefined } },
+                id: { not: id }
             },
             orderBy: { createdAt: orden == '0' ? 'desc' : 'asc' }
         });

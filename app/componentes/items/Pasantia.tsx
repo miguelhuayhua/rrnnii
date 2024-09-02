@@ -21,7 +21,7 @@ const PasantiaItem = ({ value }: Props) => {
             <Grid xs={6} p={1}>
                 <ChipBox sx={{ margin: 0, bgcolor: blue[600], borderRadius: 1.5, color: grey[50] }}
                     label={`${value.modalidad} meses`} />
-                <Link href={`/pasantias/${value.id}`}>
+                <Link href={`/pasantias/${value.id}`} style={{ textDecoration: 'none' }}>
                     <Negrita mt={2}>
                         {value.titulo}
                     </Negrita>
@@ -35,7 +35,15 @@ const PasantiaItem = ({ value }: Props) => {
                 <Negrita sx={{ fontSize: 11, mt: 1, color: grey[700], display: 'flex', alignItems: 'center' }}>
                     <FaBuilding style={{ marginRight: 5 }} /> {value.Institucion.nombre}
                 </Negrita>
-                <Divider />
+            </Grid>
+            <Grid xs={6} py={1} px={1}>
+                <Box position='relative' sx={{ aspectRatio: 1 }}>
+                    <Link href={`/pasantias/${value.id}`}>
+                        <Image objectFit="cover" layout='fill' src={value.imagen} alt='' />
+                    </Link>
+                </Box>
+            </Grid>
+            <Grid item xs={12}>
                 <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>
                     {
                         value.PasantiaCarrera.map(value =>
@@ -44,19 +52,6 @@ const PasantiaItem = ({ value }: Props) => {
                         )
                     }
                 </Stack>
-            </Grid>
-            <Grid xs={6} py={1} px={1}>
-                <Box position='relative' borderRadius={2} height={"100%"} overflow='hidden'>
-                    <Link href={`/pasantias/${value.id}`}>
-                        <Image objectFit="contain" layout='fill' src={value.imagen} alt='' />
-                    </Link>
-                    <Button
-                        onClick={() => {
-                        }}
-                        sx={{ color: 'white', bgcolor: '#00000066', borderRadius: "50%", width: 30, height: 30, position: 'absolute', top: 5, right: 5, zIndex: 20, minWidth: 0 }}>
-                        <IoIosHeart />
-                    </Button>
-                </Box>
             </Grid>
         </Grid >
     )

@@ -1,11 +1,10 @@
 'use client';
-import { Avatar, Box, Divider, Grid, Stack, Typography, } from "@mui/material";
+import { Avatar, Box, Divider, Grid, Stack, } from "@mui/material";
 import Link from "next/link";
-import { Negrita, Normal, Titulo } from "../Textos";
+import { Negrita, Normal } from "../Textos";
 import { ChipBox } from "../Mostrar";
 import Image from 'next/legacy/image';
 import { FaBuilding } from "react-icons/fa6";
-import { RiGroup3Fill } from "react-icons/ri";
 import { GiConversation } from "react-icons/gi";
 import { blue, green, grey } from "@mui/material/colors";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
@@ -29,28 +28,29 @@ const ConvenioItem = ({ value }: Props) => {
                     <Avatar sx={{ bgcolor: value.tipo == 'nacional' ? blue[600] : green[600], borderRadius: 2, position: 'absolute', top: 5, left: 5, zIndex: 10 }}>
                         C{value.tipo.charAt(0).toUpperCase()}
                     </Avatar>
-                    <Link href={`/convenios/${value.id}`}>
+                    <Link href={`/convenios/${value.id}`} style={{ textDecoration: 'none' }}>
                         <Negrita sx={{ fontSize: 12 }}>
                             {value.titulo}
                         </Negrita>
                     </Link>
-                    <Normal sx={{ mt: 1, fontSize: 11 }}>
+                    <Normal sx={{ mt: 1, fontSize: 12 }}>
                         Termina el: {value.finalizacion}
                     </Normal>
-                    <Normal sx={{ fontSize: 11, mb: 1 }}>
+                    <Normal sx={{ fontSize: 12, mb: 1 }}>
                         Publicado el: {dayjs(value.createdAt).format('DD/MM/YYYY')}
                     </Normal>
                     {/* <Negrita sx={{ py: 1, fontWeight: 600, color: green[500], fontSize: 12, display: 'flex', alignItems: 'center' }}>
                         <RiGroup3Fill /> <i style={{ marginLeft: 5 }}>12 candidatos</i>
                     </Negrita> */}
                     <Normal sx={{ fontWeight: 600, fontSize: 12, display: 'flex', alignItems: 'center' }}>
-                        <FaBuilding style={{ marginRight: 5 }} /> <i>{value.Institucion.nombre}</i>
+                        <FaBuilding style={{ marginRight: 5 }} />
+                        {value.Institucion.nombre}
                     </Normal>
                     <Normal sx={{ fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center' }}>
-                        <GiConversation style={{ marginRight: 5 }} /> Convenio {value.tipo}
+                        <GiConversation style={{ marginRight: 5 }} />
+                        Convenio {value.tipo}
                     </Normal>
                 </Grid>
-
             </Grid>
             <Divider sx={{ borderColor: '#eee' }}></Divider>
             <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>

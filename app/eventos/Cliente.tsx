@@ -17,10 +17,7 @@ const Cliente = () => {
     const [Eventos, setEventos] = useState<Evento[]>([]);
     useEffect(() => {
         axios.post('/api/evento/listar',
-            {
-                tipo: params.get('tipo') || undefined,
-                carrera: params.get('carrera') || undefined
-            }).then(res => {
+            { tipo: params.get('t') || undefined }).then(res => {
                 setEventos(res.data);
             })
     }, [params]);
@@ -43,7 +40,7 @@ const Cliente = () => {
                 {
                     Eventos.length > 0 ?
                         Eventos.map(value => (
-                            <Grid key={value.id} item xs={11} sm={8} md={6} lg={4} mx='auto'>
+                            <Grid key={value.id} item xs={10} sm={6} md={4} lg={3} xl={2} mx='auto'>
                                 <EventoItem value={value as any} />
                             </Grid>))
                         : <Normal ml={4} my={4}>

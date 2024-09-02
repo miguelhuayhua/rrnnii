@@ -102,8 +102,8 @@ const Navbar = () => {
                                         "& .MuiTooltip-tooltip": {
                                             background: 'linear-gradient(50deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 41%, rgba(255,255,255,1) 60%, rgba(255,240,240,1) 100%)',
                                             borderRadius: 3,
-                                            maxWidth: 900,
-                                            width: "80vw",
+                                            maxWidth: 1000,
+                                            width: "85vw",
                                             p: 2,
                                             boxShadow: '-10px 10px 30px #00000022',
                                         }
@@ -116,16 +116,16 @@ const Navbar = () => {
                                     <Grid container columnSpacing={3} >
                                         <Grid item xs={2}>
                                             <Link style={{ textDecoration: 'none' }} href={'/convenios'}>
-                                                <Negrita>
+                                                <Negrita sx={{ color: pathname.startsWith('/convenios') ? red[700] : 'inherit' }}>
                                                     Convenios
                                                 </Negrita>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?tipo=nacionales'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?t=nacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Nacionales
                                                 </Normal>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?tipo=internacionales'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?t=internacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Internacionales
                                                 </Normal>
@@ -133,28 +133,28 @@ const Navbar = () => {
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Link style={{ textDecoration: 'none' }} href={'/pasantias'}>
-                                                <Negrita>
+                                                <Negrita sx={{ color: pathname.startsWith('/pasantias') ? red[700] : 'inherit' }}>
                                                     Pasantías
                                                 </Negrita>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Link style={{ textDecoration: 'none' }} href={'/actividades'}>
-                                                <Negrita>
+                                                <Negrita sx={{ color: pathname.startsWith('/actividades') ? red[700] : 'inherit' }}>
                                                     Actividades
                                                 </Negrita>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?tipo=beca'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?t=becas'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Becas
                                                 </Normal>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?tipo=idioma'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?t=idiomas'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Idiomas
                                                 </Normal>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?tipo=noticia'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?t=noticias'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Noticias
                                                 </Normal>
@@ -162,7 +162,7 @@ const Navbar = () => {
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Link style={{ textDecoration: 'none' }} href={'/eventos'}>
-                                                <Negrita>
+                                                <Negrita sx={{ color: pathname.startsWith('/eventos') ? red[700] : 'inherit' }}>
                                                     Eventos
                                                 </Negrita>
                                             </Link>
@@ -172,7 +172,8 @@ const Navbar = () => {
                                 }
                             >
                                 <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
-                                    {(pathname.startsWith('/convenios') || pathname.startsWith('/pasantias')) ? <GoDotFill color='inherit' /> : null}
+                                    {(pathname.startsWith('/convenios') || pathname.startsWith('/pasantias') || pathname.startsWith('/eventos') || pathname.startsWith('/actividades'))
+                                        ? <GoDotFill color='inherit' /> : null}
                                     Convocatorias <FaAngleDown />
                                 </Normal>
                             </Tooltip>

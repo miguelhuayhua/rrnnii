@@ -18,8 +18,8 @@ interface Props {
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
     const params = useSearchParams();
-    const tipo = params.get('tipo') || '';
-    const carrera = params.get('carrera') || '';
+    const tipo = params.get('t') || '';
+    const carrera = params.get('c') || '';
     const [carreras, setCarreras] = useState<Carrera[]>([]);
     useEffect(() => {
         axiosInstance.post('/api/carrera/listar').then(res => {
@@ -56,16 +56,14 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
-                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
-                            Carrera
-                        </Titulo>
                         <InputBox
                             value={carrera}
                             sx={{ ".MuiTypography-root": { fontSize: 11 } }}
                             defaultValue={''}
                             select
+                            label='Carrera'
                             onChange={(ev) => {
-                                router.replace(`/convenios?carrera=${ev.target.value}${params.has('tipo') ? '&tipo=' + params.get('tipo') : ''}`)
+                                router.replace(`/convenios?c=${ev.target.value}${params.has('t') ? '&t=' + params.get('t') : ''}`)
                             }}
                             SelectProps={{
                                 MenuProps: {
@@ -97,11 +95,11 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 ))
                             }
                         </InputBox>
-                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
+                        <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
                             Tipo
                         </Titulo>
                         <RadioGroup value={tipo} onChange={(ev) => {
-                            router.replace(`/convenios?tipo=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}`)
+                            router.replace(`/convenios?t=${ev.target.value}${params.has('c') ? '&c=' + params.get('c') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'nacional'}

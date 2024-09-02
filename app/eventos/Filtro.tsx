@@ -1,22 +1,18 @@
 'use client';
-import { Badge, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer, useTheme } from "@mui/material";
+import { Badge, FormControlLabel, Grid, Radio, RadioGroup, Stack, SwipeableDrawer } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Titulo } from "../componentes/Textos";
 import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
-import { InputBox } from "../componentes/Datos";
 interface Props {
     open: boolean;
     setOpen: any
 }
-
 const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
     const params = useSearchParams();
-    const tipo = params.get('tipo') || '';
-    const modo = params.get('modo') || '';
-
+    const t = params.get('t') || '';
     return (
         <>
             <SwipeableDrawer
@@ -25,11 +21,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}
             >
-                <Grid
-                    container
-                    component={'form'}
-                    width={270}
-                >
+                <Grid container width={270}>
                     <Grid display='flex' justifyContent='space-between' item xs={12} p={2} borderBottom='1px solid #ddd' >
                         <Titulo sx={{ fontSize: 15 }}>
                             Filtros
@@ -54,8 +46,8 @@ const Filtros = ({ open, setOpen }: Props) => {
                         <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
                             Modo
                         </Titulo>
-                        <RadioGroup value={modo} onChange={(ev) => {
-                            router.replace(`/eventos?modo=${ev.target.value}${params.has('tipo') ? '&tipo=' + params.get('tipo') : ''}`)
+                        <RadioGroup value={t} onChange={(ev) => {
+                            router.replace(`/eventos?t=${ev.target.value}`)
                         }}>
                             <FormControlLabel
                                 value={'online'}
@@ -70,34 +62,6 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 label={'Presencial'}
                             />
                         </RadioGroup>
-                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
-                            Tipo
-                        </Titulo>
-                        <InputBox
-                            select
-                            value={tipo}
-                            onChange={(ev) => {
-                                router.replace(`/eventos?tipo=${ev.target.value}${params.has('modo') ? '&modo=' + params.get('modo') : ''}`)
-                            }}
-                            SelectProps={{
-                                MenuProps: {
-                                    slotProps: {
-                                        paper: {
-                                            sx: {
-                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                px: 0,
-                                                borderRadius: 3,
-                                                border: "1px solid #f1f1f1",
-                                                boxShadow: '-10px 10px 30px #00000022',
-                                                maxHeight: 400
-                                            }
-                                        }
-                                    }
-                                }
-                            }}
-                        >
-                            <MenuItem value='taller'>Taller</MenuItem>
-                        </InputBox>
                     </Grid>
                 </Grid>
             </SwipeableDrawer >

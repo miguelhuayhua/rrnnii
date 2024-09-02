@@ -10,6 +10,10 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import PasantiaItem from "@/app/componentes/items/Pasantia";
+import { BotonFilled } from "@/app/componentes/Botones";
+import { red, blue } from "@mui/material/colors";
+import { TbPdf } from "react-icons/tb";
+import { RiFileWord2Line } from "react-icons/ri";
 interface Props {
     value: Pasantia & { PasantiaCarrera: (PasantiaCarrera & { Carrera: Carrera })[], Institucion: Institucion };
 }
@@ -17,7 +21,7 @@ dayjs.extend(require('dayjs/plugin/customParseFormat'));
 export default function Cliente({ value }: Props) {
     const [convenios, setPasantias] = useState([]);
     useEffect(() => {
-        axios.post('/api/convenio/listar', { skip: 1 }).then(res => {
+        axios.post('/api/pasantia/listar', { id: value.id }).then(res => {
             setPasantias(res.data);
         });
     }, []);
@@ -86,6 +90,25 @@ export default function Cliente({ value }: Props) {
                                     parse(value.descripcion)
                                 }
                             </Box>
+                            {
+                                value.pdf ?
+                                    <BotonFilled
+                                        startIcon={
+                                            value.pdf.includes('pdf') ?
+                                                <TbPdf fontSize={22} />
+                                                : <RiFileWord2Line fontSize={22} />
+                                        }
+                                        onClick={() => {
+                                            let a = document.createElement('a');
+                                            a.download = value.pdf;
+                                            a.href = value.pdf;
+                                            a.click();
+                                            a.remove();
+                                        }}
+                                        sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700], fontSize: 12 }}>
+                                        Descargar documento
+                                    </BotonFilled> : null
+                            }
                         </BoxSombra>
                         <Divider sx={{ borderColor: '#eee' }}></Divider>
                         <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>
@@ -102,7 +125,7 @@ export default function Cliente({ value }: Props) {
                 </Grid>
             </Grid>
             <Grid item xs={12} md={5}>
-                <Titulo sx={{ textAlign: 'center' }}>
+                <Titulo sx={{ textAlign: 'center', mb: 2 }}>
                     Más pasantias
                 </Titulo>
                 <Grid container spacing={2}>
