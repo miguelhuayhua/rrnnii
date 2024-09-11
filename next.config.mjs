@@ -6,7 +6,8 @@ const nextConfig = {
                 hostname: 'localhost'
             },
             {
-                hostname:'play-with-docker'
+                hostname:'play-with-docker.com',
+                protocol:'http'
             }
         ]
     }
