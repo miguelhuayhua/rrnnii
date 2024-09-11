@@ -1,12 +1,13 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 import axios from "axios";
+import { fileDomain } from "@/utils/globals";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
     const formimg = new FormData();
     formimg.append('file', portada);
-    let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+    let resimage = await axios.post(fileDomain + '/upload', formimg, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'modo': 'institucion',

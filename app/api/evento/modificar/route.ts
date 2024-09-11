@@ -4,6 +4,7 @@ import { prisma } from "../../client";
 import { writeFile } from "fs/promises";
 import path from "path";
 import axios from "axios";
+import { fileDomain } from "@/utils/globals";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const imagen = form.get("imagen");
@@ -13,14 +14,14 @@ const POST = async (request: NextRequest) => {
         const formdoc = new FormData();
         formimg.append('file', imagen);
         formdoc.append('file', doc);
-        let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+        let resimage = await axios.post(fileDomain + '/upload', formimg, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'modo': 'evento',
                 'tipo': 'img'
             }
         });
-        let resdoc = await axios.post('http://localhost:4000/upload', formdoc, {
+        let resdoc = await axios.post(fileDomain + '/upload', formdoc, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'modo': 'evento',
