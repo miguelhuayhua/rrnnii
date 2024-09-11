@@ -20,6 +20,7 @@ import { blue, red } from "@mui/material/colors";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { RiFileWord2Line } from "react-icons/ri";
+import { fileDomain } from "@/utils/globals";
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -100,10 +101,10 @@ export default function Page() {
                     nombre: value.titulo,
                     Convenio: (
                         <Box display='flex' width={350} minWidth={300} py={0.35}>
-                            <Box minWidth={80} width={80} height={90} position='relative'>
-                                <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            <Box minWidth={80} width={80} height={80} position='relative'>
+                                <Image src={"http://localhost:4000" + value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
-                            <Box px={1}>
+                            <Box px={1} display='flex' flexDirection='column' justifyContent='center'>
                                 <Negrita sx={{ fontSize: 13 }}>{value.titulo}</Negrita>
                                 <Normal >{value.tipo.toUpperCase()}</Normal>
                             </Box>
@@ -131,8 +132,9 @@ export default function Page() {
                                     <BotonFilled
                                         onClick={() => {
                                             let a = document.createElement('a');
-                                            a.download = value.pdf;
-                                            a.href = value.pdf;
+                                            a.download = fileDomain + value.pdf;
+                                            a.target = '_blank';
+                                            a.href = fileDomain + value.pdf;
                                             a.click();
                                             a.remove();
                                         }}

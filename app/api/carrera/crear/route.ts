@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-import { writeFile } from "fs/promises";
-import path from "path";
+import axios from "axios";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
@@ -11,29 +10,23 @@ const POST = async (request: NextRequest) => {
             return Response.json({ error: false, mensaje: `Carrera existente` });
         }
         else {
-            if (portada) {
-                const portadab = Buffer.from(await portada.arrayBuffer());
-                const portadan = Date.now() + portada.name.replaceAll(" ", "_");
-                await writeFile(path.join(process.cwd(), "public/uploads/carreras/img/" + portadan), portadab as any);
-                await prisma.carrera.create({
-                    data: {
-                        nombre: form.get('nombre').toUpperCase(),
-                        contacto: +form.get('contacto'),
-                        logo: portada ? `/uploads/carreras/img/${portadan}` : ''
-                    }
-                });
-            }
-            else {
-                await prisma.carrera.create({
-                    data: {
-                        nombre: form.get('nombre').toUpperCase(),
-                        contacto: +form.get('contacto'),
-                        logo: ''
-                    }
-                });
-            }
+            const formimg = new FormData();
+            formimg.append('file', portada);
+            let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'modo': 'carrera',
+                    'tipo': 'img'
+                }
+            });
+            await prisma.carrera.create({
+                data: {
+                    nombre: form.get('nombre').toUpperCase(),
+                    contacto: +form.get('contacto'),
+                    logo: resimage.data.path
+                }
+            });
             return Response.json({ error: false, mensaje: `Carrera añadida con éxito` });
-
         }
     } catch (error) {
         console.log(error)

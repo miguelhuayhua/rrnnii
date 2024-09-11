@@ -17,6 +17,7 @@ import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/plugins/captions.css";
 import { ChipBox } from "../componentes/Mostrar";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { fileDomain } from "@/utils/globals";
 const Cliente = () => {
     const [index, setIndex] = useState<any>(-1);
     const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ const Cliente = () => {
     useEffect(() => {
         setLoading(true);
         axios.post('/api/galeria/listar', { orden, skip: 0 }).then(res => {
-            setGalerias(res.data);
+            setGalerias(res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen })));
             setSkip(1);
             setLoading(false);
         })
@@ -36,6 +37,7 @@ const Cliente = () => {
     const getImageSize = (src: string) => {
         const img = new Image();
         img.src = src;
+        console.log(img)
         return ({ width: img.width, height: img.height })
     }
     return (
@@ -71,12 +73,13 @@ const Cliente = () => {
                 })}
                 targetRowHeight={200}
                 render={{
-                    image: (props, context) => <Box>
-                        <Imagen src={props.src} width={context.width} height={context.height} layout="intrinsic" />
-                        <ChipBox
-                            sx={{ position: 'absolute', top: 5, right: 5 }}
-                            label={Galerias.find(value => value.imagen == props.src)?.titulo} />
-                    </Box>
+                    image: (props, context) =>
+                        <Box>
+                            <Imagen src={props.src} width={context.width} height={context.height} layout="intrinsic" />
+                            <ChipBox
+                                sx={{ position: 'absolute', top: 5, right: 5 }}
+                                label={Galerias.find(value => value.imagen == props.src)?.titulo} />
+                        </Box>
                 }}
                 onClick={({ index: current }) => setIndex(current)}
             />

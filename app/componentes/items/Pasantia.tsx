@@ -10,6 +10,7 @@ import { blue, grey } from "@mui/material/colors";
 import { Carrera, Institucion, Pasantia, PasantiaCarrera } from "@prisma/client";
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
+import { fileDomain } from "@/utils/globals";
 dayjs.locale('es');
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
 interface Props {
@@ -17,7 +18,10 @@ interface Props {
 }
 const PasantiaItem = ({ value }: Props) => {
     return (
-        <Grid container bgcolor='white' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
+        <Grid container bgcolor='white' sx={{
+            overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px',
+            border: `1px solid ${grey[300]}`
+        }}>
             <Grid xs={6} p={1}>
                 <ChipBox sx={{ margin: 0, bgcolor: blue[600], borderRadius: 1.5, color: grey[50] }}
                     label={`${value.modalidad} meses`} />
@@ -39,12 +43,13 @@ const PasantiaItem = ({ value }: Props) => {
             <Grid xs={6} py={1} px={1}>
                 <Box position='relative' sx={{ aspectRatio: 1 }}>
                     <Link href={`/pasantias/${value.id}`}>
-                        <Image objectFit="cover" layout='fill' src={value.imagen} alt='' />
+                        <Image objectFit="cover" layout='fill'
+                            src={fileDomain + value.imagen} alt='' />
                     </Link>
                 </Box>
             </Grid>
             <Grid item xs={12}>
-                <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>
+                <Stack direction='row' px={0.5} py={1} flexWrap='wrap' sx={{ borderTop: `1px solid ${grey[300]}` }}>
                     {
                         value.PasantiaCarrera.map(value =>
                         (<ChipBox key={value.id} avatar={<Image src={value.Carrera.logo} width={20} height={20} style={{ borderRadius: 4 }}

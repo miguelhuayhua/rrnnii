@@ -25,11 +25,12 @@ import { grey, red } from '@mui/material/colors';
 import { RiFileWord2Line } from 'react-icons/ri';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import axios from 'axios';
+import { fileDomain } from '@/utils/globals';
 interface Props {
     setPasantia: any;
     Pasantia: Pasantia & { PasantiaCarrera: PasantiaCarrera[] };
-    setPasantias : any;
-    setPrevPasantias:any;
+    setPasantias: any;
+    setPrevPasantias: any;
 }
 export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, setPrevPasantias }: Props) {
     const { openSnackbar } = useSnackbar();
@@ -109,7 +110,11 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
             maxWidth='md'
             onClose={() => { setPasantia(null) }}
         >
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{
+                position: 'absolute',
+                zIndex: 10,
+                top: 0, left: 0, width: "100%"
+            }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
                 <BotonSimple onClick={() => setPasantia(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
                     <IoClose fontSize={25} />
@@ -119,7 +124,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                 </Titulo>
                 <Grid container spacing={2}>
                     <Grid item xs={12} mx='auto' sm={6}>
-                        <Box px={{ xs: 10, sm: 0 }}>
+                        <Box px={{ xs: 5, sm: 0 }}>
                             <Box sx={{
                                 aspectRatio: 1,
                                 bgcolor: grey[100],
@@ -142,7 +147,9 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={(portada ? '' : fileDomain) + watch('imagen')} layout='fill' objectFit='cover' />
+                                        : null
                                 }
                                 <BsImageAlt color={'inherit'} fontSize={30} />
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>

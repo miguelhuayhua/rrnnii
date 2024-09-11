@@ -20,6 +20,7 @@ import { MdPhone } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { MasonryPhotoAlbum } from "react-photo-album";
 import "react-photo-album/masonry.css";
+import { fileDomain } from "@/utils/globals";
 const Cliente = () => {
     const theme = useTheme();
     const downsm = useMediaQuery(theme.breakpoints.down('md'));
@@ -54,15 +55,15 @@ const Cliente = () => {
             setActividades(res.data);
         });
         axios.post('/api/galeria/listar', { skip: 0, orden: '0' }).then(res => {
-            setGalerias(res.data);
+            setGalerias(res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen })));
         })
     }, []);
     return (
         <>
             <canvas id="gradient-canvas" style={{ width: "100vw", height: downsm ? 400 : 500, position: 'absolute', top: 0, clipPath: 'polygon(100% 0, 100% 18%, 0 100%, 0 0)' }}></canvas >
             <Grid container>
-                <Grid item sx={{ opacity: 1 - y * 0.0015, top: y * 0.1, zIndex: 20, }} xs={12} md={6} pt={{ xs: 5, md: 0 }}>
-                    <Box pl={{ xs: 5, sm: 10, md: 10, xl: 35 }} pr={{ xs: 5, sm: 10, md: 2 }} >
+                <Grid item sx={{ opacity: 1 - y * 0.0015, top: y * 0.1, zIndex: 20, }} xs={12} sm={7} pt={{ xs: 5, md: 0 }}>
+                    <Box pl={{ xs: 5, sm: 1, md: 10, xl: 35 }} pr={{ xs: 5, sm: 1, md: 2 }} >
                         <ChipBox label='Encargada de: ' sx={{ mb: 2, background: '#00000055', fontWeight: 700, fontSize: 14, color: 'white', borderRadius: 5, py: 2 }} />
                         <Titulo variant='h1' sx={{ color: blueGrey[50], fontSize: { xs: 16, sm: 20, md: 25, lg: 30 }, background: '#00000055', backdropFilter: 'blur(6px)', p: 2, borderRadius: 3 }} >
                             Unidad de Relaciones Internacionales
@@ -89,25 +90,29 @@ const Cliente = () => {
                         </Stack>
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={6} display={{ xs: 'none', md: 'block' }} px={{ xs: 1, md: 4, lg: 10, xl: 14 }} zIndex={20} >
+                <Grid item xs={12} sm={4.5} display={{ xs: 'none', sm: 'block' }} px={{ xs: 1, md: 4, lg: 10, xl: 14 }} zIndex={20} >
                     <Box sx={{
-                        p: 2,
                         overflow: 'hidden',
                         maxHeight: 450,
                         transform: 'perspective(100px) rotateY(-3deg) rotateZ(3deg)',
-                        backdropFilter: 'blur(3px)'
+                        backdropFilter: 'blur(4px)',
+                        bgcolor: '#ffffff11',
+                        px: 1
                     }} >
                         <Box className="slide-up" sx={{ opacity: 0.95 }}>
                             <MasonryPhotoAlbum
-                                spacing={15}
+                                spacing={10}
                                 photos={Galerias.map(value => {
-                                    return ({ src: value.imagen, ...getImageSize(value.imagen) })
+                                    return ({ ...getImageSize(value.imagen), src: value.imagen, })
                                 })}
                                 columns={2}
                                 render={{
-                                    image: (props, context) => (
-                                        <Imagen style={{ borderRadius: 10 }} src={props.src} width={context.width} height={context.height} layout="intrinsic" />
-                                    )
+                                    image: (props, context) => {
+                                        return (
+                                            <Imagen style={{ borderRadius: 10 }}
+                                                src={props.src} width={+context.photo.width} height={+context.photo.height} layout="intrinsic" />
+                                        )
+                                    }
                                 }}
                             />
                         </Box>

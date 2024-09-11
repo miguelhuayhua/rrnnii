@@ -1,10 +1,14 @@
 import { prisma } from "../../client";
 const POST = async (request: Request) => {
     try {
-        let { tipo, orden, skip } = await request.json();
+        let { tipo, orden, skip, id } = await request.json();
         let actividades = await prisma.actividad.findMany({
-            where: { estado: true, tipo: tipo || undefined },
-            skip: skip || undefined
+            where: {
+                estado: true, tipo: tipo || undefined,
+                id: { not: id || undefined }
+            },
+            skip: skip || undefined,
+
         });
         return Response.json(actividades);
     } catch (error) {

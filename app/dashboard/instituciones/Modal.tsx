@@ -17,6 +17,7 @@ import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
+import { fileDomain } from '@/utils/globals';
 interface Props {
     setInstitucion: any;
     Institucion: Institucion;
@@ -84,7 +85,7 @@ export default function ModalInstitucion({ setInstitucion, Institucion, setInsti
                 </Titulo>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
-                        <Box px={{ xs: 10, sm: 0 }}>
+                        <Box px={{ xs: 5, sm: 0 }}>
                             <Box sx={{
                                 aspectRatio: 1,
                                 bgcolor: grey[100],
@@ -107,7 +108,9 @@ export default function ModalInstitucion({ setInstitucion, Institucion, setInsti
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('logo') ? <Image src={watch('logo')} layout='fill' objectFit='cover' /> : null
+                                    watch('logo') ?
+                                        <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
+                                        : null
                                 }
                                 <BsImageAlt color={'inherit'} fontSize={30} />
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>

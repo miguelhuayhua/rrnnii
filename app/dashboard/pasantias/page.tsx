@@ -15,10 +15,12 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
-import { red } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
+import { fileDomain } from "@/utils/globals";
+import { RiFileWord2Line } from "react-icons/ri";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [Pasantias, setPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
@@ -99,8 +101,8 @@ export default function Page() {
                     nombre: value.titulo,
                     Pasantia: (
                         <Box display='flex' width={350} minWidth={300} py={0.35}>
-                            <Box minWidth={80} width={80} height={90} position='relative'>
-                                <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            <Box minWidth={80} width={80} height={80} position='relative'>
+                                <Image src={fileDomain + value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
                             <Box px={2}>
                                 <Negrita sx={{ fontSize: 13 }}>{value.titulo}</Negrita>
@@ -131,13 +133,16 @@ export default function Page() {
                                     <BotonFilled
                                         onClick={() => {
                                             let a = document.createElement('a');
-                                            a.download = value.pdf;
-                                            a.href = value.pdf;
+                                            a.download = fileDomain + value.pdf;
+                                            a.href = fileDomain + value.pdf;
+                                            a.target = '_blank';
                                             a.click();
                                             a.remove();
                                         }}
-                                        sx={{ background: red[700] }}>
-                                        <TbPdf fontSize={22} />
+                                        sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                        {
+                                            value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
+                                        }
                                     </BotonFilled> : null
                             }
                             <SwitchBox checked={value.estado} onChange={(ev, checked) => {

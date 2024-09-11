@@ -18,6 +18,7 @@ import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
+import { fileDomain } from '@/utils/globals';
 interface Props {
     setCarrera: any;
     Carrera: Carrera;
@@ -50,7 +51,7 @@ export default function ModalCarrera({ setCarrera, Carrera,
         let form = new FormData();
         form.append('nombre', carrera.nombre);
         form.append('logo', carrera.logo!);
-        form.append('contacto', carrera.contacto!.toString() || '0');
+        form.append('contacto', carrera.contacto ? carrera.contacto.toString() : '0');
         form.append('portada', portada);
         form.append('id', carrera.id);
         openModal({
@@ -111,7 +112,9 @@ export default function ModalCarrera({ setCarrera, Carrera,
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('logo') ? <Image src={watch('logo')} layout='fill' objectFit='cover' /> : null
+                                    watch('logo') ?
+                                        <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
+                                        : null
                                 }
                                 <BsImageAlt color={'inherit'} fontSize={30} />
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>

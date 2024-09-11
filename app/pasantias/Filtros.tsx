@@ -11,6 +11,7 @@ import { CgClose } from "react-icons/cg";
 import { InputBox } from "../componentes/Datos";
 import { axiosInstance } from "@/globals";
 import { Carrera } from "@prisma/client";
+import { fileDomain } from "@/utils/globals";
 interface Props {
     open: boolean;
     setOpen: any
@@ -91,7 +92,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                                     <MenuItem key={value.id} value={value.id}>
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
-                                                <Image layout='fill' src={value.logo} style={{ borderRadius: 10 }} />
+                                                <Image layout='fill' src={fileDomain + value.logo} style={{ borderRadius: 10 }} />
                                             </Box>
                                             <Negrita sx={{ fontSize: 12 }}>{value.nombre}</Negrita>
                                         </Box>

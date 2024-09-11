@@ -25,6 +25,7 @@ import { useSnackbar } from '@/providers/SnackbarProvider';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { RiFileWord2Line } from 'react-icons/ri';
 import axios from 'axios';
+import { fileDomain } from '@/utils/globals';
 interface Props {
     setConvenio: any;
     Convenio: Convenio & { ConvenioCarrera: ConvenioCarrera[] };
@@ -149,7 +150,9 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={(portada ? '' : fileDomain) + watch('imagen')} layout='fill' objectFit='cover' />
+                                        : null
                                 }
                                 <BsImageAlt color={'inherit'} fontSize={30} />
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>

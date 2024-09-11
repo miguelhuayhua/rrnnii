@@ -219,22 +219,22 @@ const Navbar = () => {
                     </BotonSimple>
                     <Box display={open3 || pathname.includes('convenios') || pathname.includes('pasantias') || pathname.includes('actividades') || pathname.includes('eventos') ? 'block' : 'none'}>
                         <Link style={{ textDecoration: 'none' }} href={'/convenios'}>
-                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/convenios' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname.includes('/convenios') ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Convenios
                             </BotonSimple>
                         </Link>
                         <Link style={{ textDecoration: 'none' }} href={'/pasantias'}>
-                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/pasantias' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname.includes('/pasantias') ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Pasantías
                             </BotonSimple>
                         </Link>
                         <Link style={{ textDecoration: 'none' }} href={'/actividades'}>
-                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/actividades' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname.includes('/actividades') ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Actividades
                             </BotonSimple>
                         </Link>
                         <Link style={{ textDecoration: 'none' }} href={'/eventos'}>
-                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname == '/eventos' ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
+                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname.includes('/eventos') ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Eventos
                             </BotonSimple>
                         </Link>

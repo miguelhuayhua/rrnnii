@@ -21,6 +21,7 @@ import { IoClose } from 'react-icons/io5';
 import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import axios from 'axios';
+import { fileDomain } from '@/utils/globals';
 interface Props {
     setGaleria: any;
     Galeria: Galeria;
@@ -110,7 +111,9 @@ export default function ModalGaleria({ setGaleria, Galeria, setGalerias, setPrev
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={(file ? '' : fileDomain) + watch('imagen')} layout='fill' objectFit='cover' />
+                                        : null
                                 }
                                 <BsImageAlt color={'inherit'} fontSize={30} />
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>

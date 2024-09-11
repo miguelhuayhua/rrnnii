@@ -23,6 +23,7 @@ import { useSnackbar } from '@/providers/SnackbarProvider';
 import { RiFileWord2Line } from 'react-icons/ri';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import axios from 'axios';
+import { fileDomain } from '@/utils/globals';
 interface Props {
     setActividad: any;
     Actividad: Actividad;
@@ -126,7 +127,9 @@ export default function ModalActividad({ setActividad, Actividad, setActividades
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={(portada ? '' : fileDomain) + watch('imagen')} layout='fill' objectFit='cover' />
+                                        : null
                                 }
                                 <BsImageAlt color={'inherit'} fontSize={30} />
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>

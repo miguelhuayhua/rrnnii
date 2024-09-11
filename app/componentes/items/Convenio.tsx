@@ -9,6 +9,7 @@ import { GiConversation } from "react-icons/gi";
 import { blue, green, grey } from "@mui/material/colors";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import dayjs from "dayjs";
+import { fileDomain } from "@/utils/globals";
 
 interface Props {
     value: Convenio & { Institucion: Institucion, ConvenioCarrera: (ConvenioCarrera & { Carrera: Carrera })[] };
@@ -17,11 +18,11 @@ interface Props {
 const ConvenioItem = ({ value }: Props) => {
     console.log(value)
     return (
-        <Box bgcolor='white' borderRadius={4} overflow='hidden' border={`1px solid ${grey[100]}`} position='relative'>
+        <Box bgcolor='white' borderRadius={4} overflow='hidden' border={`1px solid ${grey[300]}`} position='relative'>
             <Grid container>
                 <Grid item xs={6} >
                     <Link href={`/convenios/${value.id}`}>
-                        <Image src={value.imagen} height={100} objectFit="cover" width={100} layout="responsive" />
+                        <Image src={fileDomain + value.imagen} height={100} objectFit="cover" width={100} layout="responsive" />
                     </Link>
                 </Grid>
                 <Grid item xs={6} p={1}>
@@ -52,7 +53,7 @@ const ConvenioItem = ({ value }: Props) => {
                     </Normal>
                 </Grid>
             </Grid>
-            <Divider sx={{ borderColor: '#eee' }}></Divider>
+            <Divider sx={{ borderColor: grey[300], my: 0, py: 0 }} />
             <Stack direction='row' px={0.5} py={1} flexWrap='wrap'>
                 {
                     value.ConvenioCarrera.map(value =>

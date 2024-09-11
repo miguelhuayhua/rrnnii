@@ -1,35 +1,38 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-import { writeFile } from "fs/promises";
-import path from "path";
+import axios from "axios";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
     const documento = form.get('documento');
-    let pathdoc = '';
-    let pathimg = '';
     const institucion = form.get('institucion');
     const carreras = JSON.parse(form.get('carreras')) as string[];
     try {
-        if (portada) {
-            const portadab = Buffer.from(await portada.arrayBuffer());
-            const portadan = Date.now() + portada.name.replaceAll(" ", "_");
-            pathimg = "/uploads/pasantias/img/" + portadan;
-            await writeFile(path.join(process.cwd(), "public" + pathimg), portadab as any);
-        }
-        if (documento) {
-            const documentob = Buffer.from(await documento.arrayBuffer());
-            const documenton = Date.now() + documento.name.replaceAll(" ", "_");
-            pathdoc = "/uploads/pasantias/files/" + documenton;
-            await writeFile(path.join(process.cwd(), "public" + pathdoc), documentob as any);
-        }
+        const formimg = new FormData();
+        const formdoc = new FormData();
+        formimg.append('file', portada);
+        formdoc.append('file', documento);
+        let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'modo': 'pasantia',
+                'tipo': 'img'
+            }
+        });
+        let resdoc = await axios.post('http://localhost:4000/upload', formdoc, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'modo': 'pasantia',
+                'tipo': 'doc'
+            }
+        });
         if (await prisma.institucion.findFirst({ where: { nombre: institucion } })) {
             await prisma.pasantia.create({
                 data: {
                     titulo: form.get('titulo'),
                     descripcion: form.get('descripcion'),
-                    pdf: pathdoc,
-                    imagen: pathimg,
+                    pdf: resdoc.data.path,
+                    imagen: resimage.data.path,
                     modalidad: form.get('modalidad'),
                     finalizacion: form.get('finalizacion'),
                     Institucion: { connect: { nombre: institucion } },
@@ -46,8 +49,8 @@ const POST = async (request: NextRequest) => {
                 data: {
                     titulo: form.get('titulo'),
                     descripcion: form.get('descripcion'),
-                    pdf: pathdoc,
-                    imagen: pathimg,
+                    pdf: resdoc.data.path,
+                    imagen: resimage.data.path,
                     modalidad: form.get('modalidad'),
                     finalizacion: form.get('finalizacion'),
                     Institucion: { create: { nombre: institucion, logo: '' } },

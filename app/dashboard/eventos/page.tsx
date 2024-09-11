@@ -20,6 +20,7 @@ import { blue, red } from "@mui/material/colors";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
+import { fileDomain } from "@/utils/globals";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -101,8 +102,8 @@ export default function Page() {
                     nombre: value.titulo,
                     Evento: (
                         <Box display='flex' minWidth={300} py={0.35} alignItems='center'>
-                            <Box minWidth={90} width={90} height={90} position='relative'>
-                                <Image src={value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            <Box minWidth={80} width={80} height={80} position='relative'>
+                                <Image src={fileDomain + value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
                             <Box px={2}>
                                 <Negrita sx={{ fontSize: 16 }}>{value.titulo}</Negrita>
@@ -136,8 +137,9 @@ export default function Page() {
                                 <BotonFilled
                                     onClick={() => {
                                         let a = document.createElement('a');
-                                        a.download = value.pdf;
-                                        a.href = value.pdf;
+                                        a.download = fileDomain + value.pdf;
+                                        a.href = fileDomain + value.pdf;
+                                        a.target = '_blank';
                                         a.click();
                                         a.remove();
                                     }}

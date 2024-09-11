@@ -19,6 +19,7 @@ import { BotonFilled } from "@/app/componentes/Botones";
 import { blue, red } from "@mui/material/colors";
 import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line } from "react-icons/ri";
+import { fileDomain } from "@/utils/globals";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [convenios, setConvenios] = useState([]);
@@ -28,41 +29,38 @@ export default function Cliente({ value }: Props) {
         });
     }, []);
     return (
-        <Grid container spacing={4} p={3}>
+        <Grid container spacing={4} p={1}>
             <Grid item xs={12}>
-                <Breadcrumbs sx={{ mb: 4 }} separator="›" aria-label="breadcrumb">
+                <Breadcrumbs separator="›" aria-label="breadcrumb">
                     <Link color="inherit" href="/" >
                         Convocatorias
-                    </Link>,
-                    <Link
-                        color="inherit"
-                        href="/convenios"
-                    >
+                    </Link>
+                    <Link color="inherit" href="/convenios">
                         Convenios
-                    </Link>,
+                    </Link>
                     <Negrita sx={{ fontSize: 16 }}>
                         Ver
                     </Negrita>
                 </Breadcrumbs>
 
             </Grid>
-            <Grid item xs={12} md={7}>
+            <Grid item xs={12} md={8}>
                 <ChipBox label={`Convenio ${value.tipo}`} sx={{ fontSize: 13, bgcolor: 'white', border: '1px solid #ddd' }} />
                 <i style={{ float: 'right' }}>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal sx={{ fontSize: 13 }}>
                         {dayjs(value.createdAt).format('DD [de] MMMM [del] YYYY')}
                     </Normal>
                 </i>
-                <Grid container spacing={2}>
-                    <Grid item xs={10} sm={8} lg={6} mx='auto'>
-                        <Image src={value.imagen}
+                <Grid container spacing={2} mt={2}>
+                    <Grid item xs={12} sm={8} mx='auto'>
+                        <Image src={fileDomain + value.imagen}
                             objectFit="cover"
                             style={{ borderRadius: 10 }}
                             layout='responsive' width={100} height={80} />
                     </Grid>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', alignItems: 'center', my: 1 }}>
-                            <Image src={value.Institucion.logo || '/default-image.jpg'}
+                            <Image src={value.Institucion.logo ? fileDomain + value.Institucion.logo : '/default-image.jpg'}
                                 objectFit="cover"
                                 style={{ borderRadius: 10 }}
                                 layout='fixed' width={50} height={50} />
@@ -102,8 +100,9 @@ export default function Cliente({ value }: Props) {
                                         }
                                         onClick={() => {
                                             let a = document.createElement('a');
-                                            a.download = value.pdf;
-                                            a.href = value.pdf;
+                                            a.download = fileDomain + value.pdf;
+                                            a.href = fileDomain + value.pdf;
+                                            a.target = '_blank';
                                             a.click();
                                             a.remove();
                                         }}
@@ -125,7 +124,7 @@ export default function Cliente({ value }: Props) {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={4}>
                 <Titulo sx={{ textAlign: 'center', mb: 1 }}>
                     Más convenios
                 </Titulo>
@@ -136,7 +135,7 @@ export default function Cliente({ value }: Props) {
                                 <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
                             </Grid> :
                             convenios.map((value: any) => (
-                                <Grid key={value.id} item xs={10} mx='auto'>
+                                <Grid key={value.id} item xs={10} sm={6} md={12} mx='auto'>
                                     <ConvenioItem value={value} />
                                 </Grid>
                             ))

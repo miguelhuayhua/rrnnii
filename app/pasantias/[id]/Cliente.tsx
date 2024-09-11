@@ -14,6 +14,7 @@ import { BotonFilled } from "@/app/componentes/Botones";
 import { red, blue } from "@mui/material/colors";
 import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line } from "react-icons/ri";
+import { fileDomain } from "@/utils/globals";
 interface Props {
     value: Pasantia & { PasantiaCarrera: (PasantiaCarrera & { Carrera: Carrera })[], Institucion: Institucion };
 }
@@ -26,9 +27,9 @@ export default function Cliente({ value }: Props) {
         });
     }, []);
     return (
-        <Grid container spacing={4} p={3}>
+        <Grid container spacing={4} p={1}>
             <Grid item xs={12}>
-                <Breadcrumbs sx={{ mb: 4 }} separator="›" aria-label="breadcrumb">
+                <Breadcrumbs separator="›" aria-label="breadcrumb">
                     <Link color="inherit" href="/" >
                         Actividades
                     </Link>,
@@ -44,23 +45,23 @@ export default function Cliente({ value }: Props) {
                 </Breadcrumbs>
 
             </Grid>
-            <Grid item xs={12} md={7}>
+            <Grid item xs={12} md={8}>
                 <ChipBox label={`Duración: ${value.modalidad} meses`} sx={{ fontSize: 13, bgcolor: 'white', border: '1px solid #ddd' }} />
                 <i style={{ float: 'right' }}>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal sx={{ fontSize: 13 }}>
                         {dayjs(value.createdAt).format('DD [de] MMMM [del] YYYY')}
                     </Normal>
                 </i>
                 <Grid container spacing={2}>
-                    <Grid item xs={6} mx='auto'>
-                        <Image src={value.imagen}
+                    <Grid item xs={12} sm={8} mx='auto'>
+                        <Image src={fileDomain + value.imagen}
                             objectFit="cover"
                             style={{ borderRadius: 10 }}
                             layout='responsive' width={100} height={80} />
                     </Grid>
                     <Grid item xs={12} >
                         <Box sx={{ display: 'flex', alignItems: 'center', my: 1 }}>
-                            <Image src={value.Institucion.logo || '/default-image.jpg'}
+                            <Image src={value.Institucion.logo ? fileDomain + value.Institucion.logo : '/default-image.jpg'}
                                 objectFit="cover"
                                 style={{ borderRadius: 10 }}
                                 layout='fixed' width={50} height={50} />
@@ -100,8 +101,9 @@ export default function Cliente({ value }: Props) {
                                         }
                                         onClick={() => {
                                             let a = document.createElement('a');
-                                            a.download = value.pdf;
-                                            a.href = value.pdf;
+                                            a.download = fileDomain + value.pdf;
+                                            a.href = fileDomain + value.pdf;
+                                            a.target = '_blank';
                                             a.click();
                                             a.remove();
                                         }}
@@ -124,18 +126,18 @@ export default function Cliente({ value }: Props) {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={4}>
                 <Titulo sx={{ textAlign: 'center', mb: 2 }}>
                     Más pasantias
                 </Titulo>
                 <Grid container spacing={2}>
                     {
                         convenios.length == 0 ?
-                            <Grid item xs={12} >
+                            <Grid item xs={12} sm={6} >
                                 <Normal sx={{ textAlign: 'center' }}>No se encontraron más pasantias disponibles</Normal>
                             </Grid> :
                             convenios.map((value: any) => (
-                                <Grid key={value.id} item xs={10} mx='auto'>
+                                <Grid key={value.id} item xs={10} sm={6} md={12} mx='auto'>
                                     <PasantiaItem value={value} />
                                 </Grid>
                             ))

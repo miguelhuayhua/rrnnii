@@ -18,6 +18,7 @@ import { TbReload } from "react-icons/tb";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
+import { fileDomain } from "@/utils/globals";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -90,8 +91,8 @@ export default function Page() {
                 {
                     nombre: value.nombre,
                     "Institución": (<Box display='flex' alignItems='center' minWidth={200} py={0.35}>
-                        <Box minWidth={90} width={90} height={90} position='relative'>
-                            <Image src={value.logo || '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                        <Box minWidth={80} width={80} height={80} position='relative'>
+                            <Image src={value.logo ? fileDomain + value.logo : '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                         </Box>
                         <Box px={2}>
                             <Negrita sx={{ fontSize: 16 }}>{value.nombre}</Negrita>

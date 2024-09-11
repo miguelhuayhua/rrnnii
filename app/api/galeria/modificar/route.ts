@@ -1,27 +1,24 @@
-
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-import { writeFile } from "fs/promises";
-import path from "path";
+import axios from "axios";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const file = form.get("file");
-    try {
-        if (file) {
-            const buffer = Buffer.from(await file.arrayBuffer());
-            const filename = Date.now() + file.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/galeria/" + filename), buffer as any);
-            await prisma.galeria.update({
-                data: {
-                    imagen: `/uploads/galeria/${filename}`,
-                },
-                where: { id: form.get('id') }
-            });
+    const formimg = new FormData();
+    formimg.append('file', file);
+    let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'modo': 'galeria',
+            'tipo': 'img'
         }
+    });
+    try {
         await prisma.galeria.update({
             data: {
                 titulo: form.get('titulo'),
                 descripcion: form.get('descripcion'),
+                ...file ? ({ imagen: resimage.data.path }) : null,
             },
             where: { id: form.get('id') }
         });

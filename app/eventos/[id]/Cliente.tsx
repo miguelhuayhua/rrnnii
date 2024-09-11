@@ -19,6 +19,7 @@ import { BotonFilled } from "@/app/componentes/Botones";
 import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line } from "react-icons/ri";
 import { blue, red } from "@mui/material/colors";
+import { fileDomain } from "@/utils/globals";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [eventos, setEventos] = useState([]);
@@ -28,16 +29,13 @@ export default function Cliente({ value }: Props) {
         });
     }, []);
     return (
-        <Grid container spacing={4} p={3}>
+        <Grid container spacing={4} p={2}>
             <Grid item xs={12}>
-                <Breadcrumbs sx={{ mb: 4 }} separator="›" aria-label="breadcrumb">
+                <Breadcrumbs separator="›" aria-label="breadcrumb">
                     <Link color="inherit" href="/" >
                         Convocatorias
                     </Link>,
-                    <Link
-                        color="inherit"
-                        href="/eventos"
-                    >
+                    <Link color="inherit" href="/eventos" >
                         Eventos
                     </Link>,
                     <Negrita sx={{ fontSize: 16 }}>
@@ -46,16 +44,16 @@ export default function Cliente({ value }: Props) {
                 </Breadcrumbs>
 
             </Grid>
-            <Grid item xs={12} md={7}>
+            <Grid item xs={12} md={8}>
                 <ChipBox label={`Evento ${value.tipo}`} sx={{ fontSize: 13, bgcolor: 'white', border: '1px solid #ddd' }} />
                 <i style={{ float: 'right' }}>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal sx={{ fontSize: 13 }}>
                         {dayjs(value.createdAt).format('DD [de] MMMM [del] YYYY')}
                     </Normal>
                 </i>
                 <Grid container spacing={2} mt={2}>
-                    <Grid item xs={10} sm={8} md={7} lg={6} mx='auto'>
-                        <Image src={value.imagen}
+                    <Grid item xs={12} sm={8} mx='auto'>
+                        <Image src={fileDomain + value.imagen}
                             objectFit="cover"
                             style={{ borderRadius: 10 }}
                             layout='responsive' width={100} height={80} />
@@ -84,8 +82,9 @@ export default function Cliente({ value }: Props) {
                                         }
                                         onClick={() => {
                                             let a = document.createElement('a');
-                                            a.download = value.pdf;
-                                            a.href = value.pdf;
+                                            a.download = fileDomain + value.pdf;
+                                            a.href = fileDomain + value.pdf;
+                                            a.target = '_blank';
                                             a.click();
                                             a.remove();
                                         }}
@@ -97,18 +96,18 @@ export default function Cliente({ value }: Props) {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={4}>
                 <Titulo sx={{ textAlign: 'center', mb: 2 }}>
                     Más eventos
                 </Titulo>
                 <Grid container spacing={2}>
                     {
                         eventos.length == 0 ?
-                            <Grid item xs={12} >
+                            <Grid item xs={6} sm={12} >
                                 <Normal sx={{ textAlign: 'center' }}>No se encontraron más eventos disponibles</Normal>
                             </Grid> :
                             eventos.map((value: any) => (
-                                <Grid key={value.id} item xs={11} sm={6} md={10} lg={6} mx='auto'>
+                                <Grid key={value.id} item xs={6} sm={4} md={10} lg={6} mx='auto'>
                                     <EventoItem value={value} />
                                 </Grid>
                             ))

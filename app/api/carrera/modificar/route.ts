@@ -1,17 +1,22 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-import { writeFile } from "fs/promises";
-import path from "path";
+import axios from "axios";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
-    const portadab = portada ? Buffer.from(await portada.arrayBuffer()) : null;
-    const portadan = portada ? Date.now() + portada.name.replaceAll(" ", "_") : '';
+    const formimg = new FormData();
+    formimg.append('file', portada);
+    let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'modo': 'pasantia',
+            'tipo': 'img'
+        }
+    });
     try {
-        if (portadab) {
-            await writeFile(path.join(process.cwd(), "public/uploads/carreras/img/" + portadan), portadab as any);
+        if (portada) {
             await prisma.carrera.update({
-                data: { logo: portada ? `/uploads/carreras/img/${portadan}` : '' },
+                data: { logo: resimage.data.path },
                 where: { id: form.get('id') }
             });
         }

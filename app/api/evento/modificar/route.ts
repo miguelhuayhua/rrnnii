@@ -3,36 +3,39 @@ import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 import { writeFile } from "fs/promises";
 import path from "path";
+import axios from "axios";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const imagen = form.get("imagen");
     const doc = form.get('doc');
     try {
-        if (imagen) {
-            const bufferImg = Buffer.from(await imagen.arrayBuffer());
-            const imagenName = Date.now() + imagen.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/eventos/img/" + imagenName), bufferImg as any);
-            await prisma.evento.update({
-                data: { imagen: imagen ? `/uploads/eventos/img/${imagenName}` : '' },
-                where: { id: form.get('id') }
-            });
-        }
-        if (doc) {
-            const bufferDoc = Buffer.from(await doc.arrayBuffer());
-            const docName = Date.now() + doc.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/eventos/files/" + docName), bufferDoc as any);
-            await prisma.evento.update({
-                data: { pdf: `/uploads/eventos/files/${docName}` },
-                where: { id: form.get('id') }
-            });
-        }
+        const formimg = new FormData();
+        const formdoc = new FormData();
+        formimg.append('file', imagen);
+        formdoc.append('file', doc);
+        let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'modo': 'evento',
+                'tipo': 'img'
+            }
+        });
+        let resdoc = await axios.post('http://localhost:4000/upload', formdoc, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'modo': 'evento',
+                'tipo': 'doc'
+            }
+        });
         await prisma.evento.update({
             data: {
                 titulo: form.get('titulo'),
                 descripcion: form.get('descripcion'),
                 tipo: form.get('tipo'),
                 link: form.get('link'),
-                inicio: form.get('inicio')
+                inicio: form.get('inicio'),
+                ...imagen ? ({ imagen: resimage.data.path }) : null,
+                ...doc ? ({ pdf: resdoc.data.path }) : null
             },
             where: { id: form.get('id') }
         });

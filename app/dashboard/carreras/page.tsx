@@ -18,6 +18,7 @@ import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import ModalCarrera from "./Modal";
 import axios from "axios";
+import { fileDomain } from "@/utils/globals";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -90,7 +91,7 @@ export default function Page() {
                     nombre: value.nombre,
                     "Carrera": (<Box display='flex' minWidth={200} py={0.35} alignItems='center'>
                         <Box minWidth={90} width={90} height={90} position='relative'>
-                            <Image src={value.logo || '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            <Image src={value.logo ? fileDomain + value.logo : '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                         </Box>
                         <Normal ml={1}>
                             {value.nombre}

@@ -1,35 +1,36 @@
-
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-import { writeFile } from "fs/promises";
-import path from "path";
 import { ConvenioCarrera } from "@prisma/client";
+import axios from "axios";
 const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
     const documento = form.get('documento');
     const institucion = form.get('institucion');
-    const carreras = JSON.parse(form.get('carreras')) as string[];
     const convenioCarrera = JSON.parse(form.get('convenioCarrera')) as ConvenioCarrera[];
+    const formimg = new FormData();
+    const formdoc = new FormData();
+    formimg.append('file', portada);
+    formdoc.append('file', documento);
+    let resimage = await axios.post('http://localhost:4000/upload', formimg, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'modo': 'convenio',
+            'tipo': 'img'
+        }
+    });
+    let resdoc = await axios.post('http://localhost:4000/upload', formdoc, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'modo': 'convenio',
+            'tipo': 'doc'
+        }
+    });
     try {
-        if (portada) {
-            const portadab = Buffer.from(await portada.arrayBuffer());
-            const portadan = Date.now() + portada.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/convenios/img/" + portadan), portadab as any);
-            await prisma.convenio.update({
-                data: { imagen: portada ? `/uploads/convenios/img/${portadan}` : '' },
-                where: { id: form.get('id') }
-            });
-        }
-        if (documento != 'null' && documento) {
-            const documentob = Buffer.from(await documento.arrayBuffer());
-            const documenton = Date.now() + documento.name.replaceAll(" ", "_");
-            await writeFile(path.join(process.cwd(), "public/uploads/convenios/files/" + documenton), documentob as any);
-            await prisma.convenio.update({
-                data: { pdf: `/uploads/convenios/files/${documenton}` },
-                where: { id: form.get('id') }
-            });
-        }
+
+        await prisma.convenioCarrera.deleteMany({
+            where: { convenioId: form.get('id') }
+        });
         if (await prisma.institucion.findFirst({ where: { nombre: institucion } })) {
             await prisma.convenio.update({
                 data: {
@@ -45,7 +46,9 @@ const POST = async (request: NextRequest) => {
                             data: convenioCarrera.map(value => ({ carreraId: value.carreraId, ...(value.id ? { id: value.id } : null) })),
                             skipDuplicates: true
                         },
-                    }
+                    },
+                    ...portada ? ({ imagen: resimage.data.path }) : null,
+                    ...documento ? ({ pdf: resdoc.data.path }) : null
                 },
                 where: { id: form.get('id') }
             });
@@ -60,6 +63,7 @@ const POST = async (request: NextRequest) => {
                     Institucion: {
                         create: { nombre: institucion, logo: '' }
                     },
+                    imagen: resimage.data.path, pdf: resdoc.data.path,
                     ConvenioCarrera: {
                         createMany: {
                             data: convenioCarrera.map(value => ({ carreraId: value.carreraId, ...(value.id ? { id: value.id } : null) })),
@@ -70,9 +74,6 @@ const POST = async (request: NextRequest) => {
                 where: { id: form.get('id') }
             });
         }
-        await prisma.convenioCarrera.deleteMany({
-            where: { carreraId: { notIn: carreras } }
-        });
         return Response.json({ error: false, mensaje: `Convenio modificado con éxito` });
     } catch (error) {
         console.log(error)
