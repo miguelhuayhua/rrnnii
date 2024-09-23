@@ -46,10 +46,10 @@ export default function Page() {
                 Eventos
             </Titulo>
             <Breadcrumbs >
-                <Link href="/dashboard/eventos">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
-                <Link href="/dashboard/eventos">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/eventos">
                     <Normal>Eventos</Normal>
                 </Link>
                 <Normal>Listado</Normal>

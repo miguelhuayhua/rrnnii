@@ -97,10 +97,10 @@ export default function Page() {
                     Crear nuevo evento
                 </Titulo>
                 <Breadcrumbs >
-                    <Link href="/dashboard/eventos">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
-                    <Link href="/dashboard/eventos">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/eventos">
                         <Normal>Eventos</Normal>
                     </Link>
                     <Normal>Crear</Normal>

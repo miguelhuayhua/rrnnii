@@ -20,7 +20,9 @@ const ActividadItem = ({ value }: Props) => {
         <BoxSombra position='relative' sx={{ borderRadius: 4, py: 2, border: '1px solid #eee' }}>
             <Box position='absolute' top={0} height={"100%"} width="100%" sx={{ filter: 'brightness(.5)' }}>
                 <Link href={`/actividades/${value.id}`} style={{ textDecoration: 'none' }}>
-                    <Image layout="fill" objectFit="cover" src={fileDomain + value.imagen} alt={`Imagen de ${value.titulo}`} />
+                    <Image layout="fill"
+                        objectFit="cover" src={fileDomain + value.imagen}
+                        alt={`Imagen de ${value.titulo}`} />
                 </Link>
             </Box>
             <Box position='relative' p={2}>

@@ -95,10 +95,10 @@ export default function Page() {
                     Crear nueva actividad
                 </Titulo>
                 <Breadcrumbs >
-                    <Link href="/dashboard/actividads">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
-                    <Link href="/dashboard/actividads">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/actividades">
                         <Normal>Actividades</Normal>
                     </Link>
                     <Normal>Crear</Normal>

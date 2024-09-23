@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import { Avatar, ClickAwayListener, Divider, Tooltip } from "@mui/material";
 import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { BotonSimple } from '@/app/componentes/Botones';
 import { PiSignOutBold } from 'react-icons/pi';
 const Navbar = () => {
@@ -39,7 +38,10 @@ const Navbar = () => {
                                 <BotonSimple
                                     startIcon={<PiSignOutBold />}
                                     onClick={() => {
-                                        signOut();
+                                        signOut({
+                                            redirect: true,
+                                            callbackUrl: '/'
+                                        });
                                     }}>
                                     Cerrar sesión
                                 </BotonSimple>

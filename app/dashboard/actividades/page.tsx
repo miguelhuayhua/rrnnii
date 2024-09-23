@@ -46,10 +46,10 @@ export default function Page() {
                 Actividades
             </Titulo>
             <Breadcrumbs >
-                <Link href="/dashboard/actividades">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
-                <Link href="/dashboard/actividades">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/actividades">
                     <Normal>Actividades</Normal>
                 </Link>
                 <Normal>Listado</Normal>

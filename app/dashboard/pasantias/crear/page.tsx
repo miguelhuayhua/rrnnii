@@ -108,10 +108,10 @@ export default function Page() {
                     Crear nueva pasantía
                 </Titulo>
                 <Breadcrumbs >
-                    <Link href="/dashboard/pasantias">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
-                    <Link href="/dashboard/pasantias">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/pasantias">
                         <Normal>Pasantias</Normal>
                     </Link>
                     <Normal>Crear</Normal>

@@ -110,10 +110,10 @@ export default function Page() {
                     Crear nuevo convenio
                 </Titulo>
                 <Breadcrumbs >
-                    <Link href="/dashboard/convenios">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
-                    <Link href="/dashboard/convenios">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/convenios">
                         <Normal>Convenios</Normal>
                     </Link>
                     <Normal>Crear</Normal>

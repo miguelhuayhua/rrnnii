@@ -118,3 +118,9 @@ model Carrera {
   estado          Boolean           @default(true)
   PasantiaCarrera PasantiaCarrera[]
 }
+
+model Unidad {
+  contacto String @default("") @unique
+  email String @default("")
+  ubicacion String @default("")
+}

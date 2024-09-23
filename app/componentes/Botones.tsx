@@ -38,7 +38,8 @@ const BotonSimple = styled(Button)(() =>
     textTransform: 'none',
     fontWeight: 700,
     "&:hover": {
-        background: 'none'
+        background: 'none',
+        color: '#212121'
     }
 }));
 

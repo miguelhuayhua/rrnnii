@@ -46,10 +46,10 @@ export default function Page() {
                 Convenios
             </Titulo>
             <Breadcrumbs >
-                <Link href="/dashboard/convenios">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/convenios">
                     <Normal>Principal</Normal>
                 </Link>
-                <Link href="/dashboard/convenios">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/convenios">
                     <Normal>Convenios</Normal>
                 </Link>
                 <Normal>Listado</Normal>
@@ -102,7 +102,7 @@ export default function Page() {
                     Convenio: (
                         <Box display='flex' width={350} minWidth={300} py={0.35}>
                             <Box minWidth={80} width={80} height={80} position='relative'>
-                                <Image src={"http://localhost:4000" + value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                                <Image src={fileDomain + value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
                             </Box>
                             <Box px={1} display='flex' flexDirection='column' justifyContent='center'>
                                 <Negrita sx={{ fontSize: 13 }}>{value.titulo}</Negrita>

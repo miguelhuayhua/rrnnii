@@ -16,7 +16,7 @@ import { Galeria } from "@prisma/client";
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/plugins/captions.css";
 import { ChipBox } from "../componentes/Mostrar";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { fileDomain } from "@/utils/globals";
 const Cliente = () => {
     const [index, setIndex] = useState<any>(-1);
@@ -104,7 +104,7 @@ const Cliente = () => {
                         onClick={() => {
                             setLoading(true);
                             axios.post('/api/galeria/listar', { orden, skip }).then(res => {
-                                setGalerias(prev => [...prev, ...res.data]);
+                                setGalerias(prev => [...prev, ...res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen }))]);
                                 setSkip(prev => prev + 1);
                                 setLoading(false);
                             })

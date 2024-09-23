@@ -58,19 +58,51 @@ const SideBar = () => {
             <Box display='flex' justifyContent='center' my={2}>
                 <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
             </Box>
-            <SideBarItem onclick={() => router.push('/dashboard/')} Icon={HiHome} label='Principal' active={pathname == '/dashboard'} />
-            <SideBarItem onclick={() => router.push('/dashboard/convenios')} Icon={FaHandsHelping} label='Convenios' active={pathname.includes('/convenios')} />
-            <SideBarItem onclick={() => router.push('/dashboard/pasantias')} Icon={MdWork} label='Pasantias' active={pathname.includes('/pasantias')} />
-            <SideBarItem onclick={() => router.push('/dashboard/actividades')} Icon={GiMeepleCircle} label='Actividades' active={pathname.includes('/actividades')} />
-            <SideBarItem onclick={() => router.push('/dashboard/eventos')} Icon={BsFillCalendar2EventFill} label='Eventos' active={pathname.includes('/eventos')} />
-            <SideBarItem onclick={() => router.push('/dashboard/galeria')} Icon={IoImage} label='Galeria' active={pathname.includes('/galeria')} />
-            <SideBarItem onclick={() => router.push('/dashboard/instituciones')} Icon={FaBuilding} label='Instituciones' active={pathname.includes('/instituciones')} />
-            <SideBarItem onclick={() => router.push('/dashboard/carreras')} Icon={BiSolidInstitution} label='Carreras' active={pathname.includes('/carreras')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/');
+                setMove(false);
+            }} Icon={HiHome} label='Principal' active={pathname == '/dashboard'} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/convenios');
+                setMove(false);
+            }} Icon={FaHandsHelping} label='Convenios' active={pathname.includes('/convenios')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/pasantias');
+                setMove(false);
+            }} Icon={MdWork} label='Pasantias' active={pathname.includes('/pasantias')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/actividades');
+                setMove(false);
+            }} Icon={GiMeepleCircle} label='Actividades' active={pathname.includes('/actividades')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/eventos');
+                setMove(false);
+            }} Icon={BsFillCalendar2EventFill} label='Eventos' active={pathname.includes('/eventos')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/galeria');
+                setMove(false);
+            }} Icon={IoImage} label='Galeria' active={pathname.includes('/galeria')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/instituciones');
+                setMove(false);
+            }} Icon={FaBuilding} label='Instituciones' active={pathname.includes('/instituciones')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/carreras');
+                setMove(false);
+            }} Icon={BiSolidInstitution} label='Carreras' active={pathname.includes('/carreras')} />
             <Divider sx={{ borderColor: '#eee' }} />
-            <SideBarItem onclick={() => { router.push('/dashboard/usuarios') }} Icon={IoPeople} label='Personal y usuarios' active={pathname.includes('/usuarios')} />
-            <SideBarItem onclick={() => router.push('/dashboard/unidad')} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />
-
-            <SideBarItem onclick={() => { router.push('/dashboard/herramientas') }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/usuarios');
+                setMove(false);
+            }} Icon={IoPeople} label='Personal y usuarios' active={pathname.includes('/usuarios')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/unidad');
+                setMove(false);
+            }} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/herramientas');
+                setMove(false);
+            }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} />
         </Box>
     )
     return (

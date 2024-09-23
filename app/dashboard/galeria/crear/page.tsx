@@ -79,10 +79,10 @@ export default function Page() {
                     Añadir a galería
                 </Titulo>
                 <Breadcrumbs >
-                    <Link href="/dashboard/galerias">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
-                    <Link href="/dashboard/galerias">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/galerias">
                         <Normal>Galeria</Normal>
                     </Link>
                     <Normal>Crear</Normal>

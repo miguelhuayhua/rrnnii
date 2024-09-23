@@ -70,10 +70,10 @@ export default function Page() {
                     Añadir institución
                 </Titulo>
                 <Breadcrumbs >
-                    <Link href="/dashboard">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
-                    <Link href="/dashboard/instituciones">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/instituciones">
                         <Normal>Instituciones</Normal>
                     </Link>
                     <Normal>Crear</Normal>

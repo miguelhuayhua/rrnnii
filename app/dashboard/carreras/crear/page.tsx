@@ -69,10 +69,10 @@ export default function Page() {
                     Añadir carrera
                 </Titulo>
                 <Breadcrumbs >
-                    <Link href="/dashboard">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
-                    <Link href="/dashboard/carreras">
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/carreras">
                         <Normal>Carreras</Normal>
                     </Link>
                     <Normal>Crear</Normal>

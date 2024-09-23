@@ -43,10 +43,10 @@ export default function Page() {
                 Instituciones
             </Titulo>
             <Breadcrumbs>
-                <Link href="/dashboard/instituciones">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
-                <Link href="/dashboard/instituciones">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/instituciones">
                     <Normal>Instituciones</Normal>
                 </Link>
                 <Normal>Listado</Normal>

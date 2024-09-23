@@ -45,10 +45,10 @@ export default function Page() {
                 Pasantías
             </Titulo>
             <Breadcrumbs >
-                <Link href="/dashboard/pasantias">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/pasantias">
                     <Normal>Principal</Normal>
                 </Link>
-                <Link href="/dashboard/Pasantias">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/Pasantias">
                     <Normal>Pasantias</Normal>
                 </Link>
                 <Normal>Listado</Normal>

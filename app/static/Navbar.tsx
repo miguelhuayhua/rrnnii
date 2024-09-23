@@ -17,8 +17,6 @@ import { IoPeople } from 'react-icons/io5';
 import { PiDotOutlineFill, PiSquaresFourFill } from 'react-icons/pi';
 import { grey, red } from '@mui/material/colors';
 //estilos
-
-
 const Navbar = () => {
     const pathname = usePathname();
     const trigger = useScrollTrigger({
@@ -217,7 +215,7 @@ const Navbar = () => {
                         sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == 'f' ? red[700] : grey[800] }} startIcon={<FaNewspaper />} fullWidth>
                         Convocatorias <BiDownArrow style={{ position: 'absolute', right: 10, transform: open3 ? 'rotateZ(180deg)' : 'rotateZ(0deg)', transition: 'transform 0.5s' }} />
                     </BotonSimple>
-                    <Box display={open3 || pathname.includes('convenios') || pathname.includes('pasantias') || pathname.includes('actividades') || pathname.includes('eventos') ? 'block' : 'none'}>
+                    <Box display={open3 ? 'block' : 'none'}>
                         <Link style={{ textDecoration: 'none' }} href={'/convenios'}>
                             <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname.includes('/convenios') ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
                                 Convenios

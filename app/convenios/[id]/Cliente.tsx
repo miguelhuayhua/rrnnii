@@ -32,10 +32,10 @@ export default function Cliente({ value }: Props) {
         <Grid container spacing={4} p={1}>
             <Grid item xs={12}>
                 <Breadcrumbs separator="›" aria-label="breadcrumb">
-                    <Link color="inherit" href="/" >
+                    <Link style={{ textDecoration: 'none' }} color="inherit" href="/" >
                         Convocatorias
                     </Link>
-                    <Link color="inherit" href="/convenios">
+                    <Link style={{ textDecoration: 'none' }} color="inherit" href="/convenios">
                         Convenios
                     </Link>
                     <Negrita sx={{ fontSize: 16 }}>
@@ -135,7 +135,7 @@ export default function Cliente({ value }: Props) {
                                 <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
                             </Grid> :
                             convenios.map((value: any) => (
-                                <Grid key={value.id} item xs={10} sm={6} md={12} mx='auto'>
+                                <Grid key={value.id} item xs={12} sm={6} md={12} mx='auto'>
                                     <ConvenioItem value={value} />
                                 </Grid>
                             ))

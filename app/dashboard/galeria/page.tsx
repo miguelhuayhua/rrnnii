@@ -42,10 +42,10 @@ export default function Page() {
                 Galeria
             </Titulo>
             <Breadcrumbs >
-                <Link href="/dashboard/galeria">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
-                <Link href="/dashboard/galeria">
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/galeria">
                     <Normal>Galeria</Normal>
                 </Link>
                 <Normal>Listado</Normal>
