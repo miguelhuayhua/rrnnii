@@ -13,34 +13,39 @@ import axios from "axios";
 import { Actividad } from "@prisma/client";
 import { Normal } from "../componentes/Textos";
 const Filtros = dynamic(() => import('./Filtro'), { ssr: false, loading: () => (<FiltroSkeleton />) });
-
 const Cliente = () => {
-
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
     const [Actividades, setActividades] = useState<Actividad[]>([]);
+    const [ActividadesMain, setActividadesMain] = useState<Actividad[]>([]);
     useEffect(() => {
         let t = params.get('t');
         let d = params.get('d');
         axios.post('/api/actividad/listar', { tipo: t, duracion: d }).then(res => {
             setActividades(res.data);
+            setActividadesMain(res.data);
         });
     }, [params])
     return (
         <>
-            <Grid container px={3} spacing={2}>
+            <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <InputBox size="small" sx={{ width: 200 }} placeholder='Buscar'
                         InputProps={{
                             startAdornment:
                                 <BiSearch fontSize={25} />
                         }}
+                        onChange={ev => {
+                            setActividades(ActividadesMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
+                        }}
                     />
                     <BotonSimple
                         onClick={() => {
                             setOpen(true);
                         }}
-                        sx={{ float: 'right' }} endIcon={<FiFilter />}>Filtros</BotonSimple>
+                        sx={{ float: 'right' }} endIcon={<FiFilter />}>
+                        Filtros
+                    </BotonSimple>
                 </Grid>
                 {
                     Actividades.length > 0 ?

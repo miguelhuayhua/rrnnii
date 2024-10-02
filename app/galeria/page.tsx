@@ -8,12 +8,14 @@ export default function Home() {
     return (
         <>
             <Navbar />
-            <Box p={3}>
-                <Typography variant='h1' sx={{ fontWeight: 800, fontSize: 20 }}>Galeria</Typography>
+            <Box p={2}>
+                <Typography variant='h1' sx={{ fontWeight: 800, fontSize: 20, mb: 3 }}>
+                    Galeria
+                </Typography>
+                <Suspense >
+                    <Cliente />
+                </Suspense>
             </Box >
-            <Suspense >
-                <Cliente />
-            </Suspense>
             <Box mt={10}>
                 <Footer />
             </Box>

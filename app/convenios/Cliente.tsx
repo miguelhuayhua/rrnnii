@@ -15,6 +15,7 @@ const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
     const [Convenios, setConvenios] = useState<Convenio[]>([]);
+    const [ConveniosMain, setConveniosMain] = useState<Convenio[]>([]);
     useEffect(() => {
         axios.post('/api/convenio/listar',
             {
@@ -22,26 +23,30 @@ const Cliente = () => {
                 carrera: params.get('c') || undefined
             }).then(res => {
                 setConvenios(res.data);
+                setConveniosMain(res.data);
             })
     }, [params]);
     return (
         <>
-            <Grid container p={2} spacing={2} >
+            <Grid container spacing={2} >
                 <Grid item xs={12}>
-                    <Box px={2}>
-                        <InputBox sx={{ width: 200 }} placeholder='Buscar'
-                            InputProps={{
-                                size: 'small',
-                                startAdornment:
-                                    <BiSearch fontSize={25} />
-                            }}
-                        />
-                        <BotonSimple
-                            onClick={() => {
-                                setOpen(true);
-                            }}
-                            sx={{ float: 'right' }} endIcon={<FiFilter />}>Filtros</BotonSimple>
-                    </Box>
+                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                        InputProps={{
+                            size: 'small',
+                            startAdornment:
+                                <BiSearch fontSize={25} />
+                        }}
+                        onChange={(ev) => {
+                            setConvenios(ConveniosMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
+                        }}
+                    />
+                    <BotonSimple
+                        onClick={() => {
+                            setOpen(true);
+                        }}
+                        sx={{ float: 'right' }} endIcon={<FiFilter />}>
+                        Filtros
+                    </BotonSimple>
                 </Grid>
                 {
                     Convenios.length > 0 ?

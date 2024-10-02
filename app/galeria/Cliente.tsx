@@ -22,6 +22,7 @@ const Cliente = () => {
     const [index, setIndex] = useState<any>(-1);
     const [loading, setLoading] = useState(true);
     const [Galerias, setGalerias] = useState<Galeria[]>([]);
+    const [GaleriasMain, setGaleriasMain] = useState<Galeria[]>([]);
     const params = useSearchParams();
     const orden = params.get('s');
     const router = useRouter();
@@ -30,6 +31,7 @@ const Cliente = () => {
         setLoading(true);
         axios.post('/api/galeria/listar', { orden, skip: 0 }).then(res => {
             setGalerias(res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen })));
+            setGaleriasMain(res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen })));
             setSkip(1);
             setLoading(false);
         })
@@ -42,13 +44,16 @@ const Cliente = () => {
     }
     return (
         <>
-            <Grid container px={3} spacing={1}>
+            <Grid container spacing={2}>
                 <Grid item xs={12} mb={2}>
                     <InputBox
                         size='small' sx={{ width: 200 }} placeholder='Buscar'
                         InputProps={{
                             endAdornment:
                                 <BiSearch fontSize={25} />
+                        }}
+                        onChange={ev => {
+                            setGalerias(GaleriasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
                     <BotonSimple
@@ -99,18 +104,20 @@ const Cliente = () => {
             {
                 loading ?
                     <CircularProgress sx={{ display: 'block', mx: 'auto' }} /> :
-                    <BotonOutline
-                        sx={{ fontSize: 13, mx: 'auto', display: 'block', mt: 4 }}
-                        onClick={() => {
-                            setLoading(true);
-                            axios.post('/api/galeria/listar', { orden, skip }).then(res => {
-                                setGalerias(prev => [...prev, ...res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen }))]);
-                                setSkip(prev => prev + 1);
-                                setLoading(false);
-                            })
-                        }}>
-                        Cargar más
-                    </BotonOutline>
+                    Galerias.length == 0 ? null :
+                        <BotonOutline
+                            sx={{ fontSize: 13, mx: 'auto', display: 'block', mt: 4 }}
+                            onClick={() => {
+                                setLoading(true);
+                                axios.post('/api/galeria/listar', { orden, skip }).then(res => {
+                                    setGalerias(prev => [...prev, ...res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen }))]);
+                                    setGaleriasMain(prev => [...prev, ...res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen }))]);
+                                    setSkip(prev => prev + 1);
+                                    setLoading(false);
+                                })
+                            }}>
+                            Cargar más
+                        </BotonOutline>
             }
         </>
     )

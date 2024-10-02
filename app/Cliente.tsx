@@ -108,6 +108,7 @@ const Cliente = () => {
                                 columns={2}
                                 render={{
                                     image: (props, context) => {
+                                        console.log(props)
                                         return (
                                             <Imagen style={{ borderRadius: 10 }}
                                                 src={props.src} width={+context.photo.width} height={+context.photo.height} layout="intrinsic" />

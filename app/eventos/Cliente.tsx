@@ -15,27 +15,33 @@ const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
     const [Eventos, setEventos] = useState<Evento[]>([]);
+    const [EventosMain, setEventosMain] = useState<Evento[]>([]);
     useEffect(() => {
         axios.post('/api/evento/listar',
             { tipo: params.get('t') || undefined }).then(res => {
                 setEventos(res.data);
+                setEventosMain(res.data);
             })
     }, [params]);
     return (
         <>
-            <Grid container px={3} spacing={2}>
+            <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <InputBox size='small' sx={{ width: 200 }} placeholder='Buscar'
+                    <InputBox size='small' sx={{ width: 200 }}
+                        placeholder='Buscar'
                         InputProps={{
                             startAdornment:
                                 <BiSearch fontSize={25} />
                         }}
+                        onChange={ev => {
+                            setEventos(EventosMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
+                        }}
                     />
                     <BotonSimple
-                        onClick={() => {
-                            setOpen(true);
-                        }}
-                        sx={{ float: 'right' }} endIcon={<FiFilter />}>Filtros</BotonSimple>
+                        onClick={() => { setOpen(true) }}
+                        sx={{ float: 'right' }} endIcon={<FiFilter />}>
+                        Filtros
+                    </BotonSimple>
                 </Grid>
                 {
                     Eventos.length > 0 ?
@@ -43,7 +49,7 @@ const Cliente = () => {
                             <Grid key={value.id} item xs={10} sm={6} md={4} lg={3} xl={2} mx='auto'>
                                 <EventoItem value={value as any} />
                             </Grid>))
-                        : <Normal ml={4} my={4}>
+                        : <Normal m={2}>
                             Eventos no encontrados
                         </Normal>
                 }

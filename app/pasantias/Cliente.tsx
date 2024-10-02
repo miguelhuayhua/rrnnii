@@ -14,8 +14,8 @@ import { Normal } from "../componentes/Textos";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const [Pasantias, setPasantias] = useState<Pasantia[]>([]);
+    const [PasantiasMain, setPasantiasMain] = useState<Pasantia[]>([]);
     const params = useSearchParams();
-
     useEffect(() => {
         const duracion = params.get('d') || '';
         const carrera = params.get('carrera') || '';
@@ -23,29 +23,29 @@ const Cliente = () => {
         axios.post('/api/pasantia/listar',
             { duracion, carrera, orden }).then(res => {
                 setPasantias(res.data);
+                setPasantiasMain(res.data);
             })
     }, [params]);
     return (
         <>
-            <Grid container px={2} spacing={2}>
+            <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Box px={2}>
-                        <InputBox sx={{ width: 200 }} placeholder='Buscar'
-                            InputProps={{
-                                size: 'small',
-                                startAdornment:
-                                    <BiSearch fontSize={25} />
-                            }}
-                        />
-                        <BotonSimple
-                            onClick={() => {
-                                setOpen(true);
-                            }}
-                            sx={{ float: 'right' }}
-                            endIcon={<FiFilter />}>
-                            Filtros
-                        </BotonSimple>
-                    </Box>
+                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                        InputProps={{
+                            size: 'small',
+                            startAdornment:
+                                <BiSearch fontSize={25} />
+                        }}
+                        onChange={ev => {
+                            setPasantias(PasantiasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
+                        }}
+                    />
+                    <BotonSimple
+                        onClick={() => { setOpen(true) }}
+                        sx={{ float: 'right' }}
+                        endIcon={<FiFilter />}>
+                        Filtros
+                    </BotonSimple>
                 </Grid>
                 {
                     Pasantias.length > 0 ?
@@ -53,7 +53,7 @@ const Cliente = () => {
                             <Grid key={value.id} item xs={12} sm={8} md={6} lg={4} mx='auto'>
                                 <PasantiaItem value={value as any} />
                             </Grid>))
-                        : <Normal ml={4} my={4}>
+                        : <Normal ml={2}>
                             Pasantias no encontradas
                         </Normal>
                 }

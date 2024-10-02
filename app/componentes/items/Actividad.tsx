@@ -18,7 +18,7 @@ const ActividadItem = ({ value }: Props) => {
 
     return (
         <BoxSombra position='relative' sx={{ borderRadius: 4, py: 2, border: '1px solid #eee' }}>
-            <Box position='absolute' top={0} height={"100%"} width="100%" sx={{ filter: 'brightness(.5)' }}>
+            <Box position='absolute' top={0} height={"100%"} width="100%" sx={{ filter: 'brightness(.4)' }}>
                 <Link href={`/actividades/${value.id}`} style={{ textDecoration: 'none' }}>
                     <Image layout="fill"
                         objectFit="cover" src={fileDomain + value.imagen}
@@ -33,7 +33,7 @@ const ActividadItem = ({ value }: Props) => {
                     {dayjs(value.createdAt).format('DD MMMM YYYY')}
                 </Normal>
                 <Link href={`/actividades/${value.id}`} style={{ textDecoration: 'none' }}>
-                    <Negrita sx={{ color: grey[50], py: 1, fontSize: 16 }}>
+                    <Negrita sx={{ color: "#fff", py: 1, fontSize: 16 }}>
                         {value.titulo}
                     </Negrita>
                 </Link>
