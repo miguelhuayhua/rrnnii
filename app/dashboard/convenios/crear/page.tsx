@@ -1,6 +1,6 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
-import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
+import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, MenuItem, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ import axios from "axios";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } =
         useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
-            defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' }, ConvenioCarrera: [], carreras: ['66d12318f08d4603551ca1b1'] }, shouldFocusError: true
+            defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' }, ConvenioCarrera: [], carreras: [] }, shouldFocusError: true
         });
     const router = useRouter();
     const [load, setLoad] = useState(false);

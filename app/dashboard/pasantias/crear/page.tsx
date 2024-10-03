@@ -24,7 +24,7 @@ import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
-        defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: ['66d12318f08d4603551ca1b1'] }, shouldFocusError: true
+        defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
     });
     const router = useRouter();
     const { openModal } = useModal();

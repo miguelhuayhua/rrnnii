@@ -9,6 +9,7 @@ const POST = async (request: NextRequest) => {
     const documento = form.get('documento');
     const institucion = form.get('institucion');
     const carreras = JSON.parse(form.get('carreras')) as string[];
+    console.log(carreras)
     try {
         const formimg = new FormData();
         const formdoc = new FormData();
