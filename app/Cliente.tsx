@@ -8,6 +8,7 @@ import { BotonOutline, BotonFilled, BotonSimple } from "./componentes/Botones";
 import ActividadItem from "./componentes/items/Actividad";
 import EventoItem from "./componentes/items/Evento";
 import { BsWhatsapp } from "react-icons/bs";
+import { getImageSize, useImageSize } from 'react-image-size';
 import { useCallback, useEffect, useState } from "react";
 import { blueGrey, grey } from "@mui/material/colors";
 import { Gradient } from '@/utils/Gradient.ts'
@@ -42,11 +43,6 @@ const Cliente = () => {
         }
     }, []);
 
-    const getImageSize = (src: string) => {
-        const img = new Image();
-        img.src = src;
-        return ({ width: img.width, height: img.height })
-    }
     useEffect(() => {
         axios.post('/api/evento/todo', { take: 4 }).then(res => {
             setEventos(res.data);
@@ -103,12 +99,17 @@ const Cliente = () => {
                             <MasonryPhotoAlbum
                                 spacing={10}
                                 photos={Galerias.map(value => {
-                                    return ({ ...getImageSize(value.imagen), src: value.imagen, })
+                                    let img = new Image();
+                                    img.src = value.imagen;
+                                    return ({
+                                        width: img.width,
+                                        height: img.height,
+                                        src: value.imagen,
+                                    })
                                 })}
                                 columns={2}
                                 render={{
                                     image: (props, context) => {
-                                        console.log(props)
                                         return (
                                             <Imagen style={{ borderRadius: 10 }}
                                                 src={props.src} width={+context.photo.width} height={+context.photo.height} layout="intrinsic" />
