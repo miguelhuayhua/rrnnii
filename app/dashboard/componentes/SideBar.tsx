@@ -19,6 +19,7 @@ import { blue, grey, red } from '@mui/material/colors';
 import { useState } from 'react';
 import { CgMenuLeft } from 'react-icons/cg';
 import { BiSolidInstitution } from 'react-icons/bi';
+import { useSession } from 'next-auth/react';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
 
 const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: string, active: boolean, onclick?: any }) => {
@@ -53,6 +54,7 @@ const SideBar = () => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     const [move, setMove] = useState(false);
+    const { data } = useSession();
     const Side = () => (
         <Box position='sticky' top={0} borderRight='1px solid #eee' width={95} minWidth={95} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
@@ -91,10 +93,18 @@ const SideBar = () => {
                 setMove(false);
             }} Icon={BiSolidInstitution} label='Carreras' active={pathname.includes('/carreras')} />
             <Divider sx={{ borderColor: '#eee' }} />
-            <SideBarItem onclick={() => {
-                router.push('/dashboard/usuarios');
-                setMove(false);
-            }} Icon={IoPeople} label='Personal y usuarios' active={pathname.includes('/usuarios')} />
+
+            {
+                data?.user.rol == 'admin' ?
+                    <SideBarItem onclick={() => {
+                        router.push('/dashboard/usuarios');
+                        setMove(false);
+                    }}
+                        Icon={IoPeople}
+                        label='Personal y usuarios'
+                        active={pathname.includes('/usuarios')} />
+                    : null
+            }
             <SideBarItem onclick={() => {
                 router.push('/dashboard/unidad');
                 setMove(false);

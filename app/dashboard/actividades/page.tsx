@@ -6,7 +6,7 @@ import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft } from "react-icons/md";
+import { MdArrowLeft, MdGroups2 } from "react-icons/md";
 import { axiosInstance } from "@/globals";
 import { Actividad } from "@prisma/client";
 import ModalActividad from "./Modal";
@@ -21,12 +21,14 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { RiFileWord2Line } from "react-icons/ri";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";
+import ModalParticipantes from "./ModalParticipantes";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [actividades, setActividades] = useState<Actividad[]>([]);
     const [prevActividades, setPrevActividades] = useState<Actividad[]>([]);
     const { openSnackbar } = useSnackbar();
+    const [openP, setOpenP] = useState(false);
     const [actividad, setActividad] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
@@ -137,6 +139,16 @@ export default function Page() {
                                         }
                                     </BotonFilled> : null
                             }
+                            {
+                                value.tipo == 'idiomas' || value.tipo == 'becas' ?
+                                    <BotonOutline onClick={() => {
+                                        setOpenP(true);
+                                        setActividad(value);
+                                    }}>
+                                        <MdGroups2 fontSize={23} />
+                                    </BotonOutline>
+                                    : null
+                            }
                             <SwitchBox checked={value.estado} onChange={(ev, checked) => {
                                 axios.post('/api/actividad/estado', { estado: checked, id: value.id }).then(res => {
                                     openSnackbar(res.data.mensaje);
@@ -152,7 +164,7 @@ export default function Page() {
                 }
             ))} />
             {
-                actividad ?
+                !openP && actividad ?
                     <ModalActividad
                         Actividad={actividad}
                         setActividad={setActividad}
@@ -161,6 +173,17 @@ export default function Page() {
                     />
                     : null
             }
+            {
+                openP && actividad ?
+                    <ModalParticipantes
+                        Actividad={actividad}
+                        setActividad={setActividad}
+                        setActividades={setActividades}
+                        setPrevActividades={setPrevActividades}
+                    />
+                    : null
+            }
+
         </Box>
     )
 }
