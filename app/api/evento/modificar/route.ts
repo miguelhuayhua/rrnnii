@@ -1,7 +1,6 @@
 
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-import { writeFile } from "fs/promises";
 import path from "path";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";

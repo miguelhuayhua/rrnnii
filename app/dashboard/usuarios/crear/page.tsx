@@ -1,6 +1,6 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
-import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
+import { Normal, Titulo } from "@/app/componentes/Textos";
 import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, MenuItem, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -99,17 +99,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs >
-                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
-                        <Normal>Principal</Normal>
-                    </Link>
-                    <Link style={{ textDecoration: 'none' }} href="/dashboard/pasantias">
-                        <Normal>Pasantias</Normal>
-                    </Link>
-                    <Negrita>Crear</Negrita>
-                </Breadcrumbs>
                 <BotonSimple
-                    sx={{ mt: 2 }}
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
@@ -117,7 +107,16 @@ export default function Page() {
                 <Titulo sx={{ mt: 1 }}>
                     Crear nueva pasantía
                 </Titulo>
-                <Grid container spacing={2} px={{ xs: 0, md: 10, lg: 20, xl: 30 }} py={2}>
+                <Breadcrumbs >
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard">
+                        <Normal>Principal</Normal>
+                    </Link>
+                    <Link style={{ textDecoration: 'none' }} href="/dashboard/pasantias">
+                        <Normal>Pasantias</Normal>
+                    </Link>
+                    <Normal>Crear</Normal>
+                </Breadcrumbs>
+                <Grid container spacing={2} px={{ xs: 0, md: 10, lg: 20, xl: 30 }} py={4}>
                     <Grid item xs={12} sm={5} lg={4}>
                         <Box px={{ xs: 12, sm: 0 }}>
                             <Box sx={{

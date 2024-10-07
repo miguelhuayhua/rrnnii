@@ -93,29 +93,12 @@ const Tabla = ({
     }));
     return (
         <Box>
-            {
-                hasSearch ?
-                    <Box my={1}>
-                        <InputBox
-                            size='small'
-                            sx={{
-                                width: "30%",
-                                minWidth: 200
-                            }}
-                            onChange={(ev: any) => {
-                                setData(filtrarValorEnArray(data, ev.target.value));
-                            }}
-                            placeholder='Buscar'
-                            InputProps={{
-                                endAdornment:
-                                    <BiSearch fontSize={25} />
-                            }}
-                        />
-                    </Box>
-                    : null
-            }
+
             <Box>
-                <TableContainer sx={{ maxHeight: 1000 }} >
+                <TableContainer sx={{
+                    maxHeight: 1000,
+                    bgcolor: 'white', p: 1.5, borderRadius: 3
+                }} >
                     {
                         Data.length > 0 ?
                             <Table
@@ -123,6 +106,32 @@ const Tabla = ({
                                 stickyHeader
                             >
                                 <TableHead >
+                                    {
+                                        hasSearch ?
+                                            <Box>
+                                                <InputBox
+
+                                                    size='small'
+
+                                                    sx={{
+                                                        width: "30%",
+                                                        minWidth: 200,
+                                                        ".MuiInputBase-root": {
+                                                            background: 'white'
+                                                        }
+                                                    }}
+                                                    onChange={(ev: any) => {
+                                                        setData(filtrarValorEnArray(data, ev.target.value));
+                                                    }}
+                                                    placeholder='Buscar'
+                                                    InputProps={{
+                                                        endAdornment:
+                                                            <BiSearch fontSize={25} />
+                                                    }}
+                                                />
+                                            </Box>
+                                            : null
+                                    }
                                     <TableRow key={'head'}>
                                         {cols.map((column) => {
                                             return (

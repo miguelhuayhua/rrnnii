@@ -80,11 +80,11 @@ export default function ModalLogin({ open, setOpen }: Props) {
                         rules={{ required: 'No puede quedar vacio' }}
                         control={credencialsForm.control}
                         name="password"
-                        render={({ field }) => (
+                        render={({ field, fieldState }) => (
                             <InputBox
                                 sx={{ mt: 3 }}
                                 label='Contraseña'
-                                error={!!credencialsForm.formState.errors.password}
+                                error={!!fieldState.error}
                                 disabled={loading}
                                 type={showPassword ? 'text' : 'password'}
                                 InputProps={{
@@ -96,10 +96,9 @@ export default function ModalLogin({ open, setOpen }: Props) {
                                             {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
                                         </IconButton>
                                 }}
-                                helperText={credencialsForm.formState.errors.password?.message || mensaje}
+                                helperText={fieldState.error?.message || mensaje}
                                 {...field}
-                            >
-                            </InputBox>
+                            />
                         )}
                     />
                     <BotonFilled sx={{ display: 'block', mt: 4, mx: 'auto', px: 4 }} onClick={async () => {

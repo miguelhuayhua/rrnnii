@@ -16,7 +16,7 @@ const ChipBox = styled(Chip)(() => {
 const BoxSombra = styled(Box)(() => {
     return {
         overflow: 'hidden',
-        borderRadius: 8,
+        borderRadius: 10,
         boxShadow: 'rgba(145, 158, 171, 0.4) 0px 1px 2px 0px',
         background: 'white'
     }

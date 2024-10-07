@@ -37,23 +37,18 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonSimple
-                startIcon={<MdArrowLeft fontSize={20} />}
-                onClick={() => router.back()}>
-                Regresar
-            </BotonSimple>
-            <Titulo sx={{ mt: 1 }}>
-                Convenios
-            </Titulo>
-            <Breadcrumbs >
+            <Breadcrumbs sx={{ mb: 2 }} >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard/convenios">
                     <Normal>Principal</Normal>
                 </Link>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard/convenios">
                     <Normal>Convenios</Normal>
                 </Link>
-                <Normal>Listado</Normal>
+                <Negrita>Listado</Negrita>
             </Breadcrumbs>
+            <Titulo sx={{ mt: 1 }}>
+                Convenios
+            </Titulo>
             <Stack direction='row' my={2} spacing={2} >
                 <BotonFilled onClick={() => router.push('/dashboard/convenios/crear')}>
                     Añadir convenio
@@ -68,7 +63,9 @@ export default function Page() {
                     <TbReload fontSize={22} />
                 </BotonSimple>
             </Stack>
-            <Tabs sx={{ mb: 4 }}
+            <Tabs
+                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}

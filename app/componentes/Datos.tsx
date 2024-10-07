@@ -8,6 +8,7 @@ const InputBox = styled(TextField)(() => {
         marginBottom: 16,
         '& .MuiOutlinedInput-root': {
             borderRadius: 14,
+            background: 'white',
             '&:hover fieldset': {
                 borderColor: blue[600], // Cambia el color al hacer hover
             },

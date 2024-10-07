@@ -21,7 +21,7 @@ const handler = NextAuth({
                         usuario
                     }
                 });
-                
+
                 if (data) {
                     if (bcrypt.compareSync(password, data.password)) {
                         return {
@@ -52,14 +52,16 @@ const handler = NextAuth({
             }
             return false
         },
-
         jwt({ token, user, trigger, session }) {
             if (user) {
                 token.rol = user.rol;
             }
             if (trigger == 'update') {
+                console.log(session)
                 token.name = session.usuario;
                 token.picture = session.avatar;
+                token.rol = session.rol;
+
             }
             return token
         },
@@ -67,7 +69,12 @@ const handler = NextAuth({
             session.user.rol = token.rol;
             return session;
         }
+    },
+    pages: {
+        signIn: '/'
     }
+
+
 })
 
 export { handler as GET, handler as POST };

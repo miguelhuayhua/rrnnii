@@ -1,6 +1,6 @@
 'use client';
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
-import { Normal, Titulo } from "@/app/componentes/Textos";
+import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
@@ -18,6 +18,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
+import { blue } from "@mui/material/colors";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [galerias, setGalerias] = useState<Galeria[]>([]);
@@ -33,14 +34,6 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonSimple
-                startIcon={<MdArrowLeft fontSize={20} />}
-                onClick={() => router.back()}>
-                Regresar
-            </BotonSimple>
-            <Titulo sx={{ mt: 1 }}>
-                Galeria
-            </Titulo>
             <Breadcrumbs >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
@@ -48,8 +41,11 @@ export default function Page() {
                 <Link style={{ textDecoration: 'none' }} href="/dashboard/galeria">
                     <Normal>Galeria</Normal>
                 </Link>
-                <Normal>Listado</Normal>
+                <Negrita>Listado</Negrita>
             </Breadcrumbs>
+            <Titulo sx={{ mt: 1 }}>
+                Galeria
+            </Titulo>
             <Stack direction='row' my={2} spacing={2} >
                 <BotonFilled onClick={() => router.push('/dashboard/galeria/crear')}>
                     Añadir galeria
@@ -65,6 +61,8 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
+                sx={{ mb: 4, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -113,9 +111,9 @@ export default function Page() {
                                 <MdEdit fontSize={18} />
                             </BotonOutline>
                             <SwitchBox checked={value.estado} onChange={(ev, checked) => {
-                                axiosInstance.post('/api/galeria/estado', { estado: checked, id: value.id }).then(res => {
+                                axios.post('/api/galeria/estado', { estado: checked, id: value.id }).then(res => {
                                     openSnackbar(res.data.mensaje);
-                                    axiosInstance.post('/api/galeria/todo', { opcion }).then(res => {
+                                    axios.post('/api/galeria/todo', { opcion }).then(res => {
                                         setGalerias(res.data);
                                         setPrevGalerias(res.data);
                                         setOpcion('todo');

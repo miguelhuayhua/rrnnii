@@ -1,13 +1,20 @@
 'use client';
 import Box from '@mui/material/Box';
-import { Avatar, ClickAwayListener, Divider, Tooltip } from "@mui/material";
+import { Avatar, ClickAwayListener, Divider, Stack, Tooltip } from "@mui/material";
 import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { BotonSimple } from '@/app/componentes/Botones';
 import { PiSignOutBold } from 'react-icons/pi';
+import { FaRegUser, FaUser } from 'react-icons/fa';
+import { RiLogoutCircleLine } from 'react-icons/ri';
+import { useRouter } from 'next/navigation';
+import { fileDomain } from '@/utils/globals';
+import { Normal } from '@/app/componentes/Textos';
+import { grey } from '@mui/material/colors';
 const Navbar = () => {
     const [open, setOpen] = useState(false);
     const { data } = useSession();
+    const router = useRouter();
     return (
         <Box position={'sticky'} top={0} zIndex={18} width="100%" px={1}>
             <Box className='blur-style' p={2} height={30} bgcolor='transparent' position={'relative'} >
@@ -34,9 +41,24 @@ const Navbar = () => {
                         open={open}
                         onClose={() => setOpen(false)}
                         title={
-                            <Box p={0.5}>
+                            <Stack p={0.5}>
+                                <Normal sx={{
+                                    textAlign: 'center',
+                                    color: grey[900]
+                                }}>
+                                    {data?.user.name}
+                                </Normal>
                                 <BotonSimple
-                                    startIcon={<PiSignOutBold />}
+                                    onClick={() => {
+                                        router.push('/dashboard/perfil');
+                                    }}
+                                    sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}
+                                    startIcon={<FaRegUser style={{ marginBottom: 1 }} />}>
+                                    Mi Perfil
+                                </BotonSimple>
+                                <BotonSimple
+                                    sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}
+                                    startIcon={<RiLogoutCircleLine />}
                                     onClick={() => {
                                         signOut({
                                             redirect: true,
@@ -45,13 +67,14 @@ const Navbar = () => {
                                     }}>
                                     Cerrar sesión
                                 </BotonSimple>
-                            </Box>
+
+                            </Stack>
                         }
                     >
                         <Avatar
                             onClick={() => setOpen(true)}
-                            sx={{ "&:hover": { cursor: 'pointer' }, position: 'absolute', right: 10, top: 10, bgcolor: '#0074be' }}
-                            src={data?.user.image!}
+                            sx={{ "&:hover": { cursor: 'pointer' }, position: 'absolute', right: 10, top: 15 }}
+                            src={fileDomain + data?.user.image!}
                         />
                     </Tooltip>
                 </ClickAwayListener>

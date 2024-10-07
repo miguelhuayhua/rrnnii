@@ -1,19 +1,18 @@
 "use client";
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+import { BotonFilled } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Grid } from "@mui/material";
+import { Box, Breadcrumbs, Grid } from "@mui/material";
 import { BoxSombra } from "../componentes/Mostrar";
-import { useRouter } from "next/navigation";
-import { MdAlternateEmail, MdArrowLeft } from "react-icons/md";
+import { MdAlternateEmail } from "react-icons/md";
 import { Unidad } from "@prisma/client";
 import { GrLocation } from "react-icons/gr";
-import { TbAlertSquareRounded, TbPdf, TbReload } from "react-icons/tb";
-import { InputBox, SwitchBox } from "@/app/componentes/Datos";
+import { TbAlertSquareRounded } from "react-icons/tb";
+import { InputBox } from "@/app/componentes/Datos";
 import { Controller, useForm } from "react-hook-form";
 import { FiSmartphone } from "react-icons/fi";
 import axios from "axios";
-
 import { useModal } from "@/providers/ModalProvider";
+import Link from "next/link";
 export default function Page() {
     const { control,
         handleSubmit,
@@ -25,13 +24,18 @@ export default function Page() {
                 ubicacion: ''
             }
         })
-    const router = useRouter();
     const { openModal } = useModal();
     return (
-        <Box px={{ xs: 1, md: 2, lg: 5 }}>
+        <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
+            <Breadcrumbs>
+                <Link style={{ textDecoration: 'none' }} href="/dashboard">
+                    <Normal>Principal</Normal>
+                </Link>
+                <Negrita>Unidad</Negrita>
+            </Breadcrumbs>
             {
                 isDirty ?
-                    <BoxSombra mb={2} p={1} display='flex'
+                    <BoxSombra my={2} p={1} display='flex'
                         alignItems='center'
                         justifyContent='space-between'>
                         <Normal sx={{
@@ -57,14 +61,9 @@ export default function Page() {
                     </BoxSombra>
                     : null
             }
-            <Titulo mb={2}>
+            <Titulo mt={1}>
                 Información de Unidad
             </Titulo>
-            <BotonSimple
-                startIcon={<MdArrowLeft fontSize={20} />}
-                onClick={() => router.back()}>
-                Regresar
-            </BotonSimple>
             <Grid container spacing={2} pt={2}>
                 <Grid item xs={12} sm={6} lg={4}>
                     <BoxSombra p={1.5}>

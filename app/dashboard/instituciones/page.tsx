@@ -19,6 +19,7 @@ import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";
+import { blue } from "@mui/material/colors";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -34,14 +35,6 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonSimple
-                startIcon={<MdArrowLeft fontSize={20} />}
-                onClick={() => router.back()}>
-                Regresar
-            </BotonSimple>
-            <Titulo sx={{ mt: 1 }}>
-                Instituciones
-            </Titulo>
             <Breadcrumbs>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
@@ -49,8 +42,11 @@ export default function Page() {
                 <Link style={{ textDecoration: 'none' }} href="/dashboard/instituciones">
                     <Normal>Instituciones</Normal>
                 </Link>
-                <Normal>Listado</Normal>
+                <Negrita>Listado</Negrita>
             </Breadcrumbs>
+            <Titulo sx={{ mt: 1 }}>
+                Instituciones
+            </Titulo>
             <Stack direction='row' my={2} spacing={2}>
                 <BotonFilled onClick={() => router.push('/dashboard/instituciones/crear')}>
                     Añadir institución
@@ -66,7 +62,8 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
-                sx={{ mb: 4 }}
+                sx={{ mb: 4, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}

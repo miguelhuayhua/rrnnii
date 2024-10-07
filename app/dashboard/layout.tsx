@@ -16,9 +16,9 @@ export default async function Layout({ children }: any) {
             <DatePickerProvider>
                 <SnackbarProvider>
                     <ModalProvider>
-                        <Box display='flex'>
+                        <Box bgcolor='#eee' display='flex'>
                             <SideBar />
-                            <Box sx={{ width: { xs: "100%", md: "calc(100% -95px)" }, overflow:'hidden' }}>
+                            <Box sx={{ width: { xs: "100%", md: "calc(100% -250px)" }, overflow: 'hidden' }}>
                                 <Navbar />
                                 <Box mt={5}>
                                     {children}

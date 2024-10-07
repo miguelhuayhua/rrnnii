@@ -37,14 +37,6 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonSimple
-                startIcon={<MdArrowLeft fontSize={20} />}
-                onClick={() => router.back()}>
-                Regresar
-            </BotonSimple>
-            <Titulo sx={{ mt: 1 }}>
-                Eventos
-            </Titulo>
             <Breadcrumbs >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
@@ -52,8 +44,11 @@ export default function Page() {
                 <Link style={{ textDecoration: 'none' }} href="/dashboard/eventos">
                     <Normal>Eventos</Normal>
                 </Link>
-                <Normal>Listado</Normal>
+                <Negrita>Listado</Negrita>
             </Breadcrumbs>
+            <Titulo sx={{ mt: 1 }}>
+                Eventos
+            </Titulo>
             <Stack direction='row' my={2} spacing={2} >
                 <BotonFilled onClick={() => router.push('/dashboard/eventos/crear')}>
                     Añadir evento
@@ -69,7 +64,8 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
-                sx={{ mb: 4 }}
+                sx={{ mb: 4, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}

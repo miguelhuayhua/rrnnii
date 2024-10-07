@@ -28,20 +28,23 @@ const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: 
             onClick={() => onclick()}
             sx={{
                 display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
+                alignItems: 'center',
+                justifyContent: 'start',
                 textTransform: 'none',
                 fontSize: 10.5,
                 fontWeight: 700,
-                color: active ? blue[700] : grey[700],
+                color: active ? blue[700] : grey[900],
                 mx: 'auto',
-                borderRadius: 2,
-                my: 0.5,
+                borderRadius: 4,
+                my: 0.25,
+                py: 1.1,
                 background: active ? blue[50] : 'transparent',
                 width: "90%"
             }}>
-            <Icon fontSize={25} />
-            <Normal sx={{ color: active ? blue[700] : grey[700], fontWeight: 700, fontSize: 12.5 }}>
+            <Box sx={{ background: 'white', padding: 1, borderRadius: 3, height: 35 }}>
+                <Icon fontSize={18} />
+            </Box>
+            <Normal sx={{ color: grey[900], fontWeight: 700, fontSize: 12.5, ml: 1 }}>
                 {label}
             </Normal>
         </Button >
@@ -56,7 +59,7 @@ const SideBar = () => {
     const [move, setMove] = useState(false);
     const { data } = useSession();
     const Side = () => (
-        <Box position='sticky' top={0} borderRight='1px solid #eee' width={95} minWidth={95} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
+        <Box position='sticky' top={0} borderRight='1px solid #eee' width={250} minWidth={95} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
                 <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
             </Box>
@@ -101,7 +104,7 @@ const SideBar = () => {
                         setMove(false);
                     }}
                         Icon={IoPeople}
-                        label='Personal y usuarios'
+                        label='Personal'
                         active={pathname.includes('/usuarios')} />
                     : null
             }

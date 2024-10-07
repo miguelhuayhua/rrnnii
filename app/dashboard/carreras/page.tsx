@@ -19,6 +19,7 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import ModalCarrera from "./Modal";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";
+import { blue } from "@mui/material/colors";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -34,11 +35,6 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonSimple
-                startIcon={<MdArrowLeft fontSize={20} />}
-                onClick={() => router.back()}>
-                Regresar
-            </BotonSimple>
             <Titulo sx={{ mt: 1 }}>
                 Carreras
             </Titulo>
@@ -49,14 +45,14 @@ export default function Page() {
                 <Link style={{ textDecoration: 'none' }} href="/dashboard/carreras">
                     <Normal>Carreras</Normal>
                 </Link>
-                <Normal>Listado</Normal>
+                <Negrita>Listado</Negrita>
             </Breadcrumbs>
             <Stack direction='row' my={2} spacing={2}>
                 <BotonFilled onClick={() => router.push('/dashboard/carreras/crear')}>
                     Añadir carrera
                 </BotonFilled>
                 <BotonSimple onClick={() => {
-                    axiosInstance.post('/api/carrera/todo', {}).then(res => {
+                    axios.post('/api/carrera/todo', {}).then(res => {
                         setCarreras(res.data);
                         setPrevCarreras(res.data);
                     });
@@ -65,7 +61,8 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
-                sx={{ mb: 4 }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}

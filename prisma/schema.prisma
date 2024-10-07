@@ -146,6 +146,9 @@ model Persona {
   f_nacimiento String   @default("")
   ci           String   @unique @default("")
   Usuario      Usuario?
+  estado       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  cargo        String   @default("")
 }
 
 model Acciones {

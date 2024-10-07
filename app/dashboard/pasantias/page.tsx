@@ -36,23 +36,18 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <BotonSimple
-                startIcon={<MdArrowLeft fontSize={20} />}
-                onClick={() => router.back()}>
-                Regresar
-            </BotonSimple>
+            <Breadcrumbs >
+                <Link style={{ textDecoration: 'none' }} href="/dashboard">
+                    <Normal>Principal</Normal>
+                </Link>
+                <Link style={{ textDecoration: 'none' }} href="/dashboard/pasantias">
+                    <Normal>Pasantias</Normal>
+                </Link>
+                <Negrita>Listado</Negrita>
+            </Breadcrumbs>
             <Titulo sx={{ mt: 1 }}>
                 Pasantías
             </Titulo>
-            <Breadcrumbs >
-                <Link style={{ textDecoration: 'none' }} href="/dashboard/pasantias">
-                    <Normal>Principal</Normal>
-                </Link>
-                <Link style={{ textDecoration: 'none' }} href="/dashboard/Pasantias">
-                    <Normal>Pasantias</Normal>
-                </Link>
-                <Normal>Listado</Normal>
-            </Breadcrumbs>
             <Stack direction='row' my={2} spacing={2} >
                 <BotonFilled onClick={() => router.push('/dashboard/pasantias/crear')}>
                     Añadir Pasantia
@@ -68,7 +63,8 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
-                sx={{ mb: 4 }}
+                sx={{ mb: 4, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -122,42 +118,43 @@ export default function Page() {
                     ),
                     "Institución": value.Institucion.nombre,
                     "Finaliza el": dayjs(value.finalizacion, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY'),
-                    "": (<>
-                        <Stack direction='row' alignItems='center' spacing={2}>
-                            <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
-                                setPasantia(value);
-                            }}>Modificar</BotonOutline>
+                    "": (
+                        <>
+                            <Stack direction='row' alignItems='center' spacing={2}>
+                                <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
+                                    setPasantia(value);
+                                }}>Modificar</BotonOutline>
 
-                            {
-                                value.pdf ?
-                                    <BotonFilled
-                                        onClick={() => {
-                                            let a = document.createElement('a');
-                                            a.download = fileDomain + value.pdf;
-                                            a.href = fileDomain + value.pdf;
-                                            a.target = '_blank';
-                                            a.click();
-                                            a.remove();
-                                        }}
-                                        sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
-                                        {
-                                            value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
-                                        }
-                                    </BotonFilled> : null
-                            }
-                            <SwitchBox checked={value.estado} onChange={(ev, checked) => {
-                                axiosInstance.post('/api/pasantia/estado', { estado: checked, id: value.id }).then(res => {
-                                    openSnackbar(res.data.mensaje);
-                                    axiosInstance.post('/api/pasantia/todo', {}).then(res => {
-                                        setPasantias(res.data);
-                                        setPrevPasantias(res.data);
-                                        setOpcion('todo');
+                                {
+                                    value.pdf ?
+                                        <BotonFilled
+                                            onClick={() => {
+                                                let a = document.createElement('a');
+                                                a.download = fileDomain + value.pdf;
+                                                a.href = fileDomain + value.pdf;
+                                                a.target = '_blank';
+                                                a.click();
+                                                a.remove();
+                                            }}
+                                            sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                            {
+                                                value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
+                                            }
+                                        </BotonFilled> : null
+                                }
+                                <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                                    axios.post('/api/pasantia/estado', { estado: checked, id: value.id }).then(res => {
+                                        openSnackbar(res.data.mensaje);
+                                        axios.post('/api/pasantia/todo', {}).then(res => {
+                                            setPasantias(res.data);
+                                            setPrevPasantias(res.data);
+                                            setOpcion('todo');
+                                        });
+
                                     });
-
-                                });
-                            }} />
-                        </Stack>
-                    </>)
+                                }} />
+                            </Stack>
+                        </>)
                 }
             ))} />
             {
