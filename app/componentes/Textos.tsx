@@ -2,7 +2,7 @@ import { Typography, styled } from "@mui/material";
 const Normal = styled(Typography)(() =>
 ({
     fontWeight: 400,
-    fontSize: 14
+    fontSize: 16
 }));
 
 const Titulo = styled(Typography)(({ theme }) =>
@@ -16,7 +16,7 @@ const Titulo = styled(Typography)(({ theme }) =>
 }));
 const Negrita = styled(Typography)(() =>
 ({
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 700,
 }));
 

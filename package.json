@@ -46,6 +46,7 @@
     "yet-another-react-lightbox": "^3.21.4"
   },
   "devDependencies": {
+    "@iconify/react": "^5.0.2",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/pdfjs-dist": "^2.10.378",

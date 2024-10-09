@@ -1,11 +1,10 @@
 'use client';
-import { Box, Button, Divider, Grid, Stack } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import Link from "next/link";
 import Image from 'next/legacy/image';
-import { FaBuilding, FaLink } from "react-icons/fa6";
+import { FaBuilding, FaBuildingColumns, FaLink } from "react-icons/fa6";
 import { Negrita, Normal } from "../Textos";
 import { ChipBox } from "../Mostrar";
-import { IoIosHeart } from "react-icons/io";
 import { blue, grey } from "@mui/material/colors";
 import { Carrera, Institucion, Pasantia, PasantiaCarrera } from "@prisma/client";
 import dayjs from "dayjs";
@@ -26,17 +25,17 @@ const PasantiaItem = ({ value }: Props) => {
                 <ChipBox sx={{ margin: 0, bgcolor: blue[600], borderRadius: 1.5, color: grey[50] }}
                     label={`${value.modalidad} meses`} />
                 <Link href={`/pasantias/${value.id}`} style={{ textDecoration: 'none' }}>
-                    <Negrita mt={2}>
+                    <Negrita my={2}>
                         {value.titulo}
                     </Negrita>
                 </Link>
-                <Normal sx={{ fontSize: 11, color: grey[700] }}>
+                <Normal sx={{ fontSize: 12, color: grey[700] }}>
                     Válido hasta: {dayjs(value.finalizacion, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY')}
                 </Normal>
-                <Normal sx={{ fontSize: 11, color: grey[700] }}>
+                <Normal sx={{ fontSize: 12, color: grey[700] }}>
                     Publicado el: {dayjs(value.createdAt).format('DD [de] MMMM [del] YYYY')}
                 </Normal>
-                <Negrita sx={{ fontSize: 11, mt: 1, color: grey[700], display: 'flex', alignItems: 'center' }}>
+                <Negrita sx={{ fontSize: 12, mt: 1, color: grey[700], display: 'flex', alignItems: 'center' }}>
                     <FaBuilding style={{ marginRight: 5 }} /> {value.Institucion.nombre}
                 </Negrita>
             </Grid>
@@ -52,8 +51,13 @@ const PasantiaItem = ({ value }: Props) => {
                 <Stack direction='row' px={0.5} py={1} flexWrap='wrap' sx={{ borderTop: `1px solid ${grey[300]}` }}>
                     {
                         value.PasantiaCarrera.map(value =>
-                        (<ChipBox key={value.id} avatar={<Image src={value.Carrera.logo} width={20} height={20} style={{ borderRadius: 4 }}
-                            layout='fixed' />} label={<Normal sx={{ fontSize: 10 }}>{value.Carrera.nombre}</Normal>} />)
+                        (<ChipBox
+                            key={value.id}
+                            label={<Normal sx={{ fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+                                {value.Carrera.logo ?
+                                    <Image src={fileDomain + value.Carrera.logo} width={20} height={20} style={{ borderRadius: 4 }}
+                                        layout='fixed' /> : <FaBuildingColumns style={{ marginRight: 5 }} fontSize={15} />}
+                                {value.Carrera.nombre}</Normal>} />)
                         )
                     }
                 </Stack>

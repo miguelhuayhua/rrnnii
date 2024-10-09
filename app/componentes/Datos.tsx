@@ -1,5 +1,5 @@
-import { MenuItem, Select, Switch, TextField, Typography, styled } from "@mui/material";
-import { blue, blueGrey, grey, red } from "@mui/material/colors";
+import { Switch, TextField, styled } from "@mui/material";
+import { blue, blueGrey } from "@mui/material/colors";
 import { DatePicker } from "@mui/x-date-pickers";
 
 const InputBox = styled(TextField)(() => {
@@ -7,8 +7,8 @@ const InputBox = styled(TextField)(() => {
         width: "100%",
         marginBottom: 16,
         '& .MuiOutlinedInput-root': {
-            borderRadius: 14,
-            background: 'white',
+            borderRadius: 10,
+            'fieldset': { border: '1px solid #ddd' },
             '&:hover fieldset': {
                 borderColor: blue[600], // Cambia el color al hacer hover
             },
@@ -18,9 +18,10 @@ const InputBox = styled(TextField)(() => {
         },
         ".MuiFormLabel-root": {
             fontWeight: 600,
+            fontSize: 17
         },
-        ".MuiTypography-root": {
-            fontSize: 14,
+        ".MuiInputBase-input": {
+            fontSize: 18
         }
     }
 });

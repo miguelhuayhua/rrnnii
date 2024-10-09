@@ -1,32 +1,29 @@
 "use client";
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft } from "react-icons/md";
-import { axiosInstance } from "@/globals";
 import { Institucion, Pasantia } from "@prisma/client";
-import Image from 'next/legacy/image';
 import ModalPasantia from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
+import 'dayjs/locale/es';
+dayjs.locale('es');
 import { blue, red } from "@mui/material/colors";
-import { SwitchBox } from "@/app/componentes/Datos";
-import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
-import { fileDomain } from "@/utils/globals";
-import { RiFileWord2Line } from "react-icons/ri";
+import PasantiaComponent from "../componentes/items/Pasantia";
+import { ChipBox } from "@/app/componentes/Mostrar";
+import { InputBox } from "@/app/componentes/Datos";
+import { IoSearch } from "react-icons/io5";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [Pasantias, setPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
     const [prevPasantias, setPrevPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
     const [Pasantia, setPasantia] = useState<any>(null);
-    const { openSnackbar } = useSnackbar();
     const router = useRouter();
     useEffect(() => {
         axios.post('/api/pasantia/todo').then(res => {
@@ -36,7 +33,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <Breadcrumbs >
+            <Breadcrumbs sx={{ mb: 1 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -45,7 +42,7 @@ export default function Page() {
                 </Link>
                 <Negrita>Listado</Negrita>
             </Breadcrumbs>
-            <Titulo sx={{ mt: 1 }}>
+            <Titulo sx={{ mb: 2 }}>
                 Pasantías
             </Titulo>
             <Stack direction='row' my={2} spacing={2} >
@@ -53,7 +50,7 @@ export default function Page() {
                     Añadir Pasantia
                 </BotonFilled>
                 <BotonSimple onClick={() => {
-                    axiosInstance.post('/api/pasantia/todo', { opcion }).then(res => {
+                    axios.post('/api/pasantia/todo', { opcion }).then(res => {
                         setPasantias(res.data);
                         setPrevPasantias(res.data);
                         setOpcion('todo');
@@ -63,7 +60,7 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
-                sx={{ mb: 4, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
                 TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
@@ -85,78 +82,64 @@ export default function Page() {
                     else if (value == 'inactivo')
                         setPasantias(prevPasantias.filter(value => !value.estado))
                 }}>
-                <TabBox label="Todos" value='todo' />
-                <TabBox label="Vigentes" value='vigente' />
-                <TabBox label="Concluídos" value='concluido' />
-                <TabBox label="Activos" value='activo' />
-                <TabBox label="Inactivos" value='inactivo' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Todos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, background: '#212121', color: 'white', height: 25 }}
+                            label={prevPasantias.length} />
+                    </Box>}
+                    value='todo' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Vigentes
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevPasantias.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0).length} />
+                    </Box>} value='vigente' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Concluídos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevPasantias.filter(value => dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) < 0).length} />
+                    </Box>} value='concluido' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Activos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevPasantias.filter(value => value.estado).length} />
+                    </Box>} value='activo' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Inactivos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevPasantias.filter(value => !value.estado).length} />
+                    </Box>} value='inactivo' />
             </Tabs>
-            <Tabla skipColumns={{ nombre: true }} data={Pasantias.map(value => (
+            <InputBox
+                onChange={ev => {
+                    setPasantias(prevPasantias.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
+                }}
+                placeholder="Buscar" InputProps={{
+                    endAdornment: <IoSearch fontSize={28} />
+                }} sx={{ maxWidth: 300 }} />
+            <Grid container spacing={2}>
                 {
-                    id: value.id,
-                    nombre: value.titulo,
-                    Pasantia: (
-                        <Box display='flex' width={350} minWidth={300} py={0.35}>
-                            <Box minWidth={80} width={80} height={80} position='relative'>
-                                <Image src={fileDomain + value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
-                            </Box>
-                            <Box px={2}>
-                                <Negrita sx={{ fontSize: 13 }}>{value.titulo}</Negrita>
-                                <Normal >Duración: {value.modalidad} meses</Normal>
-                            </Box>
-                        </Box>
-                    ),
-                    "Creado el": (
-                        <Box minWidth={90}>
-                            <Negrita sx={{ fontSize: 13 }}>
-                                {dayjs(value.createdAt).format('DD/MM/YYYY')}
-                            </Negrita>
-                            <Normal sx={{ fontSize: 11 }}>
-                                {dayjs(value.createdAt).format('HH:mm:ss')}
-                            </Normal>
-                        </Box>
-                    ),
-                    "Institución": value.Institucion.nombre,
-                    "Finaliza el": dayjs(value.finalizacion, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY'),
-                    "": (
-                        <>
-                            <Stack direction='row' alignItems='center' spacing={2}>
-                                <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
-                                    setPasantia(value);
-                                }}>Modificar</BotonOutline>
-
-                                {
-                                    value.pdf ?
-                                        <BotonFilled
-                                            onClick={() => {
-                                                let a = document.createElement('a');
-                                                a.download = fileDomain + value.pdf;
-                                                a.href = fileDomain + value.pdf;
-                                                a.target = '_blank';
-                                                a.click();
-                                                a.remove();
-                                            }}
-                                            sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
-                                            {
-                                                value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
-                                            }
-                                        </BotonFilled> : null
-                                }
-                                <SwitchBox checked={value.estado} onChange={(ev, checked) => {
-                                    axios.post('/api/pasantia/estado', { estado: checked, id: value.id }).then(res => {
-                                        openSnackbar(res.data.mensaje);
-                                        axios.post('/api/pasantia/todo', {}).then(res => {
-                                            setPasantias(res.data);
-                                            setPrevPasantias(res.data);
-                                            setOpcion('todo');
-                                        });
-
-                                    });
-                                }} />
-                            </Stack>
-                        </>)
+                    Pasantias.map(value => (
+                        <Grid item xs={12} lg={6}>
+                            <PasantiaComponent
+                                setPasantia={setPasantia}
+                                setPasantias={setPasantias}
+                                setOpcion={setOpcion}
+                                setPrevPasantias={setPrevPasantias}
+                                Pasantia={value as any} />
+                        </Grid>
+                    ))
                 }
-            ))} />
+            </Grid>
             {
                 Pasantia ?
                     <ModalPasantia

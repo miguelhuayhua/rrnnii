@@ -8,7 +8,8 @@ const POST = async (request: NextRequest) => {
             where: {
                 tipo,
                 ConvenioCarrera: { some: { carreraId: carrera } },
-                id: { not: id }
+                id: { not: id },
+                estado: true
             },
             skip: skip || undefined
         });

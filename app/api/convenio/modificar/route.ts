@@ -39,6 +39,8 @@ const POST = async (request: NextRequest) => {
                     descripcion: form.get('descripcion'),
                     tipo: form.get('tipo'),
                     finalizacion: form.get('finalizacion'),
+                    pais: form.get('tipo') == 'nacional' ? 'BO' : form.get('pais'),
+                    continente: form.get('tipo') == 'nacional' ? 'SA' : form.get('continente'),
                     Institucion: {
                         connect: { nombre: institucion }
                     },
@@ -61,6 +63,8 @@ const POST = async (request: NextRequest) => {
                     descripcion: form.get('descripcion'),
                     tipo: form.get('tipo'),
                     finalizacion: form.get('finalizacion'),
+                    pais: form.get('tipo') == 'nacional' ? 'BO' : form.get('pais'),
+                    continente: form.get('tipo') == 'nacional' ? 'SA' : form.get('continente'),
                     Institucion: {
                         create: { nombre: institucion, logo: '' }
                     },

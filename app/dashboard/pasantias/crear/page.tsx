@@ -16,7 +16,7 @@ import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";
 import { useEffect, useState } from "react";
 import Image from 'next/legacy/image';
-import { ChipBox } from "@/app/componentes/Mostrar";
+import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
@@ -99,7 +99,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs >
+                <Breadcrumbs sx={{ mb: 1 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -108,18 +108,17 @@ export default function Page() {
                     </Link>
                     <Negrita>Crear</Negrita>
                 </Breadcrumbs>
+                <Titulo sx={{ mb: 2 }}>
+                    Crear nueva pasantía
+                </Titulo>
                 <BotonSimple
-                    sx={{ mt: 2 }}
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
                 </BotonSimple>
-                <Titulo sx={{ mt: 1 }}>
-                    Crear nueva pasantía
-                </Titulo>
-                <Grid container spacing={2} px={{ xs: 0, md: 10, lg: 20, xl: 30 }} py={2}>
+                <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Box px={{ xs: 12, sm: 0 }}>
+                        <BoxSombra p={2}>
                             <Box sx={{
                                 aspectRatio: 1,
                                 bgcolor: grey[100],
@@ -148,49 +147,48 @@ export default function Page() {
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                             </Box>
                             <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-
-                        </Box>
-                        <Box px={{ xs: 2, sm: 0 }}>
-                            <Box sx={{
-                                p: 2,
-                                border: `1px solid ${grey[400]}`,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                borderRadius: 3,
-                                color: grey[900],
-                                position: 'relative',
-                                transition: 'border .5s',
-                                "&:hover": {
-                                    border: `1px solid ${red[300]}`
+                            <Box px={{ xs: 2, sm: 0 }}>
+                                <Box sx={{
+                                    p: 2,
+                                    border: `1px solid ${grey[400]}`,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    borderRadius: 3,
+                                    color: grey[900],
+                                    position: 'relative',
+                                    transition: 'border .5s',
+                                    "&:hover": {
+                                        border: `1px solid ${red[300]}`
+                                    }
+                                }}
+                                    onClick={() => PDFPicker.openFilePicker()}
+                                >
+                                    <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
+                                    <MdOutlineAttachFile style={{ fontSize: 20 }} />
+                                </Box>
+                                {
+                                    documento ?
+                                        <ChipBox icon={documento.type.includes('pdf') ?
+                                            <BsFileEarmarkPdfFill fontSize={20} color={red[400]} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
+                                            sx={{
+                                                mt: 2,
+                                                border: `1px solid ${documento.type.includes('pdf') ? red[400] : '#1951b2'}`,
+                                                height: 40,
+                                                bgcolor: 'white'
+                                            }}
+                                            label={documento.name}
+                                            onDelete={() => {
+                                                setDocumento(null);
+                                            }}
+                                        />
+                                        : null
                                 }
-                            }}
-                                onClick={() => PDFPicker.openFilePicker()}
-                            >
-                                <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
-                                <MdOutlineAttachFile style={{ fontSize: 20 }} />
                             </Box>
-                            {
-                                documento ?
-                                    <ChipBox icon={documento.type.includes('pdf') ?
-                                        <BsFileEarmarkPdfFill fontSize={20} color={red[400]} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
-                                        sx={{
-                                            mt: 2,
-                                            border: `1px solid ${documento.type.includes('pdf') ? red[400] : '#1951b2'}`,
-                                            height: 40,
-                                            bgcolor: 'white'
-                                        }}
-                                        label={documento.name}
-                                        onDelete={() => {
-                                            setDocumento(null);
-                                        }}
-                                    />
-                                    : null
-                            }
-                        </Box>
+                        </BoxSombra>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <Box px={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
@@ -212,7 +210,7 @@ export default function Page() {
                                         control={control}
                                         render={({ field }) => (
                                             <Box>
-                                                <Normal sx={{ fontSize: 16, my: 1, fontWeight: 500 }} >
+                                                <Normal sx={{ fontSize: 16, mb: 1, fontWeight: 500 }} >
                                                     Descripción:
                                                 </Normal>
                                                 <Editor
@@ -355,7 +353,7 @@ export default function Page() {
                                     <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Pasantia</BotonFilled>
                                 </Grid>
                             </Grid>
-                        </Box>
+                        </BoxSombra>
                     </Grid>
                 </Grid>
             </Box>

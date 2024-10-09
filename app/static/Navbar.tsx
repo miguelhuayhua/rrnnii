@@ -64,7 +64,7 @@ const Navbar = () => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         py: trigger ? 1.2 : 1.8,
-                        transition: 'padding .25s'
+                        transition: 'padding .25s',
                     }}
                 >
                     <Link style={{ textDecoration: 'none' }} href={"/"} >
@@ -112,7 +112,7 @@ const Navbar = () => {
                                 leaveTouchDelay={0}
                                 title={
                                     <Grid container columnSpacing={3} >
-                                        <Grid item xs={2}>
+                                        <Grid item xs={3}>
                                             <Link style={{ textDecoration: 'none' }} href={'/convenios'}>
                                                 <Negrita sx={{ color: pathname.startsWith('/convenios') ? red[700] : 'inherit' }}>
                                                     Convenios
@@ -129,36 +129,21 @@ const Navbar = () => {
                                                 </Normal>
                                             </Link>
                                         </Grid>
-                                        <Grid item xs={2}>
+                                        <Grid item xs={3}>
                                             <Link style={{ textDecoration: 'none' }} href={'/pasantias'}>
                                                 <Negrita sx={{ color: pathname.startsWith('/pasantias') ? red[700] : 'inherit' }}>
                                                     Pasantías
                                                 </Negrita>
                                             </Link>
                                         </Grid>
-                                        <Grid item xs={2}>
-                                            <Link style={{ textDecoration: 'none' }} href={'/actividades'}>
-                                                <Negrita sx={{ color: pathname.startsWith('/actividades') ? red[700] : 'inherit' }}>
-                                                    Actividades
+                                        <Grid item xs={3}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/becas'}>
+                                                <Negrita sx={{ color: pathname.startsWith('/becas') ? red[700] : 'inherit' }}>
+                                                    Becas
                                                 </Negrita>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?t=becas'}>
-                                                <Normal sx={{ my: 1 }}>
-                                                    Becas
-                                                </Normal>
-                                            </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?t=idiomas'}>
-                                                <Normal sx={{ my: 1 }}>
-                                                    Idiomas
-                                                </Normal>
-                                            </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/actividades?t=noticias'}>
-                                                <Normal sx={{ my: 1 }}>
-                                                    Noticias
-                                                </Normal>
-                                            </Link>
                                         </Grid>
-                                        <Grid item xs={2}>
+                                        <Grid item xs={3}>
                                             <Link style={{ textDecoration: 'none' }} href={'/eventos'}>
                                                 <Negrita sx={{ color: pathname.startsWith('/eventos') ? red[700] : 'inherit' }}>
                                                     Eventos
@@ -170,15 +155,15 @@ const Navbar = () => {
                                 }
                             >
                                 <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
-                                    {(pathname.startsWith('/convenios') || pathname.startsWith('/pasantias') || pathname.startsWith('/eventos') || pathname.startsWith('/actividades'))
+                                    {(pathname.startsWith('/convenios') || pathname.startsWith('/pasantias') || pathname.startsWith('/eventos') || pathname.startsWith('/becas'))
                                         ? <GoDotFill color='inherit' /> : null}
                                     Convocatorias <FaAngleDown />
                                 </Normal>
                             </Tooltip>
-                            <Link style={{ textDecoration: 'none' }} href={'/galeria'}>
+                            <Link style={{ textDecoration: 'none' }} href={'/noticias'}>
                                 <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
-                                    {pathname == '/galeria' ? <GoDotFill color='inherit' /> : null}
-                                    Galería
+                                    {pathname == '/noticias' ? <GoDotFill color='inherit' /> : null}
+                                    Noticias
                                 </Normal>
                             </Link>
                             <Link style={{ textDecoration: 'none' }} href={'/about'}>
@@ -226,9 +211,9 @@ const Navbar = () => {
                                 Pasantías
                             </BotonSimple>
                         </Link>
-                        <Link style={{ textDecoration: 'none' }} href={'/actividades'}>
-                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname.includes('/actividades') ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
-                                Actividades
+                        <Link style={{ textDecoration: 'none' }} href={'/becas'}>
+                            <BotonSimple sx={{ borderRadius: 0, justifyContent: 'start', p: 2, color: pathname.includes('/becas') ? red[700] : grey[800] }} startIcon={<PiDotOutlineFill />} fullWidth>
+                                Becas
                             </BotonSimple>
                         </Link>
                         <Link style={{ textDecoration: 'none' }} href={'/eventos'}>
@@ -237,9 +222,9 @@ const Navbar = () => {
                             </BotonSimple>
                         </Link>
                     </Box>
-                    <Link style={{ textDecoration: 'none' }} href={'/galeria'}>
-                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/galeria' ? red[700] : grey[800] }} startIcon={<PiSquaresFourFill />} fullWidth>
-                            Galeria
+                    <Link style={{ textDecoration: 'none' }} href={'/noticias'}>
+                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/noticias' ? red[700] : grey[800] }} startIcon={<PiSquaresFourFill />} fullWidth>
+                            Noticias
                         </BotonSimple>
                     </Link>
                     <Link style={{ textDecoration: 'none' }} href={'/about'}>

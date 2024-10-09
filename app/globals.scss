@@ -5,6 +5,42 @@ body {
 
 
 
+.btn-cont {
+  border-radius: 50% !important;
+  width: 130px;
+  height: 130px;
+  border: 1px solid rgb(67, 118, 207) !important;
+  overflow: hidden;
+  transition: 0.3s border;
+  opacity: 1;
+
+  margin: 10;
+  .img {
+    transition: opacity 0.5s;
+  }
+
+  span {
+    opacity: 0;
+    z-index: 10;
+  }
+
+  &:hover {
+    transition: 0.3s border;
+    border: 16px solid rgb(197, 38, 38) !important;
+
+    span {
+      opacity: 1;
+      transition: opacity 0.5s;
+      font-weight: 900;
+    }
+
+    .img {
+      opacity: 0.1;
+      transition: opacity 0.5s;
+    }
+  }
+}
+
 .dec {
   width: 88px;
   height: 36px;

@@ -31,6 +31,8 @@ model Convenio {
   pdf             String            @default("")
   imagen          String            @default("")
   institucionId   String            @default("")
+  pais            String            @default("")
+  continente      String            @default("")
   Institucion     Institucion?      @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   ConvenioCarrera ConvenioCarrera[]
 }
@@ -45,23 +47,35 @@ model Pasantia {
   pdf             String            @default("")
   estado          Boolean           @default(true)
   imagen          String            @default("")
-  institucionId   String            @default("")
+  institucionId   String?           @default("")
   Institucion     Institucion?      @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   PasantiaCarrera PasantiaCarrera[]
 }
 
-model Actividad {
-  id            String         @id @default(dbgenerated("generate_object_id()"))
-  titulo        String         @default("")
-  createdAt     DateTime       @default(now())
-  descripcion   String         @default("")
-  pdf           String         @default("")
-  tipo          String         @default("")
-  referencia    String?        @default("")
-  estado        Boolean        @default(true)
-  imagen        String         @default("")
-  encargado     String         @default("")
-  Participantes Participante[]
+model Beca {
+  id            String             @id @default(dbgenerated("generate_object_id()"))
+  titulo        String             @default("")
+  createdAt     DateTime           @default(now())
+  descripcion   String             @default("")
+  pdf           String             @default("")
+  termina       String             @default("")
+  estado        Boolean            @default(true)
+  imagen        String             @default("")
+  encargado     String             @default("")
+  pais          String             @default("")
+  continente    String             @default("")
+  Participantes ParticipanteBeca[]
+  tipo          String             @default("nacional")
+  institucionId String?            @default("")
+  Institucion   Institucion?       @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model ParticipanteBeca {
+  id              String @id @default(dbgenerated("generate_object_id()"))
+  nombre_completo String @default("")
+  contacto        String @default("")
+  becaId          String @default("")
+  Beca            Beca?  @relation(fields: [becaId], references: [id])
 }
 
 model Evento {
@@ -77,7 +91,7 @@ model Evento {
   imagen      String   @default("")
 }
 
-model Galeria {
+model Noticia {
   id          String   @id @default(dbgenerated("generate_object_id()"))
   titulo      String   @default("")
   createdAt   DateTime @default(now())
@@ -91,10 +105,12 @@ model Institucion {
   nombre    String     @unique
   createdAt DateTime   @default(now())
   estado    Boolean    @default(true)
+  ubicacion String     @default("")
   logo      String     @default("")
   contacto  Int?       @default(0)
   Convenios Convenio[]
   Pasantia  Pasantia[]
+  Becas     Beca[]
 }
 
 model ConvenioCarrera {
@@ -128,15 +144,6 @@ model Unidad {
   contacto  String @unique @default("")
   email     String @default("")
   ubicacion String @default("")
-}
-
-model Participante {
-  id              String     @id @default(dbgenerated("generate_object_id()"))
-  nombre_completo String     @default("")
-  contacto        String     @default("")
-  id_actividad    String     @default("")
-  Actividad       Actividad? @relation(fields: [actividadId], references: [id])
-  actividadId     String?
 }
 
 model Persona {

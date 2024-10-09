@@ -1,7 +1,7 @@
 "use client";
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -17,10 +17,13 @@ import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
-import { SwitchBox } from "@/app/componentes/Datos";
+import { InputBox, SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";
+import { IoSearch } from "react-icons/io5";
+import EventoComponent from "../componentes/items/Evento";
+import { ChipBox } from "@/app/componentes/Mostrar";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -54,7 +57,7 @@ export default function Page() {
                     Añadir evento
                 </BotonFilled>
                 <BotonSimple onClick={() => {
-                    axiosInstance.post('/api/evento/todo', { opcion }).then(res => {
+                    axios.post('/api/evento/todo', { opcion }).then(res => {
                         setEventos(res.data);
                         setPrevEventos(res.data);
                         setOpcion('todo');
@@ -64,7 +67,7 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
-                sx={{ mb: 4, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
                 TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
@@ -86,78 +89,64 @@ export default function Page() {
                     else if (value == 'inactivo')
                         setEventos(prevEventos.filter(value => !value.estado));
                 }}  >
-                <TabBox label="Todos" value='todo' />
-                <TabBox label="Vigentes" value='vigente' />
-                <TabBox label="Concluidos" value='concluido' />
-                <TabBox label="Activos" value='activo' />
-                <TabBox label="Inactivos" value='inactivo' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Todos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, background: '#212121', color: 'white', height: 25 }}
+                            label={prevEventos.length} />
+                    </Box>}
+                    value='todo' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Vigentes
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevEventos.filter(value => dayjs(value.inicio, 'DD/MM/YYYY').diff(dayjs()) > 0).length} />
+                    </Box>} value='vigente' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Concluídos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevEventos.filter(value => dayjs(value.inicio, 'DD/MM/YYYY').diff(dayjs()) < 0).length} />
+                    </Box>} value='concluido' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Activos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevEventos.filter(value => value.estado).length} />
+                    </Box>} value='activo' />
+                <TabBox label={
+                    <Box display='flex' alignItems='center'>
+                        Inactivos
+                        <ChipBox
+                            sx={{ ml: 1, mb: 0.5, height: 25 }}
+                            label={prevEventos.filter(value => !value.estado).length} />
+                    </Box>} value='inactivo' />
             </Tabs>
-            <Tabla skipColumns={{ nombre: true }} hasPagination data={eventos.map(value => (
+            <InputBox
+                onChange={ev => {
+                    setEventos(prevEventos.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
+                }}
+                placeholder="Buscar" InputProps={{
+                    endAdornment: <IoSearch fontSize={28} />
+                }} sx={{ maxWidth: 300 }} />
+            <Grid container spacing={2}>
                 {
-                    id: value.id,
-                    nombre: value.titulo,
-                    Evento: (
-                        <Box display='flex' minWidth={300} py={0.35} alignItems='center'>
-                            <Box minWidth={80} width={80} height={80} position='relative'>
-                                <Image src={fileDomain + value.imagen} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
-                            </Box>
-                            <Box px={2}>
-                                <Negrita sx={{ fontSize: 16 }}>{value.titulo}</Negrita>
-                                <Normal><b>Tipo: </b>{value.tipo.toUpperCase()}</Normal>
-                            </Box>
-                        </Box>
-                    ),
-                    "Inicia el": (
-                        <Box minWidth={100}>
-                            <Negrita sx={{ fontSize: 13 }}>
-                                {value.inicio}
-                            </Negrita>
-                        </Box>
-                    ),
-                    "Creado el": (
-                        <Box minWidth={100}>
-                            <Negrita sx={{ fontSize: 13 }}>
-                                {dayjs(value.createdAt).format('DD/MM/YYYY')}
-                            </Negrita>
-                            <Normal sx={{ fontSize: 11 }}>
-                                {dayjs(value.createdAt).format('HH:mm:ss')}
-                            </Normal>
-                        </Box>
-                    ),
-                    "": (<Stack direction='row' spacing={2} alignItems='center'>
-                        <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
-                            setEvento(value);
-                        }}>Modificar</BotonOutline>
-                        {
-                            value.pdf ?
-                                <BotonFilled
-                                    onClick={() => {
-                                        let a = document.createElement('a');
-                                        a.download = fileDomain + value.pdf;
-                                        a.href = fileDomain + value.pdf;
-                                        a.target = '_blank';
-                                        a.click();
-                                        a.remove();
-                                    }}
-                                    sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700], px: 1.4 }}>
-                                    {
-                                        value.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
-                                    }
-                                </BotonFilled> : null
-                        }
-                        <SwitchBox checked={value.estado} onChange={(ev, checked) => {
-                            axiosInstance.post('/api/convenio/estado', { estado: checked, id: value.id }).then(res => {
-                                openSnackbar(res.data.mensaje);
-                                axiosInstance.post('/api/evento/todo', { opcion }).then(res => {
-                                    setEventos(res.data);
-                                    setPrevEventos(res.data);
-                                    setOpcion('todo');
-                                });
-                            });
-                        }} />
-                    </Stack>)
+                    eventos.map(value => (
+                        <Grid key={value.id} item xs={12} lg={6}>
+                            <EventoComponent
+                                setEvento={setEvento}
+                                setEventos={setEventos}
+                                setOpcion={setOpcion}
+                                setPrevEventos={setPrevEventos}
+                                Evento={value as any} />
+                        </Grid>
+                    ))
                 }
-            ))} />
+            </Grid>
             {
                 evento ?
                     <ModalEvento

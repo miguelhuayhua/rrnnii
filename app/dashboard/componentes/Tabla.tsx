@@ -141,7 +141,8 @@ const Tabla = ({
                                                         fontSize: 16,
                                                         fontFamily: 'inherit',
                                                         fontWeight: 600,
-                                                        border: 'none'
+                                                        border: 'none',
+                                                        background: 'white'
                                                     }}
                                                     key={column.label}
                                                     align={'left'}

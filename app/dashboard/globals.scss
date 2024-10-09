@@ -1,13 +1,14 @@
-
-html{
+html {
     background-color: #eee;
 }
+
 .editor {
 
     border: 1px solid #ccc;
     border-radius: 12px;
     overflow: hidden;
     color: #444 !important;
+    font-size: 14px;
 
     .ql-toolbar {
         border: none !important;

@@ -1,4 +1,4 @@
-import { Box, MenuItem, Select, Tab, TextField, Typography, styled } from "@mui/material";
+import { Box, Tab, styled } from "@mui/material";
 
 const BoxSombra = styled(Box)(() => {
     return {
@@ -12,7 +12,8 @@ const TabBox = styled(Tab)(() => {
     return {
         textTransform: 'none',
         fontWeight: 500,
-        fontSize: 13.5,
+        fontSize: 16,
+        color: 'black'
     }
 })
 export { BoxSombra, TabBox };

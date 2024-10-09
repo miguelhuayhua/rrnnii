@@ -2,7 +2,7 @@
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Box, Grid, MenuItem, LinearProgress } from '@mui/material';
+import { Autocomplete, Box, Grid, MenuItem, LinearProgress, ListSubheader } from '@mui/material';
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
@@ -25,7 +25,8 @@ import { useSnackbar } from '@/providers/SnackbarProvider';
 import { ChipBox } from '@/app/componentes/Mostrar';
 import { RiFileWord2Line } from 'react-icons/ri';
 import axios from 'axios';
-import { fileDomain } from '@/utils/globals';
+import { Icon as Iconify } from '@iconify/react';
+import { fileDomain, paises } from '@/utils/globals';
 interface Props {
     setConvenio: any;
     Convenio: Convenio & { ConvenioCarrera: ConvenioCarrera[] };
@@ -77,6 +78,9 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
         form.append('descripcion', convenio.descripcion);
         form.append('finalizacion', convenio.finalizacion!);
         form.append('institucion', convenio.Institucion.nombre);
+
+        form.append('continente', convenio.continente);
+        form.append('pais', convenio.pais);
         form.append('logo', convenio.Institucion.logo!);
         form.append('portada', portada);
         form.append('documento', documento);
@@ -321,6 +325,108 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                 />
                             )}
                         />
+                        {
+                            watch('tipo') != 'nacional' ?
+                                <Controller
+                                    name="pais"
+                                    control={control}
+                                    rules={{ required: 'País requerido' }}
+                                    render={({ field: { ref, ...field } }) => (
+                                        <InputBox
+                                            select
+                                            sx={{ '.MuiSelect-select': { display: 'flex', alignItems: 'center' } }}
+                                            label='País'
+                                            {...field}
+                                            onChange={ev => {
+                                                field.onChange(ev.target.value);
+                                                if (paises.africa.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'AF');
+                                                }
+                                                else if (paises.americaSur.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'SA');
+                                                }
+                                                else if (paises.americaNorte.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'NA');
+                                                }
+                                                else if (paises.europa.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'EU');
+                                                }
+                                                else if (paises.asia.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'AS');
+                                                }
+                                                else if (paises.oceania.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'OC');
+                                                }
+                                            }}
+                                            inputRef={ref}
+                                            SelectProps={{
+                                                MenuProps: {
+                                                    slotProps: {
+                                                        paper: {
+                                                            sx: {
+                                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                                borderRadius: 3,
+                                                                border: "1px solid #f1f1f1",
+                                                                boxShadow: '-10px 10px 30px #00000022',
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }}
+                                        >
+                                            <ListSubheader>América del norte</ListSubheader>
+                                            {
+                                                paises.americaNorte.map(value => (
+                                                    <MenuItem value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>América del sur</ListSubheader>
+                                            {
+                                                paises.americaSur.map(value => (
+                                                    <MenuItem value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>Europa</ListSubheader>
+                                            {
+                                                paises.europa.map(value => (
+                                                    <MenuItem value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>Asia</ListSubheader>
+                                            {
+                                                paises.asia.map(value => (
+                                                    <MenuItem value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>África</ListSubheader>
+                                            {
+                                                paises.africa.map(value => (
+                                                    <MenuItem value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>Oceanía</ListSubheader>
+                                            {
+                                                paises.oceania.map(value => (
+                                                    <MenuItem value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                        </InputBox>
+                                    )}
+                                />
+                                : null
+                        }
                         <Controller
                             name="tipo"
                             control={control}

@@ -1,37 +1,89 @@
 'use client';
-import { Box, Grid, } from "@mui/material";
-import Link from "next/link";
-import { FaBuilding } from "react-icons/fa6";
 import { Negrita, Normal } from "@/app/componentes/Textos";
+import { Pasantia, Institucion } from "@prisma/client";
 import { ChipBox } from "@/app/componentes/Mostrar";
-import { Institucion, Pasantia } from "@prisma/client";
+import dayjs from "dayjs";
+import { BoxSombra } from "../Mostrar";
+import { Box, Grid, Stack } from "@mui/material";
 import Image from 'next/legacy/image';
+import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
+import { fileDomain } from "@/utils/globals";
+import { TbPdf } from "react-icons/tb";
+import { blue, red } from "@mui/material/colors";
+import { SwitchBox } from "@/app/componentes/Datos";
+import axios from "axios";
+import { RiFileWord2Line } from "react-icons/ri";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 interface Props {
     Pasantia: Pasantia & { Institucion: Institucion };
+    setPasantia: any;
+    setOpcion: any;
+    setPasantias: any;
+    setPrevPasantias: any;
 }
-const PasantiaComponent = ({ Pasantia }: Props) => {
+const PasantiaComponent = ({ Pasantia, setPasantia,
+    setPasantias,
+    setOpcion,
+    setPrevPasantias
+}: Props) => {
+    const { openSnackbar } = useSnackbar();
     return (
-        <Grid container bgcolor='white' sx={{ overflow: 'hidden', pb: 3, borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
-            <Grid xs={7} py={3} px={2}>
-                <ChipBox sx={{ margin: 0, bgcolor: '#0073b7', color: 'white' }} label={Pasantia.modalidad + " meses"}></ChipBox>
-                <Link href='/'>
-                    <Negrita sx={{ color: '#212b36' }} mt={2}>
+        <BoxSombra p={3} bgcolor='white' borderRadius={4} >
+            <Grid container spacing={2}>
+                <Grid item xs={8} position='relative'>
+                    <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
+                        <ChipBox sx={{ height: 30, }} label={Pasantia.estado ? 'Publicado' : 'Sin publicar'} />
+                    </Stack>
+                    <Normal sx={{ color: '#929fac', fontSize: 15, mb: 2 }}>
+                        {dayjs(Pasantia.createdAt).format('DD MMMM YYYY')}
+                    </Normal>
+                    <Negrita>
                         {Pasantia.titulo}
                     </Negrita>
-                </Link>
-                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999' }}>
-                    Válido hasta: {Pasantia.finalizacion != 'undefined' ? Pasantia.finalizacion : ' Sin definir'}
-                </Normal>
-                <Normal sx={{ fontWeight: 400, fontSize: 12, color: '#999', py: 1 }}>
-                    <FaBuilding /> {Pasantia.Institucion.nombre}
-                </Normal>
+                    <Normal sx={{ mt: 1 }}>
+                        Termina el: {Pasantia.finalizacion}
+                    </Normal>
+
+                    <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
+                        <BotonOutline sx={{ fontSize: 14 }} onClick={() => {
+                            setPasantia(Pasantia);
+                        }}>Modificar</BotonOutline>
+                        {
+                            Pasantia.pdf ?
+                                <BotonFilled
+                                    onClick={() => {
+                                        let a = document.createElement('a');
+                                        a.download = fileDomain + Pasantia.pdf;
+                                        a.target = '_blank';
+                                        a.href = fileDomain + Pasantia.pdf;
+                                        a.click();
+                                        a.remove();
+                                    }}
+                                    sx={{ background: Pasantia.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                    {
+                                        Pasantia.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
+                                    }
+                                </BotonFilled> : null
+                        }
+                        <SwitchBox checked={Pasantia.estado} onChange={(ev, checked) => {
+                            axios.post('/api/pasantia/estado', { estado: checked, id: Pasantia.id }).then(res => {
+                                openSnackbar(res.data.mensaje);
+                                axios.post('/api/pasantia/todo', {}).then(res => {
+                                    setPasantias(res.data);
+                                    setPrevPasantias(res.data);
+                                    setOpcion('todo');
+                                });
+                            });
+                        }} />
+                    </Stack>
+                </Grid>
+                <Grid item xs={4}>
+                    <Box position='relative' height="100%" borderRadius={3} overflow='hidden'>
+                        <Image src={fileDomain + Pasantia.imagen} layout="fill" />
+                    </Box>
+                </Grid>
             </Grid>
-            <Grid xs={5} p={2}>
-                <Box position='relative' borderRadius={2} height={"100%"} overflow='hidden'>
-                    <Image objectFit="cover" layout='fill' src={Pasantia.imagen} />
-                </Box>
-            </Grid>
-        </Grid >
+        </BoxSombra>
     )
 }
 export default PasantiaComponent;

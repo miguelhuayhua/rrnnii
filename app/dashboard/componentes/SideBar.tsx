@@ -2,17 +2,15 @@
 import Box from '@mui/material/Box';
 import { usePathname, useRouter } from 'next/navigation';
 import { MdWork } from "react-icons/md";
-import { Button, Divider, SwipeableDrawer, Tooltip, useMediaQuery, useTheme } from "@mui/material";
-import { IoImage, IoPeople } from "react-icons/io5";
+import { Button, Divider, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
+import { IoPeople } from "react-icons/io5";
 import { FaHandsHelping, FaTools } from "react-icons/fa";
 import { FaBuilding, FaBuildingUser } from "react-icons/fa6";
-import Link from 'next/link';
 import Image from 'next/legacy/image';
-import { HiHome } from 'react-icons/hi2';
+import { HiHome, HiNewspaper } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 import { GiMeepleCircle } from 'react-icons/gi';
 import { BsFillCalendar2EventFill } from 'react-icons/bs';
-import { ArrowRightIcon } from '@mui/x-date-pickers';
 import { BotonSimple } from '@/app/componentes/Botones';
 import { Normal } from '@/app/componentes/Textos';
 import { blue, grey, red } from '@mui/material/colors';
@@ -44,7 +42,7 @@ const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: 
             <Box sx={{ background: 'white', padding: 1, borderRadius: 3, height: 35 }}>
                 <Icon fontSize={18} />
             </Box>
-            <Normal sx={{ color: grey[900], fontWeight: 700, fontSize: 12.5, ml: 1 }}>
+            <Normal sx={{ color: grey[900], fontWeight: 700, fontSize: 14, ml: 1 }}>
                 {label}
             </Normal>
         </Button >
@@ -76,17 +74,17 @@ const SideBar = () => {
                 setMove(false);
             }} Icon={MdWork} label='Pasantias' active={pathname.includes('/pasantias')} />
             <SideBarItem onclick={() => {
-                router.push('/dashboard/actividades');
+                router.push('/dashboard/becas');
                 setMove(false);
-            }} Icon={GiMeepleCircle} label='Actividades' active={pathname.includes('/actividades')} />
+            }} Icon={GiMeepleCircle} label='Becas' active={pathname.includes('/becas')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/eventos');
                 setMove(false);
             }} Icon={BsFillCalendar2EventFill} label='Eventos' active={pathname.includes('/eventos')} />
             <SideBarItem onclick={() => {
-                router.push('/dashboard/galeria');
+                router.push('/dashboard/noticias');
                 setMove(false);
-            }} Icon={IoImage} label='Galeria' active={pathname.includes('/galeria')} />
+            }} Icon={HiNewspaper} label='Noticias' active={pathname.includes('/noticias')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/instituciones');
                 setMove(false);

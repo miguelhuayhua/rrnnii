@@ -9,7 +9,6 @@ const POST = async (request: NextRequest) => {
     const documento = form.get('documento');
     const institucion = form.get('institucion');
     const carreras = JSON.parse(form.get('carreras')) as string[];
-    console.log(carreras)
     try {
         const formimg = new FormData();
         const formdoc = new FormData();
@@ -38,6 +37,8 @@ const POST = async (request: NextRequest) => {
                     imagen: resimage.data.path,
                     finalizacion: form.get('finalizacion'),
                     tipo: form.get('tipo'),
+                    pais: form.get('tipo') == 'nacional' ? 'BO' : form.get('pais'),
+                    continente: form.get('tipo') == 'nacional' ? 'SA' : form.get('continente'),
                     Institucion: {
                         connect: { nombre: institucion }
                     },

@@ -1,9 +1,11 @@
 import { prisma } from "@/app/api/client";
 import Navbar from "@/app/static/Navbar";
 import { Box } from "@mui/material";
+import { Metadata } from "next";
 import { Convenio } from "@prisma/client";
 import Cliente from "./Cliente";
 import Footer from "@/app/static/Footer";
+import { notFound } from "next/navigation";
 const get = async (id: string) => {
     return await prisma.convenio.findUnique({
         where: { id },
@@ -12,6 +14,11 @@ const get = async (id: string) => {
             ConvenioCarrera: { include: { Carrera: true } }
         }
     });
+}
+export const generateMetadata = async (props: any): Promise<Metadata> => {
+    const convenio = await get(props.params.id) as Convenio;
+    if (!convenio) return notFound();
+    return ({ title: convenio.titulo })
 }
 export default async function Home(props: any) {
     const convenio = await get(props.params.id) as Convenio;

@@ -1,8 +1,9 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, MenuItem, Typography } from "@mui/material";
+import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, ListSubheader, MenuItem, Typography } from "@mui/material";
 import Link from "next/link";
+import { Icon as Iconify } from '@iconify/react';
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
 import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
@@ -13,7 +14,6 @@ import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
-import { axiosInstance } from "@/globals";
 import { useEffect, useState } from "react";
 import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import Image from 'next/legacy/image';
@@ -23,6 +23,7 @@ import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 import axios from "axios";
+import { paises } from "@/utils/globals";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } =
@@ -65,11 +66,13 @@ export default function Page() {
         if (portada) {
             let form = new FormData();
             form.append('titulo', convenio.titulo);
-            form.append('tipo', convenio.tipo);
             form.append('pdf', convenio.pdf);
             form.append('descripcion', convenio.descripcion);
             form.append('portada', portada);
             form.append('documento', documento);
+            form.append('continente', convenio.continente);
+            form.append('pais', convenio.pais);
+            form.append('tipo', convenio.tipo);
             form.append('institucion', convenio.Institucion.nombre);
             form.append('finalizacion', convenio.finalizacion!);
             form.append('carreras', JSON.stringify(convenio.carreras))
@@ -101,7 +104,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 2 }} >
+                <Breadcrumbs sx={{ mb: 1 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -110,15 +113,16 @@ export default function Page() {
                     </Link>
                     <Negrita>Crear</Negrita>
                 </Breadcrumbs>
+                <Titulo sx={{ mb: 2 }}>
+                    Crear nuevo convenio
+                </Titulo>
                 <BotonSimple
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
                 </BotonSimple>
-                <Titulo sx={{ mt: 1 }}>
-                    Crear nuevo convenio
-                </Titulo>
-                <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 0 }} py={4}>
+
+                <Grid container spacing={2} px={{ xs: 0, xl: 5 }} py={2}>
                     <Grid item xs={12} sm={5} lg={4}>
                         <BoxSombra p={2}>
                             <Box px={{ xs: 12, sm: 0 }}>
@@ -319,6 +323,108 @@ export default function Page() {
                                             />
                                         )}
                                     />
+                                    {
+                                        watch('tipo') != 'nacional' ?
+                                            <Controller
+                                                name="pais"
+                                                control={control}
+                                                rules={{ required: 'País requerido' }}
+                                                render={({ field: { ref, ...field } }) => (
+                                                    <InputBox
+                                                        select
+                                                        sx={{ '.MuiSelect-select': { display: 'flex', alignItems: 'center' } }}
+                                                        label='País'
+                                                        {...field}
+                                                        onChange={ev => {
+                                                            field.onChange(ev.target.value);
+                                                            if (paises.africa.findIndex(value => value.value == ev.target.value) > -1) {
+                                                                setValue('continente', 'AF');
+                                                            }
+                                                            else if (paises.americaSur.findIndex(value => value.value == ev.target.value) > -1) {
+                                                                setValue('continente', 'SA');
+                                                            }
+                                                            else if (paises.americaNorte.findIndex(value => value.value == ev.target.value) > -1) {
+                                                                setValue('continente', 'NA');
+                                                            }
+                                                            else if (paises.europa.findIndex(value => value.value == ev.target.value) > -1) {
+                                                                setValue('continente', 'EU');
+                                                            }
+                                                            else if (paises.asia.findIndex(value => value.value == ev.target.value) > -1) {
+                                                                setValue('continente', 'AS');
+                                                            }
+                                                            else if (paises.oceania.findIndex(value => value.value == ev.target.value) > -1) {
+                                                                setValue('continente', 'OC');
+                                                            }
+                                                        }}
+                                                        inputRef={ref}
+                                                        SelectProps={{
+                                                            MenuProps: {
+                                                                slotProps: {
+                                                                    paper: {
+                                                                        sx: {
+                                                                            background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                                            borderRadius: 3,
+                                                                            border: "1px solid #f1f1f1",
+                                                                            boxShadow: '-10px 10px 30px #00000022',
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }}
+                                                    >
+                                                        <ListSubheader>América del norte</ListSubheader>
+                                                        {
+                                                            paises.americaNorte.map(value => (
+                                                                <MenuItem value={value.value}>
+                                                                    <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
+                                                                    {value.pais}</MenuItem>
+                                                            ))
+                                                        }
+                                                        <ListSubheader>América del sur</ListSubheader>
+                                                        {
+                                                            paises.americaSur.map(value => (
+                                                                <MenuItem value={value.value}>
+                                                                    <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
+                                                                    {value.pais}</MenuItem>
+                                                            ))
+                                                        }
+                                                        <ListSubheader>Europa</ListSubheader>
+                                                        {
+                                                            paises.europa.map(value => (
+                                                                <MenuItem value={value.value}>
+                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                                    {value.pais}</MenuItem>
+                                                            ))
+                                                        }
+                                                        <ListSubheader>Asia</ListSubheader>
+                                                        {
+                                                            paises.asia.map(value => (
+                                                                <MenuItem value={value.value}>
+                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                                    {value.pais}</MenuItem>
+                                                            ))
+                                                        }
+                                                        <ListSubheader>África</ListSubheader>
+                                                        {
+                                                            paises.africa.map(value => (
+                                                                <MenuItem value={value.value}>
+                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                                    {value.pais}</MenuItem>
+                                                            ))
+                                                        }
+                                                        <ListSubheader>Oceanía</ListSubheader>
+                                                        {
+                                                            paises.oceania.map(value => (
+                                                                <MenuItem value={value.value}>
+                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                                    {value.pais}</MenuItem>
+                                                            ))
+                                                        }
+                                                    </InputBox>
+                                                )}
+                                            />
+                                            : null
+                                    }
                                     <Controller
                                         name="tipo"
                                         control={control}

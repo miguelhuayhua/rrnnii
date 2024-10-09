@@ -1,6 +1,6 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
-import { Normal, Titulo } from "@/app/componentes/Textos";
+import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, LinearProgress } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ import { parseNumber } from "@/utils/data";
 import { grey } from "@mui/material/colors";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { InputBox } from "@/app/componentes/Datos";
+import { BoxSombra } from "@/app/componentes/Mostrar";
 
 export default function Page() {
     const { openSnackbar } = useSnackbar();
@@ -61,26 +62,26 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <BotonSimple
-                    startIcon={<MdArrowLeft fontSize={20} />}
-                    onClick={() => router.back()}>
-                    Regresar
-                </BotonSimple>
-                <Titulo sx={{ mt: 1 }}>
-                    Añadir institución
-                </Titulo>
-                <Breadcrumbs >
+                <Breadcrumbs sx={{ mb: 1 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard/instituciones">
                         <Normal>Instituciones</Normal>
                     </Link>
-                    <Normal>Crear</Normal>
+                    <Negrita>Crear</Negrita>
                 </Breadcrumbs>
-                <Grid container spacing={2} px={{ xs: 0, md: 10, lg: 20, xl: 30 }} py={4}>
+                <Titulo sx={{ mb: 2 }}>
+                    Añadir institución
+                </Titulo>
+                <BotonSimple
+                    startIcon={<MdArrowLeft fontSize={20} />}
+                    onClick={() => router.back()}>
+                    Regresar
+                </BotonSimple>
+                <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Box px={{ xs: 12, sm: 0 }}>
+                        <BoxSombra p={2}>
                             <Box sx={{
                                 aspectRatio: 1,
                                 bgcolor: grey[100],
@@ -109,11 +110,10 @@ export default function Page() {
                                 <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                             </Box>
                             <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-
-                        </Box>
+                        </BoxSombra>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <Box px={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
@@ -152,7 +152,7 @@ export default function Page() {
                                     <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Institucion</BotonFilled>
                                 </Grid>
                             </Grid>
-                        </Box>
+                        </BoxSombra>
                     </Grid>
                 </Grid>
             </Box>

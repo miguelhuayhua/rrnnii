@@ -15,13 +15,16 @@ const BotonOutline = styled(Button)(() =>
 }));
 const BotonFilled = styled(Button)(() =>
 ({
-    background: blueGrey[900],
+    background: grey[900],
     borderRadius: 12,
     color: blueGrey[50],
     textTransform: 'none',
+    display: 'flex',
+    alignItems: 'center',
     fontWeight: 700,
-    minWidth: 0,
-    fontSize: 15,
+    minHeight: 0,
+    height: 55,
+    fontSize: 16,
     "&:hover": {
         background: blueGrey[700],
         color: 'white'
@@ -30,9 +33,9 @@ const BotonFilled = styled(Button)(() =>
 ));
 const BotonSimple = styled(Button)(() =>
 ({
-    background: grey[50],
+    background: 'transparent',
     borderRadius: 12,
-    fontSize: 15,
+    fontSize: 16,
     color: grey[900],
     minWidth: 0,
     textTransform: 'none',
