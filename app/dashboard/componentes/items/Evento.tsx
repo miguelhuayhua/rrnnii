@@ -61,7 +61,10 @@ const EventoComponent = ({ Evento, setEvento,
                                         a.click();
                                         a.remove();
                                     }}
-                                    sx={{ background: Evento.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                    sx={{
+                                        background: Evento.pdf.includes('pdf') ? red[700] : blue[700],
+                                        height: 40
+                                    }}>
                                     {
                                         Evento.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                     }

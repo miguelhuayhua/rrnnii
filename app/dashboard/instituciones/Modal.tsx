@@ -18,6 +18,8 @@ import { useSnackbar } from '@/providers/SnackbarProvider';
 import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
 import { fileDomain } from '@/utils/globals';
+import { FaYoutube } from 'react-icons/fa';
+import { TbWorldWww } from 'react-icons/tb';
 interface Props {
     setInstitucion: any;
     Institucion: Institucion;
@@ -140,6 +142,30 @@ export default function ModalInstitucion({ setInstitucion, Institucion, setInsti
                                 <InputBox
                                     {...field}
                                     label='Contacto'
+                                    inputRef={ref}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="video"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    {...field}
+                                    label='Link de Youtube'
+                                    inputRef={ref}
+                                    InputProps={{ endAdornment: <FaYoutube fontSize={26} /> }}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="web"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    {...field}
+                                    label='Página web'
+                                    InputProps={{ endAdornment: <TbWorldWww fontSize={26} /> }}
                                     inputRef={ref}
                                 />
                             )}

@@ -23,6 +23,7 @@ import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red, blue } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
+import { IoMdLink } from "react-icons/io";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Evento>({
@@ -258,7 +259,6 @@ export default function Page() {
                                         rules={{ required: 'Inicio de evento requerido' }}
                                         render={({ field: { ref, ...field } }) => (
                                             <DatePickerBox
-                                                sx={{ mt: 2 }}
                                                 disablePast
                                                 onChange={(ev: any) => {
                                                     field.onChange(ev?.format('DD/MM/YYYY'))
@@ -274,6 +274,22 @@ export default function Page() {
                                             />
                                         )}
                                     />
+                                    {
+                                        watch('tipo') == 'online' ?
+
+                                            <Controller
+                                                name="link"
+                                                control={control}
+                                                rules={{ required: 'Título es obligatorio' }}
+                                                render={({ field: { ref, ...field } }) => (
+                                                    <InputBox
+                                                        {...field}
+                                                        label='Link de acceso'
+                                                        InputProps={{ endAdornment: <IoMdLink fontSize={25} /> }}
+                                                    />
+                                                )}
+                                            /> : null
+                                    }
                                 </Grid>
                                 <Grid item xs={12}>
                                     <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Evento</BotonFilled>

@@ -7,10 +7,10 @@ export default function Home() {
     return (
         <Box bgcolor='#f4f6f8'>
             <Navbar />
-            <Box p={2}>
+            <Box px={{ xs: 2, md: 10, lg: 20, xl: 35 }}>
                 <Typography
                     variant='h1'
-                    sx={{ fontWeight: 700, color: '#212b36', fontSize: 18, mb: 3 }}
+                    sx={{ fontWeight: 700, color: '#212b36', fontSize: 28, my: 3 }}
                 >
                     Pasantías
                 </Typography>

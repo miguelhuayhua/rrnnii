@@ -4,23 +4,22 @@ import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonFilled, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
-import { Suspense, useEffect, useState } from "react";
-import EventoItem from "../componentes/items/Evento";
-import Filtros from "./Filtro";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Evento } from "@prisma/client";
 import { Normal } from "../componentes/Textos";
+import NoticiaItem from "../componentes/items/Noticia";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
-    const [Eventos, setEventos] = useState<Evento[]>([]);
-    const [EventosMain, setEventosMain] = useState<Evento[]>([]);
+    const [Noticias, setNoticias] = useState<Evento[]>([]);
+    const [NoticiasMain, setNoticiasMain] = useState<Evento[]>([]);
     useEffect(() => {
-        axios.post('/api/evento/listar',
-            { tipo: params.get('t') || undefined }).then(res => {
-                setEventos(res.data);
-                setEventosMain(res.data);
+        axios.post('/api/noticia/listar',
+            { skip: 0 }).then(res => {
+                setNoticias(res.data);
+                setNoticiasMain(res.data);
             })
     }, [params]);
     return (
@@ -34,7 +33,7 @@ const Cliente = () => {
                                 <BiSearch fontSize={28} style={{ marginRight: 10 }} color='#aaa' />
                         }}
                         onChange={ev => {
-                            setEventos(EventosMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
+                            setNoticias(NoticiasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
                     <BotonFilled
@@ -46,19 +45,16 @@ const Cliente = () => {
                 </Grid>
 
                 {
-                    Eventos.length > 0 ?
-                        Eventos.map(value => (
-                            <Grid key={value.id} item xs={12} sm={6} lg={4} mx='auto'>
-                                <EventoItem value={value as any} />
+                    Noticias.length > 0 ?
+                        Noticias.map(value => (
+                            <Grid key={value.id} item xs={12} mx='auto'>
+                                <NoticiaItem value={value as any} />
                             </Grid>))
                         : <Normal m={2}>
-                            Eventos no encontrados
+                            Noticias no encontrados
                         </Normal>
                 }
             </Grid>
-            <Suspense>
-                <Filtros setOpen={setOpen} open={open} />
-            </Suspense>
         </>
     )
 }

@@ -175,11 +175,6 @@ export default function Cliente({ Beca }: Props) {
                                                             <Normal>
                                                                 {value.contacto}
                                                             </Normal>
-                                                            <Stack direction='row' spacing={2}>
-                                                                <BotonSimple>
-
-                                                                </BotonSimple>
-                                                            </Stack>
                                                         </Box>
                                                     </BoxSombra>
                                                 </Grid>

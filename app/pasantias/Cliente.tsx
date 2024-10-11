@@ -2,7 +2,7 @@
 import { Box, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
-import { BotonSimple } from "../componentes/Botones";
+import { BotonFilled, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
 import Filtros from "./Filtros";
@@ -29,28 +29,28 @@ const Cliente = () => {
     return (
         <>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <InputBox sx={{ width: 200 }} placeholder='Buscar'
+                <Grid item xs={12} display='flex' justifyContent='space-between'>
+                    <InputBox sx={{ width: 200 }}
+                        placeholder='Buscar'
                         InputProps={{
-                            size: 'small',
                             startAdornment:
-                                <BiSearch fontSize={25} />
+                                <BiSearch fontSize={28} style={{ marginRight: 10 }} color='#aaa' />
                         }}
                         onChange={ev => {
                             setPasantias(PasantiasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
-                    <BotonSimple
-                        onClick={() => { setOpen(true) }}
-                        sx={{ float: 'right' }}
-                        endIcon={<FiFilter />}>
-                        Filtros
-                    </BotonSimple>
+                    <BotonFilled
+                        onClick={() => {
+                            setOpen(true);
+                        }} >
+                        Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
+                    </BotonFilled>
                 </Grid>
                 {
                     Pasantias.length > 0 ?
                         Pasantias.map(value => (
-                            <Grid key={value.id} item xs={12} sm={8} md={6} lg={4} mx='auto'>
+                            <Grid key={value.id} item xs={12} sm={8} md={6} mx='auto'>
                                 <PasantiaItem value={value as any} />
                             </Grid>))
                         : <Normal ml={2}>

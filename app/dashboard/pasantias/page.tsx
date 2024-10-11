@@ -32,7 +32,7 @@ export default function Page() {
         });
     }, []);
     return (
-        <Box px={{ xs: 1, md: 2, lg: 5 }} >
+        <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
             <Breadcrumbs sx={{ mb: 1 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>

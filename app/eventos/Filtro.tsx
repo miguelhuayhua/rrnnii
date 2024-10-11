@@ -1,7 +1,7 @@
 'use client';
 import { Badge, FormControlLabel, Grid, Radio, RadioGroup, Stack, SwipeableDrawer } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Titulo } from "../componentes/Textos";
+import { Negrita, Titulo } from "../componentes/Textos";
 import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
@@ -13,6 +13,7 @@ const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
     const params = useSearchParams();
     const t = params.get('t') || '';
+    const orden = params.get('')
     return (
         <>
             <SwipeableDrawer
@@ -23,7 +24,7 @@ const Filtros = ({ open, setOpen }: Props) => {
             >
                 <Grid container width={270}>
                     <Grid display='flex' justifyContent='space-between' item xs={12} p={2} borderBottom='1px solid #ddd' >
-                        <Titulo sx={{ fontSize: 15 }}>
+                        <Titulo>
                             Filtros
                         </Titulo>
                         <Stack direction='row' >
@@ -43,21 +44,36 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
-                        <Titulo sx={{ fontSize: { xs: 13, md: 14 }, fontWeight: 600 }}>
-                            Modo
-                        </Titulo>
+                        <Negrita my={1}>
+                            Orden
+                        </Negrita>
+                        <RadioGroup value={orden} onChange={(ev) => {
+                            router.replace(`/eventos?s=${ev.target.value}${params.has('t') ? '&t=' + params.get('t') : ''}`)
+                        }}>
+                            <FormControlLabel
+                                value={'0'}
+                                control={<Radio />}
+                                label={'Más recientes'}
+                            />
+                            <FormControlLabel
+                                value={'1'}
+                                control={<Radio />}
+                                label={'Más antiguos'}
+                            />
+                        </RadioGroup>
+                        <Negrita my={1}>
+                            Modalidad
+                        </Negrita>
                         <RadioGroup value={t} onChange={(ev) => {
-                            router.replace(`/eventos?t=${ev.target.value}`)
+                            router.replace(`/eventos?t=${ev.target.value}${params.has('s') ? '&s=' + params.get('s') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'online'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Online'}
                             />
                             <FormControlLabel
                                 value={'presencial'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Presencial'}
                             />

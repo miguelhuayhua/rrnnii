@@ -1,10 +1,11 @@
-import Cliente from './Cliente';
-import Navbar from '../static/Navbar';
+import Navbar from '../../static/Navbar';
 import { Box, Typography } from "@mui/material";
-import Footer from '../static/Footer';
+import Footer from '../../static/Footer';
 import { Suspense } from 'react';
-export const metadata = {
-    title: 'Eventos - UPEA'
+import Cliente from './Cliente';
+import { Metadata } from 'next';
+export const metadata: Metadata = {
+    title: 'Buscar Becas'
 }
 export default function Home() {
     return (
@@ -15,13 +16,12 @@ export default function Home() {
                     variant='h1'
                     sx={{ fontWeight: 700, color: '#212b36', fontSize: 28, my: 3 }}
                 >
-                    Eventos
+                    Becas
                 </Typography>
                 <Suspense>
                     <Cliente />
                 </Suspense>
             </Box>
-
             <Box mt={10}>
                 <Footer />
             </Box>

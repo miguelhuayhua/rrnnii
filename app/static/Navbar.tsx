@@ -118,12 +118,12 @@ const Navbar = () => {
                                                     Convenios
                                                 </Negrita>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?t=nacional'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios/buscar?t=nacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Nacionales
                                                 </Normal>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?t=internacional'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios/buscar?t=internacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Internacionales
                                                 </Normal>
@@ -135,12 +135,32 @@ const Navbar = () => {
                                                     Pasantías
                                                 </Negrita>
                                             </Link>
+                                            <Link style={{ textDecoration: 'none' }} href={'/pasantias?d=3'}>
+                                                <Normal sx={{ my: 1 }}>
+                                                    3 meses
+                                                </Normal>
+                                            </Link>
+                                            <Link style={{ textDecoration: 'none' }} href={'/pasantias?d=6'}>
+                                                <Normal sx={{ my: 1 }}>
+                                                    6 meses
+                                                </Normal>
+                                            </Link>
                                         </Grid>
                                         <Grid item xs={3}>
                                             <Link style={{ textDecoration: 'none' }} href={'/becas'}>
                                                 <Negrita sx={{ color: pathname.startsWith('/becas') ? red[700] : 'inherit' }}>
                                                     Becas
                                                 </Negrita>
+                                            </Link>
+                                            <Link style={{ textDecoration: 'none' }} href={'/becas/buscar?t=nacional'}>
+                                                <Normal sx={{ my: 1 }}>
+                                                    Nacionales
+                                                </Normal>
+                                            </Link>
+                                            <Link style={{ textDecoration: 'none' }} href={'/becas/buscar?t=internacional'}>
+                                                <Normal sx={{ my: 1 }}>
+                                                    Internacionales
+                                                </Normal>
                                             </Link>
                                         </Grid>
                                         <Grid item xs={3}>
@@ -149,7 +169,16 @@ const Navbar = () => {
                                                     Eventos
                                                 </Negrita>
                                             </Link>
-
+                                            <Link style={{ textDecoration: 'none' }} href={'/eventos?t=presencial'}>
+                                                <Normal sx={{ my: 1 }}>
+                                                    Presenciales
+                                                </Normal>
+                                            </Link>
+                                            <Link style={{ textDecoration: 'none' }} href={'/eventos?t=online'}>
+                                                <Normal sx={{ my: 1 }}>
+                                                    En línea
+                                                </Normal>
+                                            </Link>
                                         </Grid>
                                     </Grid>
                                 }

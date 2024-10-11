@@ -4,6 +4,8 @@ import { Box } from "@mui/material";
 import { Pasantia } from "@prisma/client";
 import Cliente from "./Cliente";
 import Footer from "@/app/static/Footer";
+import { notFound } from "next/navigation";
+
 const get = async (id: string) => {
     return await prisma.pasantia.findUnique({
         where: { id },
@@ -12,6 +14,12 @@ const get = async (id: string) => {
             PasantiaCarrera: { include: { Carrera: true } }
         }
     });
+}
+
+export const generateMetadata = async (props: any): Promise<Metadata> => {
+    const pasantia = await get(props.params.id) as Pasantia;
+    if (!pasantia) return notFound();
+    return ({ title: pasantia.titulo })
 }
 export default async function Home(props: any) {
     const pasantias = await get(props.params.id) as Pasantia;

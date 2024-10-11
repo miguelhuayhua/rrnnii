@@ -29,6 +29,7 @@ const DatePickerBox = styled(DatePicker)(() => {
     return {
         marginBottom: 16,
         width: "100%",
+        'fieldset': { border: '1px solid #ddd' },
         ".MuiInputBase-root": {
             borderRadius: 12,
         },

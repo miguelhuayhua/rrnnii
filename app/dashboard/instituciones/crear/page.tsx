@@ -18,6 +18,8 @@ import { grey } from "@mui/material/colors";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { InputBox } from "@/app/componentes/Datos";
 import { BoxSombra } from "@/app/componentes/Mostrar";
+import { FaYoutube } from "react-icons/fa";
+import { TbWorldWww } from "react-icons/tb";
 
 export default function Page() {
     const { openSnackbar } = useSnackbar();
@@ -114,7 +116,7 @@ export default function Page() {
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
                         <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
-                            <Grid container spacing={2}>
+                            <Grid container columnSpacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="nombre"
@@ -125,8 +127,20 @@ export default function Page() {
                                                 {...field}
                                                 label='Nombre'
                                                 error={!!errors.nombre}
-                                                helperText={errors.nombre?.message || 'Este es el título principal que será visible para la institución'}
+                                                helperText={errors.nombre?.message}
                                                 inputRef={ref}
+                                            />
+                                        )}
+                                    />
+                                    <Controller
+                                        name="video"
+                                        control={control}
+                                        render={({ field: { ref, ...field } }) => (
+                                            <InputBox
+                                                {...field}
+                                                label='Link de Youtube'
+                                                inputRef={ref}
+                                                InputProps={{ endAdornment: <FaYoutube fontSize={26} /> }}
                                             />
                                         )}
                                     />
@@ -145,7 +159,18 @@ export default function Page() {
                                             />
                                         )}
                                     />
-
+                                    <Controller
+                                        name="web"
+                                        control={control}
+                                        render={({ field: { ref, ...field } }) => (
+                                            <InputBox
+                                                {...field}
+                                                label='Página web'
+                                                InputProps={{ endAdornment: <TbWorldWww fontSize={26} /> }}
+                                                inputRef={ref}
+                                            />
+                                        )}
+                                    />
                                 </Grid>
 
                                 <Grid item xs={12}>

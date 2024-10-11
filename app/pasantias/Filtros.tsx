@@ -1,11 +1,10 @@
 'use client';
-import { Badge, Box, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
+import { Badge, Box, FormControlLabel, Grid, MenuItem, Radio, RadioGroup, Stack, SwipeableDrawer } from "@mui/material";
 import Image from 'next/legacy/image';
 import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaFilter } from "react-icons/fa6";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Negrita, Titulo } from "../componentes/Textos";
-import { BotonOutline, BotonSimple } from "../componentes/Botones";
+import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
 import { InputBox } from "../componentes/Datos";
@@ -39,7 +38,7 @@ const Filtros = ({ open, setOpen }: Props) => {
             >
                 <Grid container width={270}>
                     <Grid display='flex' justifyContent='space-between' item xs={12} p={2} borderBottom='1px solid #ddd' >
-                        <Titulo sx={{ fontSize: 15 }}>
+                        <Titulo>
                             Filtros
                         </Titulo>
                         <Stack direction='row' >
@@ -100,40 +99,36 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 ))
                             }
                         </InputBox>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600, mt: 1 }}>
+                        <Negrita my={1}>
                             Duración
-                        </Titulo>
+                        </Negrita>
                         <RadioGroup value={duracion} onChange={(ev) => {
                             router.replace(`/pasantias?${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}&d=${ev.target.value}${params.has('s') ? '&s=' + params.get('s') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'3'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'3 meses'}
                             />
                             <FormControlLabel
                                 value={'6'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'6 meses'}
                             />
                         </RadioGroup>
-                        <Titulo sx={{ fontSize: 14, fontWeight: 600 }}>
+                        <Negrita my={1}>
                             Orden
-                        </Titulo>
+                        </Negrita>
                         <RadioGroup value={orden} onChange={(ev) => {
                             router.replace(`/pasantias?s=${ev.target.value}${params.has('carrera') ? '&carrera=' + params.get('carrera') : ''}${params.has('d') ? '&d=' + params.get('d') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'0'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Más recientes'}
                             />
                             <FormControlLabel
                                 value={'1'}
-                                sx={{ '.MuiFormControlLabel-label': { fontSize: 14 } }}
                                 control={<Radio />}
                                 label={'Más antiguos'}
                             />

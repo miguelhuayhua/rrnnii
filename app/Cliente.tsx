@@ -5,7 +5,7 @@ import Footer from "./static/Footer";
 import Link from 'next/link'
 import { Negrita, Normal, Titulo } from "./componentes/Textos";
 import { BotonOutline, BotonFilled, BotonSimple } from "./componentes/Botones";
-import ActividadItem from "./componentes/items/Actividad";
+import ActividadItem from "./componentes/items/Noticia";
 import EventoItem from "./componentes/items/Evento";
 import { BsWhatsapp } from "react-icons/bs";
 import { getImageSize, useImageSize } from 'react-image-size';
@@ -15,7 +15,7 @@ import { Gradient } from '@/utils/Gradient.ts'
 import { ChipBox } from "./componentes/Mostrar";
 import { FaAngleRight } from "react-icons/fa";
 import axios from "axios";
-import { Actividad, Evento, Galeria } from "@prisma/client";
+import { Evento, Noticia } from "@prisma/client";
 import Imagen from 'next/legacy/image';
 import { MdPhone } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -28,8 +28,7 @@ const Cliente = () => {
     const [y, setY] = useState(0);
     const router = useRouter();
     const [Eventos, setEventos] = useState<Evento[]>([]);
-    const [Actividades, setActividades] = useState<Actividad[]>([]);
-    const [Galerias, setGalerias] = useState<Galeria[]>([]);
+    const [Noticias, setNoticias] = useState<Noticia[]>([]);
     const onScroll = useCallback(() => {
         const { scrollY } = window;
         setY(scrollY)
@@ -47,11 +46,8 @@ const Cliente = () => {
         axios.post('/api/evento/todo', { take: 4 }).then(res => {
             setEventos(res.data);
         });
-        axios.post('/api/actividad/todo', { take: 4 }).then(res => {
-            setActividades(res.data);
-        });
-        axios.post('/api/galeria/listar', { skip: 0, orden: '0' }).then(res => {
-            setGalerias(res.data.map((value: Galeria) => ({ ...value, imagen: fileDomain + value.imagen })));
+        axios.post('/api/noticia/listar', { skip: 0, orden: '0' }).then(res => {
+            setNoticias(res.data.map((value: Noticia) => ({ ...value, imagen: fileDomain + value.imagen })));
         })
     }, []);
     return (
@@ -59,7 +55,7 @@ const Cliente = () => {
             <canvas id="gradient-canvas" style={{ width: "100vw", height: downsm ? 400 : 500, position: 'absolute', top: 0, clipPath: 'polygon(100% 0, 100% 18%, 0 100%, 0 0)' }}></canvas >
             <Grid container>
                 <Grid item sx={{ opacity: 1 - y * 0.0015, top: y * 0.1, zIndex: 20, }} xs={12} sm={7} pt={{ xs: 5, md: 0 }}>
-                    <Box pl={{ xs: 5, sm: 1, md: 10, xl: 35 }} pr={{ xs: 5, sm: 1, md: 2 }} >
+                    <Box mt={6} pl={{ xs: 5, sm: 1, md: 10, xl: 35 }} pr={{ xs: 5, sm: 1, md: 2 }} >
                         <ChipBox label='Encargada de: ' sx={{ mb: 2, background: '#00000055', fontWeight: 700, fontSize: 14, color: 'white', borderRadius: 5, py: 2 }} />
                         <Titulo variant='h1' sx={{ color: blueGrey[50], fontSize: { xs: 16, sm: 20, md: 25, lg: 30 }, background: '#00000055', backdropFilter: 'blur(6px)', p: 2, borderRadius: 3 }} >
                             Unidad de Relaciones Internacionales
@@ -73,8 +69,8 @@ const Cliente = () => {
                             pasar a nuestra oficinas para mayor información.
                         </Normal>
                         <Stack direction='row' spacing={2} justifyContent='center' my={4}>
-                            <Link href='/convenios'>
-                                <BotonFilled endIcon={<FaAngleRight />}>
+                            <Link style={{ textDecoration: 'none' }} href='/convenios'>
+                                <BotonFilled sx={{ height: 40 }} endIcon={<FaAngleRight />}>
                                     Ver convenios
                                 </BotonFilled>
                             </Link>
@@ -89,34 +85,30 @@ const Cliente = () => {
                 <Grid item xs={12} sm={4.5} display={{ xs: 'none', sm: 'block' }} px={{ xs: 1, md: 4, lg: 10, xl: 14 }} zIndex={20} >
                     <Box sx={{
                         overflow: 'hidden',
-                        maxHeight: 450,
+                        maxHeight: 650,
+                        height: 400,
                         transform: 'perspective(100px) rotateY(-3deg) rotateZ(3deg)',
                         backdropFilter: 'blur(4px)',
                         bgcolor: '#ffffff11',
                         px: 1
                     }} >
                         <Box className="slide-up" sx={{ opacity: 0.95 }}>
-                            <MasonryPhotoAlbum
-                                spacing={10}
-                                photos={Galerias.map(value => {
-                                    let img = new Image();
-                                    img.src = value.imagen;
-                                    return ({
-                                        width: img.width,
-                                        height: img.height,
-                                        src: value.imagen,
-                                    })
-                                })}
-                                columns={2}
-                                render={{
-                                    image: (props, context) => {
-                                        return (
-                                            <Imagen style={{ borderRadius: 10 }}
-                                                src={props.src} width={+context.photo.width} height={+context.photo.height} layout="intrinsic" />
-                                        )
-                                    }
-                                }}
-                            />
+                            <Grid container>
+                                {
+                                    Noticias.map(value => (
+
+                                        <Grid item xs={6}>
+                                            <Imagen
+                                                objectFit="cover"
+                                                style={{ borderRadius: 10 }}
+                                                src={value.imagen} width={100} height={100} layout="responsive" />
+                                        </Grid>
+
+                                    ))
+                                }
+                            </Grid>
+
+
                         </Box>
                     </Box>
                 </Grid>
@@ -134,17 +126,7 @@ const Cliente = () => {
                             </Grid>))
                     }
                 </Grid>
-                <Titulo textAlign='center' variant="h3">
-                    Últimas actividades
-                </Titulo>
-                <Grid container spacing={2} px={{ xs: 1, sm: 10, md: 1, lg: 5, xl: 20 }} py={4}>
-                    {
-                        Actividades.map(value => (
-                            <Grid item xs={6} md={3} key={value.id}>
-                                <ActividadItem value={value} />
-                            </Grid>))
-                    }
-                </Grid>
+
             </Box>
             <Grid container bgcolor='#fff' px={2} py={5} borderTop={`1px solid ${grey[400]}`}>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }}>

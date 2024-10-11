@@ -1,36 +1,29 @@
 "use client";
-import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft } from "react-icons/md";
-import { axiosInstance } from "@/globals";
 import { Evento } from "@prisma/client";
 import ModalEvento from "./Modal";
-import { RiFileWord2Line } from "react-icons/ri";
-import Image from 'next/legacy/image';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
-import { TbPdf, TbReload } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
-import { InputBox, SwitchBox } from "@/app/componentes/Datos";
-import { useSnackbar } from "@/providers/SnackbarProvider";
+import { TbReload } from "react-icons/tb";
+import { blue } from "@mui/material/colors";
+import { InputBox } from "@/app/componentes/Datos";
 import axios from "axios";
-import { fileDomain } from "@/utils/globals";
 import { IoSearch } from "react-icons/io5";
 import EventoComponent from "../componentes/items/Evento";
 import { ChipBox } from "@/app/componentes/Mostrar";
-
+import 'dayjs/locale/es';
+dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [eventos, setEventos] = useState<Evento[]>([]);
     const [prevEventos, setPrevEventos] = useState<Evento[]>([]);
     const [evento, setEvento] = useState<any>(null);
-    const { openSnackbar } = useSnackbar();
     const router = useRouter();
     useEffect(() => {
         axios.post('/api/evento/todo').then(res => {
@@ -39,7 +32,7 @@ export default function Page() {
         });
     }, []);
     return (
-        <Box px={{ xs: 1, md: 2, lg: 5 }} >
+        <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
             <Breadcrumbs >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>

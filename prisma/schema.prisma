@@ -111,6 +111,8 @@ model Institucion {
   Convenios Convenio[]
   Pasantia  Pasantia[]
   Becas     Beca[]
+  video     String?    @default("")
+  web       String?    @default("")
 }
 
 model ConvenioCarrera {

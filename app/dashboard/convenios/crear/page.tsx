@@ -1,7 +1,7 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, ListSubheader, MenuItem, Typography } from "@mui/material";
+import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, ListSubheader, MenuItem } from "@mui/material";
 import Link from "next/link";
 import { Icon as Iconify } from '@iconify/react';
 import { useRouter } from "next/navigation";

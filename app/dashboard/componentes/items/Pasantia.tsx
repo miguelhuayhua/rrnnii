@@ -51,6 +51,7 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                         {
                             Pasantia.pdf ?
                                 <BotonFilled
+
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Pasantia.pdf;
@@ -59,7 +60,10 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                                         a.click();
                                         a.remove();
                                     }}
-                                    sx={{ background: Pasantia.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                    sx={{
+                                        background: Pasantia.pdf.includes('pdf') ? red[700] : blue[700],
+                                        height: 40
+                                    }}>
                                     {
                                         Pasantia.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                     }

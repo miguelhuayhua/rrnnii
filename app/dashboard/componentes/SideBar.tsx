@@ -11,7 +11,7 @@ import { HiHome, HiNewspaper } from 'react-icons/hi2';
 import { IconType } from 'react-icons/lib';
 import { GiMeepleCircle } from 'react-icons/gi';
 import { BsFillCalendar2EventFill } from 'react-icons/bs';
-import { BotonSimple } from '@/app/componentes/Botones';
+import { BotonOutline, BotonSimple } from '@/app/componentes/Botones';
 import { Normal } from '@/app/componentes/Textos';
 import { blue, grey, red } from '@mui/material/colors';
 import { useState } from 'react';
@@ -121,11 +121,15 @@ const SideBar = () => {
             {
                 md ?
                     <>
-                        <BotonSimple
+                        <BotonOutline
                             onClick={() => { setMove(!move); }}
-                            sx={{ position: 'fixed', top: 17, left: 15, zIndex: 20 }}>
+                            sx={{
+                                position: 'fixed',
+                                top: 17, left: 15, zIndex: 20,
+                                bgcolor: 'white'
+                            }}>
                             <CgMenuLeft fontSize={27} />
-                        </BotonSimple>
+                        </BotonOutline>
                         <SwipeableDrawer
                             sx={{ overflowY: 'scroll' }}
                             anchor={'left'}

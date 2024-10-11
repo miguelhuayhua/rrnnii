@@ -1,5 +1,5 @@
 'use client';
-import ActividadItem from "@/app/componentes/items/Actividad";
+import ActividadItem from "@/app/componentes/items/Noticia";
 import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid } from "@mui/material";

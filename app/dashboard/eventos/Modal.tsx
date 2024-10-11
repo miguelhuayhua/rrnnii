@@ -25,6 +25,7 @@ import { useSnackbar } from '@/providers/SnackbarProvider';
 import { RiFileWord2Line } from 'react-icons/ri';
 import axios from 'axios';
 import { fileDomain } from '@/utils/globals';
+import { IoMdLink } from 'react-icons/io';
 interface Props {
     setEvento: any;
     Evento: Evento;
@@ -96,7 +97,9 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
             maxWidth='md'
             onClose={() => { setEvento(null) }}
         >
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress sx={{
+                position: 'absolute', top: 0, left: 0, zIndex: 10, width: "100%"
+            }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
                 <BotonSimple onClick={() => setEvento(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
                     <IoClose fontSize={25} />
@@ -252,7 +255,6 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                             control={control}
                             render={({ field: { ref, ...field } }) => (
                                 <DatePickerBox
-                                    sx={{ mt: 2 }}
                                     defaultValue={dayjs(field.value, 'DD/MM/YYYY')}
                                     onChange={(ev: any) => {
                                         field.onChange(ev?.format('DD/MM/YYYY'))
@@ -266,6 +268,22 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                 />
                             )}
                         />
+                        {
+                            watch('tipo') == 'online' ?
+
+                                <Controller
+                                    name="link"
+                                    control={control}
+                                    rules={{ required: 'Título es obligatorio' }}
+                                    render={({ field: { ref, ...field } }) => (
+                                        <InputBox
+                                            {...field}
+                                            label='Link de acceso'
+                                            InputProps={{ endAdornment: <IoMdLink fontSize={25} /> }}
+                                        />
+                                    )}
+                                /> : null
+                        }
                     </Grid>
                     {
                         isDirty ?

@@ -6,7 +6,7 @@ import { ChipBox } from "../Mostrar";
 import Image from 'next/legacy/image';
 import { Icon as Iconify } from '@iconify/react';
 import { FaBuildingColumns } from "react-icons/fa6";
-import { blue, green, grey } from "@mui/material/colors";
+import { blue, green, grey, red } from "@mui/material/colors";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import dayjs from "dayjs";
 import { fileDomain } from "@/utils/globals";
@@ -25,6 +25,24 @@ const ConvenioItem = ({ value }: Props) => {
         <Box bgcolor='white' borderRadius={4} overflow='hidden' border={`1px solid ${grey[300]}`} position='relative'>
             <Grid container>
                 <Grid item xs={12} position='relative'>
+                    <ChipBox
+                        sx={{
+                            height: 30, position: 'absolute',
+                            top: 5,
+                            left: 10, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[400] : red[400], color: 'white',
+                            zIndex: 10
+                        }}
+                        label={dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
+                    <Normal sx={{
+                        display: 'flex',
+                        color: '#ddd',
+                        alignItems: 'center',
+                        zIndex: 10,
+                        position: 'absolute', right: 15, top: 10
+                    }}>
+                        <Iconify fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
+                        {value.tipo == 'nacional' ? 'BO' : value.pais}
+                    </Normal>
                     <Link href={`/convenios/${value.id}`}>
                         <Image style={{ filter: 'brightness(0.4)' }} src={fileDomain + value.imagen} height={90} objectFit="cover" width={100} layout="responsive" />
                     </Link>
@@ -44,22 +62,12 @@ const ConvenioItem = ({ value }: Props) => {
                     </Box>
                 </Grid>
                 <Grid item xs={12} p={1}>
-                    <Avatar sx={{ bgcolor: value.tipo == 'nacional' ? blue[600] : green[600], borderRadius: 2, position: 'absolute', top: 10, left: 10, zIndex: 10 }}>
-                        C{value.tipo.charAt(0).toUpperCase()}
-                    </Avatar>
                     <Normal sx={{ color: '#bbb' }}>
                         {dayjs(value.createdAt).format('DD MMMM YYYY')}
                     </Normal>
-                    <Normal sx={{
-                        display: 'flex',
-                        color: '#ddd',
-                        alignItems: 'center', position: 'absolute', right: 15, top: 15
-                    }}>
-                        <Iconify fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
-                        {value.tipo == 'nacional' ? 'BO' : value.pais}
-                    </Normal>
+
                     <Link href={`/convenios/${value.id}`} style={{ textDecoration: 'none' }}>
-                        <Negrita mb={2} >
+                        <Negrita my={1} >
                             {value.titulo}
                         </Negrita>
                     </Link>

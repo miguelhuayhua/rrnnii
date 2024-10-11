@@ -1,8 +1,8 @@
 'use client';
-import { Box, Grid, } from "@mui/material";
+import { Grid } from "@mui/material";
 import { InputBox } from "../../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
-import { BotonFilled, BotonSimple } from "../../componentes/Botones";
+import { BotonFilled } from "../../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import ConvenioItem from "../../componentes/items/Convenio";
 import { Suspense, useEffect, useState } from "react";
@@ -20,7 +20,8 @@ const Cliente = () => {
         axios.post('/api/convenio/listar',
             {
                 tipo: params.get('t') || undefined,
-                carrera: params.get('c') || undefined
+                carrera: params.get('c') || undefined,
+                continente: params.get('co') || undefined
             }).then(res => {
                 setConvenios(res.data);
                 setConveniosMain(res.data);
@@ -51,7 +52,7 @@ const Cliente = () => {
                 {
                     Convenios.length > 0 ?
                         Convenios.map(value => (
-                            <Grid key={value.id} item xs={12} sm={8} md={6} lg={4} xl={3} mx='auto'>
+                            <Grid key={value.id} item xs={12} sm={6} md={6} lg={4} mx='auto'>
                                 <ConvenioItem value={value as any} />
                             </Grid>))
                         : <Normal ml={4} my={4}>

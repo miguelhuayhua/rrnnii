@@ -5,7 +5,7 @@ import { BiSearch } from "react-icons/bi";
 import { BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { useEffect, useState } from "react";
-import ActividadItem from "../componentes/items/Actividad";
+import ActividadItem from "../componentes/items/Noticia";
 import dynamic from "next/dynamic";
 import FiltroSkeleton from "../skeletons/FiltroSkeleton";
 import { useSearchParams } from "next/navigation";

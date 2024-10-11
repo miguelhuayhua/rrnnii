@@ -55,42 +55,53 @@ export default function Home() {
                     Convenios por continente
                 </Typography>
                 <Box display='flex' flexWrap='wrap' justifyContent='space-around'>
-                    <Button className="btn-cont">
-                        <span >
-                            America Norte
-                        </span>
-                        <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/america-norte.png' />
-                    </Button>
-                    <Button className="btn-cont">
-                        <span >
-                            America Sur
-                        </span>
-                        <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/america-sur.png' />
-                    </Button>
-                    <Button className="btn-cont">
-                        <span >
-                            Europa
-                        </span>
-                        <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/europa.png' />
-                    </Button>
-                    <Button className="btn-cont">
-                        <span >
-                            Asia
-                        </span>
-                        <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/asia.png' />
-                    </Button>
-                    <Button className="btn-cont">
-                        <span >
-                            Oceanía
-                        </span>
-                        <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/oceania.png' />
-                    </Button>
-                    <Button className="btn-cont">
-                        <span >
-                            África
-                        </span>
-                        <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/africa.png' />
-                    </Button>
+                    <Link href={"/convenios/buscar?co=na"}>
+                        <Button sx={{ m: 1 }} className="btn-cont">
+                            <span >
+                                America Norte
+                            </span>
+                            <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/america-norte.png' />
+                        </Button>
+                    </Link>
+                    <Link href='/convenios/buscar?co=sa'>
+                        <Button sx={{ m: 1 }} className="btn-cont">
+                            <span >
+                                America Sur
+                            </span>
+                            <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/america-sur.png' />
+                        </Button></Link>
+                    <Link href='/convenios/buscar?co=eu'>
+                        <Button sx={{ m: 1 }} className="btn-cont">
+                            <span >
+                                Europa
+                            </span>
+                            <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/europa.png' />
+                        </Button>
+                    </Link>
+                    <Link href='/convenios/buscar?co=as'>
+                        <Button sx={{ m: 1 }} className="btn-cont">
+                            <span >
+                                Asia
+                            </span>
+                            <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/asia.png' />
+                        </Button>
+                    </Link>
+                    <Link href='/convenios/buscar?co=oc'>
+                        <Button sx={{ m: 1 }} className="btn-cont">
+                            <span >
+                                Oceanía
+                            </span>
+                            <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/oceania.png' />
+                        </Button>
+                    </Link>
+                    <Link href='/convenios/buscar?co=af'>
+                        <Button sx={{ m: 1 }} className="btn-cont">
+                            <span >
+                                África
+                            </span>
+                            <Image className="img" layout="fill" objectFit="cover" style={{ userSelect: 'none' }} src='/assets/africa.png' />
+                        </Button></Link>
+
                 </Box>
             </Box>
             <Box mt={10}>
