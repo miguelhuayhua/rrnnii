@@ -1,8 +1,8 @@
 'use client';
-import { Grid, } from "@mui/material";
+import { CircularProgress, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
-import { BotonFilled, BotonSimple } from "../componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -12,6 +12,8 @@ import { Normal } from "../componentes/Textos";
 import NoticiaItem from "../componentes/items/Noticia";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
+    const [skip, setSkip] = useState(0);
+    const [load, setLoad] = useState(true);
     const params = useSearchParams();
     const [Noticias, setNoticias] = useState<Evento[]>([]);
     const [NoticiasMain, setNoticiasMain] = useState<Evento[]>([]);
@@ -20,6 +22,8 @@ const Cliente = () => {
             { skip: 0 }).then(res => {
                 setNoticias(res.data);
                 setNoticiasMain(res.data);
+                setLoad(false);
+                setSkip(1);
             })
     }, [params]);
     return (
@@ -54,6 +58,29 @@ const Cliente = () => {
                             Noticias no encontrados
                         </Normal>
                 }
+                <Grid xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <BotonOutline
+                        disabled={load}
+                        onClick={() => {
+                            setLoad(true);
+                            axios.post('/api/noticias/listar',
+                                {
+                                    skip
+                                }).then(res => {
+                                    setNoticias(prev => ([...prev, ...res.data]));
+                                    setNoticiasMain(res.data);
+                                    setLoad(false)
+                                    setSkip(prev => prev + 1);
+                                })
+                        }}
+                        sx={{ mt: 4, fontSize: 13 }}>
+                        Cargas más
+                        {
+                            load ? <CircularProgress
+                                size='20px' sx={{ ml: 1 }} /> : null
+                        }
+                    </BotonOutline>
+                </Grid>
             </Grid>
         </>
     )

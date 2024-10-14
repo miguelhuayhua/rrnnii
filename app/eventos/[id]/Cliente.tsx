@@ -5,7 +5,7 @@ import { Evento } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
-import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
+import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -16,6 +16,8 @@ import 'dayjs/locale/es';
 import { BotonFilled } from "@/app/componentes/Botones";
 import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line } from "react-icons/ri";
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 import { blue, grey, red } from "@mui/material/colors";
 import { fileDomain } from "@/utils/globals";
 import { IoMdCalendar } from "react-icons/io";
@@ -83,9 +85,11 @@ export default function Cliente({ value }: Props) {
                             }
                         </SpeedDial>
                     </Box>
-                    <Image
-                        style={{ filter: 'brightness(0.3)', background: grey[900] }}
-                        src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
+                    <Zoom>
+                        <Image
+                            style={{ filter: 'brightness(0.3)', background: grey[900] }}
+                            src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
+                    </Zoom>
                 </Box>
                 <Grid item xs={12} >
                     <Box borderBottom='1px solid #ddd' py={4}>

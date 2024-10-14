@@ -20,6 +20,8 @@ import { fileDomain } from "@/utils/globals";
 import { blue, green, red } from "@mui/material/colors";
 import { IoMdCalendar } from "react-icons/io";
 import { ChipBox } from "@/app/componentes/Mostrar";
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 import BecaItem from "@/app/componentes/items/Beca";
 import ModalInscribir from "./ModalInscribit";
 import ModalInstitucion from "@/app/componentes/ModalInstitucion";
@@ -90,9 +92,11 @@ export default function Cliente({ value }: Props) {
                                 }
                             </SpeedDial>
                         </Box>
-                        <Image
-                            style={{ filter: 'brightness(0.3)' }}
-                            src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
+                        <Zoom>
+                            <Image
+                                style={{ filter: 'brightness(0.3)' }}
+                                src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
+                        </Zoom>
                     </Box>
                 </Grid>
                 <Grid item xs={12} >

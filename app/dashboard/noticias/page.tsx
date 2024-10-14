@@ -60,7 +60,7 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
             <Tabs
-                sx={{ mb: 4, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
                 TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>

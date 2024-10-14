@@ -1,8 +1,8 @@
 'use client';
-import { Grid, } from "@mui/material";
+import { CircularProgress, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
-import { BotonFilled, BotonSimple } from "../componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
 import EventoItem from "../componentes/items/Evento";
@@ -15,12 +15,16 @@ const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
     const [Eventos, setEventos] = useState<Evento[]>([]);
+    const [skip, setSkip] = useState(0);
+    const [load, setLoad] = useState(true);
     const [EventosMain, setEventosMain] = useState<Evento[]>([]);
     useEffect(() => {
         axios.post('/api/evento/listar',
-            { tipo: params.get('t') || undefined }).then(res => {
+            { tipo: params.get('t'), orden: params.get('s'), skip: 0 }).then(res => {
                 setEventos(res.data);
                 setEventosMain(res.data);
+                setLoad(false);
+                setSkip(1);
             })
     }, [params]);
     return (
@@ -55,6 +59,31 @@ const Cliente = () => {
                             Eventos no encontrados
                         </Normal>
                 }
+                <Grid xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <BotonOutline
+                        disabled={load}
+                        onClick={() => {
+                            setLoad(true);
+                            axios.post('/api/evento/listar',
+                                {
+                                    tipo: params.get('t'),
+                                    orden: params.get('s'),
+                                    take: 12, skip
+                                }).then(res => {
+                                    setEventos(prev => ([...prev, ...res.data]));
+                                    setEventosMain(res.data);
+                                    setLoad(false)
+                                    setSkip(prev => prev + 1);
+                                })
+                        }}
+                        sx={{ mt: 4, fontSize: 13 }}>
+                        Cargas más
+                        {
+                            load ? <CircularProgress
+                                size='20px' sx={{ ml: 1 }} /> : null
+                        }
+                    </BotonOutline>
+                </Grid>
             </Grid>
             <Suspense>
                 <Filtros setOpen={setOpen} open={open} />

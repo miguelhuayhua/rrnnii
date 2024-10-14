@@ -1,7 +1,9 @@
 import { prisma } from "../../client";
 const POST = async (request: Request) => {
     try {
-        const { tipo, skip, id, continente, take } = await request.json();
+        let { tipo, skip, id, continente, take } = await request.json();
+        take = take || 15;
+        skip = skip || 0;
         let becas = await prisma.beca.findMany({
             where: {
                 estado: true,
@@ -9,7 +11,7 @@ const POST = async (request: Request) => {
                 tipo,
                 continente: continente ? continente.toUpperCase() : undefined
             },
-            skip: skip || undefined,
+            skip: skip * take,
             include: {
                 Participantes: true,
                 Institucion: true

@@ -1,8 +1,8 @@
 'use client';
-import { Box, Grid, } from "@mui/material";
+import { Box, CircularProgress, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
-import { BotonFilled, BotonSimple } from "../componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
 import Filtros from "./Filtros";
@@ -15,16 +15,21 @@ const Cliente = () => {
     const [open, setOpen] = useState(false);
     const [Pasantias, setPasantias] = useState<Pasantia[]>([]);
     const [PasantiasMain, setPasantiasMain] = useState<Pasantia[]>([]);
+    const [load, setLoad] = useState(true);
+    const [skip, setSkip] = useState(0);
     const params = useSearchParams();
+    const duracion = params.get('d') || '';
+    const carrera = params.get('carrera') || '';
+    const orden = params.get('s');
     useEffect(() => {
-        const duracion = params.get('d') || '';
-        const carrera = params.get('carrera') || '';
-        const orden = params.get('s');
+
         axios.post('/api/pasantia/listar',
-            { duracion, carrera, orden }).then(res => {
+            { duracion, carrera, orden, skip: 0 }).then(res => {
                 setPasantias(res.data);
                 setPasantiasMain(res.data);
-            })
+                setLoad(false);
+                setSkip(1);
+            });
     }, [params]);
     return (
         <>
@@ -57,6 +62,27 @@ const Cliente = () => {
                             Pasantias no encontradas
                         </Normal>
                 }
+                <Grid xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <BotonOutline
+                        disabled={load}
+                        onClick={() => {
+                            setLoad(true);
+                            axios.post('/api/pasantia/listar',
+                                { duracion, carrera, orden, skip }).then(res => {
+                                    setPasantias(prev => [...prev, ...res.data]);
+                                    setPasantiasMain(prev => [...prev, ...res.data]);
+                                    setLoad(false);
+                                    setSkip(prev => prev + 1);
+                                });
+                        }}
+                        sx={{ mt: 4, fontSize: 13 }}>
+                        Cargas más
+                        {
+                            load ? <CircularProgress
+                                size='20px' sx={{ ml: 1 }} /> : null
+                        }
+                    </BotonOutline>
+                </Grid>
             </Grid>
             <Suspense>
                 <Filtros setOpen={setOpen} open={open} />

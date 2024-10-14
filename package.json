@@ -30,6 +30,7 @@
     "pdf-merger-js": "^5.1.1",
     "prisma": "^5.13.0",
     "react": "^18",
+    "react-countup": "^6.5.3",
     "react-dom": "^18",
     "react-easy-sort": "^1.6.0",
     "react-grid-gallery": "^1.0.1",
@@ -39,6 +40,7 @@
     "react-medium-image-zoom": "^5.2.10",
     "react-photo-album": "^3.0.2",
     "react-quill": "^2.0.0",
+    "react-show-more-text": "^1.7.1",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
     "schema-dts": "^1.1.2",
@@ -52,6 +54,7 @@
     "@types/pdfjs-dist": "^2.10.378",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-show-more-text": "^1.4.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "typescript": "^5"

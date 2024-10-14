@@ -25,7 +25,7 @@ import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
 import { MdPhone } from "react-icons/md";
-import { FaBuildingColumns, FaRotate } from "react-icons/fa6";
+import { FaBuildingColumns } from "react-icons/fa6";
 import ModalInstitucion from "@/app/componentes/ModalInstitucion";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {

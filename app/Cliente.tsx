@@ -1,14 +1,13 @@
 'use client';
-import { Box, Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Divider, Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { CiSearch } from "react-icons/ci";
 import Footer from "./static/Footer";
-import Link from 'next/link'
+import Link from 'next/link';
+import CountUp from 'react-countup';
 import { Negrita, Normal, Titulo } from "./componentes/Textos";
 import { BotonOutline, BotonFilled, BotonSimple } from "./componentes/Botones";
-import ActividadItem from "./componentes/items/Noticia";
 import EventoItem from "./componentes/items/Evento";
 import { BsWhatsapp } from "react-icons/bs";
-import { getImageSize, useImageSize } from 'react-image-size';
 import { useCallback, useEffect, useState } from "react";
 import { blueGrey, grey } from "@mui/material/colors";
 import { Gradient } from '@/utils/Gradient.ts'
@@ -19,8 +18,6 @@ import { Evento, Noticia } from "@prisma/client";
 import Imagen from 'next/legacy/image';
 import { MdPhone } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { MasonryPhotoAlbum } from "react-photo-album";
-import "react-photo-album/masonry.css";
 import { fileDomain } from "@/utils/globals";
 const Cliente = () => {
     const theme = useTheme();
@@ -33,6 +30,9 @@ const Cliente = () => {
         const { scrollY } = window;
         setY(scrollY)
     }, []);
+    const [count, setCount] = useState({
+        sizen: 0, sizee: 0, sizec: 0, sizeb: 0
+    });
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
         var gradient = new Gradient() as any;
@@ -48,6 +48,9 @@ const Cliente = () => {
         });
         axios.post('/api/noticia/listar', { skip: 0, orden: '0' }).then(res => {
             setNoticias(res.data.map((value: Noticia) => ({ ...value, imagen: fileDomain + value.imagen })));
+        });
+        axios.post('/api/count').then(res => {
+            setCount(res.data)
         })
     }, []);
     return (
@@ -93,7 +96,7 @@ const Cliente = () => {
                         px: 1
                     }} >
                         <Box className="slide-up" sx={{ opacity: 0.95 }}>
-                            <Grid container>
+                            <Grid container spacing={1}>
                                 {
                                     Noticias.map(value => (
 
@@ -107,12 +110,72 @@ const Cliente = () => {
                                     ))
                                 }
                             </Grid>
-
-
                         </Box>
                     </Box>
                 </Grid>
             </Grid>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: "100%",
+                    justifyContent: 'space-evenly',
+                    my: 3
+                }}
+            >
+                <CountUp start={0} duration={10} end={count.sizec} >
+                    {({ countUpRef }) => (
+                        <Box sx={{
+                            display: 'flex', alignItems: 'center',
+                            fontSize: 35
+                        }}>
+                            <span style={{
+                                fontSize: 'inherit',
+                                marginRight: 10, fontWeight: 700
+                            }} ref={countUpRef} />
+                            <span style={{ fontSize: 15 }}>
+                                Convenios
+                            </span>
+                        </Box>
+                    )}
+                </CountUp>
+                <Box sx={{ height: 35, width: "1px", bgcolor: '#888' }} />
+                <CountUp start={0} duration={10} end={count.sizeb} >
+                    {({ countUpRef }) => (
+                        <Box sx={{
+                            display: 'flex', alignItems: 'center',
+                            fontSize: 35
+                        }}>
+                            <span style={{
+                                fontSize: 'inherit',
+                                marginRight: 10,
+                                fontWeight: 700
+                            }} ref={countUpRef} />
+                            <span style={{ fontSize: 15 }}>
+                                Becas
+                            </span>
+                        </Box>
+                    )}
+                </CountUp>
+                <Box sx={{ height: 35, width: "1px", bgcolor: '#888' }} />
+                <CountUp start={0} duration={10} end={count.sizen} >
+                    {({ countUpRef }) => (
+                        <Box sx={{
+                            display: 'flex', alignItems: 'center',
+                            fontSize: 35
+                        }}>
+                            <span style={{
+                                fontSize: 'inherit',
+                                marginRight: 10,
+                                fontWeight: 700
+                            }} ref={countUpRef} />
+                            <span style={{ fontSize: 15 }}>
+                                Noticias
+                            </span>
+                        </Box>
+                    )}
+                </CountUp>
+            </Box>
             <Box position='relative'>
                 <Negrita sx={{ textAlign: 'center', py: 2 }}>
                     rrnnii.upea.bo

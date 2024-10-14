@@ -34,11 +34,14 @@ const NoticiaComponent = ({ Noticia, setNoticia,
                     <Negrita>
                         {Noticia.titulo}
                     </Negrita>
+
                     <Box sx={{ fontSize: 15 }}>
                         {
-                            parse(Noticia.descripcion)
+                            parse(Noticia.descripcion.substring(0, 200) + "...")
                         }
                     </Box>
+
+
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
                         <BotonOutline sx={{ fontSize: 14 }} onClick={() => {
                             setNoticia(Noticia);

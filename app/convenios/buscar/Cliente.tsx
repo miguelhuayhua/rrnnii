@@ -1,8 +1,8 @@
 'use client';
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import { InputBox } from "../../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
-import { BotonFilled } from "../../componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "../../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import ConvenioItem from "../../componentes/items/Convenio";
 import { Suspense, useEffect, useState } from "react";
@@ -14,6 +14,8 @@ import Filtros from "./Filtros";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
+    const [skip, setSkip] = useState(0);
+    const [load, setLoad] = useState(true);
     const [Convenios, setConvenios] = useState<Convenio[]>([]);
     const [ConveniosMain, setConveniosMain] = useState<Convenio[]>([]);
     useEffect(() => {
@@ -21,10 +23,13 @@ const Cliente = () => {
             {
                 tipo: params.get('t') || undefined,
                 carrera: params.get('c') || undefined,
-                continente: params.get('co') || undefined
+                continente: params.get('co') || undefined,
+                skip
             }).then(res => {
                 setConvenios(res.data);
                 setConveniosMain(res.data);
+                setLoad(false);
+                setSkip(1);
             })
     }, [params]);
     return (
@@ -59,6 +64,32 @@ const Cliente = () => {
                             Convenios no encontrados
                         </Normal>
                 }
+                <Grid xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <BotonOutline
+                        disabled={load}
+                        onClick={() => {
+                            setLoad(true);
+                            axios.post('/api/convenio/listar',
+                                {
+                                    tipo: params.get('t') || undefined,
+                                    carrera: params.get('c') || undefined,
+                                    continente: params.get('co') || undefined,
+                                    take: 12, skip
+                                }).then(res => {
+                                    setConvenios(prev => ([...prev, ...res.data]));
+                                    setConveniosMain(res.data);
+                                    setLoad(false)
+                                    setSkip(prev => prev + 1);
+                                })
+                        }}
+                        sx={{ mt: 4, fontSize: 13 }}>
+                        Cargas más
+                        {
+                            load ? <CircularProgress
+                                size='20px' sx={{ ml: 1 }} /> : null
+                        }
+                    </BotonOutline>
+                </Grid>
             </Grid>
             <Suspense>
                 <Filtros open={open} setOpen={setOpen} />

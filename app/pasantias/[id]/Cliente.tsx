@@ -5,10 +5,12 @@ import { Carrera, Institucion, Pasantia, PasantiaCarrera } from "@prisma/client"
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
-import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
+import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 import PasantiaItem from "@/app/componentes/items/Pasantia";
 import { BotonFilled } from "@/app/componentes/Botones";
 import { red, blue, grey, green } from "@mui/material/colors";
@@ -95,9 +97,11 @@ export default function Cliente({ value }: Props) {
                             }
                         </SpeedDial>
                     </Box>
-                    <Image
-                        style={{ filter: 'brightness(0.3)', background: grey[900] }}
-                        src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
+                    <Zoom>
+                        <Image
+                            style={{ filter: 'brightness(0.3)', background: grey[900] }}
+                            src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
+                    </Zoom>
                 </Box>
             </Grid>
             <Grid item xs={12} >
@@ -194,7 +198,7 @@ export default function Cliente({ value }: Props) {
                     {
                         pasantias.length == 0 ?
                             <Grid item xs={12} >
-                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
+                                <Normal sx={{ textAlign: 'center', pb: 2 }}>No se encontraron más pasantías disponibles</Normal>
                             </Grid> :
                             pasantias.map((value: any) => (
                                 <Grid key={value.id} item xs={12} md={6} lg={4} xl={3} mx='auto'>
