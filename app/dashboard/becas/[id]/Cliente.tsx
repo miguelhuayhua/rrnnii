@@ -1,12 +1,12 @@
 'use client';
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Grid, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Stack, Tabs } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, Grid, Tabs } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
+import { MdArrowLeft } from "react-icons/md";
 import parse from 'html-react-parser';
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import Image from 'next/legacy/image';
@@ -165,7 +165,7 @@ export default function Cliente({ Beca }: Props) {
                                     Beca.Participantes.length > 0 ? <Grid container spacing={2}>
                                         {
                                             Beca.Participantes.map(value => (
-                                                <Grid item xs={12} md={4}>
+                                                <Grid key={value.id} item xs={12} md={4}>
                                                     <BoxSombra>
                                                         <Avatar />
                                                         <Box>

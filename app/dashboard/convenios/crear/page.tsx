@@ -375,7 +375,7 @@ export default function Page() {
                                                         <ListSubheader>América del norte</ListSubheader>
                                                         {
                                                             paises.americaNorte.map(value => (
-                                                                <MenuItem value={value.value}>
+                                                                <MenuItem key={value.value} value={value.value}>
                                                                     <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
                                                                     {value.pais}</MenuItem>
                                                             ))
@@ -383,7 +383,7 @@ export default function Page() {
                                                         <ListSubheader>América del sur</ListSubheader>
                                                         {
                                                             paises.americaSur.map(value => (
-                                                                <MenuItem value={value.value}>
+                                                                <MenuItem key={value.value} value={value.value}>
                                                                     <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
                                                                     {value.pais}</MenuItem>
                                                             ))
@@ -391,7 +391,7 @@ export default function Page() {
                                                         <ListSubheader>Europa</ListSubheader>
                                                         {
                                                             paises.europa.map(value => (
-                                                                <MenuItem value={value.value}>
+                                                                <MenuItem key={value.value} value={value.value}>
                                                                     <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
                                                                     {value.pais}</MenuItem>
                                                             ))
@@ -399,7 +399,7 @@ export default function Page() {
                                                         <ListSubheader>Asia</ListSubheader>
                                                         {
                                                             paises.asia.map(value => (
-                                                                <MenuItem value={value.value}>
+                                                                <MenuItem key={value.value} value={value.value}>
                                                                     <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
                                                                     {value.pais}</MenuItem>
                                                             ))
@@ -407,7 +407,7 @@ export default function Page() {
                                                         <ListSubheader>África</ListSubheader>
                                                         {
                                                             paises.africa.map(value => (
-                                                                <MenuItem value={value.value}>
+                                                                <MenuItem key={value.value} value={value.value}>
                                                                     <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
                                                                     {value.pais}</MenuItem>
                                                             ))
@@ -415,7 +415,7 @@ export default function Page() {
                                                         <ListSubheader>Oceanía</ListSubheader>
                                                         {
                                                             paises.oceania.map(value => (
-                                                                <MenuItem value={value.value}>
+                                                                <MenuItem key={value.value} value={value.value}>
                                                                     <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
                                                                     {value.pais}</MenuItem>
                                                             ))

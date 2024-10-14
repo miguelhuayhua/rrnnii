@@ -129,7 +129,7 @@ export default function Page() {
             <Grid container spacing={2}>
                 {
                     Pasantias.map(value => (
-                        <Grid item xs={12} lg={6}>
+                        <Grid item xs={12} lg={6} key={value.id}>
                             <PasantiaComponent
                                 setPasantia={setPasantia}
                                 setPasantias={setPasantias}

@@ -100,7 +100,7 @@ const Cliente = () => {
                                 {
                                     Noticias.map(value => (
 
-                                        <Grid item xs={6}>
+                                        <Grid key={value.id} item xs={6}>
                                             <Imagen
                                                 objectFit="cover"
                                                 style={{ borderRadius: 10 }}
