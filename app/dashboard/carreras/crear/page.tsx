@@ -38,26 +38,7 @@ export default function Page() {
         }
     });
 
-    const onSubmit = (carrera: Institucion) => {
-        let form = new FormData();
-        form.append('nombre', carrera.nombre);
-        form.append('contacto', carrera.contacto?.toString()!);
-        form.append('portada', portada);
-        openModal({
-            titulo: '¿Continuar?',
-            content: 'Una nueva carrera se agregará',
-            callback: async () => {
-                setLoad(true);
-                let res = await axiosInstance.post('/api/carrera/crear', form);
-                if (!res.data.error) {
-                    router.back();
-                    router.refresh();
-                    setLoad(false);
-                }
-                return res.data.mensaje;
-            }
-        });
-    }
+
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
@@ -113,7 +94,26 @@ export default function Page() {
                         </BoxSombra>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <BoxSombra p={2} component='form' onSubmit={handleSubmit((carrera) => {
+                            let form = new FormData();
+                            form.append('nombre', carrera.nombre);
+                            form.append('contacto', carrera.contacto?.toString()!);
+                            form.append('portada', portada);
+                            openModal({
+                                titulo: '¿Continuar?',
+                                content: 'Una nueva carrera se agregará',
+                                callback: async () => {
+                                    setLoad(true);
+                                    let res = await axiosInstance.post('/api/carrera/crear', form);
+                                    if (!res.data.error) {
+                                        router.back();
+                                        router.refresh();
+                                        setLoad(false);
+                                    }
+                                    return res.data.mensaje;
+                                }
+                            });
+                        })}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
