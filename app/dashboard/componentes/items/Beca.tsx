@@ -71,7 +71,7 @@ const BecaComponent = ({ Beca, setBeca,
                                         a.remove();
                                     }}
                                     sx={{
-                                        background: Beca.pdf.includes('pdf') ? red[700] : blue[700],
+                                        background: Beca.pdf.includes('pdf') ? red[700] : blue[500],
                                         height: 40
                                     }}>
                                     {
@@ -98,7 +98,7 @@ const BecaComponent = ({ Beca, setBeca,
                 </Grid>
                 <Grid item xs={4}>
                     <Box position='relative' height="100%" borderRadius={3} overflow='hidden'>
-                        <Image src={fileDomain + Beca.imagen} layout="fill" />
+                        <Image objectFit="cover" src={fileDomain + Beca.imagen} layout="fill" />
                     </Box>
                 </Grid>
             </Grid>

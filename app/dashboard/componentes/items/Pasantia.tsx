@@ -61,7 +61,7 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                                         a.remove();
                                     }}
                                     sx={{
-                                        background: Pasantia.pdf.includes('pdf') ? red[700] : blue[700],
+                                        background: Pasantia.pdf.includes('pdf') ? red[700] : blue[500],
                                         height: 40
                                     }}>
                                     {
@@ -83,7 +83,7 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                 </Grid>
                 <Grid item xs={4}>
                     <Box position='relative' height="100%" borderRadius={3} overflow='hidden'>
-                        <Image src={fileDomain + Pasantia.imagen} layout="fill" />
+                        <Image objectFit="cover" src={fileDomain + Pasantia.imagen} layout="fill" />
                     </Box>
                 </Grid>
             </Grid>

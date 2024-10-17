@@ -68,7 +68,7 @@ const ConvenioComponent = ({ Convenio, setConvenio,
                                         a.remove();
                                     }}
                                     sx={{
-                                        background: Convenio.pdf.includes('pdf') ? red[700] : blue[700],
+                                        background: Convenio.pdf.includes('pdf') ? red[700] : blue[500],
                                         height: 40
                                     }}>
                                     {

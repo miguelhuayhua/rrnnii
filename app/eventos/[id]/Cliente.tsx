@@ -138,7 +138,7 @@ export default function Cliente({ value }: Props) {
                                     a.click();
                                     a.remove();
                                 }}
-                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700], mt: 4 }}>
+                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500], mt: 4 }}>
                                 Descargar documento
                             </BotonFilled> : null
                     }

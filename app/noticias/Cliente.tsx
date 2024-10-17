@@ -47,7 +47,6 @@ const Cliente = () => {
                         Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
                     </BotonFilled>
                 </Grid>
-
                 {
                     Noticias.length > 0 ?
                         Noticias.map(value => (

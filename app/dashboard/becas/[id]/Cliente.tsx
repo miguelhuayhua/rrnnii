@@ -67,7 +67,7 @@ export default function Cliente({ Beca }: Props) {
                 </Box>
                 <Tabs
                     sx={{ mb: 2 }}
-                    TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
+                    TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
                     ScrollButtonComponent={(props) =>
                         <BotonSimple  {...props}>
                             {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}

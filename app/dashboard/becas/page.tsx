@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { Beca } from "@prisma/client";
 import Image from 'next/legacy/image';
 import { FaAngleLeft, FaAngleRight, FaEye } from "react-icons/fa";
-import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
@@ -37,7 +36,7 @@ export default function Page() {
         });
     }, []);
     return (
-        <Box px={{ xs: 1, md: 2, lg: 5 }} >
+        <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
             <Breadcrumbs >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
@@ -66,7 +65,7 @@ export default function Page() {
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -134,7 +133,7 @@ export default function Page() {
             <Grid container spacing={2}>
                 {
                     becas.map(value => (
-                        <Grid item xs={12} lg={6}>
+                        <Grid key={value.id} item xs={12} lg={6}>
                             <BecaComponent
                                 setBeca={setBeca}
                                 setBecas={setBecas}

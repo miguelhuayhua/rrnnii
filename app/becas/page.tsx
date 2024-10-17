@@ -27,7 +27,7 @@ export default function Home() {
                 }}>
                     <Typography
                         variant='h1'
-                        sx={{ fontWeight: 900, textAlign: { xs: 'center', md: 'start' }, color: blue[700], fontSize: { xs: 22, sm: 30, md: 40, xl: 60 }, my: 3 }}
+                        sx={{ fontWeight: 900, textAlign: { xs: 'center', md: 'start' }, color: blue[500], fontSize: { xs: 22, sm: 30, md: 40, xl: 60 }, my: 3 }}
                     >
                         Becas <br /> <span style={{ color: '#ff3333' }}>Universidad Pública de El Alto</span>
                     </Typography>

@@ -57,7 +57,6 @@ const handler = NextAuth({
                 token.rol = user.rol;
             }
             if (trigger == 'update') {
-                console.log(session)
                 token.name = session.usuario;
                 token.picture = session.avatar;
                 token.rol = session.rol;

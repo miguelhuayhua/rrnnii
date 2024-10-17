@@ -153,7 +153,7 @@ export default function Cliente({ value }: Props) {
                             {dayjs(value.finalizacion, 'DD/MM/YYYY').format('[Finaliza el] DD [de] MMMM [del] YYYY')}
                         </Normal>
                         <ChipBox
-                            sx={{ height: 30, position: 'absolute', top: -7, right: 0, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[400] : red[400], color: 'white' }}
+                            sx={{ height: 30, position: 'absolute', top: -7, right: 0, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[500] : red[500], color: 'white' }}
                             label={dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
                         {
                             value.descripcion ? parse(value.descripcion) :
@@ -203,7 +203,7 @@ export default function Cliente({ value }: Props) {
                                                     a.click();
                                                     a.remove();
                                                 }}
-                                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
                                                 Descargar documento
                                             </BotonFilled> : null
                                     }</> : null

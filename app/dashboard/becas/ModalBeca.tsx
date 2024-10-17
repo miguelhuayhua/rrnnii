@@ -108,7 +108,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
             maxWidth='md'
             onClose={() => { setBeca(null) }}
         >
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
+            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%", zIndex: 20 }} /> : null}
             <DialogContent sx={{ position: 'relative', p: 2 }}>
                 <BotonSimple onClick={() => setBeca(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
                     <IoClose fontSize={25} />

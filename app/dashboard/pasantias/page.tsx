@@ -61,7 +61,7 @@ export default function Page() {
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}

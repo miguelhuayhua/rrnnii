@@ -29,7 +29,7 @@ export default function Home() {
                         variant='h1'
                         sx={{ fontWeight: 900, textAlign: { xs: 'center', md: 'start' }, color: '#ff3333', fontSize: { xs: 22, sm: 30, md: 40, xl: 60 }, my: 3 }}
                     >
-                        Convenios <br /> <span style={{ color: blue[700] }}>Universidad Pública de El Alto</span>
+                        Convenios <br /> <span style={{ color: blue[500] }}>Universidad Pública de El Alto</span>
                     </Typography>
                     <Typography
                         sx={{ color: 'white', my: 3, fontWeight: 40, textAlign: 'start', fontSize: { xs: 15, md: 20, lg: 30 } }}

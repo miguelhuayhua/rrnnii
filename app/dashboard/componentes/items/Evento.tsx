@@ -62,7 +62,7 @@ const EventoComponent = ({ Evento, setEvento,
                                         a.remove();
                                     }}
                                     sx={{
-                                        background: Evento.pdf.includes('pdf') ? red[700] : blue[700],
+                                        background: Evento.pdf.includes('pdf') ? red[700] : blue[500],
                                         height: 40
                                     }}>
                                     {

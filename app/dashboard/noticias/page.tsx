@@ -11,8 +11,7 @@ import ModalNoticia from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
 import { blue } from "@mui/material/colors";
-import { InputBox, SwitchBox } from "@/app/componentes/Datos";
-import { useSnackbar } from "@/providers/SnackbarProvider";
+import { InputBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { IoSearch } from "react-icons/io5";
@@ -23,7 +22,6 @@ export default function Page() {
     const [noticias, setNoticias] = useState<Noticia[]>([]);
     const [prevNoticias, setPrevNoticias] = useState<Noticia[]>([]);
     const [noticia, setNoticia] = useState<any>(null);
-    const { openSnackbar } = useSnackbar();
     const router = useRouter();
     useEffect(() => {
         axios.post('/api/noticia/todo').then(res => {
@@ -32,7 +30,7 @@ export default function Page() {
         });
     }, []);
     return (
-        <Box px={{ xs: 1, md: 2, lg: 5 }} >
+        <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
             <Breadcrumbs >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
@@ -61,7 +59,7 @@ export default function Page() {
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}

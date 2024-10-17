@@ -6,8 +6,6 @@ import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft } from "react-icons/md";
-import { axiosInstance } from "@/globals";
 import { Carrera } from "@prisma/client";
 import Image from 'next/legacy/image';
 import dayjs from "dayjs";
@@ -63,7 +61,7 @@ export default function Page() {
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -104,49 +102,51 @@ export default function Page() {
                             label={prevCarreras.filter(value => !value.estado).length} />
                     </Box>} value='inactivo' />
             </Tabs>
-            <Tabla skipColumns={{ nombre: true }} data={carreras.map(value => (
-                {
-                    nombre: value.nombre,
-                    "Carrera": (<Box display='flex' minWidth={200} py={0.35} alignItems='center'>
-                        <Box minWidth={90} width={90} height={90} position='relative'>
-                            <Image src={value.logo ? fileDomain + value.logo : '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
-                        </Box>
-                        <Normal ml={1}>
-                            {value.nombre}
-                            <br />
-                            {value.contacto || ''}
-                        </Normal>
-                    </Box>
-                    ),
-                    "Creado el": (
-                        <Box minWidth={90}>
-                            <Negrita sx={{ fontSize: 14 }}>
-                                {dayjs(value.createdAt).format('DD/MM/YYYY')}
-                            </Negrita>
-                            <Normal sx={{ fontSize: 12 }}>
-                                {dayjs(value.createdAt).format('HH:mm:ss')}
+            <Tabla
+                hasPagination
+                skipColumns={{ nombre: true }} data={carreras.map(value => (
+                    {
+                        nombre: value.nombre,
+                        "Carrera": (<Box display='flex' minWidth={200} py={0.35} alignItems='center'>
+                            <Box minWidth={90} width={90} height={90} position='relative'>
+                                <Image src={value.logo ? fileDomain + value.logo : '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            </Box>
+                            <Normal ml={1}>
+                                {value.nombre}
+                                <br />
+                                {value.contacto || ''}
                             </Normal>
                         </Box>
-                    ),
-                    "": (<>
-                        <Stack direction='row' alignItems='center' spacing={2}>
-                            <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
-                                setCarrera(value);
-                            }}>Modificar</BotonOutline>
+                        ),
+                        "Creado el": (
+                            <Box minWidth={90}>
+                                <Negrita sx={{ fontSize: 14 }}>
+                                    {dayjs(value.createdAt).format('DD/MM/YYYY')}
+                                </Negrita>
+                                <Normal sx={{ fontSize: 12 }}>
+                                    {dayjs(value.createdAt).format('HH:mm:ss')}
+                                </Normal>
+                            </Box>
+                        ),
+                        "": (<>
+                            <Stack direction='row' alignItems='center' spacing={2}>
+                                <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
+                                    setCarrera(value);
+                                }}>Modificar</BotonOutline>
 
-                            <SwitchBox checked={value.estado} onChange={(ev, checked) => {
-                                axiosInstance.post('/api/carrera/estado', { estado: checked, id: value.id }).then(res => {
-                                    openSnackbar(res.data.mensaje);
-                                    axiosInstance.post('/api/carrera/todo', {}).then(res => {
-                                        setCarreras(res.data);
-                                        setPrevCarreras(res.data);
+                                <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                                    axios.post('/api/carrera/estado', { estado: checked, id: value.id }).then(res => {
+                                        openSnackbar(res.data.mensaje);
+                                        axios.post('/api/carrera/todo', {}).then(res => {
+                                            setCarreras(res.data);
+                                            setPrevCarreras(res.data);
+                                        });
                                     });
-                                });
-                            }} />
-                        </Stack>
-                    </>)
-                }
-            ))} />
+                                }} />
+                            </Stack>
+                        </>)
+                    }
+                ))} />
             {
                 carrera ?
                     <ModalCarrera

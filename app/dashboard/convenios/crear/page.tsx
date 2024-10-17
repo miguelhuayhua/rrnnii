@@ -179,10 +179,10 @@ export default function Page() {
                                 {
                                     documento ?
                                         <ChipBox icon={documento.type.includes('pdf') ?
-                                            <BsFileEarmarkPdfFill fontSize={20} color={red[400]} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
+                                            <BsFileEarmarkPdfFill fontSize={20} color={red[500]} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
                                             sx={{
                                                 mt: 2,
-                                                border: `1px solid ${documento.type.includes('pdf') ? red[400] : '#1951b2'}`,
+                                                border: `1px solid ${documento.type.includes('pdf') ? red[500] : '#1951b2'}`,
                                                 height: 40,
                                                 bgcolor: 'white'
                                             }}

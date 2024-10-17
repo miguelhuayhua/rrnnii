@@ -29,7 +29,7 @@ const ConvenioItem = ({ value }: Props) => {
                         sx={{
                             height: 30, position: 'absolute',
                             top: 5,
-                            left: 10, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[400] : red[400], color: 'white',
+                            left: 10, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[500] : red[500], color: 'white',
                             zIndex: 10
                         }}
                         label={dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />

@@ -41,6 +41,7 @@
     "react-photo-album": "^3.0.2",
     "react-quill": "^2.0.0",
     "react-show-more-text": "^1.7.1",
+    "react-simple-captcha": "^9.3.1",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
     "schema-dts": "^1.1.2",

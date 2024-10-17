@@ -62,7 +62,7 @@ export default function Page() {
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[700] } }}
+                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -102,49 +102,50 @@ export default function Page() {
                             label={prevInstituciones.filter(value => !value.estado).length} />
                     </Box>} value='inactivo' />
             </Tabs>
-            <Tabla skipColumns={{ nombre: true }} data={instituciones.map(value => (
-                {
-                    nombre: value.nombre,
-                    "Institución": (<Box display='flex' alignItems='center' minWidth={200} py={0.35}>
-                        <Box minWidth={80} width={80} height={80} position='relative'>
-                            <Image src={value.logo ? fileDomain + value.logo : '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+            <Tabla hasPagination
+                skipColumns={{ nombre: true }} data={instituciones.map(value => (
+                    {
+                        nombre: value.nombre,
+                        "Institución": (<Box display='flex' alignItems='center' minWidth={200} py={0.35}>
+                            <Box minWidth={80} width={80} height={80} position='relative'>
+                                <Image src={value.logo ? fileDomain + value.logo : '/default-image.jpg'} objectFit="cover" layout="fill" style={{ borderRadius: 10 }} />
+                            </Box>
+                            <Box px={2}>
+                                <Negrita sx={{ fontSize: 16 }}>{value.nombre}</Negrita>
+                                <Normal >{value.contacto || 'Sin contacto'}</Normal>
+                            </Box>
                         </Box>
-                        <Box px={2}>
-                            <Negrita sx={{ fontSize: 16 }}>{value.nombre}</Negrita>
-                            <Normal >{value.contacto || 'Sin contacto'}</Normal>
-                        </Box>
-                    </Box>
-                    ),
-                    "Creado el": (
-                        <Box minWidth={90}>
-                            <Negrita sx={{ fontSize: 14 }}>
-                                {dayjs(value.createdAt).format('DD/MM/YYYY')}
-                            </Negrita>
-                            <Normal sx={{ fontSize: 12 }}>
-                                {dayjs(value.createdAt).format('HH:mm:ss')}
-                            </Normal>
-                        </Box>
-                    ),
-                    "": (<>
-                        <Stack direction='row' spacing={2} alignItems='center'>
-                            <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
-                                setInstitucion(value);
-                            }}>Modificar</BotonOutline>
+                        ),
+                        "Creado el": (
+                            <Box minWidth={90}>
+                                <Negrita sx={{ fontSize: 14 }}>
+                                    {dayjs(value.createdAt).format('DD/MM/YYYY')}
+                                </Negrita>
+                                <Normal sx={{ fontSize: 12 }}>
+                                    {dayjs(value.createdAt).format('HH:mm:ss')}
+                                </Normal>
+                            </Box>
+                        ),
+                        "": (<>
+                            <Stack direction='row' spacing={2} alignItems='center'>
+                                <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
+                                    setInstitucion(value);
+                                }}>Modificar</BotonOutline>
 
-                            <SwitchBox checked={value.estado} onChange={(ev, checked) => {
-                                axios.post('/api/institucion/estado', { estado: checked, id: value.id }).then(res => {
-                                    openSnackbar(res.data.mensaje);
-                                    axios.post('/api/institucion/todo', {}).then(res => {
-                                        setInstituciones(res.data);
-                                        setPrevInstituciones(res.data);
-                                        setOpcion('todo');
+                                <SwitchBox checked={value.estado} onChange={(ev, checked) => {
+                                    axios.post('/api/institucion/estado', { estado: checked, id: value.id }).then(res => {
+                                        openSnackbar(res.data.mensaje);
+                                        axios.post('/api/institucion/todo', {}).then(res => {
+                                            setInstituciones(res.data);
+                                            setPrevInstituciones(res.data);
+                                            setOpcion('todo');
+                                        });
                                     });
-                                });
-                            }} />
-                        </Stack>
-                    </>)
-                }
-            ))} />
+                                }} />
+                            </Stack>
+                        </>)
+                    }
+                ))} />
             {
                 institucion ?
                     <ModalInstitucion

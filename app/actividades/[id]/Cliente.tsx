@@ -83,7 +83,7 @@ const Cliente = ({ value }: Props) => {
                                                 a.click();
                                                 a.remove();
                                             }}
-                                            sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700], fontSize: 12 }}>
+                                            sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500], fontSize: 12 }}>
                                             Descargar documento
                                         </BotonFilled> : null
                                 }

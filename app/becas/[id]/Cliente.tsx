@@ -8,16 +8,14 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
-interface Props {
-    value: Beca & { Institucion: Institucion };
-}
+interface Props { value: Beca & { Institucion: Institucion }; }
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
 import { BotonFilled } from "@/app/componentes/Botones";
 import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line, RiUserReceivedFill } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
-import { blue, green, red } from "@mui/material/colors";
+import { blue, green, grey, red } from "@mui/material/colors";
 import { IoMdCalendar } from "react-icons/io";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import Zoom from 'react-medium-image-zoom';
@@ -50,7 +48,7 @@ export default function Cliente({ value }: Props) {
                             {value.titulo}
                         </Titulo>
                         <Box alignItems='center' zIndex={10} display='flex' pl={{ xs: 2, sm: 6, xl: 40 }} position='absolute' bottom={40}>
-                            <Avatar sx={{ width: 60, height: 60 }} />
+                            <Avatar src={fileDomain + value.Institucion.logo} sx={{ width: 60, height: 60, bgcolor: grey[50] }} />
                             <Box ml={2}>
                                 <Button
                                     sx={{ px: 0, mx: 0, minWidth: 0 }}
@@ -139,7 +137,7 @@ export default function Cliente({ value }: Props) {
                             sx={{
                                 height: 30,
                                 position: 'absolute', top: 6, right: 0,
-                                background: dayjs(value.termina, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[400] : red[400],
+                                background: dayjs(value.termina, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[500] : red[500],
                                 color: 'white'
                             }}
                             label={dayjs(value.termina, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
@@ -170,7 +168,7 @@ export default function Cliente({ value }: Props) {
                                                     a.click();
                                                     a.remove();
                                                 }}
-                                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[700] }}>
+                                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
                                                 Descargar documento
                                             </BotonFilled> : null
                                     }</> : null
@@ -179,7 +177,7 @@ export default function Cliente({ value }: Props) {
 
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={12} pb={2}>
                     <Titulo sx={{ textAlign: 'center', my: 3 }}>
                         Más becas
                     </Titulo>
@@ -197,7 +195,7 @@ export default function Cliente({ value }: Props) {
                         }
                     </Grid>
                 </Grid>
-            </Grid >
+            </Grid>
             <ModalInscribir becaId={value.id} open={open} setOpen={setOpen} />
             <ModalInstitucion Institucion={value.Institucion} open={openModalInstitucion}
                 setOpen={setOpenModalInstitucion}

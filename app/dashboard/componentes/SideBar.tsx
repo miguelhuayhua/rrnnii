@@ -31,7 +31,7 @@ const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: 
                 textTransform: 'none',
                 fontSize: 10.5,
                 fontWeight: 700,
-                color: active ? blue[700] : grey[900],
+                color: active ? blue[500] : grey[900],
                 mx: 'auto',
                 borderRadius: 4,
                 my: 0.25,

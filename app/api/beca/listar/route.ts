@@ -8,7 +8,7 @@ const POST = async (request: Request) => {
             where: {
                 estado: true,
                 id: { not: id || undefined },
-                tipo,
+                tipo: tipo || undefined,
                 continente: continente ? continente.toUpperCase() : undefined
             },
             skip: skip * take,
