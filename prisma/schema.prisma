@@ -76,6 +76,10 @@ model ParticipanteBeca {
   contacto        String @default("")
   becaId          String @default("")
   Beca            Beca?  @relation(fields: [becaId], references: [id])
+  ru              String @default("")
+  ci              String @default("")
+  rupath          String @default("")
+  cipath          String @default("")
 }
 
 model Evento {

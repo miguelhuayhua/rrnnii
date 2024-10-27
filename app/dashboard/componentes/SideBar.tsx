@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { CgMenuLeft } from 'react-icons/cg';
 import { BiSolidInstitution } from 'react-icons/bi';
 import { useSession } from 'next-auth/react';
+import { GrContactInfo } from 'react-icons/gr';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
 
 const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: string, active: boolean, onclick?: any }) => {
@@ -110,10 +111,18 @@ const SideBar = () => {
                 router.push('/dashboard/unidad');
                 setMove(false);
             }} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />
-            <SideBarItem onclick={() => {
+            {/* <SideBarItem onclick={() => {
                 router.push('/dashboard/herramientas');
                 setMove(false);
-            }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} />
+            }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} /> */}
+            {
+                data?.user.rol == 'admin' ?
+                    <SideBarItem onclick={() => {
+                        router.push('/dashboard/acciones');
+                        setMove(false);
+                    }} Icon={GrContactInfo} label='Acciones' active={pathname.includes('/acciones')} />
+                    : null
+            }
         </Box>
     )
     return (

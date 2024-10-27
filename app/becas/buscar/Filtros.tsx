@@ -54,7 +54,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                             Orden
                         </Negrita>
                         <RadioGroup value={orden} onChange={(ev) => {
-                            router.replace(`/becas?s=${ev.target.value}${params.has('t') ? '&t=' + params.get('t') : ''}${params.has('co') ? '&co=' + params.get('co') : ''}`)
+                            router.replace(`/becas/buscar?s=${ev.target.value}${params.has('t') ? '&t=' + params.get('t') : ''}${params.has('co') ? '&co=' + params.get('co') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'0'}

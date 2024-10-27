@@ -17,3 +17,5 @@ declare module "next-auth/jwt" {
         rol: string;
     }
 }
+
+declare module "react-simple-captcha";

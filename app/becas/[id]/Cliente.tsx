@@ -1,12 +1,13 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Button, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, Button, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
 import { Beca, Institucion } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { Icon as Iconify } from '@iconify/react';
 import axios from "axios";
 interface Props { value: Beca & { Institucion: Institucion }; }
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
@@ -23,6 +24,8 @@ import 'react-medium-image-zoom/dist/styles.css';
 import BecaItem from "@/app/componentes/items/Beca";
 import ModalInscribir from "./ModalInscribit";
 import ModalInstitucion from "@/app/componentes/ModalInstitucion";
+import { ModalProvider } from "@/providers/ModalProvider";
+import { SnackbarProvider } from "@/providers/SnackbarProvider";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [becas, setBecas] = useState([]);
@@ -38,10 +41,28 @@ export default function Cliente({ value }: Props) {
             <Grid container>
                 <Grid item xs={12}>
                     <Box sx={{ height: 500, position: 'relative' }}>
+                        <Stack sx={{
+                            position: 'absolute', top: 20, zIndex: 10,
+                            mx: { xs: 2, sm: 6, xl: 40 },
+                        }} direction='row' spacing={2}>
+                            <ChipBox label={value.tipo == 'internacional' ? 'Beca internacional' : 'Beca nacional'}
+                                sx={{
+                                    bgcolor: grey[900], color: 'white',
+
+                                }} />
+                            <Normal sx={{
+                                display: 'flex',
+                                color: '#ddd',
+                                alignItems: 'center',
+                            }}>
+                                <Iconify fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.pais.toLowerCase()}-4x3`} />
+                                {value.tipo == 'nacional' ? 'BO' : value.pais}
+                            </Normal>
+                        </Stack>
                         <Titulo sx={{
                             position: 'absolute',
                             fontSize: 30,
-                            top: 40,
+                            top: 60,
                             pl: { xs: 2, sm: 6, xl: 40 },
                             zIndex: 10, color: 'white'
                         }}>
@@ -196,10 +217,16 @@ export default function Cliente({ value }: Props) {
                     </Grid>
                 </Grid>
             </Grid>
-            <ModalInscribir becaId={value.id} open={open} setOpen={setOpen} />
-            <ModalInstitucion Institucion={value.Institucion} open={openModalInstitucion}
-                setOpen={setOpenModalInstitucion}
-            />
+            <SnackbarProvider>
+                <ModalProvider>
+                    <ModalInscribir becaId={value.id} open={open} setOpen={setOpen} />
+                    <ModalInstitucion
+                        Institucion={value.Institucion}
+                        open={openModalInstitucion}
+                        setOpen={setOpenModalInstitucion}
+                    />
+                </ModalProvider>
+            </SnackbarProvider>
         </>
     )
 }

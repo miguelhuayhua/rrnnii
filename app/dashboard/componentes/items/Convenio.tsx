@@ -1,5 +1,4 @@
 'use client';
-import { FaBuilding } from "react-icons/fa6";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Convenio, Institucion } from "@prisma/client";
 import { ChipBox } from "@/app/componentes/Mostrar";
@@ -90,7 +89,7 @@ const ConvenioComponent = ({ Convenio, setConvenio,
                 </Grid>
                 <Grid item xs={4}>
                     <Box position='relative' height="100%" borderRadius={3} overflow='hidden'>
-                        <Image src={fileDomain + Convenio.imagen} layout="fill" />
+                        <Image src={fileDomain + Convenio.imagen} layout="fill" objectFit="cover" />
                     </Box>
                 </Grid>
             </Grid>

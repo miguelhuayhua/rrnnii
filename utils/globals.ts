@@ -1,6 +1,18 @@
 const domain = 'http://localhost:3000';
 const fileDomain = 'http://localhost:4000';
 
+function makeid(size: number) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < size) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
+}
+
 const paises = {
     americaNorte: [
         { pais: 'Estados Unidos', value: 'US' },
@@ -71,4 +83,4 @@ const paises = {
 };
 
 
-export { domain, fileDomain, paises };
+export { domain, fileDomain, paises, makeid };

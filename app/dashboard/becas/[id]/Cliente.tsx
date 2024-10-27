@@ -1,19 +1,20 @@
 'use client';
 import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Grid, Tabs } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, ClickAwayListener, Grid, Stack, Tabs, Tooltip } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft } from "react-icons/md";
+import { MdArrowLeft, MdEdit } from "react-icons/md";
 import parse from 'html-react-parser';
 import { useForm } from "react-hook-form";
 import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import Image from 'next/legacy/image';
+import { Icon } from '@iconify/react';
 import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useState } from "react";
-import { blue } from "@mui/material/colors";
+import { blue, blueGrey, green } from "@mui/material/colors";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TabBox } from "../../componentes/Mostrar";
 import { IoCalendar } from "react-icons/io5";
@@ -21,6 +22,9 @@ import dayjs from "dayjs";
 import 'dayjs/locale/es';
 import { RiUserVoiceFill } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
+import { TbDotsVertical } from "react-icons/tb";
+import axios from "axios";
+import { useModal } from "@/providers/ModalProvider";
 interface Props {
     Beca: Beca & { Institucion: Institucion, Participantes: ParticipanteBeca[] };
 }
@@ -29,7 +33,9 @@ export default function Cliente({ Beca }: Props) {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Beca>({
         defaultValues: Beca, shouldFocusError: true
     });
+    const { openModal } = useModal();
     const { openSnackbar } = useSnackbar();
+    const [open, setOpen] = useState<any>(null);
     const [opcion, setOpcion] = useState(1);
     const router = useRouter();
 
@@ -139,8 +145,9 @@ export default function Cliente({ Beca }: Props) {
                                     <BoxSombra mt={2} p={2} display='flex'>
                                         <Box>
                                             <Image
-                                                src={Beca.Institucion.logo || '/default-image.jpg'} width={100} height={100}
+                                                src={fileDomain + Beca.Institucion.logo || '/default-image.jpg'} width={100} height={100}
                                                 layout="fixed"
+                                                objectFit="cover"
                                                 style={{ borderRadius: 10 }} />
                                         </Box>
                                         <Box p={2}>
@@ -162,25 +169,104 @@ export default function Cliente({ Beca }: Props) {
                         opcion == 2 ?
                             <>
                                 {
-                                    Beca.Participantes.length > 0 ? <Grid container spacing={2}>
-                                        {
-                                            Beca.Participantes.map(value => (
-                                                <Grid key={value.id} item xs={12} md={4}>
-                                                    <BoxSombra>
-                                                        <Avatar />
-                                                        <Box>
-                                                            <Negrita>
-                                                                {value.nombre_completo}
-                                                            </Negrita>
-                                                            <Normal>
-                                                                {value.contacto}
-                                                            </Normal>
-                                                        </Box>
-                                                    </BoxSombra>
-                                                </Grid>
-                                            ))
-                                        }
-                                    </Grid>
+                                    Beca.Participantes.length > 0 ?
+                                        <Grid mt={1} container spacing={2} m={2}>
+                                            {
+                                                Beca.Participantes.map((value, index) => (
+                                                    <Grid key={value.id} item xs={12} sm={6} lg={4}>
+                                                        <BoxSombra position='relative' p={2}>
+                                                            <ClickAwayListener touchEvent={false} onClickAway={() => setOpen(null)}>
+                                                                <Box>
+                                                                    <Tooltip
+                                                                        arrow
+                                                                        PopperProps={{
+                                                                            sx: {
+                                                                                "& .MuiTooltip-tooltip": {
+                                                                                    bgcolor: 'white',
+                                                                                    border: '1px solid #ddd',
+                                                                                    borderRadius: 3,
+                                                                                },
+                                                                            }
+                                                                        }}
+                                                                        placement='left'
+                                                                        disableFocusListener
+                                                                        disableHoverListener
+                                                                        disableTouchListener
+                                                                        open={open == index}
+                                                                        title={
+                                                                            <Box >
+                                                                                <BotonSimple
+                                                                                    onClick={() => {
+                                                                                        openModal({
+                                                                                            titulo: '¿Está seguro?',
+                                                                                            content: 'El postulante será rechazado',
+                                                                                            async callback() {
+                                                                                                let res = await axios.post('/api/beca/participante/rechazar', { id: value.id });
+                                                                                                router.refresh();
+                                                                                                return res.data.mensaje;
+                                                                                            }
+                                                                                        })
+                                                                                    }}
+                                                                                    fullWidth sx={{ display: 'flex', justifyContent: 'start' }} >
+                                                                                    Rechazar y eliminar
+                                                                                </BotonSimple>
+                                                                            </Box>
+                                                                        }
+                                                                    >
+                                                                        <BotonSimple sx={{ position: 'absolute', top: 10, right: 10 }} onClick={() => setOpen(index)}>
+                                                                            <TbDotsVertical fontSize={18} />
+                                                                        </BotonSimple>
+                                                                    </Tooltip>
+                                                                </Box>
+                                                            </ClickAwayListener>
+                                                            <Box pl={1}>
+                                                                <Negrita>
+                                                                    {value.nombre_completo}
+                                                                </Negrita>
+                                                                <Normal>
+                                                                    {value.contacto}
+                                                                    <br />
+                                                                    Registro universitario: {value.ru}
+                                                                    <br />
+                                                                    Carnet de identidad: {value.ci}
+                                                                </Normal>
+                                                                <Stack mt={1} direction='row' spacing={2}>
+                                                                    <BotonSimple sx={{ bgcolor: green[500], color: 'white', px: 1.5 }}>
+                                                                        <Icon icon="carbon:phone-filled" />
+                                                                    </BotonSimple>
+                                                                    <BotonSimple
+                                                                        onClick={() => {
+                                                                            let a = document.createElement('a');
+                                                                            a.href = fileDomain + value.cipath;
+                                                                            a.target = '_blank';
+                                                                            a.download = fileDomain + value.cipath;
+                                                                            a.click();
+                                                                            a.remove();
+                                                                            openSnackbar('Carnet descargado con éxito');
+                                                                        }}
+                                                                        sx={{ bgcolor: blue[500], color: 'white', px: 1.3 }}>
+                                                                        C.I.
+                                                                    </BotonSimple>
+                                                                    <BotonSimple
+                                                                        onClick={() => {
+                                                                            let a = document.createElement('a');
+                                                                            a.href = fileDomain + value.rupath;
+                                                                            a.target = '_blank';
+                                                                            a.download = fileDomain + value.rupath;
+                                                                            a.click();
+                                                                            a.remove();
+                                                                            openSnackbar('Registro universitario descargado con éxito');
+                                                                        }}
+                                                                        sx={{ bgcolor: blueGrey[500], color: 'white', px: 0.8 }}>
+                                                                        R.U.
+                                                                    </BotonSimple>
+                                                                </Stack>
+                                                            </Box>
+                                                        </BoxSombra>
+                                                    </Grid>
+                                                ))
+                                            }
+                                        </Grid>
                                         :
                                         <Grid item xs={12}>
                                             <Normal>Sin postulantes</Normal>

@@ -26,7 +26,6 @@ export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [becas, setBecas] = useState<Beca[]>([]);
     const [prevBecas, setPrevBecas] = useState<Beca[]>([]);
-    const { openSnackbar } = useSnackbar();
     const [beca, setBeca] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {

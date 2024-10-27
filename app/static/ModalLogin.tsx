@@ -1,8 +1,8 @@
 'use client';
-import { Box, Divider, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import Slide from '@mui/material/Slide';
@@ -10,9 +10,12 @@ import { TransitionProps } from '@mui/material/transitions';
 import React from 'react';
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-import { Titulo } from "../componentes/Textos";
+import { Normal, Titulo } from "../componentes/Textos";
 import { InputBox } from "../componentes/Datos";
 import { BotonFilled } from "../componentes/Botones";
+import { makeid } from "@/utils/globals";
+import { TbReload } from "react-icons/tb";
+import { blue, red } from "@mui/material/colors";
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
         children: React.ReactElement<any, any>;
@@ -31,15 +34,17 @@ export default function ModalLogin({ open, setOpen }: Props) {
     const [showPassword, setShowPassword] = React.useState(false);
     //controlador de eventos para el submit
 
-    const credencialsForm = useForm<{ password: string, usuario: string }>({
-        defaultValues: { password: '', usuario: '' }
+    const credencialsForm = useForm<{
+        password: string,
+        usuario: string,
+        captcha: string,
+        confirmCaptcha: string
+    }>({
+        defaultValues: { password: '', usuario: '', captcha: makeid(7), confirmCaptcha: '' }
     });
     //controlador de visualización de password
     const [loading, setLoading] = useState(false);
     const [mensaje, setMensaje] = useState('');
-    const recaptcha = useRef<any>();
-
-
     return (
         <Dialog
             open={open}
@@ -62,7 +67,7 @@ export default function ModalLogin({ open, setOpen }: Props) {
                     py={2}
                 >
                     <Controller
-                        rules={{ required: 'No puede quedar vacio' }}
+                        rules={{ required: 'Usuario es requerido' }}
                         control={credencialsForm.control}
                         name="usuario"
                         render={({ field }) => (
@@ -77,12 +82,13 @@ export default function ModalLogin({ open, setOpen }: Props) {
                         )}
                     />
                     <Controller
-                        rules={{ required: 'No puede quedar vacio' }}
+                        rules={{
+                            required: 'La contraseña es requerida',
+                        }}
                         control={credencialsForm.control}
                         name="password"
                         render={({ field, fieldState }) => (
                             <InputBox
-                                sx={{ mt: 3 }}
                                 label='Contraseña'
                                 error={!!fieldState.error}
                                 disabled={loading}
@@ -90,36 +96,92 @@ export default function ModalLogin({ open, setOpen }: Props) {
                                 InputProps={{
                                     endAdornment:
                                         <IconButton
+                                            sx={{ mr: 0 }}
                                             onClick={() => setShowPassword(!showPassword)}
                                             edge="end"
                                         >
                                             {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
                                         </IconButton>
                                 }}
-                                helperText={fieldState.error?.message || mensaje}
+                                helperText={fieldState.error?.message}
                                 {...field}
                             />
                         )}
                     />
-                    <BotonFilled sx={{ display: 'block', mt: 4, mx: 'auto', px: 4 }} onClick={async () => {
-                        if (await credencialsForm.trigger()) {
-                            setLoading(true);
-                            signIn('credentials', {
-                                redirect: false,
-                                callbackUrl: '/dashboard',
-                                password: credencialsForm.getValues('password'),
-                                usuario: credencialsForm.getValues('usuario')
-                            }).then(response => {
-                                if (response?.status == 401) {
-                                    setMensaje('Usuario o Contraseña inválida');
-                                    setLoading(false);
-                                }
-                                else if (response?.status == 200 && response.url) {
-                                    router.push(response.url);
-                                }
-                            })
-                        }
-                    }}>
+                    <Controller
+                        rules={{ required: 'No puede quedar vacio' }}
+                        control={credencialsForm.control}
+                        name="captcha"
+                        render={({ field }) => (
+                            <InputBox
+                                label='Captcha'
+                                disabled
+                                sx={{ userSelect: 'none' }}
+                                {...field}
+                                InputProps={{
+                                    endAdornment: <BotonFilled
+                                        onClick={() => {
+                                            credencialsForm.setValue('captcha', makeid(7))
+                                        }}
+                                        sx={{
+                                            bgcolor: blue[500],
+                                            minWidth: 0,
+                                            height: 35, width: 40,
+                                        }}>
+                                        <TbReload fontSize={24} /></BotonFilled>
+                                }}
+                            />
+                        )}
+                    />
+                    <Controller
+                        rules={{
+                            required: 'No puede quedar vacio',
+                            validate: value => value === credencialsForm.watch('captcha') || 'El valor del captcha no coincide, inténtelo de nuevo'
+
+                        }}
+                        control={credencialsForm.control}
+                        name="confirmCaptcha"
+                        render={({ field, fieldState }) => (
+                            <InputBox
+                                label='Confirme el captcha'
+                                disabled={loading}
+                                error={!!fieldState.error}
+                                {...field}
+                                helperText={fieldState.error?.message}
+                            />
+                        )}
+                    />
+                    {
+                        mensaje ?
+                            <Normal sx={{
+                                fontSize: 13,
+                                textAlign: 'center',
+                                color: red[500]
+                            }}>
+                                {mensaje}
+                            </Normal> : null
+                    }
+                    <BotonFilled
+                        disabled={loading}
+                        sx={{ display: 'block', mt: 2, mx: 'auto', px: 4 }} onClick={async () => {
+                            if (await credencialsForm.trigger()) {
+                                setLoading(true);
+                                signIn('credentials', {
+                                    redirect: false,
+                                    callbackUrl: '/dashboard',
+                                    password: credencialsForm.getValues('password'),
+                                    usuario: credencialsForm.getValues('usuario')
+                                }).then(response => {
+                                    if (response?.status == 401) {
+                                        setMensaje('Usuario o Contraseña inválida');
+                                        setLoading(false);
+                                    }
+                                    else if (response?.status == 200 && response.url) {
+                                        router.push(response.url);
+                                    }
+                                })
+                            }
+                        }}>
                         Ingresar
                     </BotonFilled>
                 </Box>

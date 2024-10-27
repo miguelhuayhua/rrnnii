@@ -1,5 +1,5 @@
 'use client';
-import { CircularProgress, Grid, } from "@mui/material";
+import { Badge, CircularProgress, Grid, } from "@mui/material";
 import { BiSearch } from "react-icons/bi";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
@@ -47,12 +47,15 @@ const Cliente = () => {
                             setBecas(BecasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
-                    <BotonFilled
-                        onClick={() => {
-                            setOpen(true);
-                        }} >
-                        Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                    </BotonFilled>
+                    <Badge invisible={!(params.has('co') ||
+                        params.has('s') || params.has('t'))} color="secondary" variant="dot">
+                        <BotonFilled
+                            onClick={() => {
+                                setOpen(true);
+                            }} >
+                            Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
+                        </BotonFilled>
+                    </Badge>
                 </Grid>
                 {
                     Becas.length > 0 ?

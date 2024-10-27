@@ -1,6 +1,6 @@
 'use client';
 import { Negrita, Normal } from "@/app/componentes/Textos";
-import { Beca, Institucion } from "@prisma/client";
+import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { BoxSombra } from "../Mostrar";
@@ -18,9 +18,10 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useRouter } from "next/navigation";
 import { IoEye } from "react-icons/io5";
 import 'dayjs/locale/es';
+import { IoMdPeople } from "react-icons/io";
 dayjs.locale('es');
 interface Props {
-    Beca: Beca & { Institucion: Institucion };
+    Beca: Beca & { Institucion: Institucion, Participantes: ParticipanteBeca[] };
     setBeca: any;
     setOpcion: any;
     setBecas: any;
@@ -95,6 +96,10 @@ const BecaComponent = ({ Beca, setBeca,
                             });
                         }} />
                     </Stack>
+                    <ChipBox
+                        icon={<IoMdPeople />}
+                        sx={{ mt: 2 }}
+                        label={`${Beca.Participantes.length} participantes`} />
                 </Grid>
                 <Grid item xs={4}>
                     <Box position='relative' height="100%" borderRadius={3} overflow='hidden'>

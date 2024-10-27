@@ -4,7 +4,7 @@ import DialogContent from '@mui/material/DialogContent';
 import React, { useEffect, useState } from 'react';
 import { IoClose } from "react-icons/io5";
 import { Icon as Iconify } from '@iconify/react';
-import { Autocomplete, Box, Grid, LinearProgress, MenuItem } from '@mui/material';
+import { Autocomplete, Box, Grid, LinearProgress, ListSubheader, MenuItem } from '@mui/material';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
@@ -19,12 +19,11 @@ import Image from 'next/legacy/image';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import { Beca, Institucion } from '@prisma/client';
-import { grey, red } from '@mui/material/colors';
+import { blue, grey, red } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { RiFileWord2Line } from 'react-icons/ri';
-import { ChipBox } from '@/app/componentes/Mostrar';
 import axios from 'axios';
-import { fileDomain } from '@/utils/globals';
+import { fileDomain, paises } from '@/utils/globals';
 import { FaUserTie } from 'react-icons/fa';
 import dayjs from 'dayjs';
 interface Props {
@@ -152,7 +151,8 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                         <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
                             p: 2,
-                            border: `1px solid ${grey[400]}`,
+                            mb: 2,
+                            border: `1px solid ${documento ? documento.type.includes('pdf') ? red[500] : blue[500] : grey[400]}`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -166,28 +166,18 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                         }}
                             onClick={() => PDFPicker.openFilePicker()}
                         >
-                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
-                            <MdOutlineAttachFile style={{ fontSize: 20 }} />
+                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>
+                                {
+                                    documento ? documento.name : "PDF o Word de Referencia"
+                                }
+                            </Normal>
+                            {
+                                documento ?
+                                    documento.type.includes('pdf') ?
+                                        <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />
+                                    : <MdOutlineAttachFile style={{ fontSize: 20 }} />
+                            }
                         </Box>
-                        {
-                            documento ?
-                                <ChipBox icon={documento.type.includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
-                                    sx={{
-                                        mt: 2,
-                                        border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
-                                        height: 40,
-                                        bgcolor: 'white'
-                                    }}
-                                    label={documento.name}
-                                    onDelete={() => {
-                                        setDocumento(null);
-                                    }}
-                                />
-                                : null
-                        }
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
                         <Controller
                             name="titulo"
                             control={control}
@@ -197,34 +187,9 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                     {...field}
                                     label='Título'
                                     error={!!errors.titulo}
-                                    helperText={errors.titulo?.message || 'Este es el título principal que será visible en el beca'}
+                                    helperText={errors.titulo?.message}
                                     inputRef={ref}
                                 />
-                            )}
-                        />
-                        <Controller
-                            name="descripcion"
-                            control={control}
-                            render={({ field }) => (
-                                <Box mb={2}>
-                                    <Negrita sx={{ mb: 1 }}>
-                                        Descripción:
-                                    </Negrita>
-                                    <Editor
-                                        value={field.value}
-                                        modules={{
-                                            toolbar: [
-                                                [{ 'header': [2, 3, 4, 5, false] }],
-                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                ['link'],
-                                            ]
-                                        }}
-                                        preserveWhitespace
-                                        className="editor"
-                                        onChange={(value) => { field.onChange(value) }}
-                                    />
-                                </Box>
                             )}
                         />
                         <Controller control={control}
@@ -281,6 +246,165 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                         />}
                                 />
 
+                            )}
+                        />
+                        <Controller
+                            name="tipo"
+                            control={control}
+                            render={({ field: { ref, ...field } }) => (
+                                <InputBox
+                                    select
+                                    label='Tipo de beca'
+                                    {...field}
+                                    inputRef={ref}
+                                    SelectProps={{
+                                        MenuProps: {
+                                            slotProps: {
+                                                paper: {
+                                                    sx: {
+                                                        background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                        borderRadius: 3,
+                                                        border: "1px solid #f1f1f1",
+                                                        boxShadow: '-10px 10px 30px #00000022',
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <MenuItem value='nacional'>Nacional</MenuItem>
+                                    <MenuItem value='internacional'>Internacional</MenuItem>
+                                </InputBox>
+                            )}
+                        />
+                        {
+                            watch('tipo') != 'nacional' ?
+                                <Controller
+                                    name="pais"
+                                    control={control}
+                                    rules={{ required: 'País requerido' }}
+                                    render={({ field: { ref, ...field } }) => (
+                                        <InputBox
+                                            select
+                                            sx={{ '.MuiSelect-select': { display: 'flex', alignItems: 'center' } }}
+                                            label='País'
+                                            {...field}
+                                            onChange={ev => {
+                                                field.onChange(ev.target.value);
+                                                if (paises.africa.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'AF');
+                                                }
+                                                else if (paises.americaSur.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'SA');
+                                                }
+                                                else if (paises.americaNorte.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'NA');
+                                                }
+                                                else if (paises.europa.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'EU');
+                                                }
+                                                else if (paises.asia.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'AS');
+                                                }
+                                                else if (paises.oceania.findIndex(value => value.value == ev.target.value) > -1) {
+                                                    setValue('continente', 'OC');
+                                                }
+                                            }}
+                                            inputRef={ref}
+                                            SelectProps={{
+                                                MenuProps: {
+                                                    slotProps: {
+                                                        paper: {
+                                                            sx: {
+                                                                background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
+                                                                borderRadius: 3,
+                                                                border: "1px solid #f1f1f1",
+                                                                boxShadow: '-10px 10px 30px #00000022',
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }}
+                                        >
+                                            <ListSubheader>América del norte</ListSubheader>
+                                            {
+                                                paises.americaNorte.map(value => (
+                                                    <MenuItem key={value.value} value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>América del sur</ListSubheader>
+                                            {
+                                                paises.americaSur.map(value => (
+                                                    <MenuItem key={value.value} value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>Europa</ListSubheader>
+                                            {
+                                                paises.europa.map(value => (
+                                                    <MenuItem key={value.value} value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>Asia</ListSubheader>
+                                            {
+                                                paises.asia.map(value => (
+                                                    <MenuItem key={value.value} value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>África</ListSubheader>
+                                            {
+                                                paises.africa.map(value => (
+                                                    <MenuItem key={value.value} value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                            <ListSubheader>Oceanía</ListSubheader>
+                                            {
+                                                paises.oceania.map(value => (
+                                                    <MenuItem key={value.value} value={value.value}>
+                                                        <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
+                                                        {value.pais}</MenuItem>
+                                                ))
+                                            }
+                                        </InputBox>
+                                    )}
+                                />
+                                : null
+                        }
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+
+                        <Controller
+                            name="descripcion"
+                            control={control}
+                            render={({ field }) => (
+                                <Box mb={2}>
+                                    <Negrita sx={{ mb: 1 }}>
+                                        Descripción:
+                                    </Negrita>
+                                    <Editor
+                                        value={field.value}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [2, 3, 4, 5, false] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link'],
+                                            ]
+                                        }}
+                                        preserveWhitespace
+                                        className="editor"
+                                        onChange={(value) => { field.onChange(value) }}
+                                    />
+                                </Box>
                             )}
                         />
 
