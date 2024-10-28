@@ -4,9 +4,9 @@ import Link from "next/link";
 import { Negrita, Normal } from "../Textos";
 import { ChipBox } from "../Mostrar";
 import Image from 'next/legacy/image';
-import { Icon as Iconify } from '@iconify/react';
+import { Icon } from '@iconify/react';
 import { FaBuildingColumns } from "react-icons/fa6";
-import { blue, green, grey, red } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import dayjs from "dayjs";
 import { fileDomain } from "@/utils/globals";
@@ -25,22 +25,21 @@ const ConvenioItem = ({ value }: Props) => {
         <Box bgcolor='white' borderRadius={4} overflow='hidden' border={`1px solid ${grey[300]}`} position='relative'>
             <Grid container>
                 <Grid item xs={12} position='relative'>
-                    <ChipBox
-                        sx={{
-                            height: 30, position: 'absolute',
-                            top: 5,
-                            left: 10, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[500] : red[500], color: 'white',
-                            zIndex: 10
-                        }}
-                        label={dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
+                    <Negrita sx={{
+                        display: 'flex', alignItems: 'center', color: grey[500],
+                        position: 'absolute', top: 15, right: 20, zIndex: 10
+                    }}>
+                        {value.conteo}
+                        <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                    </Negrita>
                     <Normal sx={{
                         display: 'flex',
                         color: '#ddd',
                         alignItems: 'center',
                         zIndex: 10,
-                        position: 'absolute', right: 15, top: 10
+                        position: 'absolute', left: 15, top: 15
                     }}>
-                        <Iconify fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
+                        <Icon fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
                         {value.tipo == 'nacional' ? 'BO' : value.pais}
                     </Normal>
                     <Link href={`/convenios/${value.id}`}>
@@ -61,8 +60,8 @@ const ConvenioItem = ({ value }: Props) => {
                         </Box>
                     </Box>
                 </Grid>
-                <Grid item xs={12} p={1}>
-                    <Normal sx={{ color: '#bbb' }}>
+                <Grid item xs={12} p={2}>
+                    <Normal sx={{ color: '#999' }}>
                         {dayjs(value.createdAt).format('DD MMMM YYYY')}
                     </Normal>
 

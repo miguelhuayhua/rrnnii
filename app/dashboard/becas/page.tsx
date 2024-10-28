@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Beca } from "@prisma/client";
 import Image from 'next/legacy/image';
+import { Icon } from '@iconify/react';
 import { FaAngleLeft, FaAngleRight, FaEye } from "react-icons/fa";
 import dayjs from "dayjs";
 import { TbPdf, TbReload } from "react-icons/tb";
@@ -59,7 +60,7 @@ export default function Page() {
                         setOpcion('todo');
                     });
                 }}>
-                    <TbReload fontSize={22} />
+                    <Icon icon="mdi:reload" fontSize={26} />
                 </BotonSimple>
             </Stack>
             <Tabs

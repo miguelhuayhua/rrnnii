@@ -13,16 +13,19 @@ type Props = {
 const get = async (id: string) => {
     return await prisma.beca.findUnique({
         where: { id },
-        include: { Institucion: true }
+        include: { Institucion: true, Participantes: true }
     });
 }
+const incrementarVista = async (id: string) => {
+    await prisma.beca.update({ where: { id }, data: { conteo: { increment: 1 } } })
+}
 
-export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const Beca = await get(params.id);
-    if (Beca)
-        return {
-            title: Beca.titulo
-        }
+    if (Beca) {
+        await incrementarVista(params.id)
+        return { title: Beca.titulo }
+    }
     else
         return notFound();
 }

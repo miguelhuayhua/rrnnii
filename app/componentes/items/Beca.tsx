@@ -8,26 +8,34 @@ import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import dayjs from "dayjs";
 interface Props { value: Beca & { Participantes: ParticipanteBeca[], Institucion: Institucion } }
 import 'dayjs/locale/es';
-import { Icon as Iconify } from '@iconify/react';
+import { Icon } from '@iconify/react';
 import { fileDomain } from "@/utils/globals";
 import { IoMdCalendar, IoMdPeople } from "react-icons/io";
 import plugin from 'dayjs/plugin/customParseFormat';
 import { BiBuilding } from "react-icons/bi";
 import { MdPhone } from "react-icons/md";
+import { grey } from "@mui/material/colors";
 dayjs.extend(plugin);
 dayjs.locale('es');
 const BecaItem = ({ value }: Props) => {
     return (
         <Box bgcolor='white !important' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
             <Box position='relative'>
+                <Negrita sx={{
+                    display: 'flex', alignItems: 'center', color: grey[500],
+                    position: 'absolute', top: 15, right: 20, zIndex: 10
+                }}>
+                    {value.conteo}
+                    <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                </Negrita>
                 <Normal sx={{
                     display: 'flex',
                     color: '#ddd',
                     alignItems: 'center',
                     zIndex: 10,
-                    position: 'absolute', right: 15, top: 15
+                    position: 'absolute', left: 15, top: 15
                 }}>
-                    <Iconify fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
+                    <Icon fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
                     {value.tipo == 'nacional' ? 'BO' : value.pais}
                 </Normal>
                 <Box alignItems='center' zIndex={10} display='flex' position='absolute' left={10} bottom={20}>
@@ -54,7 +62,7 @@ const BecaItem = ({ value }: Props) => {
                 </Link>
             </Box>
             <Box p={2} position='relative'>
-                <Normal sx={{ color: '#bbb' }}>
+                <Normal sx={{ color: grey[700] }}>
                     {dayjs(value.createdAt).format('DD MMMM YYYY')}
                 </Normal>
                 <Link href={`/becas/${value.id}`} style={{ textDecoration: 'none' }}>

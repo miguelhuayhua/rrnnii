@@ -1,5 +1,5 @@
 'use client';
-import { CircularProgress, Grid, } from "@mui/material";
+import { Badge, CircularProgress, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
@@ -35,18 +35,21 @@ const Cliente = () => {
                         placeholder='Buscar'
                         InputProps={{
                             startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} color='#aaa' />
+                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
                         }}
                         onChange={ev => {
                             setEventos(EventosMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
-                    <BotonFilled
-                        onClick={() => {
-                            setOpen(true);
-                        }} >
-                        Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                    </BotonFilled>
+                    <Badge invisible={!(
+                        params.has('t') || params.has('s'))}
+                        color="primary"
+                        variant="dot">
+                        <BotonFilled
+                            onClick={() => { setOpen(true); }} >
+                            Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
+                        </BotonFilled>
+                    </Badge>
                 </Grid>
 
                 {

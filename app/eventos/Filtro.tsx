@@ -13,7 +13,7 @@ const Filtros = ({ open, setOpen }: Props) => {
     const router = useRouter();
     const params = useSearchParams();
     const t = params.get('t') || '';
-    const orden = params.get('')
+    const orden = params.get('s')
     return (
         <>
             <SwipeableDrawer

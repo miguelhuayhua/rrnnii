@@ -37,18 +37,19 @@ const Cliente = () => {
             <Grid container spacing={2}>
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
                     <InputBox sx={{ width: 200 }}
-
                         placeholder='Buscar'
                         InputProps={{
                             startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} color='#aaa' />
+                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
                         }}
                         onChange={ev => {
                             setBecas(BecasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
                     <Badge invisible={!(params.has('co') ||
-                        params.has('s') || params.has('t'))} color="secondary" variant="dot">
+                        params.has('s') || params.has('t'))}
+                        color="primary"
+                        variant="dot">
                         <BotonFilled
                             onClick={() => {
                                 setOpen(true);

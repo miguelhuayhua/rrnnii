@@ -1,7 +1,7 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Avatar, Box, Breadcrumbs, Button, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
-import { Beca, Institucion } from "@prisma/client";
+import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
@@ -9,11 +9,10 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Icon as Iconify } from '@iconify/react';
 import axios from "axios";
-interface Props { value: Beca & { Institucion: Institucion }; }
+interface Props { value: Beca & { Institucion: Institucion, Participantes: ParticipanteBeca[] }; }
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
 import { BotonFilled } from "@/app/componentes/Botones";
-import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line, RiUserReceivedFill } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
 import { blue, green, grey, red } from "@mui/material/colors";
@@ -21,6 +20,7 @@ import { IoMdCalendar } from "react-icons/io";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import { Icon } from '@iconify/react';
 import BecaItem from "@/app/componentes/items/Beca";
 import ModalInscribir from "./ModalInscribit";
 import ModalInstitucion from "@/app/componentes/ModalInstitucion";
@@ -46,10 +46,7 @@ export default function Cliente({ value }: Props) {
                             mx: { xs: 2, sm: 6, xl: 40 },
                         }} direction='row' spacing={2}>
                             <ChipBox label={value.tipo == 'internacional' ? 'Beca internacional' : 'Beca nacional'}
-                                sx={{
-                                    bgcolor: grey[900], color: 'white',
-
-                                }} />
+                                sx={{ bgcolor: grey[900], color: 'white' }} />
                             <Normal sx={{
                                 display: 'flex',
                                 color: '#ddd',
@@ -58,6 +55,10 @@ export default function Cliente({ value }: Props) {
                                 <Iconify fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.pais.toLowerCase()}-4x3`} />
                                 {value.tipo == 'nacional' ? 'BO' : value.pais}
                             </Normal>
+                            <Negrita sx={{ display: 'flex', alignItems: 'center', color: grey[500] }}>
+                                {value.conteo}
+                                <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                            </Negrita>
                         </Stack>
                         <Titulo sx={{
                             position: 'absolute',
@@ -103,7 +104,7 @@ export default function Cliente({ value }: Props) {
                                             }}
                                             sx={{ background: 'white' }}
                                             icon={value.pdf.includes('pdf') ?
-                                                <TbPdf fontSize={22} />
+                                                <Icon icon="proicons:pdf" width={30} height={30} />
                                                 : <RiFileWord2Line fontSize={22} />}
                                             tooltipTitle={'Descargar archivo'}
                                         />
@@ -166,6 +167,12 @@ export default function Cliente({ value }: Props) {
                             value.descripcion ? parse(value.descripcion) :
                                 <Normal>Sin descripción</Normal>
                         }
+                        <Normal mb={2} sx={{ color: grey[700], display: 'flex', alignItems: 'center' }}>
+                            <Icon icon="mingcute:group-3-fill" style={{ marginRight: 5 }} width={22} height={22} />
+                            {
+                                value.Participantes.length
+                            } participantes se han inscrito
+                        </Normal>
                         {
                             value.pdf ?
                                 <>
@@ -178,7 +185,7 @@ export default function Cliente({ value }: Props) {
                                             <BotonFilled
                                                 startIcon={
                                                     value.pdf.includes('pdf') ?
-                                                        <TbPdf fontSize={22} />
+                                                        <Icon icon="proicons:pdf" width={30} height={30} />
                                                         : <RiFileWord2Line fontSize={22} />
                                                 }
                                                 onClick={() => {
@@ -190,10 +197,11 @@ export default function Cliente({ value }: Props) {
                                                     a.remove();
                                                 }}
                                                 sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
-                                                Descargar documento
+                                                Descargar
                                             </BotonFilled> : null
                                     }</> : null
                         }
+
                     </Box>
 
                 </Grid>

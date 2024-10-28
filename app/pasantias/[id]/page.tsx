@@ -16,18 +16,27 @@ const get = async (id: string) => {
     });
 }
 
+const incrementarVista = async (id: string) => {
+    await prisma.pasantia.update({ where: { id }, data: { conteo: { increment: 1 } } })
+}
+
 export const generateMetadata = async (props: any): Promise<Metadata> => {
     const pasantia = await get(props.params.id) as Pasantia;
     if (!pasantia) return notFound();
     return ({ title: pasantia.titulo })
 }
-export default async function Home(props: any) {
-    const pasantias = await get(props.params.id) as Pasantia;
-    return (
-        <Box bgcolor='#f4f6f8'>
-            <Navbar />
-            <Cliente value={pasantias as any} />
-            <Footer />
-        </Box>
-    );
+export default async function Home({ params }: any) {
+    const pasantias = await get(params.id) as Pasantia;
+    if (pasantias) {
+        await incrementarVista(params.id)
+        return (
+            <Box bgcolor='#f4f6f8'>
+                <Navbar />
+                <Cliente value={pasantias as any} />
+                <Footer />
+            </Box>
+        );
+    }
+    else
+        return notFound();
 }

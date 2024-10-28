@@ -103,7 +103,8 @@ export default function Page() {
                     </Box>} value='inactivo' />
             </Tabs>
             <Tabla hasPagination
-                skipColumns={{ nombre: true }} data={instituciones.map(value => (
+                skipColumns={{ nombre: true }}
+                data={instituciones.map(value => (
                     {
                         nombre: value.nombre,
                         "Institución": (<Box display='flex' alignItems='center' minWidth={200} py={0.35}>

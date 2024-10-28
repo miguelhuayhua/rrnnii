@@ -39,7 +39,7 @@ const Cliente = () => {
                         placeholder='Buscar'
                         InputProps={{
                             startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} color='#aaa' />
+                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
                         }}
                         onChange={ev => {
                             setPasantias(PasantiasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))

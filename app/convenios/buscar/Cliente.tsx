@@ -1,8 +1,8 @@
 'use client';
-import { CircularProgress, Grid } from "@mui/material";
+import { Badge, CircularProgress, Grid } from "@mui/material";
 import { InputBox } from "../../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
-import { BotonFilled, BotonOutline, BotonSimple } from "../../componentes/Botones";
+import { BotonFilled, BotonOutline } from "../../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import ConvenioItem from "../../componentes/items/Convenio";
 import { Suspense, useEffect, useState } from "react";
@@ -37,22 +37,26 @@ const Cliente = () => {
             <Grid container spacing={2} >
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
                     <InputBox sx={{ width: 200 }}
-
                         placeholder='Buscar'
                         InputProps={{
                             startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} color='#aaa' />
+                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
                         }}
                         onChange={(ev) => {
                             setConvenios(ConveniosMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
-                    <BotonFilled
-                        onClick={() => {
-                            setOpen(true);
-                        }} >
-                        Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                    </BotonFilled>
+                    <Badge invisible={!(params.has('carrera') ||
+                        params.has('d') || params.has('s'))}
+                        color="primary"
+                        variant="dot">
+                        <BotonFilled
+                            onClick={() => {
+                                setOpen(true);
+                            }} >
+                            Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
+                        </BotonFilled>
+                    </Badge>
                 </Grid>
                 {
                     Convenios.length > 0 ?

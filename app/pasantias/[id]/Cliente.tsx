@@ -1,6 +1,6 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Divider, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
 import { Carrera, Institucion, Pasantia, PasantiaCarrera } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
@@ -14,7 +14,7 @@ import 'react-medium-image-zoom/dist/styles.css';
 import PasantiaItem from "@/app/componentes/items/Pasantia";
 import { BotonFilled } from "@/app/componentes/Botones";
 import { red, blue, grey, green } from "@mui/material/colors";
-import { TbPdf } from "react-icons/tb";
+import { Icon } from '@iconify/react';
 import { RiFileWord2Line } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
 import { MdPhone } from "react-icons/md";
@@ -32,7 +32,7 @@ export default function Cliente({ value }: Props) {
         });
     }, []);
     return (
-        <Grid container>
+        <Grid container mb={4}>
             <Grid item xs={12}>
                 <Box sx={{ height: 500, position: 'relative' }}>
                     <Stack sx={{
@@ -43,7 +43,13 @@ export default function Cliente({ value }: Props) {
                             sx={{
                                 bgcolor: grey[900], color: 'white',
                             }} />
-
+                        <Negrita sx={{
+                            display: 'flex', alignItems: 'center',
+                            color: grey[500],
+                        }}>
+                            {value.conteo}
+                            <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                        </Negrita>
                     </Stack>
                     <Titulo sx={{
                         position: 'absolute',
@@ -89,7 +95,7 @@ export default function Cliente({ value }: Props) {
                                         }}
                                         sx={{ background: 'white' }}
                                         icon={value.pdf.includes('pdf') ?
-                                            <TbPdf fontSize={22} />
+                                            <Icon icon="proicons:pdf" width={30} height={30} />
                                             : <RiFileWord2Line fontSize={22} />}
                                         tooltipTitle={'Descargar archivo'}
                                     />
@@ -171,7 +177,7 @@ export default function Cliente({ value }: Props) {
                                         <BotonFilled
                                             startIcon={
                                                 value.pdf.includes('pdf') ?
-                                                    <TbPdf fontSize={22} />
+                                                    <Icon icon="proicons:pdf" width={30} height={30} />
                                                     : <RiFileWord2Line fontSize={22} />
                                             }
                                             onClick={() => {
@@ -183,7 +189,7 @@ export default function Cliente({ value }: Props) {
                                                 a.remove();
                                             }}
                                             sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
-                                            Descargar documento
+                                            Descargar
                                         </BotonFilled> : null
                                 }</> : null
                     }
@@ -191,7 +197,7 @@ export default function Cliente({ value }: Props) {
 
             </Grid>
             <Grid item xs={12}>
-                <Titulo sx={{ textAlign: 'center', my: 1 }}>
+                <Titulo sx={{ textAlign: 'center', my: 2 }}>
                     Más pasantías
                 </Titulo>
                 <Grid container spacing={2} px={{ xs: 2, sm: 5, md: 10 }} >

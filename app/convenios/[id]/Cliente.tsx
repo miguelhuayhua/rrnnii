@@ -8,7 +8,7 @@ import Link from "next/link";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { Icon as Iconify } from '@iconify/react';
+import { Icon } from '@iconify/react';
 import axios from "axios";
 import { IoMdCalendar } from "react-icons/io";
 import ConvenioItem from "@/app/componentes/items/Convenio";
@@ -46,18 +46,19 @@ export default function Cliente({ value }: Props) {
                             mx: { xs: 2, sm: 6, xl: 40 },
                         }} direction='row' spacing={2}>
                             <ChipBox label={value.tipo == 'internacional' ? 'Convenio internacional' : 'Convenio nacional'}
-                                sx={{
-                                    bgcolor: grey[900], color: 'white',
-
-                                }} />
+                                sx={{ bgcolor: grey[900], color: 'white' }} />
                             <Normal sx={{
                                 display: 'flex',
                                 color: '#ddd',
                                 alignItems: 'center',
                             }}>
-                                <Iconify fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
+                                <Icon fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
                                 {value.tipo == 'nacional' ? 'BO' : value.pais}
                             </Normal>
+                            <Negrita sx={{ display: 'flex', alignItems: 'center', color: grey[500] }}>
+                                {value.conteo}
+                                <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                            </Negrita>
                         </Stack>
                         <Titulo sx={{
                             position: 'absolute',
@@ -69,7 +70,11 @@ export default function Cliente({ value }: Props) {
                             {value.titulo}
                         </Titulo>
                         <Box alignItems='center' zIndex={10} display='flex' pl={{ xs: 2, sm: 6, xl: 40 }} position='absolute' bottom={40}>
-                            <Avatar sx={{ border: '1px solid #333', height: 70, width: 70 }}
+                            <Avatar sx={{
+                                border: '1px solid #333',
+                                bgcolor: 'white',
+                                height: 70, width: 70
+                            }}
                                 src={value.Institucion.logo ? fileDomain + value.Institucion.logo : ''} />
                             <Box ml={2}>
                                 <Button
@@ -109,7 +114,7 @@ export default function Cliente({ value }: Props) {
                                             }}
                                             sx={{ background: 'white' }}
                                             icon={value.pdf.includes('pdf') ?
-                                                <TbPdf fontSize={22} />
+                                                <Icon icon="proicons:pdf" width={30} height={30} />
                                                 : <RiFileWord2Line fontSize={22} />}
                                             tooltipTitle={'Descargar archivo'}
                                         />
@@ -192,7 +197,7 @@ export default function Cliente({ value }: Props) {
                                             <BotonFilled
                                                 startIcon={
                                                     value.pdf.includes('pdf') ?
-                                                        <TbPdf fontSize={22} />
+                                                        <Icon icon="proicons:pdf" width={30} height={30} />
                                                         : <RiFileWord2Line fontSize={22} />
                                                 }
                                                 onClick={() => {
@@ -204,7 +209,7 @@ export default function Cliente({ value }: Props) {
                                                     a.remove();
                                                 }}
                                                 sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
-                                                Descargar documento
+                                                Descargar
                                             </BotonFilled> : null
                                     }</> : null
                         }

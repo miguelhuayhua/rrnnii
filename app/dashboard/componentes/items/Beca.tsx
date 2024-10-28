@@ -4,13 +4,13 @@ import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { BoxSombra } from "../Mostrar";
-import { Icon as Iconify } from '@iconify/react';
+import { Icon } from '@iconify/react';
 import { Box, Grid, Stack } from "@mui/material";
 import Image from 'next/legacy/image';
 import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { fileDomain } from "@/utils/globals";
 import { TbPdf } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
+import { blue, grey, red } from "@mui/material/colors";
 import { SwitchBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import { RiFileWord2Line } from "react-icons/ri";
@@ -38,13 +38,17 @@ const BecaComponent = ({ Beca, setBeca,
         <BoxSombra p={3} bgcolor='white' borderRadius={4} >
             <Grid container spacing={2}>
                 <Grid item xs={8} position='relative'>
-                    <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
+                    <Stack direction='row' spacing={2} sx={{ mb: 2, alignItems: 'center' }}>
                         <ChipBox sx={{ height: 30, }} label={Beca.estado ? 'Publicado' : 'Sin publicar'} />
                         <ChipBox sx={{ height: 30 }} label={
                             <Normal sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Iconify style={{ marginRight: 5 }} icon={`flag:${Beca.tipo == 'nacional' ? 'bo' : Beca.pais.toLowerCase()}-4x3`} />
+                                <Icon style={{ marginRight: 5 }} icon={`flag:${Beca.tipo == 'nacional' ? 'bo' : Beca.pais.toLowerCase()}-4x3`} />
                                 {Beca.tipo == 'nacional' ? 'BO' : Beca.pais}
                             </Normal>} />
+                        <Negrita sx={{ display: 'flex', alignItems: 'center', color: grey[700] }}>
+                            {Beca.conteo}
+                            <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                        </Negrita>
                     </Stack>
                     <Normal sx={{ color: '#929fac', fontSize: 15, mb: 2 }}>
                         {dayjs(Beca.createdAt).format('DD MMMM YYYY')}
@@ -83,7 +87,7 @@ const BecaComponent = ({ Beca, setBeca,
                         <BotonOutline onClick={() => {
                             router.push(`/dashboard/becas/${Beca.id}`)
                         }}>
-                            <IoEye fontSize={24} />
+                            <Icon style={{ fontSize: 24 }} icon="solar:eye-bold" />
                         </BotonOutline>
                         <SwitchBox checked={Beca.estado} onChange={(ev, checked) => {
                             axios.post('/api/convenio/estado', { estado: checked, id: Beca.id }).then(res => {

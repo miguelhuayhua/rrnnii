@@ -19,6 +19,7 @@ import { RiFileWord2Line } from "react-icons/ri";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import { blue, grey, red } from "@mui/material/colors";
+import { Icon } from '@iconify/react';
 import { fileDomain } from "@/utils/globals";
 import { IoMdCalendar } from "react-icons/io";
 dayjs.locale('es');
@@ -46,8 +47,13 @@ export default function Cliente({ value }: Props) {
                         }}>
                             {dayjs(value.createdAt).format('DD MMMM YYYY')}
                         </Normal>
+                        <Negrita sx={{
+                            display: 'flex', alignItems: 'center', color: grey[500]
+                        }}>
+                            {value.conteo}
+                            <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                        </Negrita>
                     </Stack>
-
                     <Titulo sx={{
                         position: 'absolute',
                         fontSize: 30,
@@ -139,7 +145,7 @@ export default function Cliente({ value }: Props) {
                                     a.remove();
                                 }}
                                 sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500], mt: 4 }}>
-                                Descargar documento
+                                Descargar
                             </BotonFilled> : null
                     }
                 </Box>

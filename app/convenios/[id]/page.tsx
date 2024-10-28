@@ -15,18 +15,31 @@ const get = async (id: string) => {
         }
     });
 }
+
+const incrementarVista = async (id: string) => {
+    await prisma.convenio.update({ where: { id }, data: { conteo: { increment: 1 } } })
+}
+
+
 export const generateMetadata = async (props: any): Promise<Metadata> => {
     const convenio = await get(props.params.id) as Convenio;
     if (!convenio) return notFound();
     return ({ title: convenio.titulo })
 }
-export default async function Home(props: any) {
-    const convenio = await get(props.params.id) as Convenio;
-    return (
-        <Box bgcolor='#f4f6f8'>
-            <Navbar />
-            <Cliente value={convenio as any} />
-            <Footer />
-        </Box>
-    );
+
+export default async function Home({ params }: any) {
+    const convenio = await get(params.id) as Convenio;
+    if (convenio) {
+        await incrementarVista(params.id);
+        return (
+            <Box bgcolor='#f4f6f8'>
+                <Navbar />
+                <Cliente value={convenio as any} />
+                <Footer />
+            </Box>
+        );
+
+    }
+    else
+        return notFound();
 }

@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Box, ClickAwayListener, Tooltip, Typography } from '@mui/material';
+import { Box, ClickAwayListener, Tooltip } from '@mui/material';
 import { BiSearch } from 'react-icons/bi';
 import Image from 'next/legacy/image';
 import { BsCursorFill } from "react-icons/bs"; import { useRouter } from 'next/navigation';
@@ -100,38 +100,39 @@ const Tabla = ({
                     bgcolor: 'white', p: 1.5, borderRadius: 3
                 }} >
                     {
+                        hasSearch ?
+                            <Box>
+                                <InputBox
+
+                                    size='small'
+
+                                    sx={{
+                                        width: "30%",
+                                        minWidth: 200,
+                                        ".MuiInputBase-root": {
+                                            background: 'white'
+                                        }
+                                    }}
+                                    onChange={(ev: any) => {
+                                        setData(filtrarValorEnArray(data, ev.target.value));
+                                    }}
+                                    placeholder='Buscar'
+                                    InputProps={{
+                                        endAdornment:
+                                            <BiSearch fontSize={25} />
+                                    }}
+                                />
+                            </Box>
+                            : null
+                    }
+                    {
                         Data.length > 0 ?
                             <Table
                                 size={small ? 'small' : 'medium'}
                                 stickyHeader
                             >
                                 <TableHead >
-                                    {
-                                        hasSearch ?
-                                            <Box>
-                                                <InputBox
 
-                                                    size='small'
-
-                                                    sx={{
-                                                        width: "30%",
-                                                        minWidth: 200,
-                                                        ".MuiInputBase-root": {
-                                                            background: 'white'
-                                                        }
-                                                    }}
-                                                    onChange={(ev: any) => {
-                                                        setData(filtrarValorEnArray(data, ev.target.value));
-                                                    }}
-                                                    placeholder='Buscar'
-                                                    InputProps={{
-                                                        endAdornment:
-                                                            <BiSearch fontSize={25} />
-                                                    }}
-                                                />
-                                            </Box>
-                                            : null
-                                    }
                                     <TableRow key={'head'}>
                                         {cols.map((column) => {
                                             return (

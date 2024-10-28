@@ -3,6 +3,7 @@ import { Box, IconButton } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { useState } from "react";
+import { Icon } from '@iconify/react';
 import { signIn } from "next-auth/react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import Slide from '@mui/material/Slide';
@@ -14,7 +15,6 @@ import { Normal, Titulo } from "../componentes/Textos";
 import { InputBox } from "../componentes/Datos";
 import { BotonFilled } from "../componentes/Botones";
 import { makeid } from "@/utils/globals";
-import { TbReload } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -128,7 +128,9 @@ export default function ModalLogin({ open, setOpen }: Props) {
                                             minWidth: 0,
                                             height: 35, width: 40,
                                         }}>
-                                        <TbReload fontSize={24} /></BotonFilled>
+                                        <Icon fontSize={22} icon="pepicons-pop:reload" />
+
+                                    </BotonFilled>
                                 }}
                             />
                         )}

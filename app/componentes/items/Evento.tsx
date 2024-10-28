@@ -7,6 +7,7 @@ import { ChipBox } from "../Mostrar";
 import { Negrita, Normal } from "../Textos";
 import { blue, green, grey } from "@mui/material/colors";
 import { Evento } from "@prisma/client";
+import { Icon } from '@iconify/react';
 import dayjs from "dayjs";
 interface Props { value: Evento }
 import 'dayjs/locale/es';
@@ -30,9 +31,16 @@ const EventoItem = ({ value }: Props) => {
                         value.tipo == 'online' ? <TbWorld /> : <FaUserGroup />
                     }
                 </Avatar>
-                <Normal sx={{ fontSize: 12, pt: 2, color: grey[600] }}>
+                <Normal sx={{ fontSize: 14, pt: 2, color: grey[600] }}>
                     Inicia el: {value.inicio}
                 </Normal>
+                <Negrita sx={{
+                    display: 'flex', alignItems: 'center', color: grey[500],
+                    position: 'absolute', top: 30, right: 20, zIndex: 10
+                }}>
+                    {value.conteo}
+                    <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                </Negrita>
                 <Link href={`/eventos/${value.id}`} style={{ textDecoration: 'none' }}>
                     <Negrita py={2}>
                         {value.titulo}

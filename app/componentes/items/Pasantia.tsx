@@ -9,6 +9,7 @@ import { blue, green, grey, red } from "@mui/material/colors";
 import { Carrera, Institucion, Pasantia, PasantiaCarrera } from "@prisma/client";
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
+import { Icon } from '@iconify/react';
 import { fileDomain } from "@/utils/globals";
 import { MdPhone } from "react-icons/md";
 dayjs.locale('es');
@@ -23,9 +24,17 @@ const PasantiaItem = ({ value }: Props) => {
             border: `1px solid ${grey[300]}`
         }}>
             <Grid xs={7} p={1}>
-                <ChipBox sx={{ margin: 0, bgcolor: blue[600], borderRadius: 1.5, color: grey[50] }}
-                    label={`${value.modalidad} meses`} />
-
+                <Stack direction='row' spacing={2}>
+                    <ChipBox sx={{ margin: 0, bgcolor: blue[600], borderRadius: 1.5, color: grey[50] }}
+                        label={`${value.modalidad} meses`} />
+                    <Negrita sx={{
+                        display: 'flex', alignItems: 'center',
+                        color: grey[500],
+                    }}>
+                        {value.conteo}
+                        <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
+                    </Negrita>
+                </Stack>
                 <Link href={`/pasantias/${value.id}`} style={{ textDecoration: 'none' }}>
                     <Negrita my={2}>
                         {value.titulo}
@@ -55,6 +64,7 @@ const PasantiaItem = ({ value }: Props) => {
                         <Image objectFit="cover" layout='fill'
                             src={fileDomain + value.imagen} alt='' />
                     </Link>
+
                 </Box>
             </Grid>
             <Grid item xs={12} borderTop='1px solid #ddd'>
@@ -81,6 +91,7 @@ const PasantiaItem = ({ value }: Props) => {
                         )
                     }
                 </Stack>
+
             </Grid>
         </Grid >
     )
