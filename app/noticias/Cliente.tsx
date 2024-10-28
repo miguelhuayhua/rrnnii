@@ -1,25 +1,27 @@
 'use client';
-import { CircularProgress, Grid, } from "@mui/material";
+import { Badge, CircularProgress, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
-import { Evento } from "@prisma/client";
+import { Noticia } from "@prisma/client";
 import { Normal } from "../componentes/Textos";
 import NoticiaItem from "../componentes/items/Noticia";
+import Filtros from "./Filtros";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const [skip, setSkip] = useState(0);
     const [load, setLoad] = useState(true);
     const params = useSearchParams();
-    const [Noticias, setNoticias] = useState<Evento[]>([]);
-    const [NoticiasMain, setNoticiasMain] = useState<Evento[]>([]);
+    const [Noticias, setNoticias] = useState<Noticia[]>([]);
+    const [NoticiasMain, setNoticiasMain] = useState<Noticia[]>([]);
+    const orden = params.get('s');
     useEffect(() => {
         axios.post('/api/noticia/listar',
-            { skip: 0 }).then(res => {
+            { skip: 0, orden }).then(res => {
                 setNoticias(res.data);
                 setNoticiasMain(res.data);
                 setLoad(false);
@@ -34,18 +36,24 @@ const Cliente = () => {
                         placeholder='Buscar'
                         InputProps={{
                             startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} color='#aaa' />
+                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
                         }}
                         onChange={ev => {
                             setNoticias(NoticiasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
-                    <BotonFilled
-                        onClick={() => {
-                            setOpen(true);
-                        }} >
-                        Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                    </BotonFilled>
+
+
+                    <Badge invisible={!params.has('s')}
+                        color="primary"
+                        variant="dot">
+                        <BotonFilled
+                            onClick={() => {
+                                setOpen(true);
+                            }} >
+                            Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
+                        </BotonFilled>
+                    </Badge>
                 </Grid>
                 {
                     Noticias.length > 0 ?
@@ -81,6 +89,9 @@ const Cliente = () => {
                     </BotonOutline>
                 </Grid>
             </Grid>
+            <Suspense>
+                <Filtros setOpen={setOpen} open={open} />
+            </Suspense>
         </>
     )
 }

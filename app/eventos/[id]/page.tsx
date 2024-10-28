@@ -1,7 +1,7 @@
 import { prisma } from "@/app/api/client";
 import Navbar from "@/app/static/Navbar";
 import { Box } from "@mui/material";
-import { Convenio, Evento } from "@prisma/client";
+import { Evento } from "@prisma/client";
 import Footer from "@/app/static/Footer";
 import Cliente from "./Cliente";
 import { Metadata } from "next";
@@ -16,6 +16,10 @@ const get = async (id: string) => {
     });
 }
 
+const incrementarVista = async (id: string) => {
+    await prisma.evento.update({ where: { id }, data: { conteo: { increment: 1 } } })
+}
+
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
     const Evento = await get(params.id);
     if (Evento)
@@ -26,13 +30,18 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         return notFound();
 }
 
-export default async function Home(props: any) {
-    const value = await get(props.params.id) as Evento;
-    return (
-        <Box bgcolor='#f4f6f8'>
-            <Navbar />
-            <Cliente value={value as any} />
-            <Footer />
-        </Box>
-    );
+export default async function Home({ params }: any) {
+    const value = await get(params.id) as Evento;
+    if (value) {
+        await incrementarVista(params.id)
+        return (
+            <Box bgcolor='#f4f6f8'>
+                <Navbar />
+                <Cliente value={value as any} />
+                <Footer />
+            </Box>
+        );
+    }
+    else
+        return notFound();
 }

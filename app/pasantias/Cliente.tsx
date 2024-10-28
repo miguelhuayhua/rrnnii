@@ -1,5 +1,5 @@
 'use client';
-import { Box, CircularProgress, Grid, } from "@mui/material";
+import { Badge, Box, CircularProgress, Grid, } from "@mui/material";
 import { InputBox } from "../componentes/Datos";
 import { BiSearch } from "react-icons/bi";
 import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
@@ -45,12 +45,18 @@ const Cliente = () => {
                             setPasantias(PasantiasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
                         }}
                     />
-                    <BotonFilled
-                        onClick={() => {
-                            setOpen(true);
-                        }} >
-                        Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                    </BotonFilled>
+
+                    <Badge invisible={!(params.has('c') ||
+                        params.has('co') || params.has('t'))}
+                        color="primary"
+                        variant="dot">
+                        <BotonFilled
+                            onClick={() => {
+                                setOpen(true);
+                            }} >
+                            Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
+                        </BotonFilled>
+                    </Badge>
                 </Grid>
                 {
                     Pasantias.length > 0 ?

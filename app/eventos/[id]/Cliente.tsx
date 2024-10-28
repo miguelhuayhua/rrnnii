@@ -6,6 +6,7 @@ import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
 import { ChipBox } from "@/app/componentes/Mostrar";
+import { Icon } from '@iconify/react';
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -19,7 +20,6 @@ import { RiFileWord2Line } from "react-icons/ri";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import { blue, grey, red } from "@mui/material/colors";
-import { Icon } from '@iconify/react';
 import { fileDomain } from "@/utils/globals";
 import { IoMdCalendar } from "react-icons/io";
 dayjs.locale('es');
@@ -83,7 +83,7 @@ export default function Cliente({ value }: Props) {
                                         }}
                                         sx={{ background: 'white' }}
                                         icon={value.pdf.includes('pdf') ?
-                                            <TbPdf fontSize={22} />
+                                            <Icon icon="proicons:pdf" width={30} height={30} />
                                             : <RiFileWord2Line fontSize={22} />}
                                         tooltipTitle={'Descargar archivo'}
                                     />
@@ -133,7 +133,7 @@ export default function Cliente({ value }: Props) {
                             <BotonFilled
                                 startIcon={
                                     value.pdf.includes('pdf') ?
-                                        <TbPdf fontSize={22} />
+                                        <Icon icon="proicons:pdf" width={30} height={30} />
                                         : <RiFileWord2Line fontSize={22} />
                                 }
                                 onClick={() => {
