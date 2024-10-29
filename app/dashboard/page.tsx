@@ -11,8 +11,11 @@ import { BarChart, LineChart, Line, Bar, ResponsiveContainer, Tooltip, PieChart,
 import { blue, green, grey, red } from "@mui/material/colors";
 import CountUp from "react-countup";
 import Tabla from "./componentes/Tabla";
-import { BotonSimple } from "../componentes/Botones";
+import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
 import { useRouter } from "next/navigation";
+import Image from 'next/legacy/image';
+import { Institucion } from "@prisma/client";
+import { fileDomain } from "@/utils/globals";
 
 export default function Page() {
     const { data } = useSession();
@@ -20,7 +23,7 @@ export default function Page() {
     const [dashboard, setDashboard] = useState({
         vistasXDia: [], archivos: [{ name: 'PDF', value: 0 }, { name: 'WORD', value: 0 }],
         participantesXMes: [], publicacionXContinente: [], mayorVisto: [],
-        conteoPais: [], masVisitados: []
+        conteoPais: [], masVisitados: [], Instituciones: []
     });
 
     const [count, setCount] = useState({
@@ -52,7 +55,7 @@ export default function Page() {
             <Titulo>
                 Bienvenido {data?.user.name}
             </Titulo>
-            <Grid container spacing={2} mt={2}>
+            <Grid container spacing={4} my={2}>
                 <Grid item xs={12} sm={6} lg={4} mx='auto'>
                     <BoxSombra p={2} >
                         <Box display='flex' justifyContent='space-between' alignItems='center'>
@@ -232,7 +235,7 @@ export default function Page() {
                         </Normal>
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={7} lg={5}>
+                <Grid item xs={12} sm={7} >
                     <BoxSombra >
                         <Box px={2} pt={2}>
                             <Negrita sx={{ fontSize: 18 }}>
@@ -243,16 +246,27 @@ export default function Page() {
                             </Normal>
                         </Box>
                         <Tabla
-
-                            hasSearch={false} data={dashboard.masVisitados.map((value: any) => (
+                            hasSearch={false} data={dashboard.masVisitados.sort((a: any, b: any) => b.visitantes - a.visitantes).map((value: any) => (
                                 {
                                     Titulo: value.titulo,
-                                    Tipo: (<Box sx={{ textTransform: 'capitalize' }}>{value.name}</Box>),
-                                    "": (<Box>
-                                        <BotonSimple onClick={() => router.push(`/${value.name}s/${value.id}`)}>
-                                            <Icon icon="solar:eye-bold" fontSize={20} />
-                                        </BotonSimple>
-                                    </Box>)
+                                    "": (
+                                        <Stack direction='row' spacing={2} alignItems='center'>
+                                            <Negrita sx={{ display: 'flex', alignItems: 'center', fontSize: 13 }}>
+                                                <Icon icon="solar:eye-bold" fontSize={20} style={{ marginRight: 5 }} />
+                                                {value.visitantes}
+                                            </Negrita>
+
+                                            <BotonOutline
+                                                sx={{
+                                                    p: 0, m: 0,
+                                                    border: `1px solid ${blue[600]}`,
+                                                    color: blue[700],
+                                                    width: 30, minWidth: 0, height: 30
+                                                }}
+                                                onClick={() => router.push(`/${value.name}s/${value.id}`)}>
+                                                <Icon icon="tdesign:internet" fontSize={20} />
+                                            </BotonOutline>
+                                        </Stack>)
                                 }
                             ))} />
                     </BoxSombra>
@@ -297,14 +311,14 @@ export default function Page() {
                                         return null;
                                     }} />
                                 <Legend />
-                                <Bar width={20} radius={[0, 0, 10, 10]} dataKey="Becas" stackId="a" fill={grey[500]} />
-                                <Bar radius={[10, 10, 0, 0]} dataKey="Convenios" stackId="a" fill={grey[900]} />
+                                <Bar width={20} radius={[0, 0, 10, 10]} dataKey="Becas" stackId="a" fill={green[500]} />
+                                <Bar radius={[10, 10, 0, 0]} dataKey="Convenios" stackId="a" fill={green[900]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </BoxSombra>
                 </Grid>
-               
-                <Grid item xs={12} md={6}>
+
+                <Grid item xs={12} md={4}>
                     <BoxSombra p={2} >
                         <Negrita sx={{ fontSize: 18 }}>
                             Publicaciones con mayor demanda
@@ -346,36 +360,61 @@ export default function Page() {
                         </ResponsiveContainer>
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={6} md={4}>
                     <BoxSombra p={2} >
                         <Negrita sx={{ fontSize: 18 }}>
                             Paises más concurridos
                         </Negrita>
                         <Normal>
-                            Éstos países cuenta con más interesados
+                            Países que atraen a más visitantes
                         </Normal>
-                        <Box display='flex' justifyContent='center' alignItems='center' flexDirection='column'
-                            height={230} width={"100%"}>
-                            {
-                                dashboard.conteoPais.map((value: any) => (
-                                    <Stack my={1} spacing={2} direction='row'>
-                                        <Icon style={{ marginRight: 5, borderRadius: 10 }} fontSize={25} icon={`flagpack:${value.name.toLowerCase()}`} />
-                                        <Negrita sx={{
-                                            display: 'flex', alignItems: 'center', color: grey[700],
-                                        }}>
-                                            <Icon style={{ marginRight: 10, fontSize: 18 }} icon="solar:eye-bold" />
-                                            {value.value} Visitantes
-                                        </Negrita>
-                                    </Stack>
-                                ))
-                            }
-                        </Box>
-                        <Divider orientation="horizontal"></Divider>
-                        <Stack>
+                        <Tabla
+                            hasSearch={false}
+                            data={dashboard.conteoPais.map((value: any) => ({
+                                Pais: (
+                                    <Box display='flex' alignItems='center' my={1}>
 
-                        </Stack>
+                                        <Icon style={{ marginRight: 10, borderRadius: 10 }} fontSize={25} icon={`flagpack:${value.name.toLowerCase()}`} />
+                                        <b style={{ fontSize: 15 }}>{value.name}</b>
+                                    </Box>
+                                ),
+                                "": (<Negrita sx={{
+                                    display: 'flex', alignItems: 'center', color: grey[700],
+                                }}>
+                                    <Icon style={{ marginRight: 10, fontSize: 18 }} icon="solar:eye-bold" />
+                                    {value.value} Visitantes
+                                </Negrita>)
+                            }))}
+
+                        />
                     </BoxSombra>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                    <BoxSombra p={2}>
+                        <Negrita sx={{ fontSize: 18 }}>
+                            Últimas instituciones agregadas
+                        </Negrita>
+                        <Normal>
+                            Mire los ultimos 10 instituciones agregadas
+                        </Normal>
+                        <Tabla
+                            hasSearch={false}
+                            data={dashboard.Instituciones.map((value: Institucion) => ({
+                                "Institución": (
+                                    <Box display='flex' alignItems='center' my={0.5}>
+                                        <Image style={{ borderRadius: 10, border: '1px solid #ddd' }} objectFit="cover" width={60} height={60}
+                                            src={fileDomain + value.logo} />
+                                        <Box ml={1}>
+                                            <Negrita>
+                                                {value.nombre}
+                                            </Negrita>
+                                        </Box>
+                                    </Box>
+                                )
+                            }))}>
 
+                        </Tabla>
+                    </BoxSombra>
                 </Grid>
             </Grid>
 

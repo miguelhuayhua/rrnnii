@@ -199,39 +199,52 @@ const POST = async (request: NextRequest) => {
                 name: pais
             }));
 
-            // Formateamos el resultado en el formato [{id:'', titulo:'', name:'', visitantes:0}]
             const masVisitados = [
-                ...eventos.map(evento => ({
-                    id: evento.id,
-                    titulo: evento.titulo,
-                    name: 'evento',
-                    visitantes: evento.conteo || 0,
-                })),
-                ...pasantias.map(pasantia => ({
-                    id: pasantia.id,
-                    titulo: pasantia.titulo,
-                    name: 'pasantia',
-                    visitantes: pasantia.conteo || 0,
-                })),
-                ...becas.map(beca => ({
-                    id: beca.id,
-                    titulo: beca.titulo,
-                    name: 'beca',
-                    visitantes: beca.conteo || 0,
-                })),
-                ...convenios.map(convenio => ({
-                    id: convenio.id,
-                    titulo: convenio.titulo,
-                    name: 'convenio',
-                    visitantes: convenio.conteo || 0,
-                })),
+                ...eventos
+                    .sort((a, b) => b.conteo - a.conteo) // Ordenar por visitantes de mayor a menor
+                    .slice(0, 2) // Tomar solo los dos primeros
+                    .map(evento => ({
+                        id: evento.id,
+                        titulo: evento.titulo,
+                        name: 'evento',
+                        visitantes: evento.conteo || 0,
+                    })),
+                ...pasantias
+                    .sort((a, b) => b.conteo - a.conteo)
+                    .slice(0, 2)
+                    .map(pasantia => ({
+                        id: pasantia.id,
+                        titulo: pasantia.titulo,
+                        name: 'pasantia',
+                        visitantes: pasantia.conteo || 0,
+                    })),
+                ...becas
+                    .sort((a, b) => b.conteo - a.conteo)
+                    .slice(0, 2)
+                    .map(beca => ({
+                        id: beca.id,
+                        titulo: beca.titulo,
+                        name: 'beca',
+                        visitantes: beca.conteo || 0,
+                    })),
+                ...convenios
+                    .sort((a, b) => b.conteo - a.conteo)
+                    .slice(0, 2)
+                    .map(convenio => ({
+                        id: convenio.id,
+                        titulo: convenio.titulo,
+                        name: 'convenio',
+                        visitantes: convenio.conteo || 0,
+                    })),
             ];
-
+            const Instituciones = await prisma.institucion.findMany({
+                orderBy: { id: 'desc' }
+            })
             return Response.json({
                 conteoPais: resultadoPorPais, mayorVisto: conteoGeneral,
                 publicacionXContinente: resultado, participantesXMes: conteoPorMes,
                 archivos: [{ name: 'PDF', Cantidad: totalPdfCount }, { name: 'WORD', Cantidad: totalDocxCount }], vistasXDia: resultadoFinal, totalVisitas,
-                masVisitados
+                masVisitados, Instituciones
             });
         } catch (error) {
             console.log(error)
