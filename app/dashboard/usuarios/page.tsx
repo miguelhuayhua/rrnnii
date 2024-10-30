@@ -110,7 +110,7 @@ export default function Main() {
                         CI: value.ci,
                         "Datos personales": `${value.nombre} ${value.paterno} ${value.materno}`,
                         "Creado el": (
-                            <Box minWidth={90}>
+                            <Box minWidth={90} py={1}>
                                 <Negrita sx={{ fontSize: 13 }}>
                                     {dayjs(value.createdAt).format('DD/MM/YYYY')}
                                 </Negrita>

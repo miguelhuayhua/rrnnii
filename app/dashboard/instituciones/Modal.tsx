@@ -51,6 +51,8 @@ export default function ModalInstitucion({ setInstitucion, Institucion, setInsti
         form.append('contacto', institucion.contacto?.toString()!);
         form.append('logo', institucion.logo!);
         form.append('portada', portada);
+        form.append('web', institucion.web || '');
+        form.append('video', institucion.video || '');
         form.append('id', institucion.id);
         openModal({
             titulo: '¿Continuar?',

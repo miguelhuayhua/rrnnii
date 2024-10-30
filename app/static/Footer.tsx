@@ -1,13 +1,20 @@
 "use client";
-import { useScrollTrigger, Grid } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { Normal } from '../componentes/Textos';
 import dayjs from "dayjs";
 import { BsPhone } from 'react-icons/bs';
 import { CiMail } from 'react-icons/ci';
+import axios from 'axios';
+import { Unidad } from '@prisma/client';
 
 const Footer = () => {
+    const [unidad, setUnidad] = useState<Unidad>();
+    useEffect(() => {
+        axios.post('/api/unidad/x').then(res => {
+            setUnidad(res.data);
+        });
+    }, []);
     return (
         <>
             <Grid container component='footer'
@@ -17,19 +24,17 @@ const Footer = () => {
                 <Grid xs={6}>
                     <BsPhone fontSize={30} color='#888' />
                     <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
-                        Teléfono: 2844177
+                        Ubicación: {unidad?.ubicacion}
                     </Normal>
                     <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
-                        Celular:  76567636-70670980
+                        Celular:  {unidad?.contacto}
                     </Normal>
-                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
-                        Fax: {`(591-2) 2845800`}
-                    </Normal>
+
                 </Grid>
                 <Grid xs={6}>
                     <CiMail fontSize={30} color='#888' />
                     <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
-                        Correo: camposugartevictor@gmail.com
+                        Correo: {unidad?.email}
                         <br />
                         relaciones.internacionales@upea.bo
                     </Normal>

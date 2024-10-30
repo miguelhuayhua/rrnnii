@@ -51,7 +51,7 @@ export default function Page() {
                                     titulo: '¿Continuar?',
                                     content: 'La imagen será editada',
                                     callback: async () => {
-                                        let res = await axios.post('/api/galeria/modificar', data);
+                                        let res = await axios.post('/api/unidad/modificar', data);
                                         return res.data.mensaje;
                                     }
                                 });

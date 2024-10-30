@@ -84,6 +84,7 @@ model ParticipanteBeca {
   rupath          String   @default("")
   cipath          String   @default("")
   createdAt       DateTime @default(now())
+  aceptado        Boolean  @default(false)
 }
 
 model Evento {
@@ -153,7 +154,8 @@ model Carrera {
 }
 
 model Unidad {
-  contacto  String @unique @default("")
+  id        String @id @default("rrnnii")
+  contacto  String @default("")
   email     String @default("")
   ubicacion String @default("")
 }

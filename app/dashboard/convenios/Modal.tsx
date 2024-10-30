@@ -19,7 +19,7 @@ import Image from 'next/legacy/image';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
-import { grey, red } from '@mui/material/colors';
+import { blue, grey, red } from '@mui/material/colors';
 import { IoClose } from 'react-icons/io5';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { ChipBox } from '@/app/componentes/Mostrar';
@@ -165,7 +165,8 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                         <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
                         <Box sx={{
                             p: 2,
-                            border: `1px solid ${grey[400]}`,
+                            mb: 2,
+                            border: `1px solid ${documento ? documento.type.includes('pdf') ? red[500] : blue[500] : grey[400]}`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -179,28 +180,18 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                         }}
                             onClick={() => PDFPicker.openFilePicker()}
                         >
-                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
-                            <MdOutlineAttachFile style={{ fontSize: 20 }} />
+                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>
+                                {
+                                    documento ? documento.name : "PDF o Word de Referencia"
+                                }
+                            </Normal>
+                            {
+                                documento ?
+                                    documento.type.includes('pdf') ?
+                                        <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />
+                                    : <MdOutlineAttachFile style={{ fontSize: 20 }} />
+                            }
                         </Box>
-                        {
-                            documento ?
-                                <ChipBox icon={documento.type.includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
-                                    sx={{
-                                        mt: 2,
-                                        border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
-                                        height: 40,
-                                        bgcolor: 'white'
-                                    }}
-                                    label={documento.name}
-                                    onDelete={() => {
-                                        setDocumento(null);
-                                    }}
-                                />
-                                : null
-                        }
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
                         <Controller
                             name="titulo"
                             control={control}
@@ -208,36 +199,12 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                             render={({ field: { ref, ...field } }) => (
                                 <InputBox
                                     {...field}
+                                    sx={{ mt: 2 }}
                                     label='Título'
                                     error={!!errors.titulo}
-                                    helperText={errors.titulo?.message || 'Este es el título principal que será visible en el convenio'}
+                                    helperText={errors.titulo?.message}
                                     inputRef={ref}
                                 />
-                            )}
-                        />
-                        <Controller
-                            name="descripcion"
-                            control={control}
-                            render={({ field }) => (
-                                <Box mb={2}>
-                                    <Negrita sx={{ my: 1 }}>
-                                        Descripción:
-                                    </Negrita>
-                                    <Editor
-                                        value={field.value}
-                                        modules={{
-                                            toolbar: [
-                                                [{ 'header': [2, 3, 4, 5, false] }],
-                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                ['link'],
-                                            ]
-                                        }}
-                                        preserveWhitespace
-                                        className="editor"
-                                        onChange={(value) => { field.onChange(value) }}
-                                    />
-                                </Box>
                             )}
                         />
                         <Controller
@@ -457,6 +424,34 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                 </InputBox>
                             )}
                         />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Controller
+                            name="descripcion"
+                            control={control}
+                            render={({ field }) => (
+                                <Box mb={2}>
+                                    <Negrita sx={{ mb: 1 }}>
+                                        Descripción:
+                                    </Negrita>
+                                    <Editor
+                                        value={field.value}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [2, 3, 4, 5, false] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link'],
+                                            ]
+                                        }}
+                                        preserveWhitespace
+                                        className="editor"
+                                        onChange={(value) => { field.onChange(value) }}
+                                    />
+                                </Box>
+                            )}
+                        />
+
                     </Grid>
                     {
                         isDirty ?

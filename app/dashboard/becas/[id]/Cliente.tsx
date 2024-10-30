@@ -1,5 +1,5 @@
 'use client';
-import { BotonSimple } from "@/app/componentes/Botones";
+import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Avatar, Box, Breadcrumbs, ClickAwayListener, Grid, Stack, Tabs, Tooltip } from "@mui/material";
 import Link from "next/link";
@@ -145,7 +145,7 @@ export default function Cliente({ Beca }: Props) {
                                     <BoxSombra mt={2} p={2} display='flex'>
                                         <Box>
                                             <Image
-                                                src={fileDomain + Beca.Institucion.logo || '/default-image.jpg'} width={100} height={100}
+                                                src={Beca.Institucion.logo ? (fileDomain + Beca.Institucion.logo) : '/default-image.jpg'} width={100} height={100}
                                                 layout="fixed"
                                                 objectFit="cover"
                                                 style={{ borderRadius: 10 }} />
@@ -210,6 +210,19 @@ export default function Cliente({ Beca }: Props) {
                                                                                     fullWidth sx={{ display: 'flex', justifyContent: 'start' }} >
                                                                                     Rechazar y eliminar
                                                                                 </BotonSimple>
+                                                                                <BotonFilled onClick={() => {
+                                                                                    openModal({
+                                                                                        titulo: '¿Está seguro?',
+                                                                                        content: 'El postulante quedará registrado en la beca',
+                                                                                        async callback() {
+                                                                                            let res = await axios.post('/api/beca/participante/aceptar');
+                                                                                            router.refresh();
+                                                                                            return res.data.mensaje;
+                                                                                        }
+                                                                                    })
+                                                                                }}>
+                                                                                    Aceptar
+                                                                                </BotonFilled>
                                                                             </Box>
                                                                         }
                                                                     >
@@ -269,7 +282,9 @@ export default function Cliente({ Beca }: Props) {
                                         </Grid>
                                         :
                                         <Grid item xs={12}>
-                                            <Normal>Sin postulantes</Normal>
+                                            <Negrita sx={{ textAlign: 'center', mt: 3 }}>
+                                                La beca aún no cuenta con participantes
+                                            </Negrita>
                                         </Grid>
                                 }
                             </> : null

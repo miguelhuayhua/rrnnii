@@ -318,7 +318,7 @@ export default function Page() {
                     </BoxSombra>
                 </Grid>
 
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} lg={4}>
                     <BoxSombra p={2} >
                         <Negrita sx={{ fontSize: 18 }}>
                             Publicaciones con mayor demanda
@@ -360,14 +360,16 @@ export default function Page() {
                         </ResponsiveContainer>
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                    <BoxSombra p={2} >
-                        <Negrita sx={{ fontSize: 18 }}>
-                            Paises más concurridos
-                        </Negrita>
-                        <Normal>
-                            Países que atraen a más visitantes
-                        </Normal>
+                <Grid item xs={12} sm={6} lg={4}>
+                    <BoxSombra >
+                        <Box px={2} pt={2}>
+                            <Negrita sx={{ fontSize: 18 }}>
+                                Paises más concurridos
+                            </Negrita>
+                            <Normal>
+                                Países que atraen a más visitantes
+                            </Normal>
+                        </Box>
                         <Tabla
                             hasSearch={false}
                             data={dashboard.conteoPais.map((value: any) => ({
@@ -389,28 +391,56 @@ export default function Page() {
                         />
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                    <BoxSombra p={2}>
-                        <Negrita sx={{ fontSize: 18 }}>
-                            Últimas instituciones agregadas
-                        </Negrita>
-                        <Normal>
-                            Mire los ultimos 10 instituciones agregadas
-                        </Normal>
+                <Grid item xs={12} sm={6} lg={4}>
+                    <BoxSombra position='relative' >
+                        <Box px={2} pt={2} pr={11}>
+                            <Negrita sx={{ fontSize: 18 }}>
+                                Últimas instituciones agregadas
+                            </Negrita>
+                            <Normal >
+                                Mire los ultimos 10 instituciones creados
+                            </Normal>
+                            <BotonFilled
+                                onClick={() => router.push('/dashboard/instituciones')}
+                                sx={{ height: 40, position: 'absolute', right: 10, top: 20 }}>
+                                Ver más
+                            </BotonFilled>
+                        </Box>
                         <Tabla
                             hasSearch={false}
                             data={dashboard.Instituciones.map((value: Institucion) => ({
                                 "Institución": (
-                                    <Box display='flex' alignItems='center' my={0.5}>
-                                        <Image style={{ borderRadius: 10, border: '1px solid #ddd' }} objectFit="cover" width={60} height={60}
-                                            src={fileDomain + value.logo} />
+                                    <Box display='flex' alignItems='center' my={0.6}>
+                                        <Image style={{
+                                            borderRadius: 10,
+                                            padding: 10, background: '#eee',
+                                            overflow: 'hidden'
+                                        }} objectFit="cover" width={50} height={50}
+                                            src={value.logo ? (fileDomain + value.logo) : '/default-image.jpg'} />
                                         <Box ml={1}>
                                             <Negrita>
                                                 {value.nombre}
                                             </Negrita>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', color: grey[600] }}>
+                                                <Icon icon="gridicons:phone" fontSize={20} />
+                                                <Normal>
+                                                    {value.contacto || 'Sin contacto'}
+                                                </Normal>
+                                            </Box>
                                         </Box>
                                     </Box>
-                                )
+                                ),
+                                "": (<Stack direction='row'>
+                                    {
+                                        value.web ?
+                                            <BotonOutline onClick={() => {
+                                                router.push(value.web!);
+                                            }}>
+                                                <Icon icon="tdesign:internet" fontSize={20} />
+
+                                            </BotonOutline> : null
+                                    }
+                                </Stack>)
                             }))}>
 
                         </Tabla>

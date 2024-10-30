@@ -32,7 +32,7 @@ export default function Cliente({ value }: Props) {
     const [convenios, setConvenios] = useState([]);
     const [openModalInstitucion, setOpenModalInstitucion] = useState(false);
     useEffect(() => {
-        axios.post('/api/convenio/listar', { id: value.id }).then(res => {
+        axios.post('/api/convenio/listar', { id: value.id, skip: 0 }).then(res => {
             setConvenios(res.data);
         });
     }, []);
@@ -71,9 +71,7 @@ export default function Cliente({ value }: Props) {
                         </Titulo>
                         <Box alignItems='center' zIndex={10} display='flex' pl={{ xs: 2, sm: 6, xl: 40 }} position='absolute' bottom={40}>
                             <Avatar sx={{
-                                border: '1px solid #333',
-                                bgcolor: 'white',
-                                height: 70, width: 70
+                                bgcolor: 'white', height: 70, width: 70
                             }}
                                 src={value.Institucion.logo ? fileDomain + value.Institucion.logo : ''} />
                             <Box ml={2}>

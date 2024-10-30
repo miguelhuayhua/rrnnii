@@ -50,6 +50,7 @@ const Navbar = () => {
                     position: 'sticky',
                     top: 0,
                     left: 0,
+                    
                 }}
             >
                 {
@@ -65,6 +66,7 @@ const Navbar = () => {
                         alignItems: 'center',
                         py: trigger ? 1.2 : 1.8,
                         transition: 'padding .25s',
+                        bgcolor: 'transparent'
                     }}
                 >
                     <Link style={{ textDecoration: 'none' }} href={"/"} >

@@ -9,7 +9,7 @@ import { BotonOutline, BotonFilled, BotonSimple } from "./componentes/Botones";
 import EventoItem from "./componentes/items/Evento";
 import { BsWhatsapp } from "react-icons/bs";
 import { useCallback, useEffect, useState } from "react";
-import { blueGrey, grey } from "@mui/material/colors";
+import { blue, blueGrey, grey, red } from "@mui/material/colors";
 import { Gradient } from '@/utils/Gradient.ts'
 import { ChipBox } from "./componentes/Mostrar";
 import { FaAngleRight } from "react-icons/fa";
@@ -31,7 +31,7 @@ const Cliente = () => {
         setY(scrollY)
     }, []);
     const [count, setCount] = useState({
-        sizen: 0, sizee: 0, sizec: 0, sizeb: 0
+        sizen: 0, sizee: 0, sizec: 0, sizeb: 0, sizev: 0
     });
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
@@ -232,10 +232,26 @@ const Cliente = () => {
                 </Grid>
             </Grid>
             <Box py={10}>
-                <Titulo sx={{ textAlign: 'center', fontSize: { xs: 14, md: 18 }, py: 2 }}>
+                <CountUp start={0} duration={10} end={count.sizev} >
+                    {({ countUpRef }) => (
+                        <Box sx={{
+                            display: 'flex', alignItems: 'center',
+                            fontSize: 50, justifyContent: 'center'
+                        }}>
+                            <span style={{
+                                fontSize: 'inherit',
+                                marginRight: 10, fontWeight: 700, color: red[600]
+                            }} ref={countUpRef} />
+                            <span style={{ fontSize: 18 }}>
+                                Visitas
+                            </span>
+                        </Box>
+                    )}
+                </CountUp>
+                <Titulo sx={{ textAlign: 'center', fontSize: { xs: 18, md: 22 }, py: 3 }}>
                     ¿Tienes dudas?
                 </Titulo>
-                <BotonFilled sx={{ display: 'flex', mx: 'auto' }} startIcon={<BsWhatsapp style={{ fontSize: 20 }} />}>
+                <BotonFilled sx={{ display: 'flex', mx: 'auto', bgcolor: blue[600], px: 2 }} startIcon={<BsWhatsapp style={{ fontSize: 20 }} />}>
                     Contactanos
                 </BotonFilled>
             </Box>

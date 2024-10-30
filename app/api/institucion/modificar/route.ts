@@ -23,6 +23,8 @@ const POST = async (request: NextRequest) => {
                 data: {
                     nombre: form.get('nombre'),
                     contacto: +form.get('contacto'),
+                    video: form.get('video'),
+                    web: form.get('web'),
                     ...portada ? ({ logo: resimage.data.path }) : null,
                 },
                 where: { id: form.get('id') }

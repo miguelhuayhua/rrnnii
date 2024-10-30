@@ -32,9 +32,6 @@ const POST = async (request: NextRequest) => {
 
             // Convertir el objeto conteo a un array del formato solicitado
             const resultadoFinal = Object.entries(conteoPorDia).map(([name, valor]) => ({ name, Visitantes: valor }));
-
-            // Resultado final
-            console.log(resultadoFinal);
             const totalVisitas = await prisma.visitantes.count();
             // Contar archivos de tipo PDF y DOCX en el modelo Convenio
             const pdfCountConvenio = await prisma.convenio.count({

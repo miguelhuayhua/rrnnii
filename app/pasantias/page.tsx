@@ -3,6 +3,9 @@ import Navbar from '../static/Navbar';
 import { Box, Typography } from "@mui/material";
 import Footer from '../static/Footer';
 import { Suspense } from 'react';
+export const metadata = {
+    title: 'Pasantías - UPEA'
+}
 export default function Home() {
     return (
         <Box bgcolor='#f4f6f8'>

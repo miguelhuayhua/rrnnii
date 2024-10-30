@@ -47,7 +47,7 @@ const Cliente = () => {
                         }}
                     />
                     <Badge invisible={!(params.has('carrera') ||
-                        params.has('d') || params.has('s'))}
+                        params.has('d') || params.has('co'))}
                         color="primary"
                         variant="dot">
                         <BotonFilled

@@ -17,6 +17,8 @@
     "@mui/material-nextjs": "^5.15.11",
     "@mui/x-date-pickers": "^7.5.0",
     "@prisma/client": "^5.13.0",
+    "@react-pdf/renderer": "^4.0.0",
+    "@xyflow/react": "^12.3.2",
     "axios": "^1.7.1",
     "bcrypt": "^5.1.1",
     "crypto-random-string": "^5.0.0",

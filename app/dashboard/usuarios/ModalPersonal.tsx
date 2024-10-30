@@ -138,9 +138,9 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
                                             }
                                         }}
                                     >
-                                        <MenuItem value='becas'>Jefe de unidad</MenuItem>
-                                        <MenuItem value='idiomas'>Técnico</MenuItem>
-                                        <MenuItem value='noticias'>Secretaria</MenuItem>
+                                        <MenuItem value='jefe'>Jefe de unidad</MenuItem>
+                                        <MenuItem value='tecnico'>Técnico</MenuItem>
+                                        <MenuItem value='secretario'>{"Secretario(a)"}</MenuItem>
                                     </InputBox>
                                 )}
                             />

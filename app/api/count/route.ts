@@ -18,8 +18,9 @@ const POST = async (request: Request) => {
         });
         let sizen = await prisma.evento.count({
             where: { estado: true }
-        })
-        return Response.json({ sizec, sizeb, sizee, sizen });
+        });
+        let sizev = await prisma.visitantes.count();
+        return Response.json({ sizec, sizeb, sizee, sizen, sizev });
     } catch (error) {
         console.log(error)
         return Response.json({
