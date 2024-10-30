@@ -23,17 +23,17 @@ const Footer = () => {
             >
                 <Grid xs={6}>
                     <BsPhone fontSize={30} color='#888' />
-                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
+                    <Normal variant='body1' sx={{ fontSize: 14 }}>
                         Ubicación: {unidad?.ubicacion}
                     </Normal>
-                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
+                    <Normal variant='body1' sx={{ fontSize: 14 }}>
                         Celular:  {unidad?.contacto}
                     </Normal>
 
                 </Grid>
                 <Grid xs={6}>
                     <CiMail fontSize={30} color='#888' />
-                    <Normal variant='body1' sx={{ fontSize: { xs: 11, md: 14, lg: 16 } }}>
+                    <Normal variant='body1' sx={{ fontSize: 14 }}>
                         Correo: {unidad?.email}
                         <br />
                         relaciones.internacionales@upea.bo

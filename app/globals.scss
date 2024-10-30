@@ -71,14 +71,14 @@ body {
 }
 
 :root {
-  --color-bg1: #eef6ff;
-  --color-bg2: #f4f6f8;
-  --color1: #f4f6f8;
-  --color2: 255, 200, 200;
-  --color3: #f4f6f8;
-  --color4: #d9e8f8;
-  --color5: rgb(214, 222, 243);
-  --color-interactive: rgba(137, 134, 238, 0.345);
+  --color-bg1: #ffffff;
+  --color-bg2: #e4edf5;
+  --color1: #43709e;
+  --color2: 255, 180, 180;
+  --color3: #781414;
+  --color4: #ffffff;
+  --color5: rgb(183, 47, 47);
+  --color-interactive: rgb(255, 255, 255);
   --circle-size: 100%;
   --blending: hard-light;
 }
@@ -128,7 +128,7 @@ body {
 
 .gradient-bg {
   width: 100vw;
-  height: 100%;
+  height: 200%;
   position: relative;
   overflow: hidden;
   background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));

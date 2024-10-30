@@ -35,7 +35,7 @@ export default function Organigrama({ personal }: Props) {
                     id: 'jefe',
                     data: {
                         nombre: `${director?.nombre || ''} ${director?.paterno || ''} ${director?.materno || ''}`,
-                        cargo: 'Jefe de Unidad '
+                        cargo: 'jefe'
                     },
                     type: 'Nodo',
                     position: { x: 150, y: 160 },
