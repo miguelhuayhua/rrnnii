@@ -1,11 +1,9 @@
-import { Box, Button, ButtonGroup, Grid, Typography, } from "@mui/material";
-import { Suspense } from 'react';
+import { Box, Button, ButtonGroup, Typography, } from "@mui/material";
 import Navbar from "../static/Navbar";
 import Footer from "../static/Footer";
 import Image from 'next/legacy/image';
 import '@/app/globals.scss';
 import { blue, red } from "@mui/material/colors";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 export const metadata = {
     title: 'Convenios'
@@ -13,9 +11,16 @@ export const metadata = {
 export default function Home() {
 
     return (
-        <Box bgcolor='#f4f6f8'>
+        <Box bgcolor='transparent'>
             <Navbar />
-
+            <div className="gradient-wrap">
+                <div className="meshgradient">
+                    <div className="color c1"></div>
+                    <div className="color c2"></div>
+                    <div className="color c3"></div>
+                    <div className="color c4"></div>
+                </div>
+            </div>
             <Box position='relative'>
                 <Box sx={{
                     background: 'url("/convenios.png")',

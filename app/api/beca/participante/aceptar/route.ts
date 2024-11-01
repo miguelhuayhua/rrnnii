@@ -6,6 +6,7 @@ const POST = async (request: NextRequest) => {
     if (token?.name) {
         try {
             let { id } = await request.json();
+            console.log(id)
             await prisma.participanteBeca.update({
                 where: { id }, data: { aceptado: true }
             });
@@ -14,7 +15,7 @@ const POST = async (request: NextRequest) => {
             console.log(error)
             return Response.json({
                 error: true,
-                mensaje: 'Error al rechazar participante'
+                mensaje: 'Error al aceptar participante'
             });
         }
     }

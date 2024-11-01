@@ -16,15 +16,28 @@ export default async function Layout({ children }: any) {
             <DatePickerProvider>
                 <SnackbarProvider>
                     <ModalProvider>
-                        <Box bgcolor='#f6f6f6' display='flex'>
+                        <Box bgcolor='transparent' display='flex'>
                             <SideBar />
-                            <Box sx={{ width: { xs: "100%", md: "calc(100% -250px)" }, overflow: 'hidden' }}>
+                            <Box
+                                bgcolor='transparent'
+                                sx={{ width: { xs: "100%", md: "calc(100% -300px)" }, overflow: 'hidden' }}>
                                 <Navbar />
-                                <Box mt={5}>
+                                <Box
+                                    bgcolor='transparent'
+                                    mt={5}>
                                     {children}
                                 </Box>
                             </Box>
+
                         </Box>
+                        <div className="gradient-wrap">
+                <div className="meshgradient">
+                    <div className="color c1"></div>
+                    <div className="color c2"></div>
+                    <div className="color c3"></div>
+                    <div className="color c4"></div>
+                </div>
+            </div>
                     </ModalProvider>
                 </SnackbarProvider>
             </DatePickerProvider>

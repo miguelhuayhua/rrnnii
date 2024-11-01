@@ -21,12 +21,12 @@ const PasantiaItem = ({ value }: Props) => {
     return (
         <Grid container bgcolor='white' sx={{
             overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px',
-            border: `1px solid ${grey[300]}`
+            border: `1px solid ${grey[400]}`,
         }}>
             <Grid xs={7} p={1}>
                 <Stack direction='row' spacing={2}>
                     <ChipBox sx={{ margin: 0, bgcolor: blue[600], borderRadius: 1.5, color: grey[50] }}
-                        label={`${value.modalidad} meses`} />
+                        label={`${value.modalidad == 'more' ? 'Más de 6' : value.modalidad} meses`} />
                     <Negrita sx={{
                         display: 'flex', alignItems: 'center',
                         color: grey[500],

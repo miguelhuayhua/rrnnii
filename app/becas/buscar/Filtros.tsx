@@ -71,7 +71,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                             Tipo
                         </Negrita>
                         <RadioGroup value={tipo} onChange={(ev) => {
-                            router.replace(`/becas/buscar?t=${ev.target.value}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
+                            router.replace(`/becas/buscar?t=${ev.target.value}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('s') ? '&s=' + params.get('s') : ''}`)
                         }}>
                             <FormControlLabel
                                 value={'nacional'}

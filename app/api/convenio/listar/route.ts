@@ -3,6 +3,7 @@ import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
     try {
         let { carrera, tipo, skip, id, continente, take } = await request.json();
+        console.log(carrera, tipo, skip, take, continente, id)
         take = take || 15;
         let convenios = await prisma.convenio.findMany({
             include: { Institucion: true, ConvenioCarrera: { include: { Carrera: true } } },

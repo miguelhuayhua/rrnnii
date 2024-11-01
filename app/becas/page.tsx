@@ -13,9 +13,17 @@ export const metadata = {
 export default function Home() {
 
     return (
-        <Box bgcolor='#f4f6f8'>
+        <Box bgcolor='transparent'>
             <Navbar />
 
+            <div className="gradient-wrap">
+                <div className="meshgradient">
+                    <div className="color c1"></div>
+                    <div className="color c2"></div>
+                    <div className="color c3"></div>
+                    <div className="color c4"></div>
+                </div>
+            </div>
             <Box position='relative'>
                 <Box sx={{
                     background: 'url("/assets/becas.png")',

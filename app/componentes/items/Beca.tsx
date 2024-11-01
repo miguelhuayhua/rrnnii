@@ -19,7 +19,10 @@ dayjs.extend(plugin);
 dayjs.locale('es');
 const BecaItem = ({ value }: Props) => {
     return (
-        <Box bgcolor='white !important' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
+        <Box bgcolor='white !important' sx={{
+            overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px',
+            border: '1px solid #ddd'
+        }}>
             <Box position='relative'>
                 <Negrita sx={{
                     display: 'flex', alignItems: 'center', color: grey[500],

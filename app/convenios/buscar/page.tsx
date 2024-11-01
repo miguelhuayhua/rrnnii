@@ -8,7 +8,7 @@ export const metadata = {
 }
 export default function Home() {
     return (
-        <Box bgcolor='#f4f6f8'>
+        <Box bgcolor='transparent'>
             <Navbar />
             <Box px={{ xs: 2, md: 10, lg: 20, xl: 35 }}>
                 <Typography

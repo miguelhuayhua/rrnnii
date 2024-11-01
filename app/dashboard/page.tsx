@@ -51,7 +51,8 @@ export default function Page() {
 
 
     return (
-        <Box px={{ xs: 1, md: 4, lg: 5 }}>
+        <Box bgcolor='transparent' px={{ xs: 1, md: 4, lg: 5 }}>
+           
             <Titulo>
                 Bienvenido {data?.user.name}
             </Titulo>

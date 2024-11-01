@@ -196,7 +196,7 @@ export default function Page() {
                                                 {...field}
                                                 label='Título'
                                                 error={!!errors.titulo}
-                                                helperText={errors.titulo?.message || 'Este es el título principal que será visible en el beca'}
+                                                helperText={errors.titulo?.message}
                                                 inputRef={ref}
                                             />
                                         )}

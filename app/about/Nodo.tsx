@@ -7,7 +7,7 @@ import { Persona } from '@prisma/client';
 
 const Nodo = (({ data }: any) => {
     return (
-        <Box width={180} className='nodrag' sx={{ border: '1px solid #ccc' }}>
+        <Box width={180} className='nodrag'>
             <Handle
                 type="source"
 
@@ -21,7 +21,7 @@ const Nodo = (({ data }: any) => {
                 style={{ opacity: 0 }} // Ajusta el tamaño a 0 para ocultar
                 id="top"
             />
-            <Box sx={{ borderRadius: 2, bgcolor: grey[200], overflow: 'hidden' }} >
+            <Box sx={{ borderRadius: 2, bgcolor: grey[200] }} >
                 <Box p={1} sx={{ background: data.cargo == 'upea' ? 'linear-gradient(135deg, rgba(147,54,63,1) 0%, rgba(72,72,194,1) 99%)' : grey[800] }}>
                     <Negrita sx={{
                         fontSize: 15,
@@ -32,7 +32,11 @@ const Nodo = (({ data }: any) => {
                     </Negrita>
                 </Box>
                 <Divider />
-                <Box bgcolor='white' p={1.5}>
+                <Box bgcolor='white' p={1.5}
+                    border='1px solid #ccc' sx={{
+                        borderBottomRightRadius: 2,
+                        borderBottomLeftRadius: 2
+                    }}>
                     <Normal sx={{ fontSize: 14, textAlign: 'center' }}>
                         {data.nombre}
                     </Normal>

@@ -28,6 +28,7 @@ const ConvenioComponent = ({ Convenio, setConvenio,
     setPrevConvenios
 }: Props) => {
     const { openSnackbar } = useSnackbar();
+    console.log(Convenio)
     return (
         <BoxSombra p={3} bgcolor='white' borderRadius={4} >
             <Grid container spacing={2}>

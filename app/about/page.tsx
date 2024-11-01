@@ -9,17 +9,13 @@ export const metadata = {
 }
 export default function Home() {
     return (
-        <Box bgcolor='#f4f6f8' position='relative'>
+        <Box bgcolor='transparent' position='relative'>
             <Navbar />
             <Suspense>
                 <Cliente />
             </Suspense>
-            <Box sx={{
-                position: 'absolute', bottom: 0,
-                bgcolor: 'white', width: "100%"
-            }}>
-                <Footer />
-            </Box>
+
+            <Footer />
         </Box>
     );
 }

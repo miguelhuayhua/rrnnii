@@ -78,7 +78,6 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
         form.append('descripcion', convenio.descripcion);
         form.append('finalizacion', convenio.finalizacion!);
         form.append('institucion', convenio.Institucion.nombre);
-
         form.append('continente', convenio.continente);
         form.append('pais', convenio.pais);
         form.append('logo', convenio.Institucion.logo!);
@@ -263,8 +262,14 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                     {
                                         carreras.map(value => (
                                             <MenuItem key={value.id} value={value.id}>
-                                                {value.nombre}
-                                            </MenuItem>))
+                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                    <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
+                                                        <Image layout='fill' src={fileDomain + value.logo} style={{ borderRadius: 10 }} />
+                                                    </Box>
+                                                    <Negrita sx={{ fontSize: 14 }}>{value.nombre}</Negrita>
+                                                </Box>
+                                            </MenuItem>
+                                        ))
                                     }
                                 </InputBox>
                             )}

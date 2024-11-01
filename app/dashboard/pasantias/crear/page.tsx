@@ -22,6 +22,7 @@ import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
+import { fileDomain } from "@/utils/globals";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
         defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
@@ -260,6 +261,7 @@ export default function Page() {
                                             >
                                                 <MenuItem value='3'>3 meses</MenuItem>
                                                 <MenuItem value='6'>6 meses</MenuItem>
+                                                <MenuItem value='more'>Más de 6 meses</MenuItem>
                                             </InputBox>
                                         )}
                                     />
@@ -296,9 +298,15 @@ export default function Page() {
                                                 {
                                                     carreras.map(value => (
                                                         <MenuItem key={value.id} value={value.id}>
-                                                            {value.nombre}
-                                                        </MenuItem>))
-                                                }
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
+                                                                    <Image layout='fill' src={fileDomain + value.logo} style={{ borderRadius: 10 }} />
+                                                                </Box>
+                                                                <Negrita sx={{ fontSize: 14 }}>{value.nombre}</Negrita>
+                                                            </Box>
+                                                        </MenuItem>
+                                                    ))
+                                                }Z
                                             </InputBox>
                                         )}
                                     />
@@ -315,9 +323,8 @@ export default function Page() {
                                                 options={instituciones.map((value: Institucion) => value.nombre)}
                                                 renderInput={(params) =>
                                                     <InputBox
-                                                        sx={{ mt: 2 }}
                                                         error={!!errors.Institucion?.nombre}
-                                                        helperText={errors.Institucion?.nombre?.message || 'Es importante involucrar la institución que ofrece la pasantía'}
+                                                        helperText={errors.Institucion?.nombre?.message}
                                                         {...params}
                                                         {...field}
                                                         label='Institución'
@@ -331,7 +338,6 @@ export default function Page() {
                                         control={control}
                                         render={({ field: { ref, ...field } }) => (
                                             <DatePickerBox
-                                                sx={{ mt: 2 }}
                                                 onChange={(ev: any) => {
                                                     field.onChange(ev?.format('DD/MM/YYYY'))
                                                 }}

@@ -115,6 +115,11 @@ const Filtros = ({ open, setOpen }: Props) => {
                                 control={<Radio />}
                                 label={'6 meses'}
                             />
+                            <FormControlLabel
+                                value={'more'}
+                                control={<Radio />}
+                                label={'Más de 6 meses'}
+                            />
                         </RadioGroup>
                         <Negrita my={1}>
                             Orden

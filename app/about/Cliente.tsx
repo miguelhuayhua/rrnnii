@@ -12,62 +12,20 @@ const Cliente = () => {
 
     const [personal, setPersonal] = useState([]);
     useEffect(() => {
-        document.addEventListener('DOMContentLoaded', () => {
-            const interBubble = document.querySelector<HTMLDivElement>('.interactive')!;
-            let curX = 0;
-            let curY = 0;
-            let tgX = 0;
-            let tgY = 0;
-
-            function move() {
-                curX += (tgX - curX) / 20;
-                curY += (tgY - curY) / 20;
-                interBubble.style.transform = `translate(${Math.round(curX)}px, ${Math.round(curY)}px)`;
-                requestAnimationFrame(() => {
-                    move();
-                });
-            }
-
-            window.addEventListener('mousemove', (event) => {
-                tgX = event.clientX;
-                tgY = event.clientY;
-            });
-
-            move();
-        });
         axios.post('/api/persona/listar').then(res => {
             setPersonal(res.data);
         })
     }, [])
     return (
         <>
-
-            <Box className="gradient-bg" sx={{
-                position: 'fixed', top: 0, left: 0,
-                height: "100%", width: "100vw"
-            }}>
-
-                <svg xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <filter id="goo">
-                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
-                            <feBlend in="SourceGraphic" in2="goo" />
-                        </filter>
-                    </defs>
-                </svg>
-
-
-                <div className="gradients-container">
-                    <div className="g1"></div>
-                    <div className="g2"></div>
-                    <div className="g3"></div>
-                    <div className="g4"></div>
-                    <div className="g5"></div>
-                    <div className="interactive"></div>
+            <div className="gradient-wrap">
+                <div className="meshgradient">
+                    <div className="color c1"></div>
+                    <div className="color c2"></div>
+                    <div className="color c3"></div>
+                    <div className="color c4"></div>
                 </div>
-
-            </Box>
+            </div>
 
             <Grid container spacing={4} py={3}
                 pb={10} px={1} position='relative'>
@@ -174,7 +132,7 @@ const Cliente = () => {
                 </Grid>
                 <Grid item xs={12} position='relative'>
 
-                    <Box height={600} width={{ xs: 480 }} mx='auto'>
+                    <Box height={460} width={{ xs: 480 }} mx='auto'>
                         <Organigrama personal={personal} />
                     </Box>
                 </Grid>

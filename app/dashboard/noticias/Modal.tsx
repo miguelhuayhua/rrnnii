@@ -84,7 +84,7 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
                     <IoClose fontSize={25} />
                 </BotonSimple>
                 <Titulo sx={{ fontSize: 20, mb: 3 }}>
-                    Editar imagen
+                    Editar noticia
                 </Titulo>
                 <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
                     <Grid item xs={12} sm={6}>
@@ -132,7 +132,7 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
                                     {...field}
                                     label='Título'
                                     error={!!errors.titulo}
-                                    helperText={errors.titulo?.message || 'Este es el título principal que será visible en el noticia'}
+                                    helperText={errors.titulo?.message}
                                     inputRef={ref}
                                 />
                             )}
@@ -142,7 +142,7 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
                             control={control}
                             render={({ field }) => (
                                 <Box>
-                                    <Negrita sx={{ my: 1, fontWeight: 600, fontSize: 14 }}>
+                                    <Negrita sx={{ mb: 1, fontWeight: 600 }}>
                                         Descripción:
                                     </Negrita>
                                     <Editor

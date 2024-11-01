@@ -60,7 +60,7 @@ export const ModalProvider = ({ children }: any) => {
                 maxWidth={'xs'}
                 sx={{
                     ".MuiPaper-root": {
-                        zIndex: 100
+                        zIndex: 100000
                     }
                 }}
             >

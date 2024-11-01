@@ -214,7 +214,7 @@ export default function Cliente({ value }: Props) {
                         {
                             becas.length == 0 ?
                                 <Grid item xs={12} >
-                                    <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
+                                    <Normal sx={{ textAlign: 'center' }}>No se encontraron más becas disponibles</Normal>
                                 </Grid> :
                                 becas.map((value: any) => (
                                     <Grid key={value.id} item xs={12} sm={6} lg={4} xl={3} mx='auto'>

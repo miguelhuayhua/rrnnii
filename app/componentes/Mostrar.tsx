@@ -17,7 +17,7 @@ const BoxSombra = styled(Box)(() => {
     return {
         overflow: 'hidden',
         borderRadius: 10,
-        boxShadow: 'rgba(145, 158, 171, 0.4) 0px 1px 2px 0px',
+        boxShadow: 'rgba(145, 158, 171, 0.5) 0px 2px 5px 0px',
         background: 'white'
     }
 })

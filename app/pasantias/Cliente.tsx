@@ -33,9 +33,21 @@ const Cliente = () => {
     }, [params]);
     return (
         <>
+            <div className="gradient-wrap">
+                <div className="meshgradient">
+                    <div className="color c1"></div>
+                    <div className="color c2"></div>
+                    <div className="color c3"></div>
+                    <div className="color c4"></div>
+                </div>
+            </div>
             <Grid container spacing={2}>
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
-                    <InputBox sx={{ width: 200 }}
+                    <InputBox
+                        sx={{
+                            width: 200,
+                            'fieldset': { border: '1px solid #aaa !important' },
+                        }}
                         placeholder='Buscar'
                         InputProps={{
                             startAdornment:
@@ -89,6 +101,7 @@ const Cliente = () => {
                         }
                     </BotonOutline>
                 </Grid>
+
             </Grid>
             <Suspense>
                 <Filtros setOpen={setOpen} open={open} />

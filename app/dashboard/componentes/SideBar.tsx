@@ -41,9 +41,9 @@ const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: 
                 width: "90%"
             }}>
             <Box sx={{ background: 'white', padding: 1, borderRadius: 3, height: 35 }}>
-                <Icon fontSize={18} />
+                <Icon fontSize={22} />
             </Box>
-            <Normal sx={{ color: grey[900], fontWeight: 700, fontSize: 14, ml: 1 }}>
+            <Normal sx={{ color: grey[900], fontWeight: 700, fontSize: 15, ml: 1 }}>
                 {label}
             </Normal>
         </Button >
@@ -58,9 +58,11 @@ const SideBar = () => {
     const [move, setMove] = useState(false);
     const { data } = useSession();
     const Side = () => (
-        <Box position='sticky' top={0} borderRight='1px solid #eee' width={250} minWidth={95} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
+        <Box position='sticky'
+            bgcolor='white'
+            top={0} borderRight='1px solid #eee' width={300} minWidth={95} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
             <Box display='flex' justifyContent='center' my={2}>
-                <Image src='/logorrnnii.png' width={40} height={38} layout='fixed' />
+                <Image src='/logorrnnii.png' width={50} height={48} layout='fixed' />
             </Box>
             <SideBarItem onclick={() => {
                 router.push('/dashboard/');

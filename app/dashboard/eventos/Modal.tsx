@@ -20,7 +20,7 @@ import Image from 'next/legacy/image';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
-import { grey, red } from '@mui/material/colors';
+import { blue, grey, red } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { RiFileWord2Line } from 'react-icons/ri';
 import axios from 'axios';
@@ -141,44 +141,7 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                             </Box>
                         </Box>
                         <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-                        <Box sx={{
-                            p: 2,
-                            border: `1px solid ${grey[400]}`,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            borderRadius: 3,
-                            color: grey[900],
-                            position: 'relative',
-                            transition: 'border .5s',
-                            "&:hover": {
-                                border: `1px solid ${red[300]}`
-                            }
-                        }}
-                            onClick={() => PDFPicker.openFilePicker()}
-                        >
-                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
-                            <MdOutlineAttachFile style={{ fontSize: 20 }} />
-                        </Box>
-                        {
-                            documento ?
-                                <ChipBox icon={documento.type.includes('pdf') ?
-                                    <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
-                                    sx={{
-                                        mt: 2,
-                                        border: `1px solid ${documento.type.includes('pdf') ? '#e62c31' : '#1951b2'}`,
-                                        height: 40,
-                                        bgcolor: 'white'
-                                    }}
-                                    label={documento.name}
-                                    onDelete={() => {
-                                        setDocumento(null);
-                                    }}
-                                />
-                                : null
-                        }
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
+
                         <Controller
                             name="titulo"
                             control={control}
@@ -188,34 +151,9 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                     {...field}
                                     label='Título'
                                     error={!!errors.titulo}
-                                    helperText={errors.titulo?.message || 'Este es el título principal que será visible en el evento'}
+                                    helperText={errors.titulo?.message}
                                     inputRef={ref}
                                 />
-                            )}
-                        />
-                        <Controller
-                            name="descripcion"
-                            control={control}
-                            render={({ field }) => (
-                                <Box mb={1}>
-                                    <Negrita sx={{ my: 1 }}>
-                                        Descripción:
-                                    </Negrita>
-                                    <Editor
-                                        value={field.value}
-                                        modules={{
-                                            toolbar: [
-                                                [{ 'header': [2, 3, 4, 5, false] }],
-                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                ['link'],
-                                            ]
-                                        }}
-                                        preserveWhitespace
-                                        className="editor"
-                                        onChange={(value) => { field.onChange(value) }}
-                                    />
-                                </Box>
                             )}
                         />
                         <Controller
@@ -284,6 +222,64 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                     )}
                                 /> : null
                         }
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+
+                        <Controller
+                            name="descripcion"
+                            control={control}
+                            render={({ field }) => (
+                                <Box mb={1}>
+                                    <Negrita sx={{ my: 1 }}>
+                                        Descripción:
+                                    </Negrita>
+                                    <Editor
+                                        value={field.value}
+                                        modules={{
+                                            toolbar: [
+                                                [{ 'header': [2, 3, 4, 5, false] }],
+                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                ['link'],
+                                            ]
+                                        }}
+                                        preserveWhitespace
+                                        className="editor"
+                                        onChange={(value) => { field.onChange(value) }}
+                                    />
+                                </Box>
+                            )}
+                        />
+                        <Box sx={{
+                            p: 2,
+                            mb: 2,
+                            border: `1px solid ${documento ? documento.type.includes('pdf') ? red[500] : blue[500] : grey[400]}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            borderRadius: 3,
+                            color: grey[900],
+                            position: 'relative',
+                            transition: 'border .5s',
+                            "&:hover": {
+                                border: `1px solid ${red[300]}`
+                            }
+                        }}
+                            onClick={() => PDFPicker.openFilePicker()}
+                        >
+                            <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>
+                                {
+                                    documento ? documento.name : "PDF o Word de Referencia"
+                                }
+                            </Normal>
+                            {
+                                documento ?
+                                    documento.type.includes('pdf') ?
+                                        <BsFileEarmarkPdfFill fontSize={20} color={'#e62c31'} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />
+                                    : <MdOutlineAttachFile style={{ fontSize: 20 }} />
+                            }
+                        </Box>
+
                     </Grid>
                     {
                         isDirty ?

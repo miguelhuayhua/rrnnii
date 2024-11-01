@@ -23,7 +23,7 @@ import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 import axios from "axios";
-import { paises } from "@/utils/globals";
+import { fileDomain, paises } from "@/utils/globals";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } =
@@ -209,7 +209,7 @@ export default function Page() {
                                                 {...field}
                                                 label='Título'
                                                 error={!!errors.titulo}
-                                                helperText={errors.titulo?.message || 'Este es el título principal que será visible en el convenio'}
+                                                helperText={errors.titulo?.message}
                                                 inputRef={ref}
                                             />
                                         )}
@@ -296,8 +296,14 @@ export default function Page() {
                                                 {
                                                     carreras.map(value => (
                                                         <MenuItem key={value.id} value={value.id}>
-                                                            {value.nombre}
-                                                        </MenuItem>))
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
+                                                                    <Image layout='fill' src={fileDomain + value.logo} style={{ borderRadius: 10 }} />
+                                                                </Box>
+                                                                <Negrita sx={{ fontSize: 14 }}>{value.nombre}</Negrita>
+                                                            </Box>
+                                                        </MenuItem>
+                                                    ))
                                                 }
                                             </InputBox>
                                         )}

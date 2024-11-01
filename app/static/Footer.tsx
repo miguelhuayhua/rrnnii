@@ -19,7 +19,7 @@ const Footer = () => {
         <>
             <Grid container component='footer'
                 px={{ xs: 1, md: 5, lg: 16 }} py={4}
-                borderTop='1px solid #ddd'
+                borderTop='1px solid #aaa'
             >
                 <Grid xs={6}>
                     <BsPhone fontSize={30} color='#888' />
