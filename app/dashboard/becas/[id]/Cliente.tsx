@@ -1,12 +1,11 @@
 'use client';
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, ClickAwayListener, Grid, Stack, Tabs, Tooltip } from "@mui/material";
+import { Box, Breadcrumbs, ClickAwayListener, Grid, Stack, Tabs, Tooltip } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdEdit } from "react-icons/md";
 import parse from 'html-react-parser';
-import { useForm } from "react-hook-form";
 import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import Image from 'next/legacy/image';
@@ -30,9 +29,7 @@ interface Props {
 }
 dayjs.locale('es')
 export default function Cliente({ Beca }: Props) {
-    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Beca>({
-        defaultValues: Beca, shouldFocusError: true
-    });
+
     const { openModal } = useModal();
     const { openSnackbar } = useSnackbar();
     const [open, setOpen] = useState<any>(null);
@@ -207,7 +204,7 @@ export default function Cliente({ Beca }: Props) {
                                                                                         },
                                                                                     }
                                                                                 }}
-                                                                                
+
                                                                                 placement='left'
                                                                                 disableFocusListener
                                                                                 disableHoverListener

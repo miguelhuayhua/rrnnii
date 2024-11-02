@@ -13,8 +13,8 @@ import { Beca, ParticipanteBeca } from '@prisma/client';
 import { grey, red } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import axios from 'axios';
-import { FaPlus, FaUserGraduate, FaUserSlash, FaUserTie } from 'react-icons/fa';
-import { CgAdd, CgMathPlus } from 'react-icons/cg';
+import { FaUserTie } from 'react-icons/fa';
+import { CgMathPlus } from 'react-icons/cg';
 import { BiTrash } from 'react-icons/bi';
 import { HiOutlinePlus, HiPlus } from 'react-icons/hi2';
 interface Props {

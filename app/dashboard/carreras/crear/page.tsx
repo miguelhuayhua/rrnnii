@@ -8,7 +8,7 @@ import { MdArrowLeft } from "react-icons/md";
 import { InputBox } from "@/app/componentes/Datos";
 import { BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
-import { Carrera, Institucion } from "@prisma/client";
+import { Carrera } from "@prisma/client";
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";

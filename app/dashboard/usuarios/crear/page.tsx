@@ -1,7 +1,7 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, MenuItem, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Grid, LinearProgress, MenuItem, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
@@ -11,18 +11,12 @@ import { Carrera, Institucion, Persona } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import { useModal } from "@/providers/ModalProvider";
 import { useEffect, useState } from "react";
-import Image from 'next/legacy/image';
 import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import dynamic from "next/dynamic";
-import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
-import { grey, red } from "@mui/material/colors";
-import { RiFileWord2Line } from "react-icons/ri";
 import dayjs from "dayjs";
 import axios from "axios";
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, watch,
-        setValue } = useForm<Persona>({
+    const { control, formState: { errors }, handleSubmit } = useForm<Persona>({
             defaultValues: {
                 nombre: '', paterno: '', materno: '',
                 cargo: '', f_nacimiento: dayjs().format('DD/MM/YYYY')
@@ -31,11 +25,6 @@ export default function Page() {
     const router = useRouter();
     const { openModal } = useModal();
     const [load, setLoad] = useState(false);
-    const [portada, setPortada] = useState<any>('');
-    const [documento, setDocumento] = useState<any>('');
-
-    const { openSnackbar } = useSnackbar();
-
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>

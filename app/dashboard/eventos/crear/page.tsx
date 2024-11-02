@@ -1,5 +1,5 @@
 "use client";
-import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, LinearProgress, MenuItem } from "@mui/material";
 import Link from "next/link";
@@ -21,7 +21,7 @@ import { ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
-import { grey, red, blue } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 import { IoMdLink } from "react-icons/io";
 
