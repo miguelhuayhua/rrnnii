@@ -5,8 +5,10 @@ const POST = async (request: NextRequest) => {
     try {
         let acciones = await prisma.acciones.findMany({
             orderBy: {
-                id: 'desc'
-            }
+                id: 'desc',
+
+            },
+            include: { Usuario: true }
         });
 
         return Response.json(acciones);

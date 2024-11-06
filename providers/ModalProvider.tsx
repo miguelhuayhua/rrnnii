@@ -58,11 +58,7 @@ export const ModalProvider = ({ children }: any) => {
                 aria-labelledby="Seleccione el producto"
                 aria-describedby="Área de selección de productos para la generación de información"
                 maxWidth={'xs'}
-                sx={{
-                    ".MuiPaper-root": {
-                        zIndex: 100000
-                    }
-                }}
+
             >
                 <Box p={3} >
                     <Titulo sx={{ fontSize: 18, textAlign: 'center' }}>

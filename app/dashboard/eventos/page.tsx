@@ -1,7 +1,7 @@
 "use client";
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -25,10 +25,12 @@ export default function Page() {
     const [prevEventos, setPrevEventos] = useState<Evento[]>([]);
     const [evento, setEvento] = useState<any>(null);
     const router = useRouter();
+    const [load, setLoad] = useState(true);
     useEffect(() => {
         axios.post('/api/evento/todo').then(res => {
             setEventos(res.data);
             setPrevEventos(res.data);
+            setLoad(false);
         });
     }, []);
     return (
@@ -50,10 +52,12 @@ export default function Page() {
                     Añadir evento
                 </BotonFilled>
                 <BotonSimple onClick={() => {
+                    setLoad(true);
                     axios.post('/api/evento/todo', { opcion }).then(res => {
                         setEventos(res.data);
                         setPrevEventos(res.data);
                         setOpcion('todo');
+                        setLoad(false);
                     });
                 }}>
                     <TbReload fontSize={22} />
@@ -126,20 +130,29 @@ export default function Page() {
                 placeholder="Buscar" InputProps={{
                     endAdornment: <IoSearch fontSize={28} />
                 }} sx={{ maxWidth: 300 }} />
-            <Grid container spacing={2}>
-                {
-                    eventos.map(value => (
-                        <Grid key={value.id} item xs={12} lg={6}>
-                            <EventoComponent
-                                setEvento={setEvento}
-                                setEventos={setEventos}
-                                setOpcion={setOpcion}
-                                setPrevEventos={setPrevEventos}
-                                Evento={value as any} />
-                        </Grid>
-                    ))
-                }
-            </Grid>
+            {
+                load ?
+                    <CircularProgress color="inherit"
+                        sx={{
+                            display: 'block', mt: 3,
+                            justifyContent: 'center',
+                            mx: 'auto'
+                        }} /> : <Grid container spacing={2}>
+                        {
+                            eventos.map(value => (
+                                <Grid key={value.id} item xs={12} lg={6}>
+                                    <EventoComponent
+                                        setEvento={setEvento}
+                                        setEventos={setEventos}
+                                        setOpcion={setOpcion}
+                                        setPrevEventos={setPrevEventos}
+                                        Evento={value as any} />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>
+            }
+
             {
                 evento ?
                     <ModalEvento

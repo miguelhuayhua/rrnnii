@@ -44,10 +44,7 @@ const handler = NextAuth({
     ],
     callbacks: {
         async signIn({ account }) {
-            if (account!.provider === "google") {
-                return true
-            }
-            else if (account!.provider === 'credentials') {
+            if (account!.provider === 'credentials') {
                 return true
             }
             return false

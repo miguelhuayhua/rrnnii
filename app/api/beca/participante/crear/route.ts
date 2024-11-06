@@ -40,7 +40,7 @@ const POST = async (request: NextRequest) => {
         console.log(error)
         return Response.json({
             error: true,
-            mensaje: 'Error al modificar actividad'
+            mensaje: 'Error al registrar participante'
         });
     }
 }

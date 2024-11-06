@@ -4,7 +4,7 @@ import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, ClickAwayListener, Grid, Stack, Tabs, Tooltip } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft, MdEdit } from "react-icons/md";
+import { MdArrowLeft } from "react-icons/md";
 import parse from 'html-react-parser';
 import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
@@ -13,7 +13,7 @@ import { Icon } from '@iconify/react';
 import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useState } from "react";
-import { blue, blueGrey, green } from "@mui/material/colors";
+import { blue, blueGrey, green, grey } from "@mui/material/colors";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TabBox } from "../../componentes/Mostrar";
 import { IoCalendar } from "react-icons/io5";
@@ -24,18 +24,20 @@ import { fileDomain } from "@/utils/globals";
 import { TbDotsVertical } from "react-icons/tb";
 import axios from "axios";
 import { useModal } from "@/providers/ModalProvider";
+import ParticipantesPDF from "./PDFPostulantes";
+import { pdf } from "@react-pdf/renderer";
+import ModalParticipante from "./ModalParticipante";
 interface Props {
     Beca: Beca & { Institucion: Institucion, Participantes: ParticipanteBeca[] };
 }
 dayjs.locale('es')
 export default function Cliente({ Beca }: Props) {
-
     const { openModal } = useModal();
     const { openSnackbar } = useSnackbar();
     const [open, setOpen] = useState<any>(null);
     const [opcion, setOpcion] = useState(1);
     const router = useRouter();
-
+    const [participante, setParticipante] = useState<any>(null);
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
@@ -124,7 +126,6 @@ export default function Cliente({ Beca }: Props) {
                                                 <Negrita>
                                                     {dayjs(Beca.termina, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY')}
                                                 </Negrita>
-
                                             </Box>
                                         </Box>
                                         <Box display={'flex'} mt={2}>
@@ -172,7 +173,17 @@ export default function Cliente({ Beca }: Props) {
                                                 <Stack direction='row' spacing={2}>
                                                     <BotonOutline
                                                         onClick={() => {
-
+                                                            pdf(<ParticipantesPDF
+                                                                Beca={Beca}
+                                                                Participantes={Beca.Participantes}
+                                                            />).toBlob().then(res => {
+                                                                let url = URL.createObjectURL(res);
+                                                                let a = document.createElement('a');
+                                                                a.download = "participantes-beca-" + Beca.id;
+                                                                a.href = url;
+                                                                a.click();
+                                                                a.remove();
+                                                            });
                                                         }}
                                                     >
                                                         Generar listado
@@ -185,11 +196,24 @@ export default function Cliente({ Beca }: Props) {
                                                         <BoxSombra position='relative' p={2}>
                                                             {
                                                                 value.aceptado ?
-                                                                    <Box sx={{ position: 'absolute', top: 10, right: 15 }}>
-                                                                        <Icon icon="lets-icons:done-round-duotone"
-                                                                            fontSize={35}
-                                                                            style={{ color: green[500] }} />
-                                                                    </Box> :
+                                                                    <Stack spacing={2} direction='row'
+                                                                        sx={{ position: 'absolute', top: 10, right: 15 }}>
+                                                                        <Box>
+                                                                            <Icon icon="lets-icons:done-round-duotone"
+                                                                                fontSize={35}
+                                                                                style={{
+                                                                                    color: green[500],
+                                                                                    marginTop: 10
+                                                                                }} />
+                                                                        </Box>
+                                                                        <BotonSimple onClick={() => {
+                                                                            setParticipante(value);
+                                                                        }}>
+                                                                            <Icon icon="material-symbols:edit-outline"
+                                                                                fontSize={25}
+                                                                                style={{ color: grey[500] }} />
+                                                                        </BotonSimple>
+                                                                    </Stack> :
                                                                     <ClickAwayListener touchEvent={false} onClickAway={() => setOpen(null)}>
                                                                         <Box>
                                                                             <Tooltip
@@ -313,6 +337,11 @@ export default function Cliente({ Beca }: Props) {
 
                 </Grid>
             </Box>
+            {
+                participante ?
+                    <ModalParticipante Participante={participante} setParticipante={setParticipante} />
+                    : null
+            }
         </>
     )
 }

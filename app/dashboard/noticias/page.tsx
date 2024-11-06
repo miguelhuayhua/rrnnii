@@ -1,7 +1,7 @@
 "use client";
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -22,11 +22,13 @@ export default function Page() {
     const [noticias, setNoticias] = useState<Noticia[]>([]);
     const [prevNoticias, setPrevNoticias] = useState<Noticia[]>([]);
     const [noticia, setNoticia] = useState<any>(null);
+    const [load, setLoad] = useState(true);
     const router = useRouter();
     useEffect(() => {
         axios.post('/api/noticia/todo').then(res => {
             setNoticias(res.data);
             setPrevNoticias(res.data);
+            setLoad(false);
         });
     }, []);
     return (
@@ -48,10 +50,12 @@ export default function Page() {
                     Añadir noticia
                 </BotonFilled>
                 <BotonSimple onClick={() => {
+                    setLoad(true);
                     axios.post('/api/noticia/todo', { opcion }).then(res => {
                         setNoticias(res.data);
                         setPrevNoticias(res.data);
                         setOpcion('todo');
+                        setLoad(false);
                     });
                 }}>
                     <TbReload fontSize={22} />
@@ -107,20 +111,29 @@ export default function Page() {
                 placeholder="Buscar" InputProps={{
                     endAdornment: <IoSearch fontSize={28} />
                 }} sx={{ maxWidth: 300 }} />
-            <Grid container spacing={2}>
-                {
-                    noticias.map(value => (
-                        <Grid key={value.id} item xs={12} lg={6}>
-                            <NoticiaComponent
-                                setNoticia={setNoticia}
-                                setNoticias={setNoticias}
-                                setOpcion={setOpcion}
-                                setPrevNoticias={setPrevNoticias}
-                                Noticia={value as any} />
-                        </Grid>
-                    ))
-                }
-            </Grid>
+            {
+                load ? <CircularProgress color="inherit"
+                    sx={{
+                        display: 'block', mt: 3,
+                        justifyContent: 'center',
+                        mx: 'auto'
+                    }} />
+                    : <Grid container spacing={2}>
+                        {
+                            noticias.map(value => (
+                                <Grid key={value.id} item xs={12} lg={6}>
+                                    <NoticiaComponent
+                                        setNoticia={setNoticia}
+                                        setNoticias={setNoticias}
+                                        setOpcion={setOpcion}
+                                        setPrevNoticias={setPrevNoticias}
+                                        Noticia={value as any} />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>
+            }
+
             {
                 noticia ?
                     <ModalNoticia

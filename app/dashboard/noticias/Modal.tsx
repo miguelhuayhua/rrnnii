@@ -2,7 +2,7 @@
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
-import { Box, Grid, LinearProgress } from '@mui/material';
+import { Box, Grid, CircularProgress, Backdrop } from '@mui/material';
 import { Noticia } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Negrita, Normal, Titulo } from '@/app/componentes/Textos';
@@ -72,108 +72,114 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
         });
     }
     return (
-        <Dialog
-            open={!!Noticia}
-            keepMounted={false}
-            maxWidth='md'
-            onClose={() => { setNoticia(null) }}
-        >
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
-            <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <BotonSimple onClick={() => setNoticia(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
-                    <IoClose fontSize={25} />
-                </BotonSimple>
-                <Titulo sx={{ fontSize: 20, mb: 3 }}>
-                    Editar noticia
-                </Titulo>
-                <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
-                    <Grid item xs={12} sm={6}>
-                        <Box px={{ xs: 10, sm: 0 }}>
-                            <Box sx={{
-                                aspectRatio: 1,
-                                bgcolor: grey[100],
-                                p: 1,
-                                border: `1px dashed ${grey[400]}`,
-                                flexDirection: 'column',
-                                borderRadius: 5,
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                color: grey[900],
-                                transition: 'color 0.25s',
-                                position: 'relative',
-                                overflow: 'hidden',
-                                "&:hover": {
-                                    color: grey[500],
-                                    cursor: 'pointer'
-                                }
-                            }}
-                                onClick={() => openFilePicker()}
-                            >
-                                {
-                                    watch('imagen') ?
-                                        <Image src={(file ? '' : fileDomain) + watch('imagen')} layout='fill' objectFit='cover' />
-                                        : null
-                                }
-                                <BsImageAlt color={'inherit'} fontSize={30} />
-                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                            </Box>
-                        </Box>
-                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Controller
-                            name="titulo"
-                            control={control}
-                            rules={{ required: 'Título es obligatorio' }}
-                            render={({ field: { ref, ...field } }) => (
-                                <InputBox
-                                    {...field}
-                                    label='Título'
-                                    error={!!errors.titulo}
-                                    helperText={errors.titulo?.message}
-                                    inputRef={ref}
-                                />
-                            )}
-                        />
-                        <Controller
-                            name="descripcion"
-                            control={control}
-                            render={({ field }) => (
-                                <Box>
-                                    <Negrita sx={{ mb: 1, fontWeight: 600 }}>
-                                        Descripción:
-                                    </Negrita>
-                                    <Editor
-                                        value={field.value}
-                                        modules={{
-                                            toolbar: [
-                                                [{ 'header': [2, 3, 4, 5, false] }],
-                                                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                ['link'],
-                                            ]
-                                        }}
-                                        preserveWhitespace
-                                        className="editor"
-                                        onChange={(value) => { field.onChange(value) }}
-                                    />
+        <>
+            <Dialog
+                open={!!Noticia}
+                keepMounted={false}
+                maxWidth='md'
+                onClose={() => { setNoticia(null) }}
+            >
+                <DialogContent sx={{ position: 'relative', p: 2 }}>
+                    <BotonSimple onClick={() => setNoticia(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
+                        <IoClose fontSize={25} />
+                    </BotonSimple>
+                    <Titulo sx={{ fontSize: 20, mb: 3 }}>
+                        Editar noticia
+                    </Titulo>
+                    <Grid container spacing={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <Grid item xs={12} sm={6}>
+                            <Box px={{ xs: 10, sm: 0 }}>
+                                <Box sx={{
+                                    aspectRatio: 1,
+                                    bgcolor: grey[100],
+                                    p: 1,
+                                    border: `1px dashed ${grey[400]}`,
+                                    flexDirection: 'column',
+                                    borderRadius: 5,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    color: grey[900],
+                                    transition: 'color 0.25s',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    "&:hover": {
+                                        color: grey[500],
+                                        cursor: 'pointer'
+                                    }
+                                }}
+                                    onClick={() => openFilePicker()}
+                                >
+                                    {
+                                        watch('imagen') ?
+                                            <Image src={(file ? '' : fileDomain) + watch('imagen')} layout='fill' objectFit='cover' />
+                                            : null
+                                    }
+                                    <BsImageAlt color={'inherit'} fontSize={30} />
+                                    <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
                                 </Box>
-                            )}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                    </Grid>
-                    {
-                        isDirty ?
-                            <Grid item xs={12}>
-                                <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >Modificar Noticia</BotonFilled>
-                            </Grid> : null
-                    }
-                </Grid>
-            </DialogContent>
+                            </Box>
+                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
 
-        </Dialog >
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Controller
+                                name="titulo"
+                                control={control}
+                                rules={{ required: 'Título es obligatorio' }}
+                                render={({ field: { ref, ...field } }) => (
+                                    <InputBox
+                                        {...field}
+                                        label='Título'
+                                        error={!!errors.titulo}
+                                        helperText={errors.titulo?.message}
+                                        inputRef={ref}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="descripcion"
+                                control={control}
+                                render={({ field }) => (
+                                    <Box>
+                                        <Negrita sx={{ mb: 1, fontWeight: 600 }}>
+                                            Descripción:
+                                        </Negrita>
+                                        <Editor
+                                            value={field.value}
+                                            modules={{
+                                                toolbar: [
+                                                    [{ 'header': [2, 3, 4, 5, false] }],
+                                                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                    ['link'],
+                                                ]
+                                            }}
+                                            preserveWhitespace
+                                            className="editor"
+                                            onChange={(value) => { field.onChange(value) }}
+                                        />
+                                    </Box>
+                                )}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                        </Grid>
+                        {
+                            isDirty ?
+                                <Grid item xs={12}>
+                                    <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >Modificar Noticia</BotonFilled>
+                                </Grid> : null
+                        }
+                    </Grid>
+                </DialogContent>
+            </Dialog >
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </>
     );
 }

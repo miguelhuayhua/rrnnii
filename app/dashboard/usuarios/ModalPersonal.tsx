@@ -1,13 +1,14 @@
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Titulo } from "@/app/componentes/Textos";
 import { useModal } from "@/providers/ModalProvider";
-import { Dialog, DialogContent, Grid, MenuItem } from "@mui/material";
+import { Dialog, DialogContent, Grid, MenuItem, Backdrop, CircularProgress } from "@mui/material";
 import { Persona } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 interface Props {
     Persona: Persona;
@@ -21,6 +22,7 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
         defaultValues: Persona, shouldFocusError: true
     });
     const { openModal } = useModal();
+    const [load, setLoad] = useState(false);
     return (
         <>
             <Dialog
@@ -102,17 +104,6 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
                                 )}
                             />
                             <Controller
-                                name="ci"
-                                control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Carnet de identidad'
-                                        inputRef={ref}
-                                    />
-                                )}
-                            />
-                            <Controller
                                 name="cargo"
                                 control={control}
                                 render={({ field: { ref, ...field } }) => (
@@ -153,12 +144,14 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
                                         onClick={handleSubmit((Persona) => {
                                             openModal({
                                                 async callback() {
+                                                    setLoad(true);
                                                     let res = await axios.post('/api/persona/modificar', Persona);
                                                     setPersona(null);
                                                     axios.post('/api/persona/todo').then(res => {
                                                         setPersonas(res.data);
                                                         setPrevPersonas(res.data);
                                                     });
+                                                    setLoad(false);
                                                     return res.data.mensaje;
                                                 },
                                                 content: 'El personal será modificado',
@@ -173,6 +166,12 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
                 </DialogContent>
 
             </Dialog >
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     )
 }

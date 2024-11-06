@@ -5,6 +5,7 @@ import { Pasantia } from "@prisma/client";
 import Cliente from "./Cliente";
 import Footer from "@/app/static/Footer";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 const get = async (id: string) => {
     return await prisma.pasantia.findUnique({

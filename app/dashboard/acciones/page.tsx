@@ -4,13 +4,15 @@ import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Stack } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Acciones } from "@prisma/client";
+import { Acciones, Usuario } from "@prisma/client";
 import { TbReload } from "react-icons/tb";
 import axios from "axios";
 import Tabla from "../componentes/Tabla";
-
+import dayjs from "dayjs";
+import 'dayjs/locale/es';
+dayjs.locale('es');
 export default function Page() {
-    const [acciones, setAccions] = useState<Acciones[]>([]);
+    const [acciones, setAccions] = useState<(Acciones & { Usuario: Usuario })[]>([]);
     useEffect(() => {
         axios.post('/api/acciones/todo', {}).then(res => {
             setAccions(res.data);
@@ -41,7 +43,22 @@ export default function Page() {
                 </BotonSimple>
             </Stack>
 
-            <Tabla hasSearch hasPagination data={acciones} />
+            <Tabla hasSearch hasPagination data={acciones.map(value => (
+                {
+                    Usuario: (<Box>
+                        <Negrita>
+                            {value.Usuario.usuario}
+
+                        </Negrita>
+                        <Normal>
+                            {value.Usuario.rol}
+                        </Normal>
+                    </Box>),
+                    Tabla: value.tabla,
+                    Tipo: value.tipo,
+                    Fecha: dayjs(value.createdAt).format('DD [de] MMMM [del] YYYY')
+                }
+            ))} />
 
 
         </Box>

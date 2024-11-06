@@ -1,7 +1,7 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, CircularProgress, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -24,11 +24,13 @@ export default function Page() {
     const [convenios, setConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
     const [convenio, setConvenio] = useState<any>(null);
     const [prevConvenios, setPrevConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
+    const [load, setLoad] = useState(true);
     const router = useRouter();
     useEffect(() => {
         axios.post('/api/convenio/todo', {}).then(res => {
             setConvenios(res.data);
             setPrevConvenios(res.data);
+            setLoad(false);
         });
     }, []);
     return (
@@ -50,10 +52,12 @@ export default function Page() {
                     Añadir convenio
                 </BotonFilled>
                 <BotonSimple onClick={() => {
+                    setLoad(true);
                     axios.post('/api/convenio/todo', {}).then(res => {
                         setConvenios(res.data);
                         setPrevConvenios(res.data);
                         setOpcion('todo');
+                        setLoad(false);
                     });
                 }}>
                     <TbReload fontSize={22} />
@@ -126,20 +130,31 @@ export default function Page() {
                 placeholder="Buscar" InputProps={{
                     endAdornment: <IoSearch fontSize={28} />
                 }} sx={{ maxWidth: 300 }} />
-            <Grid container spacing={2}>
-                {
-                    convenios.map(value => (
-                        <Grid key={value.id} item xs={12} lg={6}>
-                            <ConvenioComponent
-                                setConvenio={setConvenio}
-                                setConvenios={setConvenios}
-                                setOpcion={setOpcion}
-                                setPrevConvenios={setPrevConvenios}
-                                Convenio={value as any} />
-                        </Grid>
-                    ))
-                }
-            </Grid>
+
+
+            {
+                load ?
+                    <CircularProgress color="inherit"
+                        sx={{
+                            display: 'block', mt: 3,
+                            justifyContent: 'center',
+                            mx: 'auto'
+                        }} /> : <Grid container spacing={2}>
+                        {
+                            convenios.map(value => (
+                                <Grid key={value.id} item xs={12} lg={6}>
+                                    <ConvenioComponent
+                                        setConvenio={setConvenio}
+                                        setConvenios={setConvenios}
+                                        setOpcion={setOpcion}
+                                        setPrevConvenios={setPrevConvenios}
+                                        Convenio={value as any} />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>
+            }
+
             {
                 convenio ?
                     <ModalConvenio

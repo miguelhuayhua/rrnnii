@@ -1,7 +1,7 @@
 "use client";
-import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -25,10 +25,12 @@ export default function Page() {
     const [prevPasantias, setPrevPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
     const [Pasantia, setPasantia] = useState<any>(null);
     const router = useRouter();
+    const [load, setLoad] = useState(true);
     useEffect(() => {
         axios.post('/api/pasantia/todo').then(res => {
             setPasantias(res.data);
             setPrevPasantias(res.data);
+            setLoad(false);
         });
     }, []);
     return (
@@ -50,10 +52,12 @@ export default function Page() {
                     Añadir Pasantia
                 </BotonFilled>
                 <BotonSimple onClick={() => {
+                    setLoad(true);
                     axios.post('/api/pasantia/todo', { opcion }).then(res => {
                         setPasantias(res.data);
                         setPrevPasantias(res.data);
                         setOpcion('todo');
+                        setLoad(false);
                     });
                 }}>
                     <TbReload fontSize={22} />
@@ -126,20 +130,29 @@ export default function Page() {
                 placeholder="Buscar" InputProps={{
                     endAdornment: <IoSearch fontSize={28} />
                 }} sx={{ maxWidth: 300 }} />
-            <Grid container spacing={2}>
-                {
-                    Pasantias.map(value => (
-                        <Grid item xs={12} lg={6} key={value.id}>
-                            <PasantiaComponent
-                                setPasantia={setPasantia}
-                                setPasantias={setPasantias}
-                                setOpcion={setOpcion}
-                                setPrevPasantias={setPrevPasantias}
-                                Pasantia={value as any} />
-                        </Grid>
-                    ))
-                }
-            </Grid>
+            {
+                load ?
+                    <CircularProgress color="inherit"
+                        sx={{
+                            display: 'block', mt: 3,
+                            justifyContent: 'center',
+                            mx: 'auto'
+                        }} /> : <Grid container spacing={2}>
+                        {
+                            Pasantias.map(value => (
+                                <Grid item xs={12} lg={6} key={value.id}>
+                                    <PasantiaComponent
+                                        setPasantia={setPasantia}
+                                        setPasantias={setPasantias}
+                                        setOpcion={setOpcion}
+                                        setPrevPasantias={setPrevPasantias}
+                                        Pasantia={value as any} />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>
+            }
+
             {
                 Pasantia ?
                     <ModalPasantia

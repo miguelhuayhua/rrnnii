@@ -2,7 +2,7 @@
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
-import { Box, Grid, LinearProgress, useTheme } from '@mui/material';
+import { Box, Grid, Backdrop, CircularProgress } from '@mui/material';
 import { Carrera } from '@prisma/client';
 import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
 import { Normal, Titulo } from '@/app/componentes/Textos';
@@ -73,94 +73,101 @@ export default function ModalCarrera({ setCarrera, Carrera,
         });
     }
     return (
-        <Dialog
-            open={!!Carrera}
-            keepMounted={false}
-            maxWidth='md'
-            onClose={() => { setCarrera(null) }}
-        >
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
-            <DialogContent sx={{ position: 'relative', p: 2 }}>
-                <BotonSimple onClick={() => setCarrera(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
-                    <IoClose fontSize={25} />
-                </BotonSimple>
-                <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
-                    Información sobre el {Carrera.nombre}
-                </Titulo>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <Box px={{ xs: 10, sm: 0 }}>
-                            <Box sx={{
-                                aspectRatio: 1,
-                                bgcolor: grey[100],
-                                p: 1,
-                                border: `1px dashed ${grey[400]}`,
-                                flexDirection: 'column',
-                                borderRadius: 5,
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                color: grey[900],
-                                transition: 'color 0.25s',
-                                position: 'relative',
-                                overflow: 'hidden',
-                                "&:hover": {
-                                    color: grey[500],
-                                    cursor: 'pointer'
-                                }
-                            }}
-                                onClick={() => openFilePicker()}
-                            >
-                                {
-                                    watch('logo') ?
-                                        <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
-                                        : null
-                                }
-                                <BsImageAlt color={'inherit'} fontSize={30} />
-                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+        <>
+            <Dialog
+                open={!!Carrera}
+                keepMounted={false}
+                maxWidth='md'
+                onClose={() => { setCarrera(null) }}
+            >
+                <DialogContent sx={{ position: 'relative', p: 2 }}>
+                    <BotonSimple onClick={() => setCarrera(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
+                        <IoClose fontSize={25} />
+                    </BotonSimple>
+                    <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
+                        Información sobre el {Carrera.nombre}
+                    </Titulo>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <Box px={{ xs: 10, sm: 0 }}>
+                                <Box sx={{
+                                    aspectRatio: 1,
+                                    bgcolor: grey[100],
+                                    p: 1,
+                                    border: `1px dashed ${grey[400]}`,
+                                    flexDirection: 'column',
+                                    borderRadius: 5,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    color: grey[900],
+                                    transition: 'color 0.25s',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    "&:hover": {
+                                        color: grey[500],
+                                        cursor: 'pointer'
+                                    }
+                                }}
+                                    onClick={() => openFilePicker()}
+                                >
+                                    {
+                                        watch('logo') ?
+                                            <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
+                                            : null
+                                    }
+                                    <BsImageAlt color={'inherit'} fontSize={30} />
+                                    <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
+                                </Box>
                             </Box>
-                        </Box>
-                        <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
+                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
 
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Controller
-                            name="nombre"
-                            control={control}
-                            rules={{ required: 'Nombre es obligatorio' }}
-                            render={({ field: { ref, ...field } }) => (
-                                <InputBox
-                                    {...field}
-                                    label='Título'
-                                    error={!!errors.nombre}
-                                    helperText={errors.nombre?.message || 'Este es el título principal que será visible en el carrera'}
-                                    inputRef={ref}
-                                />
-                            )}
-                        />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Controller
+                                name="nombre"
+                                control={control}
+                                rules={{ required: 'Nombre es obligatorio' }}
+                                render={({ field: { ref, ...field } }) => (
+                                    <InputBox
+                                        {...field}
+                                        label='Título'
+                                        error={!!errors.nombre}
+                                        helperText={errors.nombre?.message || 'Este es el título principal que será visible en el carrera'}
+                                        inputRef={ref}
+                                    />
+                                )}
+                            />
 
-                        <Controller
-                            name="contacto"
-                            control={control}
-                            render={({ field: { ref, ...field } }) => (
-                                <InputBox
-                                    {...field}
-                                    label='Contacto'
-                                    inputRef={ref}
-                                />
-                            )}
-                        />
+                            <Controller
+                                name="contacto"
+                                control={control}
+                                render={({ field: { ref, ...field } }) => (
+                                    <InputBox
+                                        {...field}
+                                        label='Contacto'
+                                        inputRef={ref}
+                                    />
+                                )}
+                            />
+                        </Grid>
+                        {
+                            isDirty ?
+                                <Grid item xs={12}>
+                                    <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >
+                                        Modificar Carrera
+                                    </BotonFilled>
+                                </Grid> : null
+                        }
                     </Grid>
-                    {
-                        isDirty ?
-                            <Grid item xs={12}>
-                                <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >
-                                    Modificar Carrera
-                                </BotonFilled>
-                            </Grid> : null
-                    }
-                </Grid>
-            </DialogContent>
-        </Dialog >
+                </DialogContent>
+            </Dialog >
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop></>
+
     );
 }

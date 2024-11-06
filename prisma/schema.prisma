@@ -15,8 +15,8 @@ model Usuario {
   estado    Boolean    @default(true)
   avatar    String?
   rol       String     @default("tecnico")
-  Persona   Persona    @relation(fields: [personaCi], references: [ci])
-  personaCi String     @unique
+  Persona   Persona    @relation(fields: [personaId], references: [id])
+  personaId String     @unique @default("")
   Acciones  Acciones[]
 }
 
@@ -165,7 +165,8 @@ model Persona {
   paterno      String   @default("")
   materno      String   @default("")
   f_nacimiento String   @default("")
-  ci           String   @unique @default("")
+  ci           String
+  id           String   @id @default(dbgenerated("generate_object_id()"))
   Usuario      Usuario?
   estado       Boolean  @default(true)
   createdAt    DateTime @default(now())

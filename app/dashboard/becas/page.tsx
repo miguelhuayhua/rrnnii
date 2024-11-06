@@ -1,23 +1,18 @@
 "use client";
-import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Beca } from "@prisma/client";
-import Image from 'next/legacy/image';
 import { Icon } from '@iconify/react';
-import { FaAngleLeft, FaAngleRight, FaEye } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
-import { TbPdf, TbReload } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
-import { InputBox, SwitchBox } from "@/app/componentes/Datos";
-import { useSnackbar } from "@/providers/SnackbarProvider";
-import { RiFileWord2Line } from "react-icons/ri";
+import { blue } from "@mui/material/colors";
+import { InputBox } from "@/app/componentes/Datos";
 import axios from "axios";
-import { fileDomain } from "@/utils/globals";
 import ModalBeca from "./ModalBeca";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import BecaComponent from "../componentes/items/Beca";
@@ -29,10 +24,12 @@ export default function Page() {
     const [prevBecas, setPrevBecas] = useState<Beca[]>([]);
     const [beca, setBeca] = useState<any>(null);
     const router = useRouter();
+    const [load, setLoad] = useState(true);
     useEffect(() => {
         axios.post('/api/beca/todo', {}).then(res => {
             setBecas(res.data);
             setPrevBecas(res.data);
+            setLoad(false);
         });
     }, []);
     return (
@@ -54,10 +51,12 @@ export default function Page() {
                     Añadir beca
                 </BotonFilled>
                 <BotonSimple onClick={() => {
+                    setLoad(true);
                     axios.post('/api/beca/todo', {}).then(res => {
                         setBecas(res.data);
                         setPrevBecas(res.data);
                         setOpcion('todo');
+                        setLoad(false);
                     });
                 }}>
                     <Icon icon="mdi:reload" fontSize={26} />
@@ -130,20 +129,29 @@ export default function Page() {
                 placeholder="Buscar" InputProps={{
                     endAdornment: <IoSearch fontSize={28} />
                 }} sx={{ maxWidth: 300 }} />
-            <Grid container spacing={2}>
-                {
-                    becas.map(value => (
-                        <Grid key={value.id} item xs={12} lg={6}>
-                            <BecaComponent
-                                setBeca={setBeca}
-                                setBecas={setBecas}
-                                setOpcion={setOpcion}
-                                setPrevBecas={setPrevBecas}
-                                Beca={value as any} />
-                        </Grid>
-                    ))
-                }
-            </Grid>
+            {
+                load ?
+                    <CircularProgress color="inherit"
+                        sx={{
+                            display: 'block', mt: 3,
+                            justifyContent: 'center',
+                            mx: 'auto'
+                        }} /> : <Grid container spacing={2}>
+                        {
+                            becas.map(value => (
+                                <Grid key={value.id} item xs={12} lg={6}>
+                                    <BecaComponent
+                                        setBeca={setBeca}
+                                        setBecas={setBecas}
+                                        setOpcion={setOpcion}
+                                        setPrevBecas={setPrevBecas}
+                                        Beca={value as any} />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>
+            }
+
             {
                 beca ?
                     <ModalBeca

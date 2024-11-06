@@ -5,11 +5,11 @@ const POST = async (request: NextRequest) => {
     const token = await getToken({ secret: process.env.NEXTAUTH_SECRET as string, req: request });
     if (token?.name) {
         try {
-            await prisma.acciones.create({ data: { tabla: 'persona', Usuario: { connect: { usuario: token.name } }, tipo: 'crear' } });
+            await prisma.acciones.create({ data: { tabla: 'persona', Usuario: { connect: { usuario: token.name } }, tipo: 'modificar' } });
             const Persona = await request.json();
             await prisma.persona.update({
                 data: Persona,
-                where: { ci: Persona.ci }
+                where: { id: Persona.id }
             });
             return Response.json({ error: false, mensaje: `Personal modificado con éxito` });
 
