@@ -110,9 +110,6 @@ export default function Page() {
                             </Box>
 
                         </Box>
-                        <Normal>
-                            2.6
-                        </Normal>
                     </BoxSombra>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={4} mx='auto'>
@@ -174,9 +171,6 @@ export default function Page() {
                             </Box>
 
                         </Box>
-                        <Normal>
-                            2.6
-                        </Normal>
                     </BoxSombra>
                 </Grid>
                 <Grid item xs={12} sm={6} lg={4} mx='auto' >
@@ -231,9 +225,6 @@ export default function Page() {
                             </Box>
 
                         </Box>
-                        <Normal>
-                            2.6
-                        </Normal>
                     </BoxSombra>
                 </Grid>
                 <Grid item xs={12} sm={7} >

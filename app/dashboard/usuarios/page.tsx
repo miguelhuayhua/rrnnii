@@ -130,7 +130,7 @@ export default function Main() {
                                     <BotonOutline
                                         sx={{ p: 1.16 }}
                                         onClick={() => {
-                                            setPersonaId(value.ci);
+                                            setPersonaId(value.id);
                                         }}>
                                         <FaUser />
                                     </BotonOutline>

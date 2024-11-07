@@ -6,7 +6,6 @@ const POST = async (request: NextRequest) => {
         let persona = await prisma.persona.findFirst({
             where: { Usuario: { usuario } },
         });
-        console.log(persona)
         return Response.json(persona);
     } catch (error) {
         console.log(error)

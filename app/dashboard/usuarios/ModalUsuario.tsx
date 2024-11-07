@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ModalUsuario = ({ personaId, setPersonaId }: Props) => {
-    const { control, watch, formState: { isDirty }, handleSubmit,
+    const { control, watch, formState: { isDirty }, clearErrors, setError, handleSubmit,
         reset } = useForm<Usuario & { password2: string }>({
             defaultValues: {
                 personaId,
@@ -51,16 +51,24 @@ const ModalUsuario = ({ personaId, setPersonaId }: Props) => {
                     <Grid container spacing={2}>
                         <Grid item xs={12} >
                             <Controller
-                                name="usuario"
                                 control={control}
-                                rules={{ required: 'Usuario es obligatorio' }}
+                                name="usuario"
+                                rules={{
+                                    required: 'No puede quedar vacío',
+                                    onBlur: async () => {
+                                        let res = await axios.post('/api/usuario/existe', { usuario: watch('usuario') });
+                                        res.data.existe ? setError('usuario', { message: 'Usuario en uso' }) : clearErrors('usuario');
+                                    }
+                                }}
                                 render={({ field: { ref, ...field }, fieldState }) => (
                                     <InputBox
                                         {...field}
+                                        sx={{ mt: 4 }}
+                                        color='success'
+                                        inputRef={ref}
                                         label='Usuario'
                                         error={!!fieldState.error}
                                         helperText={fieldState.error?.message}
-                                        inputRef={ref}
                                     />
                                 )}
                             />

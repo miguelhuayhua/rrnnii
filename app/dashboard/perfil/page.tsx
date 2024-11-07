@@ -51,7 +51,7 @@ export default function Main() {
     });
 
     const [personaId, setPersonaId] = useState<any>(null);
-    const { control, watch, formState: { isDirty }, handleSubmit,
+    const { control, watch, formState: { isDirty }, setError, clearErrors, handleSubmit,
         resetField } = useForm<Usuario & { password2: string }>({
             defaultValues: {
                 personaId,
@@ -118,17 +118,24 @@ export default function Main() {
                             Cambiar avatar
                         </BotonOutline>
                         <Controller
-                            name="usuario"
                             control={control}
-                            rules={{ required: 'Usuario es obligatorio' }}
+                            name="usuario"
+                            rules={{
+                                required: 'No puede quedar vacío',
+                                onBlur: async () => {
+                                    let res = await axios.post('/api/usuario/existe', { usuario: watch('usuario') });
+                                    res.data.existe ? setError('usuario', { message: 'Usuario en uso' }) : clearErrors('usuario');
+                                }
+                            }}
                             render={({ field: { ref, ...field }, fieldState }) => (
                                 <InputBox
                                     {...field}
-                                    size="small"
+                                    sx={{ mt: 4 }}
+                                    color='success'
+                                    inputRef={ref}
                                     label='Usuario'
                                     error={!!fieldState.error}
                                     helperText={fieldState.error?.message}
-                                    inputRef={ref}
                                 />
                             )}
                         />

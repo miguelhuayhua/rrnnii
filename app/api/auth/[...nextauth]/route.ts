@@ -18,7 +18,8 @@ const handler = NextAuth({
                 const password = credentials?.password!;
                 const data = await prisma.usuario.findUnique({
                     where: {
-                        usuario
+                        usuario,
+                        estado: true
                     }
                 });
 
