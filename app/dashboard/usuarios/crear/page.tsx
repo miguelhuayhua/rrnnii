@@ -7,21 +7,20 @@ import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
 import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
 import { Controller, useForm } from "react-hook-form";
-import { Carrera, Institucion, Persona } from "@prisma/client";
+import { Persona } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import { useModal } from "@/providers/ModalProvider";
-import { useEffect, useState } from "react";
-import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
-import { useSnackbar } from "@/providers/SnackbarProvider";
+import { useState } from "react";
+import { BoxSombra } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import axios from "axios";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit } = useForm<Persona>({
-            defaultValues: {
-                nombre: '', paterno: '', materno: '',
-                cargo: '', f_nacimiento: dayjs().format('DD/MM/YYYY')
-            }, shouldFocusError: true
-        });
+        defaultValues: {
+            nombre: '', paterno: '', materno: '',
+            cargo: '', f_nacimiento: dayjs().format('DD/MM/YYYY')
+        }, shouldFocusError: true
+    });
     const router = useRouter();
     const { openModal } = useModal();
     const [load, setLoad] = useState(false);

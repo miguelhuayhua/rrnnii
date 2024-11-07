@@ -1,7 +1,10 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, LinearProgress } from "@mui/material";
+import {
+    Box, Breadcrumbs, Grid,
+    CircularProgress, Backdrop
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
@@ -11,13 +14,13 @@ import { Controller, useForm } from "react-hook-form";
 import { Carrera } from "@prisma/client";
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
-import { axiosInstance } from "@/globals";
 import { useState } from "react";
 import Image from 'next/legacy/image';
 import { parseNumber } from "@/utils/data";
 import { grey } from "@mui/material/colors";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { BoxSombra } from "@/app/componentes/Mostrar";
+import axios from "axios";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Carrera>({
         defaultValues: { nombre: '', logo: '' }, shouldFocusError: true
@@ -37,8 +40,6 @@ export default function Page() {
             openSnackbar('Logo de carrera agregado con éxito');
         }
     });
-
-
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
@@ -104,7 +105,7 @@ export default function Page() {
                                 content: 'Una nueva carrera se agregará',
                                 callback: async () => {
                                     setLoad(true);
-                                    let res = await axiosInstance.post('/api/carrera/crear', form);
+                                    let res = await axios.post('/api/carrera/crear', form);
                                     if (!res.data.error) {
                                         router.back();
                                         router.refresh();
@@ -156,7 +157,12 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
 
     )

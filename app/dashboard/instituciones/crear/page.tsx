@@ -1,7 +1,10 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, LinearProgress } from "@mui/material";
+import {
+    Box, Breadcrumbs, Grid,
+    CircularProgress, Backdrop
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
@@ -10,7 +13,6 @@ import { Controller, useForm } from "react-hook-form";
 import { Institucion } from "@prisma/client";
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
-import { axiosInstance } from "@/globals";
 import { useState } from "react";
 import Image from 'next/legacy/image';
 import { parseNumber } from "@/utils/data";
@@ -20,6 +22,7 @@ import { InputBox } from "@/app/componentes/Datos";
 import { BoxSombra } from "@/app/componentes/Mostrar";
 import { FaYoutube } from "react-icons/fa";
 import { TbWorldWww } from "react-icons/tb";
+import axios from "axios";
 
 export default function Page() {
     const { openSnackbar } = useSnackbar();
@@ -51,7 +54,7 @@ export default function Page() {
             content: 'Una nueva institucion se agregará',
             callback: async () => {
                 setLoad(true);
-                let res = await axiosInstance.post('/api/institucion/crear', form);
+                let res = await axios.post('/api/institucion/crear', form);
                 if (!res.data.error) {
                     router.back();
                     router.refresh();
@@ -172,7 +175,6 @@ export default function Page() {
                                         )}
                                     />
                                 </Grid>
-
                                 <Grid item xs={12}>
                                     <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Institucion</BotonFilled>
                                 </Grid>
@@ -181,7 +183,12 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     )
 }

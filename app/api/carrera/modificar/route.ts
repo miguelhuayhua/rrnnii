@@ -6,16 +6,17 @@ const POST = async (request: NextRequest) => {
     let form = await request.formData() as any;
     const portada = form.get("portada");
     const formimg = new FormData();
-    formimg.append('file', portada);
-    let resimage = await axios.post(fileDomain + '/upload', formimg, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            'modo': 'pasantia',
-            'tipo': 'img'
-        }
-    });
+
     try {
         if (portada) {
+            formimg.append('file', portada);
+            let resimage = await axios.post(fileDomain + '/upload', formimg, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'modo': 'pasantia',
+                    'tipo': 'img'
+                }
+            });
             await prisma.carrera.update({
                 data: { logo: resimage.data.path },
                 where: { id: form.get('id') }

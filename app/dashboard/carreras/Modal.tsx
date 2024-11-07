@@ -59,7 +59,7 @@ export default function ModalCarrera({ setCarrera, Carrera,
             content: 'La carrera será modificada',
             callback: async () => {
                 setLoad(true);
-                let res = await axiosInstance.post('/api/carrera/modificar', form);
+                let res = await axios.post('/api/carrera/modificar', form);
                 if (!res.data.error) {
                     setCarrera(null);
                     axios.post('/api/carrera/todo', {}).then(res => {

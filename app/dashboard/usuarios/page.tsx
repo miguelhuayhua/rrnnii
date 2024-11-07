@@ -136,7 +136,7 @@ export default function Main() {
                                     </BotonOutline>
                                     <SwitchBox checked={value.estado}
                                         onChange={(ev, checked) => {
-                                            axios.post('/api/persona/estado', { estado: checked, ci: value.ci }).then(res => {
+                                            axios.post('/api/persona/estado', { estado: checked, id: value.id }).then(res => {
                                                 openSnackbar(res.data.mensaje);
                                                 axios.post('/api/persona/todo').then(res => {
                                                     setPersonas(res.data);

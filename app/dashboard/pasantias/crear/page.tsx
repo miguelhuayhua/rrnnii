@@ -1,7 +1,10 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, MenuItem, Typography } from "@mui/material";
+import {
+    Autocomplete, Box, Breadcrumbs, Grid,
+    CircularProgress, Backdrop, MenuItem
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
@@ -13,7 +16,6 @@ import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
-import { axiosInstance } from "@/globals";
 import { useEffect, useState } from "react";
 import Image from 'next/legacy/image';
 import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
@@ -23,6 +25,7 @@ import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
+import axios from "axios";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
         defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
@@ -70,7 +73,7 @@ export default function Page() {
                 content: 'Una nueva pasantia se agregará',
                 callback: async () => {
                     setLoad(true);
-                    let res = await axiosInstance.post('/api/pasantia/crear', form);
+                    let res = await axios.post('/api/pasantia/crear', form);
                     if (!res.data.error) {
                         router.back();
                         router.refresh();
@@ -86,14 +89,14 @@ export default function Page() {
     }
     const [instituciones, setInstituciones] = useState([]);
     useEffect(() => {
-        axiosInstance.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
+        axios.post('/api/institucion/todo', { opcion: 'activo' }).then(res => {
             setInstituciones(res.data);
         })
     }, []);
 
     const [carreras, setCarreras] = useState<Carrera[]>([]);
     useEffect(() => {
-        axiosInstance.post('/api/carrera/listar').then(res => {
+        axios.post('/api/carrera/listar').then(res => {
             setCarreras(res.data);
         })
     }, []);
@@ -306,7 +309,7 @@ export default function Page() {
                                                             </Box>
                                                         </MenuItem>
                                                     ))
-                                                }Z
+                                                }
                                             </InputBox>
                                         )}
                                     />
@@ -363,7 +366,12 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     )
 }

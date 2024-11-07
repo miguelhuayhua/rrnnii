@@ -1,7 +1,11 @@
 'use client';
 import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Autocomplete, Box, Breadcrumbs, Grid, LinearProgress, ListSubheader, MenuItem } from "@mui/material";
+import {
+    Autocomplete, Box, Breadcrumbs,
+    Backdrop, CircularProgress,
+    Grid, ListSubheader, MenuItem
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
@@ -93,6 +97,12 @@ export default function Page() {
     }
     return (
         <>
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
                 <Breadcrumbs sx={{ mb: 1 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
@@ -423,7 +433,6 @@ export default function Page() {
                     </Grid>
                 </Grid>
             </Box>
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, width: "100%" }} /> : null}
         </>
     )
 }

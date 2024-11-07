@@ -1,11 +1,11 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
-    let { estado, ci } = await request.json();
+    let { estado, id } = await request.json();
     try {
         await prisma.persona.update({
             data: { estado },
-            where: { ci }
+            where: { id }
         });
         return Response.json({ error: false, mensaje: `Personal ${estado ? 'Activado' : 'Desactivado'}` });
     } catch (error) {

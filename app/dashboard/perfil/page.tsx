@@ -1,5 +1,8 @@
 'use client';
-import { Box, Breadcrumbs, Grid, IconButton, LinearProgress, Link } from "@mui/material";
+import {
+    Box, Breadcrumbs, Grid, IconButton,
+    CircularProgress, Backdrop
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { MdArrowLeft, MdVisibility, MdVisibilityOff } from "react-icons/md";
@@ -17,6 +20,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useModal } from "@/providers/ModalProvider";
 import dayjs from "dayjs";
 import { fileDomain } from "@/utils/globals";
+import Link from "next/link";
 export default function Main() {
     const { openSnackbar } = useSnackbar();
     const [load, setLoad] = useState(false);
@@ -46,11 +50,11 @@ export default function Main() {
         materno: ''
     });
 
-    const [personaCi, setPersonaCi] = useState<any>(null);
+    const [personaId, setPersonaId] = useState<any>(null);
     const { control, watch, formState: { isDirty }, handleSubmit,
         resetField } = useForm<Usuario & { password2: string }>({
             defaultValues: {
-                personaCi,
+                personaId,
                 usuario: '',
                 password: '',
                 avatar: ''
@@ -62,7 +66,6 @@ export default function Main() {
     const router = useRouter();
     useEffect(() => {
         if (data) {
-            console.log(data)
             axios.post('/api/persona/xusuario', { usuario: data.user.name }).then(res => {
                 setPersona(res.data)
             })
@@ -72,7 +75,12 @@ export default function Main() {
     }, [data]);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2} >
-            {load ? <LinearProgress style={{ position: 'absolute', top: 0, left: 0, width: "100%" }} /> : null}
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
+                open={load}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Breadcrumbs sx={{ mb: 2 }} >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
@@ -178,13 +186,15 @@ export default function Main() {
                                     onClick={handleSubmit((Usuario) => {
                                         openModal({
                                             async callback() {
+                                                setLoad(true);
                                                 let res = await axios.post('/api/usuario/modificar', {
                                                     usuario: Usuario.usuario,
                                                     password: Usuario.password,
                                                     usuario2: data?.user.name
                                                 });
-                                                setPersonaCi(null);
-                                                update({ ...res.data.usuario })
+                                                setPersonaId(null);
+                                                update({ ...res.data.usuario });
+                                                setLoad(false);
                                                 return res.data.mensaje;
                                             },
                                             content: 'El usuario será modificado',
