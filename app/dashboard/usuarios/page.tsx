@@ -23,7 +23,7 @@ export default function Main() {
     const [Personas, setPersonas] = useState<any>([]);
     const [prevPersonas, setPrevPersonas] = useState<Persona[]>([]);
     const [Persona, setPersona] = useState<any>(null);
-    const [personaCi, setPersonaCi] = useState<any>(null);
+    const [personaId, setPersonaId] = useState<any>(null);
     const router = useRouter();
     useEffect(() => {
         axios.post('/api/persona/todo').then(res => {
@@ -130,7 +130,7 @@ export default function Main() {
                                     <BotonOutline
                                         sx={{ p: 1.16 }}
                                         onClick={() => {
-                                            setPersonaCi(value.ci);
+                                            setPersonaId(value.ci);
                                         }}>
                                         <FaUser />
                                     </BotonOutline>
@@ -162,10 +162,10 @@ export default function Main() {
                     : null
             }
             {
-                personaCi ?
+                personaId ?
                     <ModalUsuario
-                        personaCi={personaCi}
-                        setPersonaCi={setPersonaCi}
+                        personaId={personaId}
+                        setPersonaId={setPersonaId}
                     /> : null
             }
         </Box>

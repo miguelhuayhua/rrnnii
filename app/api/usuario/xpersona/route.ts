@@ -1,10 +1,10 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
 const POST = async (request: NextRequest) => {
-    const { personaCi } = await request.json();
+    const { personaId } = await request.json();
     try {
         let usuario = await prisma.usuario.findFirst({
-            where: { personaCi },
+            where: { personaId },
             select: {
                 avatar: true,
                 rol: true,

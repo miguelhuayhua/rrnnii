@@ -11,15 +11,15 @@ import { useEffect, useState } from "react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 interface Props {
-    personaCi: string;
-    setPersonaCi: any;
+    personaId: string;
+    setPersonaId: any;
 }
 
-const ModalUsuario = ({ personaCi, setPersonaCi }: Props) => {
+const ModalUsuario = ({ personaId, setPersonaId }: Props) => {
     const { control, watch, formState: { isDirty }, handleSubmit,
         reset } = useForm<Usuario & { password2: string }>({
             defaultValues: {
-                personaCi,
+                personaId,
                 usuario: '',
                 password: '',
                 rol: ''
@@ -29,20 +29,20 @@ const ModalUsuario = ({ personaCi, setPersonaCi }: Props) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     useEffect(() => {
-        axios.post('/api/usuario/xpersona', { personaCi }).then(res => {
+        axios.post('/api/usuario/xpersona', { personaId }).then(res => {
             reset(res.data);
         })
-    }, [personaCi])
+    }, [personaId])
     return (
         <>
             <Dialog
-                open={!!personaCi}
+                open={!!personaId}
                 keepMounted={false}
                 maxWidth='sm'
-                onClose={() => { setPersonaCi(null) }}
+                onClose={() => { setPersonaId(null) }}
             >
                 <DialogContent sx={{ position: 'relative', p: 2 }}>
-                    <BotonSimple onClick={() => setPersonaCi(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
+                    <BotonSimple onClick={() => setPersonaId(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
                         <IoClose fontSize={25} />
                     </BotonSimple>
                     <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
@@ -151,7 +151,7 @@ const ModalUsuario = ({ personaCi, setPersonaCi }: Props) => {
                                             openModal({
                                                 async callback() {
                                                     let res = await axios.post('/api/usuario/modificar', Usuario);
-                                                    setPersonaCi(null);
+                                                    setPersonaId(null);
                                                     return res.data.mensaje;
                                                 },
                                                 content: 'El usuario será modificado',
