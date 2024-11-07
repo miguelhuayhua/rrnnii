@@ -52,8 +52,8 @@ const ParticipantesPDF = ({ Participantes, Beca }: Props) => {
                     justifyContent: 'center', alignItems: 'center',
                     width: "100%", marginTop: 10
                 }}>
-                    <Image fixed source='/assets/cabecera.jpg' style={{
-                        width: 450, height: 70,
+                    <Image fixed source='/assets/head.png' style={{
+                        width: 700, height: 70,
                     }} />
                 </View>
                 <Text style={{
