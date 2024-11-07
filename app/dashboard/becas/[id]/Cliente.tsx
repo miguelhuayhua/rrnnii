@@ -214,68 +214,41 @@ export default function Cliente({ Beca }: Props) {
                                                                                 style={{ color: grey[500] }} />
                                                                         </BotonSimple>
                                                                     </Stack> :
-                                                                    <ClickAwayListener touchEvent={false} onClickAway={() => setOpen(null)}>
-                                                                        <Box>
-                                                                            <Tooltip
-                                                                                arrow
-                                                                                PopperProps={{
-                                                                                    sx: {
-                                                                                        "& .MuiTooltip-tooltip": {
-                                                                                            bgcolor: 'white',
-                                                                                            border: '1px solid #ddd',
-                                                                                            borderRadius: 3,
-                                                                                            p: 1.5
-                                                                                        },
+                                                                    <Stack
+                                                                        sx={{ mb: 2 }}
+                                                                        direction='row' spacing={1} >
+                                                                        <BotonOutline
+                                                                            sx={{ height: 30, fontSize: 13 }}
+                                                                            onClick={() => {
+                                                                                openModal({
+                                                                                    titulo: '¿Está seguro?',
+                                                                                    content: 'El postulante será rechazado',
+                                                                                    async callback() {
+                                                                                        let res = await axios.post('/api/beca/participante/rechazar', { id: value.id });
+                                                                                        router.refresh();
+                                                                                        return res.data.mensaje;
                                                                                     }
-                                                                                }}
-
-                                                                                placement='left'
-                                                                                disableFocusListener
-                                                                                disableHoverListener
-                                                                                disableTouchListener
-                                                                                open={open == index}
-                                                                                title={
-                                                                                    <Stack direction='row' spacing={1} >
-                                                                                        <BotonOutline
-                                                                                            sx={{ height: 40 }}
-                                                                                            onClick={() => {
-                                                                                                openModal({
-                                                                                                    titulo: '¿Está seguro?',
-                                                                                                    content: 'El postulante será rechazado',
-                                                                                                    async callback() {
-                                                                                                        let res = await axios.post('/api/beca/participante/rechazar', { id: value.id });
-                                                                                                        router.refresh();
-                                                                                                        return res.data.mensaje;
-                                                                                                    }
-                                                                                                })
-                                                                                            }}
-                                                                                        >
-                                                                                            Rechazar
-                                                                                        </BotonOutline>
-                                                                                        <BotonFilled
-                                                                                            sx={{ height: 40 }}
-                                                                                            onClick={() => {
-                                                                                                openModal({
-                                                                                                    titulo: '¿Está seguro?',
-                                                                                                    content: 'El postulante quedará registrado en la beca',
-                                                                                                    async callback() {
-                                                                                                        let res = await axios.post('/api/beca/participante/aceptar', { id: value.id });
-                                                                                                        router.refresh();
-                                                                                                        return res.data.mensaje;
-                                                                                                    }
-                                                                                                })
-                                                                                            }}>
-                                                                                            Aceptar
-                                                                                        </BotonFilled>
-                                                                                    </Stack>
-                                                                                }
-                                                                            >
-                                                                                <BotonSimple sx={{ position: 'absolute', top: 10, right: 10 }} onClick={() => setOpen(index)}>
-                                                                                    <TbDotsVertical fontSize={18} />
-                                                                                </BotonSimple>
-                                                                            </Tooltip>
-                                                                        </Box>
-                                                                    </ClickAwayListener>
+                                                                                })
+                                                                            }}
+                                                                        >
+                                                                            Rechazar
+                                                                        </BotonOutline>
+                                                                        <BotonFilled
+                                                                            sx={{ height: 30, fontSize: 13 }}
+                                                                            onClick={() => {
+                                                                                openModal({
+                                                                                    titulo: '¿Está seguro?',
+                                                                                    content: 'El postulante quedará registrado en la beca',
+                                                                                    async callback() {
+                                                                                        let res = await axios.post('/api/beca/participante/aceptar', { id: value.id });
+                                                                                        router.refresh();
+                                                                                        return res.data.mensaje;
+                                                                                    }
+                                                                                })
+                                                                            }}>
+                                                                            Aceptar
+                                                                        </BotonFilled>
+                                                                    </Stack>
                                                             }
                                                             <Box pl={1}>
                                                                 <Negrita>
