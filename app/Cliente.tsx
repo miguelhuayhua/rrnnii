@@ -31,7 +31,7 @@ const Cliente = () => {
         setY(scrollY)
     }, []);
     const [count, setCount] = useState({
-        sizen: 0, sizee: 0, sizec: 0, sizeb: 0, sizev: 0
+        sizen: 0, sizee: 0, sizec: 0, sizeb: 0, sizev: 0, contacto: 0
     });
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
@@ -43,7 +43,7 @@ const Cliente = () => {
     }, []);
 
     useEffect(() => {
-        axios.post('/api/evento/todo', { take: 4 }).then(res => {
+        axios.post('/api/evento/listar', { take: 4 }).then(res => {
             setEventos(res.data);
         });
         axios.post('/api/noticia/listar', { skip: 0, orden: '0' }).then(res => {
@@ -68,8 +68,8 @@ const Cliente = () => {
                             </span>
                         </Titulo>
                         <Normal sx={{ fontSize: 17, pt: 14 }}>
-                            Descubre los convenios y ofertas disponibles para toda la comunidad universitaria, no olvides que puedes
-                            pasar a nuestra oficinas para mayor información.
+                            Descubre los convenios y ofertas disponibles para toda la comunidad universitaria.
+                            Explora nuestra publicaciones y contáctanos para mayor información.
                         </Normal>
                         <Stack direction='row' spacing={2} justifyContent='center' my={4}>
                             <Link style={{ textDecoration: 'none' }} href='/convenios'>
@@ -77,7 +77,9 @@ const Cliente = () => {
                                     Ver convenios
                                 </BotonFilled>
                             </Link>
-                            <Link href='/convenios'>
+                            <Link
+                                href={`https://wa.me/591${count.contacto}`}
+                            >
                                 <BotonSimple endIcon={<MdPhone />}>
                                     Contactarnos
                                 </BotonSimple>
@@ -197,18 +199,18 @@ const Cliente = () => {
                 </Grid>
                 <Grid item xs={6}>
                     <Negrita>
-                        EXPLORA LO QUE TE CONVENGA
+                        EXPLORA LOS CONVENIOS
                     </Negrita>
                     <Titulo variant='h2' sx={{ py: 2 }}>
                         Busca las oportunidades
                     </Titulo>
                     <Normal sx={{ pb: 3 }}>
-                        Hemos recolectado la información necesaria para que puedas estar al tanto con las convocatorias que te puede ofrecer la Universidad Pública de El Alto
+                        Explora los convenios vigentes que tiene la Unidad de Relaciones Internacionales con instituciones extranjeras o nacionales con la Universidad Pública de El Alto.
                     </Normal>
                     <BotonOutline onClick={() => {
-                        router.push('/actividades?t=becas')
+                        router.push('/convenios')
                     }} startIcon={<CiSearch />}>
-                        Explorar Becas
+                        Explorar Convenios
                     </BotonOutline>
                 </Grid>
                 <Grid item xs={6}>
@@ -216,15 +218,15 @@ const Cliente = () => {
                         CONOCE EL MUNDO
                     </Negrita>
                     <Titulo sx={{ textAlign: 'end', py: 2 }} variant='h2'>
-                        Aprende idiomas y ábrete al mundo
+                        Conoce las becas publicadas
                     </Titulo>
                     <Normal sx={{ textAlign: 'end', pb: 3 }}>
-                        Hemos recolectado la información necesaria para que puedas estar al tanto con las convocatorias que te puede ofrecer la Universidad Pública de El Alto
+                        Las becas te ayudarán en oportunidades económicas para fortalecer el nivel intelectual que puedes adquirir mediante las afiliaciones firmadas con nuestra Universidad.
                     </Normal>
                     <BotonOutline onClick={() => {
-                        router.push('/actividades?t=idiomas')
+                        router.push('/becas')
                     }} startIcon={<CiSearch />} sx={{ float: 'right' }}>
-                        Explorar Idiomas
+                        Explorar Becas
                     </BotonOutline>
                 </Grid>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }} pt={5}>
