@@ -1,5 +1,4 @@
 "use client";
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
@@ -11,11 +10,11 @@ import ModalNoticia from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
 import { blue } from "@mui/material/colors";
-import { InputBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { IoSearch } from "react-icons/io5";
 import NoticiaComponent from "../componentes/items/Noticia";
+import { Button, Input, InputGroup } from "rsuite";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -46,28 +45,34 @@ export default function Page() {
                 Noticias
             </Titulo>
             <Stack direction='row' my={2} spacing={2} >
-                <BotonFilled onClick={() => router.push('/dashboard/noticias/crear')}>
+                <Button size='lg' appearance="primary"
+                    onClick={() => router.push('/dashboard/noticias/crear')}>
                     Añadir noticia
-                </BotonFilled>
-                <BotonSimple onClick={() => {
-                    setLoad(true);
-                    axios.post('/api/noticia/todo', { opcion }).then(res => {
-                        setNoticias(res.data);
-                        setPrevNoticias(res.data);
-                        setOpcion('todo');
-                        setLoad(false);
-                    });
-                }}>
+                </Button>
+                <Button
+                    size='lg'
+                    appearance="subtle"
+                    onClick={() => {
+                        setLoad(true);
+                        axios.post('/api/noticia/todo', { opcion }).then(res => {
+                            setNoticias(res.data);
+                            setPrevNoticias(res.data);
+                            setOpcion('todo');
+                            setLoad(false);
+                        });
+                    }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
                 TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
                 ScrollButtonComponent={(props) =>
-                    <BotonSimple  {...props}>
+                    <Button
+                        size='lg'
+                        appearance="subtle"  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
-                    </BotonSimple>}
+                    </Button>}
                 variant="scrollable"
                 allowScrollButtonsMobile
                 value={opcion}
@@ -104,13 +109,15 @@ export default function Page() {
                     </Box>} value='inactivo' />
 
             </Tabs>
-            <InputBox
-                onChange={ev => {
-                    setNoticias(prevNoticias.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                }}
-                placeholder="Buscar" InputProps={{
-                    endAdornment: <IoSearch fontSize={28} />
-                }} sx={{ maxWidth: 300 }} />
+            <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                <Input onChange={text => {
+                    setNoticias(prevNoticias.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                }} />
+                <InputGroup.Addon>
+                    <IoSearch fontSize={28} />
+                </InputGroup.Addon>
+            </InputGroup>
+
             {
                 load ? <CircularProgress color="inherit"
                     sx={{

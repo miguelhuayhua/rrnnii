@@ -19,6 +19,7 @@ import axios from "axios";
 import { fileDomain } from "@/utils/globals";
 import { blue } from "@mui/material/colors";
 import { ChipBox } from "@/app/componentes/Mostrar";
+import { Button } from "rsuite";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -47,18 +48,22 @@ export default function Page() {
                 Instituciones
             </Titulo>
             <Stack direction='row' my={2} spacing={2}>
-                <BotonFilled onClick={() => router.push('/dashboard/instituciones/crear')}>
+                <Button size='lg' appearance="primary"
+                    onClick={() => router.push('/dashboard/instituciones/crear')}>
                     Añadir institución
-                </BotonFilled>
-                <BotonSimple onClick={() => {
-                    axios.post('/api/institucion/todo', {}).then(res => {
-                        setInstituciones(res.data);
-                        setPrevInstituciones(res.data);
-                        setOpcion('todo');
-                    });
-                }}>
+                </Button>
+                <Button
+                    size='lg'
+                    appearance="subtle"
+                    onClick={() => {
+                        axios.post('/api/institucion/todo', {}).then(res => {
+                            setInstituciones(res.data);
+                            setPrevInstituciones(res.data);
+                            setOpcion('todo');
+                        });
+                    }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}

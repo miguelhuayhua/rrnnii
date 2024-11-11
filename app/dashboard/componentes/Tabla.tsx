@@ -9,15 +9,15 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Box, ClickAwayListener, Tooltip } from '@mui/material';
-import { BiSearch } from 'react-icons/bi';
 import Image from 'next/legacy/image';
 import { BsCursorFill } from "react-icons/bs"; import { useRouter } from 'next/navigation';
 import { Normal } from '@/app/componentes/Textos';
 import { ChipBox } from '@/app/componentes/Mostrar';
-import { InputBox } from '@/app/componentes/Datos';
 import { BotonOutline, BotonSimple } from '@/app/componentes/Botones';
 import { FaEye } from 'react-icons/fa6';
 import { grey } from '@mui/material/colors';
+import { Input, InputGroup } from 'rsuite';
+import { IoSearch } from 'react-icons/io5';
 interface Column {
     id: string;
     label: string;
@@ -102,26 +102,14 @@ const Tabla = ({
                     {
                         hasSearch ?
                             <Box>
-                                <InputBox
-
-                                    size='small'
-
-                                    sx={{
-                                        width: "30%",
-                                        minWidth: 200,
-                                        ".MuiInputBase-root": {
-                                            background: 'white'
-                                        }
-                                    }}
-                                    onChange={(ev: any) => {
-                                        setData(filtrarValorEnArray(data, ev.target.value));
-                                    }}
-                                    placeholder='Buscar'
-                                    InputProps={{
-                                        endAdornment:
-                                            <BiSearch fontSize={25} />
-                                    }}
-                                />
+                                <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                                    <Input placeholder='Buscar' onChange={text => {
+                                        setData(filtrarValorEnArray(data, text));
+                                    }} />
+                                    <InputGroup.Addon>
+                                        <IoSearch fontSize={28} />
+                                    </InputGroup.Addon>
+                                </InputGroup>
                             </Box>
                             : null
                     }

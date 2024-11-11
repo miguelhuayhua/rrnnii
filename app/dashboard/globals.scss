@@ -2,9 +2,42 @@ html {
     background-color: transparent;
 }
 
+:root {
+    --rs-primary-500: #3498ff;
+    /* Color primario */
+    --rs-success-500: #28a745;
+    /* Color para éxito */
+    --rs-danger-500: #dc3545;
+    /* Color para error */
+    --rs-warning-500: #ffc107;
+    /* Color para advertencias */
+    --rs-border-primary: rgb(183, 183, 183);
+    --rs-btn-primary-hover-bg: #212121;
+    --rs-btn-primary-bg: #212121;
+}
+
+.rs-btn {
+    font-size: 16px;
+}
+
+.rs-breadcrumb-item {
+    a {
+        text-decoration: none !important;
+    }
+}
+
+.drop {
+    transition: background-color 1s;
+
+    &:hover {
+        background-color: #eee;
+        transition: background-color 1s;
+    }
+}
+
 .editor {
 
-    border: 1px solid #ccc;
+    border: 1px solid var(--rs-border-primary);
     border-radius: 12px;
     overflow: hidden;
     color: #444 !important;

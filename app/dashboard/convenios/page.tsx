@@ -18,6 +18,7 @@ import { ChipBox } from "@/app/componentes/Mostrar";
 import ConvenioComponent from "../componentes/items/Convenio";
 import { InputBox } from "@/app/componentes/Datos";
 import { IoSearch } from "react-icons/io5";
+import { Breadcrumb, Button, Input, InputGroup, Text } from "rsuite";
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -35,8 +36,8 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs sx={{ mb: 1 }} >
-                <Link style={{ textDecoration: 'none' }} href="/dashboard/convenios">
+            <Breadcrumbs sx={{ mb: 1 }}>
+                <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard/convenios">
@@ -44,24 +45,28 @@ export default function Page() {
                 </Link>
                 <Negrita>Listado</Negrita>
             </Breadcrumbs>
-            <Titulo sx={{ mt: 1 }}>
+            <Titulo>
                 Convenios
             </Titulo>
             <Stack direction='row' my={2} spacing={2} >
-                <BotonFilled onClick={() => router.push('/dashboard/convenios/crear')}>
+                <Button size='lg' appearance="primary"
+                    onClick={() => router.push('/dashboard/convenios/crear')}>
                     Añadir convenio
-                </BotonFilled>
-                <BotonSimple onClick={() => {
-                    setLoad(true);
-                    axios.post('/api/convenio/todo', {}).then(res => {
-                        setConvenios(res.data);
-                        setPrevConvenios(res.data);
-                        setOpcion('todo');
-                        setLoad(false);
-                    });
-                }}>
+                </Button>
+                <Button
+                    size='lg'
+                    appearance="subtle"
+                    onClick={() => {
+                        setLoad(true);
+                        axios.post('/api/convenio/todo', {}).then(res => {
+                            setConvenios(res.data);
+                            setPrevConvenios(res.data);
+                            setOpcion('todo');
+                            setLoad(false);
+                        });
+                    }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '1px solid #ccc' }}
@@ -123,15 +128,14 @@ export default function Page() {
                             label={prevConvenios.filter(value => !value.estado).length} />
                     </Box>} value='inactivo' />
             </Tabs>
-            <InputBox
-                onChange={ev => {
-                    setConvenios(prevConvenios.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                }}
-                placeholder="Buscar" InputProps={{
-                    endAdornment: <IoSearch fontSize={28} />
-                }} sx={{ maxWidth: 300 }} />
-
-
+            <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                <Input onChange={text => {
+                    setConvenios(prevConvenios.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                }} />
+                <InputGroup.Addon>
+                    <IoSearch fontSize={28} />
+                </InputGroup.Addon>
+            </InputGroup>
             {
                 load ?
                     <CircularProgress color="inherit"

@@ -12,12 +12,12 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
 import { TbReload } from "react-icons/tb";
 import { blue } from "@mui/material/colors";
-import { InputBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import { IoSearch } from "react-icons/io5";
 import EventoComponent from "../componentes/items/Evento";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import 'dayjs/locale/es';
+import { Button, Input, InputGroup } from "rsuite";
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -48,20 +48,24 @@ export default function Page() {
                 Eventos
             </Titulo>
             <Stack direction='row' my={2} spacing={2} >
-                <BotonFilled onClick={() => router.push('/dashboard/eventos/crear')}>
+                <Button size='lg' appearance="primary"
+                    onClick={() => router.push('/dashboard/eventos/crear')}>
                     Añadir evento
-                </BotonFilled>
-                <BotonSimple onClick={() => {
-                    setLoad(true);
-                    axios.post('/api/evento/todo', { opcion }).then(res => {
-                        setEventos(res.data);
-                        setPrevEventos(res.data);
-                        setOpcion('todo');
-                        setLoad(false);
-                    });
-                }}>
+                </Button>
+                <Button
+                    size='lg'
+                    appearance="subtle"
+                    onClick={() => {
+                        setLoad(true);
+                        axios.post('/api/evento/todo', { opcion }).then(res => {
+                            setEventos(res.data);
+                            setPrevEventos(res.data);
+                            setOpcion('todo');
+                            setLoad(false);
+                        });
+                    }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
@@ -123,13 +127,14 @@ export default function Page() {
                             label={prevEventos.filter(value => !value.estado).length} />
                     </Box>} value='inactivo' />
             </Tabs>
-            <InputBox
-                onChange={ev => {
-                    setEventos(prevEventos.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                }}
-                placeholder="Buscar" InputProps={{
-                    endAdornment: <IoSearch fontSize={28} />
-                }} sx={{ maxWidth: 300 }} />
+            <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                <Input onChange={text => {
+                    setEventos(prevEventos.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                }} />
+                <InputGroup.Addon>
+                    <IoSearch fontSize={28} />
+                </InputGroup.Addon>
+            </InputGroup>
             {
                 load ?
                     <CircularProgress color="inherit"

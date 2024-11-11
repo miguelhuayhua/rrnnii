@@ -12,75 +12,59 @@ function makeid(size: number) {
     }
     return result;
 }
-
-const paises = {
-    americaNorte: [
-        { pais: 'Estados Unidos', value: 'US' },
-        { pais: 'Canadá', value: 'CA' },
-        { pais: 'México', value: 'MX' },
-        { pais: 'Cuba', value: 'CU' },
-        { pais: 'Puerto Rico', value: 'PR' },
-        { pais: 'Honduras', value: 'HN' },
-        { pais: 'Guatemala', value: 'GT' }
-    ],
-    americaSur: [
-        { pais: 'Argentina', value: 'AR' },
-        { pais: 'Brasil', value: 'BR' },
-        { pais: 'Chile', value: 'CL' },
-        { pais: 'Perú', value: 'PE' },
-        { pais: 'Colombia', value: 'CO' },
-        { pais: 'Venezuela', value: 'VE' },
-        { pais: 'Paraguay', value: 'PY' },
-        { pais: 'Uruguay', value: 'UY' },
-        { pais: 'Ecuador', value: 'EC' }
-    ],
-    europa: [
-        { pais: 'Alemania', value: 'DE' },
-        { pais: 'Francia', value: 'FR' },
-        { pais: 'Italia', value: 'IT' },
-        { pais: 'España', value: 'ES' },
-        { pais: 'Reino Unido', value: 'GB' },
-        { pais: 'Portugal', value: 'PT' },
-        { pais: 'Países Bajos', value: 'NL' },
-        { pais: 'Suiza', value: 'CH' },
-        { pais: 'Suecia', value: 'SE' },
-        { pais: 'Noruega', value: 'NO' },
-    ],
-    africa: [
-        { pais: 'Sudáfrica', value: 'ZA' },
-        { pais: 'Nigeria', value: 'NG' },
-        { pais: 'Egipto', value: 'EG' },
-        { pais: 'Kenia', value: 'KE' },
-        { pais: 'Marruecos', value: 'MA' },
-        { pais: 'Ghana', value: 'GH' },
-        { pais: 'Etiopía', value: 'ET' },
-        { pais: 'Angola', value: 'AO' },
-        { pais: 'Túnez', value: 'TN' },
-        { pais: 'Argelia', value: 'DZ' }
-    ],
-    oceania: [
-        { pais: 'Australia', value: 'AU' },
-        { pais: 'Nueva Zelanda', value: 'NZ' },
-        { pais: 'Fiyi', value: 'FJ' },
-        { pais: 'Papúa Nueva Guinea', value: 'PG' },
-        { pais: 'Samoa', value: 'WS' },
-        { pais: 'Tonga', value: 'TO' }
-    ],
-    asia: [
-        { pais: 'China', value: 'CN' },
-        { pais: 'Japón', value: 'JP' },
-        { pais: 'India', value: 'IN' },
-        { pais: 'Corea del Sur', value: 'KR' },
-        { pais: 'Tailandia', value: 'TH' },
-        { pais: 'Vietnam', value: 'VN' },
-        { pais: 'Filipinas', value: 'PH' },
-        { pais: 'Indonesia', value: 'ID' },
-        { pais: 'Malasia', value: 'MY' },
-        { pais: 'Pakistán', value: 'PK' },
-        { pais: 'Rusia', value: 'RU' }
-
-    ]
-};
-
-
+const paises = [
+    { continente: 'América del Norte', continenteAbrev: 'NA', pais: 'Estados Unidos', value: 'US' },
+    { continente: 'América del Norte', continenteAbrev: 'NA', pais: 'Canadá', value: 'CA' },
+    { continente: 'América del Norte', continenteAbrev: 'NA', pais: 'México', value: 'MX' },
+    { continente: 'América del Norte', continenteAbrev: 'NA', pais: 'Cuba', value: 'CU' },
+    { continente: 'América del Norte', continenteAbrev: 'NA', pais: 'Puerto Rico', value: 'PR' },
+    { continente: 'América del Norte', continenteAbrev: 'NA', pais: 'Honduras', value: 'HN' },
+    { continente: 'América del Norte', continenteAbrev: 'NA', pais: 'Guatemala', value: 'GT' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Argentina', value: 'AR' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Brasil', value: 'BR' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Chile', value: 'CL' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Perú', value: 'PE' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Colombia', value: 'CO' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Venezuela', value: 'VE' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Paraguay', value: 'PY' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Uruguay', value: 'UY' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Ecuador', value: 'EC' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Alemania', value: 'DE' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Francia', value: 'FR' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Italia', value: 'IT' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'España', value: 'ES' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Reino Unido', value: 'GB' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Portugal', value: 'PT' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Países Bajos', value: 'NL' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Suiza', value: 'CH' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Suecia', value: 'SE' },
+    { continente: 'Europa', continenteAbrev: 'EU', pais: 'Noruega', value: 'NO' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Sudáfrica', value: 'ZA' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Nigeria', value: 'NG' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Egipto', value: 'EG' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Kenia', value: 'KE' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Marruecos', value: 'MA' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Ghana', value: 'GH' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Etiopía', value: 'ET' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Angola', value: 'AO' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Túnez', value: 'TN' },
+    { continente: 'África', continenteAbrev: 'AF', pais: 'Argelia', value: 'DZ' },
+    { continente: 'Oceanía', continenteAbrev: 'OC', pais: 'Australia', value: 'AU' },
+    { continente: 'Oceanía', continenteAbrev: 'OC', pais: 'Nueva Zelanda', value: 'NZ' },
+    { continente: 'Oceanía', continenteAbrev: 'OC', pais: 'Fiyi', value: 'FJ' },
+    { continente: 'Oceanía', continenteAbrev: 'OC', pais: 'Papúa Nueva Guinea', value: 'PG' },
+    { continente: 'Oceanía', continenteAbrev: 'OC', pais: 'Samoa', value: 'WS' },
+    { continente: 'Oceanía', continenteAbrev: 'OC', pais: 'Tonga', value: 'TO' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'China', value: 'CN' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Japón', value: 'JP' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'India', value: 'IN' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Corea del Sur', value: 'KR' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Tailandia', value: 'TH' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Vietnam', value: 'VN' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Filipinas', value: 'PH' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Indonesia', value: 'ID' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Malasia', value: 'MY' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Pakistán', value: 'PK' },
+    { continente: 'Asia', continenteAbrev: 'AS', pais: 'Rusia', value: 'RU' }
+];
 export { domain, fileDomain, paises, makeid };

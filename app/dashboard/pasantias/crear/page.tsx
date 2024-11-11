@@ -1,15 +1,12 @@
 'use client';
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import {
-    Autocomplete, Box, Breadcrumbs, Grid,
-    CircularProgress, Backdrop, MenuItem
+    Box, Breadcrumbs, Grid,
+    CircularProgress, Backdrop
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
-import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
-import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
+import { MdArrowLeft } from "react-icons/md";
 import { Controller, useForm } from "react-hook-form";
 import { Carrera, Institucion, Pasantia } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
@@ -18,23 +15,27 @@ import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { useEffect, useState } from "react";
 import Image from 'next/legacy/image';
-import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
+import { BoxSombra } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
-import { grey, red } from "@mui/material/colors";
-import { RiFileWord2Line } from "react-icons/ri";
+import { Icon } from '@iconify/react';
 import { fileDomain } from "@/utils/globals";
 import axios from "axios";
+import {
+    AutoComplete, Button, DatePicker, Form, Input, Panel, SelectPicker, TagPicker, Uploader,
+    Text
+} from "rsuite";
+import dayjs from "dayjs";
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
+    const { control, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
         defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
     });
     const router = useRouter();
     const { openModal } = useModal();
     const [load, setLoad] = useState(false);
     const [portada, setPortada] = useState<any>('');
-    const [documento, setDocumento] = useState<any>('');
+    const [documento, setDocumento] = useState<any>([]);
     const { openFilePicker } = useFilePicker({
         readAs: 'DataURL',
         accept: 'image/*',
@@ -45,16 +46,6 @@ export default function Page() {
             setPortada(plainFiles[0]);
         }
     });
-    const PDFPicker = useFilePicker({
-        readAs: 'DataURL',
-        accept: '.pdf, .doc, .docx',
-        multiple: false,
-        onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setDocumento(plainFiles[0]);
-            openSnackbar('Documento modificado con éxito');
-            setValue('pdf', plainFiles[0].name);
-        }
-    });
     const { openSnackbar } = useSnackbar();
     const onSubmit = (pasantia: Pasantia & { Institucion: Institucion, carreras: string[] }) => {
         let form = new FormData();
@@ -62,7 +53,7 @@ export default function Page() {
         form.append('pdf', pasantia.pdf);
         form.append('descripcion', pasantia.descripcion);
         form.append('portada', portada);
-        form.append('documento', documento);
+        form.append('documento', documento[0].blobFile);
         form.append('modalidad', pasantia.modalidad);
         form.append('finalizacion', pasantia.finalizacion!);
         form.append('institucion', pasantia.Institucion.nombre);
@@ -115,81 +106,54 @@ export default function Page() {
                 <Titulo sx={{ mb: 2 }}>
                     Crear nueva pasantía
                 </Titulo>
-                <BotonSimple
+                <Button
+                    appearance="subtle"
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
-                </BotonSimple>
+                </Button>
                 <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <BoxSombra p={2}>
-                            <Box sx={{
+                        <Panel shaded style={{ padding: 16 }}>
+                            <div style={{
                                 aspectRatio: 1,
-                                bgcolor: grey[100],
-                                p: 1,
-                                border: `1px dashed ${grey[400]}`,
+                                border: `1px dashed #aaa`,
                                 flexDirection: 'column',
-                                borderRadius: 5,
+                                borderRadius: 12,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                color: grey[900],
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden',
-                                "&:hover": {
-                                    color: grey[500],
-                                    cursor: 'pointer'
-                                }
+                                overflow: 'hidden'
                             }}
+                                className='drop'
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={watch('imagen')} layout='fill' objectFit='contain' /> : null
                                 }
-                                <BsImageAlt color={'inherit'} fontSize={30} />
-                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                            </Box>
-                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-                            <Box px={{ xs: 2, sm: 0 }}>
-                                <Box sx={{
-                                    p: 2,
-                                    border: `1px solid ${grey[400]}`,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    borderRadius: 3,
-                                    color: grey[900],
-                                    position: 'relative',
-                                    transition: 'border .5s',
-                                    "&:hover": {
-                                        border: `1px solid ${red[300]}`
-                                    }
-                                }}
-                                    onClick={() => PDFPicker.openFilePicker()}
-                                >
-                                    <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
-                                    <MdOutlineAttachFile style={{ fontSize: 20 }} />
-                                </Box>
-                                {
-                                    documento ?
-                                        <ChipBox icon={documento.type.includes('pdf') ?
-                                            <BsFileEarmarkPdfFill fontSize={20} color={red[500]} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
-                                            sx={{
-                                                mt: 2,
-                                                border: `1px solid ${documento.type.includes('pdf') ? red[500] : '#1951b2'}`,
-                                                height: 40,
-                                                bgcolor: 'white'
-                                            }}
-                                            label={documento.name}
-                                            onDelete={() => {
-                                                setDocumento(null);
-                                            }}
-                                        />
-                                        : null
-                                }
-                            </Box>
-                        </BoxSombra>
+                                <Icon icon="stash:image-light" width="60" height="60" style={{ color: '#000' }} />
+                                <Text align='center'>+ Subir imagen</Text>
+                            </div>
+                            <Text
+                                style={{ margin: '15px 0' }}
+                                size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
+                            <Uploader
+                                fileList={documento}
+                                autoUpload={false}
+                                action="/"
+                                onChange={setDocumento}
+                                multiple={false}
+                                accept=".pdf, .doc, .docx"
+                            >
+                                <>
+                                    <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
+                                    <Button size='lg' block>Seleccionar archivo...</Button>
+                                </>
+                            </Uploader>
+                        </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
                         <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
@@ -198,15 +162,15 @@ export default function Page() {
                                     <Controller
                                         name="titulo"
                                         control={control}
-                                        rules={{ required: 'Título es obligatorio' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Título'
-                                                error={!!errors.titulo}
-                                                helperText={errors.titulo?.message || 'Este es el título principal que será visible en el pasantia'}
-                                                inputRef={ref}
-                                            />
+                                        rules={{ required: 'Título no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Título de la pasantía</Form.ControlLabel>
+                                                <Input {...field} size='lg' />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
@@ -240,32 +204,20 @@ export default function Page() {
                                         name="modalidad"
                                         control={control}
                                         render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                select
-                                                label='Tiempo de duración'
-                                                {...field}
-                                                inputRef={ref}
-                                                SelectProps={{
-                                                    MenuProps: {
-                                                        slotProps: {
-                                                            paper: {
-                                                                sx: {
-                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                    px: 0,
-                                                                    borderRadius: 3,
-                                                                    border: "1px solid #f1f1f1",
-                                                                    boxShadow: '-10px 10px 30px #00000022',
-                                                                    maxHeight: 400
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem value='3'>3 meses</MenuItem>
-                                                <MenuItem value='6'>6 meses</MenuItem>
-                                                <MenuItem value='more'>Más de 6 meses</MenuItem>
-                                            </InputBox>
+                                            <Form.Group controlId="modalidad">
+                                                <Form.ControlLabel>Tiempo de duración</Form.ControlLabel>
+                                                <SelectPicker
+                                                    {...field}
+                                                    size="lg"
+                                                    cleanable={false}
+                                                    style={{ marginBottom: 10, width: "100%" }}
+                                                    data={[{ label: '3 meses', value: '3' },
+                                                    { label: '6 meses', value: '6' },
+                                                    { label: 'Más de 6 meses', value: 'more' }
+                                                    ]}
+                                                    searchable={false}
+                                                />
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
@@ -274,92 +226,75 @@ export default function Page() {
                                         rules={{
                                             validate: (value) => value.length > 0 || 'Seleccione al menos una carrera'
                                         }}
-                                        render={({ field: { ref, ...field }, fieldState }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Carreras'
-                                                select
-                                                inputRef={ref}
-                                                error={!!fieldState.error}
-                                                helperText={fieldState.error?.message}
-                                                SelectProps={{
-                                                    multiple: true,
-                                                    MenuProps: {
-                                                        slotProps: {
-                                                            paper: {
-                                                                sx: {
-                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                    borderRadius: 3,
-                                                                    border: "1px solid #f1f1f1",
-                                                                    boxShadow: '-10px 10px 30px #00000022',
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }}
-                                            >
-                                                {
-                                                    carreras.map(value => (
-                                                        <MenuItem key={value.id} value={value.id}>
-                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                                <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
-                                                                    <Image layout='fill' src={fileDomain + value.logo} style={{ borderRadius: 10 }} />
-                                                                </Box>
-                                                                <Negrita sx={{ fontSize: 14 }}>{value.nombre}</Negrita>
-                                                            </Box>
-                                                        </MenuItem>
-                                                    ))
-                                                }
-                                            </InputBox>
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group controlId="carrera">
+                                                <Form.ControlLabel>Carrera</Form.ControlLabel>
+                                                <TagPicker
+                                                    id='carrera'
+                                                    style={{ width: "100%", marginBottom: 10 }}
+                                                    labelKey="nombre"
+                                                    {...field}
+                                                    size="lg"
+                                                    valueKey="id" data={carreras}
+                                                    renderMenuItem={(label, item) => (
+                                                        <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
+                                                            <div style={{ width: 25, minWidth: 25, aspectRatio: 1, position: 'relative', marginRight: 10 }}>
+                                                                <Image layout='fill' src={fileDomain + item.logo} style={{ borderRadius: 10 }} />
+                                                            </div>
+                                                            <Negrita sx={{ fontSize: 14 }}>{item.nombre}</Negrita>
+                                                        </div>
+                                                    )} />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
                                         name="Institucion.nombre"
                                         control={control}
-                                        rules={{ required: 'Institución es obligatoria' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <Autocomplete
-                                                freeSolo
-                                                multiple={false}
-                                                onChange={(_, value) => field.onChange(value)}
-                                                disableClearable
-                                                options={instituciones.map((value: Institucion) => value.nombre)}
-                                                renderInput={(params) =>
-                                                    <InputBox
-                                                        error={!!errors.Institucion?.nombre}
-                                                        helperText={errors.Institucion?.nombre?.message}
-                                                        {...params}
-                                                        {...field}
-                                                        label='Institución'
-                                                    />}
-                                            />
+                                        rules={{ required: 'Institución no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Institución</Form.ControlLabel>
+                                                <AutoComplete
+                                                    onBlur={ev => field.onChange((ev.target as any).value! as any)}
+                                                    size="lg"
+                                                    data={
+                                                        instituciones.map((value: Institucion) => value.nombre)
+                                                    } />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
                                         name="finalizacion"
-                                        rules={{ required: 'Finalización es obligatoria' }}
                                         control={control}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <DatePickerBox
-                                                onChange={(ev: any) => {
-                                                    field.onChange(ev?.format('DD/MM/YYYY'))
-                                                }}
-                                                disablePast
-                                                slotProps={{
-                                                    textField: {
-                                                        error: !!errors.finalizacion,
-                                                        helperText: errors.finalizacion?.message,
-                                                        inputRef: ref,
-                                                        label: 'Finalización del pasantia',
-                                                    }
-                                                }}
-                                            />
+                                        rules={{ required: 'Finalización no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group controlId="fecha">
+                                                <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
+                                                <DatePicker
+                                                    placement="top"
+                                                    style={{ width: "100%", marginBottom: 10 }}
+                                                    size="lg"
+                                                    onChange={ev => {
+                                                        field.onChange(dayjs(ev).format("DD/MM/YYYY"))
+                                                    }} />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                 </Grid>
 
                                 <Grid item xs={12}>
-                                    <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Pasantia</BotonFilled>
+                                    <Button size='lg' appearance='primary' type="submit" >
+                                        Crear Pasantia
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </BoxSombra>

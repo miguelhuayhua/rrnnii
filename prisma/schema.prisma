@@ -108,6 +108,15 @@ model Noticia {
   descripcion String   @default("")
   estado      Boolean  @default(true)
   imagen      String   @default("")
+}
+
+model Video {
+  id          String   @id @default(dbgenerated("generate_object_id()"))
+  titulo      String   @default("")
+  createdAt   DateTime @default(now())
+  descripcion String   @default("")
+  estado      Boolean  @default(true)
+  video       String   @default("")
   conteo      Int      @default(1)
 }
 

@@ -7,11 +7,9 @@ import {
     Grid, LinearProgress, ListSubheader, MenuItem
 } from "@mui/material";
 import Link from "next/link";
-import { Icon as Iconify } from '@iconify/react';
 import { useRouter } from "next/navigation";
+import { Icon } from '@iconify/react';
 import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
-import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
-import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
@@ -28,18 +26,31 @@ import { grey, red } from "@mui/material/colors";
 import { RiFileWord2Line } from "react-icons/ri";
 import axios from "axios";
 import { fileDomain, paises } from "@/utils/globals";
+import {
+    AutoComplete, Breadcrumb, DatePicker, Form, Text
+    , Input, SelectPicker, TagPicker,
+    Button,
+    Uploader,
+    Panel
+} from "rsuite";
+import dayjs from "dayjs";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } =
         useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
-            defaultValues: { titulo: '', tipo: 'nacional', descripcion: '', Institucion: { nombre: '' }, ConvenioCarrera: [], carreras: [] }, shouldFocusError: true
+            defaultValues: {
+                titulo: '', tipo: 'nacional',
+                finalizacion: '',
+                descripcion: '', Institucion: { nombre: '' },
+                ConvenioCarrera: [], carreras: []
+            }, shouldFocusError: true
         });
     const router = useRouter();
     const [load, setLoad] = useState(false);
     const [carreras, setCarreras] = useState<Carrera[]>([]);
     const { openModal } = useModal();
     const [portada, setPortada] = useState<any>('');
-    const [documento, setDocumento] = useState<any>('');
+    const [documento, setDocumento] = useState<any>([]);
     const { openFilePicker } = useFilePicker({
         readAs: 'DataURL',
         accept: 'image/*',
@@ -73,7 +84,7 @@ export default function Page() {
             form.append('pdf', convenio.pdf);
             form.append('descripcion', convenio.descripcion);
             form.append('portada', portada);
-            form.append('documento', documento);
+            form.append('documento', documento[0].blobFile);
             form.append('continente', convenio.continente);
             form.append('pais', convenio.pais);
             form.append('tipo', convenio.tipo);
@@ -108,7 +119,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }} >
+                <Breadcrumbs sx={{ mb: 1 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -120,102 +131,73 @@ export default function Page() {
                 <Titulo sx={{ mb: 2 }}>
                     Crear nuevo convenio
                 </Titulo>
-                <BotonSimple
+                <Button
+                    appearance="subtle"
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
-                </BotonSimple>
+                </Button>
 
                 <Grid container spacing={2} px={{ xs: 0, xl: 5 }} py={2}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <BoxSombra p={2}>
-                            <Box px={{ xs: 12, sm: 0 }}>
-                                <Box sx={{
-                                    aspectRatio: 1,
-                                    bgcolor: grey[100],
-                                    p: 1,
-                                    border: `1px dashed ${grey[400]}`,
-                                    flexDirection: 'column',
-                                    borderRadius: 5,
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    color: grey[900],
-                                    transition: 'color 0.25s',
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                    "&:hover": {
-                                        color: grey[500],
-                                        cursor: 'pointer'
-                                    }
-                                }}
-                                    onClick={() => openFilePicker()}
-                                >
-                                    {
-                                        watch('imagen') ?
-                                            <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
-                                    }
-                                    <BsImageAlt color={'inherit'} fontSize={30} />
-                                    <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                                </Box>
-                                <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-                            </Box>
-                            <Box px={{ xs: 2, sm: 0 }}>
-                                <Box sx={{
-                                    p: 2,
-                                    border: `1px solid ${grey[400]}`,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    borderRadius: 3,
-                                    color: grey[900],
-                                    position: 'relative',
-                                    transition: 'border .5s',
-                                    "&:hover": {
-                                        border: `1px solid ${red[300]}`
-                                    }
-                                }}
-                                    onClick={() => PDFPicker.openFilePicker()}
-                                >
-                                    <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
-                                    <MdOutlineAttachFile style={{ fontSize: 20 }} />
-                                </Box>
+                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                            <div style={{
+                                aspectRatio: 1,
+                                border: `1px dashed #aaa`,
+                                flexDirection: 'column',
+                                borderRadius: 12,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                transition: 'color 0.25s',
+                                position: 'relative',
+                                overflow: 'hidden'
+                            }}
+                                className='drop'
+                                onClick={() => openFilePicker()}
+                            >
                                 {
-                                    documento ?
-                                        <ChipBox icon={documento.type.includes('pdf') ?
-                                            <BsFileEarmarkPdfFill fontSize={20} color={red[500]} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
-                                            sx={{
-                                                mt: 2,
-                                                border: `1px solid ${documento.type.includes('pdf') ? red[500] : '#1951b2'}`,
-                                                height: 40,
-                                                bgcolor: 'white'
-                                            }}
-                                            label={documento.name}
-                                            onDelete={() => {
-                                                setDocumento(null);
-                                            }}
-                                        />
-                                        : null
+                                    watch('imagen') ?
+                                        <Image src={watch('imagen')} layout='fill' objectFit='contain' /> : null
                                 }
-                            </Box>
-                        </BoxSombra>
+                                <Icon icon="stash:image-light" width="60" height="60" style={{ color: '#000' }} />
+                                <Text align='center'>+ Subir imagen</Text>
+                            </div>
+                            <Text
+                                style={{ margin: '15px 0' }}
+                                size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
+                            <Uploader
+                                fileList={documento}
+                                autoUpload={false}
+                                action="/"
+                                onChange={setDocumento}
+                                multiple={false}
+                                accept=".pdf, .doc, .docx"
+                            >
+                                <>
+                                    <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
+                                    <Button size='lg' block>Seleccionar archivo...</Button>
+                                </>
+                            </Uploader>
+                        </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <Panel shaded style={{ padding: 16, background: 'white' }}
+                            as='form' onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="titulo"
                                         control={control}
-                                        rules={{ required: 'Título es obligatorio' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Título'
-                                                error={!!errors.titulo}
-                                                helperText={errors.titulo?.message}
-                                                inputRef={ref}
-                                            />
+                                        rules={{ required: 'Título no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Título del convenio</Form.ControlLabel>
+                                                <Input {...field} size='lg' />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
@@ -223,9 +205,7 @@ export default function Page() {
                                         control={control}
                                         render={({ field }) => (
                                             <Box>
-                                                <Normal sx={{ fontSize: 16, my: 1, fontWeight: 500 }} >
-                                                    Descripción:
-                                                </Normal>
+                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
                                                 <Editor
                                                     value={field.value}
                                                     modules={{
@@ -249,22 +229,19 @@ export default function Page() {
                                         name="Institucion.nombre"
                                         control={control}
                                         rules={{ required: 'Institución no puede quedar vacío' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <Autocomplete
-                                                freeSolo
-                                                multiple={false}
-                                                onChange={(_, value) => field.onChange(value)}
-                                                disableClearable
-                                                options={instituciones.map((value: Institucion) => value.nombre)}
-                                                renderInput={(params) =>
-                                                    <InputBox
-                                                        {...params}
-                                                        {...field}
-                                                        error={!!errors.Institucion?.nombre}
-                                                        helperText={errors.Institucion?.nombre?.message}
-                                                        label='Institución'
-                                                    />}
-                                            />
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Institución</Form.ControlLabel>
+                                                <AutoComplete
+                                                    onBlur={ev => field.onChange((ev.target as any).value! as any)}
+                                                    size="lg"
+                                                    data={
+                                                        instituciones.map((value: Institucion) => value.nombre)
+                                                    } />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
@@ -273,64 +250,48 @@ export default function Page() {
                                         rules={{
                                             validate: (value) => value.length > 0 || 'Seleccione al menos una carrera'
                                         }}
-                                        render={({ field: { ref, ...field }, fieldState }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Carreras'
-                                                select
-                                                inputRef={ref}
-                                                error={!!fieldState.error}
-                                                helperText={fieldState.error?.message}
-                                                SelectProps={{
-                                                    multiple: true,
-                                                    MenuProps: {
-                                                        slotProps: {
-                                                            paper: {
-                                                                sx: {
-                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                    borderRadius: 3,
-                                                                    border: "1px solid #f1f1f1",
-                                                                    boxShadow: '-10px 10px 30px #00000022',
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }}
-                                            >
-                                                {
-                                                    carreras.map(value => (
-                                                        <MenuItem key={value.id} value={value.id}>
-                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                                <Box sx={{ width: 30, minWidth: 30, aspectRatio: 1, position: 'relative', mr: 1 }}>
-                                                                    <Image layout='fill' src={fileDomain + value.logo} style={{ borderRadius: 10 }} />
-                                                                </Box>
-                                                                <Negrita sx={{ fontSize: 14 }}>{value.nombre}</Negrita>
-                                                            </Box>
-                                                        </MenuItem>
-                                                    ))
-                                                }
-                                            </InputBox>
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group controlId="carrera">
+                                                <Form.ControlLabel>Carrera</Form.ControlLabel>
+                                                <TagPicker
+                                                    id='carrera'
+                                                    style={{ width: "100%", marginBottom: 10 }}
+                                                    labelKey="nombre"
+                                                    {...field}
+                                                    size="lg"
+                                                    valueKey="id" data={carreras}
+                                                    renderMenuItem={(label, item) => (
+                                                        <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
+                                                            <div style={{ width: 25, minWidth: 25, aspectRatio: 1, position: 'relative', marginRight: 10 }}>
+                                                                <Image layout='fill' src={fileDomain + item.logo} style={{ borderRadius: 10 }} />
+                                                            </div>
+                                                            <Negrita sx={{ fontSize: 14 }}>{item.nombre}</Negrita>
+                                                        </div>
+                                                    )} />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
                                         name="finalizacion"
                                         control={control}
-                                        rules={{ required: 'Finalización de convenio requerida' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <DatePickerBox
-                                                disablePast
-                                                onChange={(ev: any) => {
-                                                    field.onChange(ev?.format('DD/MM/YYYY'))
-                                                }}
-                                                slotProps={{
-                                                    textField: {
-                                                        inputRef: ref,
-                                                        label: 'Finalización del convenio',
-                                                        error: !!errors.finalizacion,
-                                                        helperText: errors.finalizacion?.message
-                                                    }
-                                                }}
-                                            />
+                                        rules={{ required: 'Finalización no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group controlId="fecha">
+                                                <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
+                                                <DatePicker
+                                                    placement="top"
+                                                    style={{ width: "100%", marginBottom: 10 }}
+                                                    size="lg"
+                                                    onChange={ev => {
+                                                        field.onChange(dayjs(ev).format("DD/MM/YYYY"))
+                                                    }} />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     {
@@ -338,99 +299,36 @@ export default function Page() {
                                             <Controller
                                                 name="pais"
                                                 control={control}
-                                                rules={{ required: 'País requerido' }}
-                                                render={({ field: { ref, ...field } }) => (
-                                                    <InputBox
-                                                        select
-                                                        sx={{ '.MuiSelect-select': { display: 'flex', alignItems: 'center' } }}
-                                                        label='País'
-                                                        {...field}
-                                                        onChange={ev => {
-                                                            field.onChange(ev.target.value);
-                                                            if (paises.africa.findIndex(value => value.value == ev.target.value) > -1) {
-                                                                setValue('continente', 'AF');
-                                                            }
-                                                            else if (paises.americaSur.findIndex(value => value.value == ev.target.value) > -1) {
-                                                                setValue('continente', 'SA');
-                                                            }
-                                                            else if (paises.americaNorte.findIndex(value => value.value == ev.target.value) > -1) {
-                                                                setValue('continente', 'NA');
-                                                            }
-                                                            else if (paises.europa.findIndex(value => value.value == ev.target.value) > -1) {
-                                                                setValue('continente', 'EU');
-                                                            }
-                                                            else if (paises.asia.findIndex(value => value.value == ev.target.value) > -1) {
-                                                                setValue('continente', 'AS');
-                                                            }
-                                                            else if (paises.oceania.findIndex(value => value.value == ev.target.value) > -1) {
-                                                                setValue('continente', 'OC');
-                                                            }
-                                                        }}
-                                                        inputRef={ref}
-                                                        SelectProps={{
-                                                            MenuProps: {
-                                                                slotProps: {
-                                                                    paper: {
-                                                                        sx: {
-                                                                            background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                            borderRadius: 3,
-                                                                            border: "1px solid #f1f1f1",
-                                                                            boxShadow: '-10px 10px 30px #00000022',
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }}
-                                                    >
-                                                        <ListSubheader>América del norte</ListSubheader>
-                                                        {
-                                                            paises.americaNorte.map(value => (
-                                                                <MenuItem key={value.value} value={value.value}>
-                                                                    <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
-                                                                    {value.pais}</MenuItem>
-                                                            ))
-                                                        }
-                                                        <ListSubheader>América del sur</ListSubheader>
-                                                        {
-                                                            paises.americaSur.map(value => (
-                                                                <MenuItem key={value.value} value={value.value}>
-                                                                    <Iconify style={{ marginRight: 5 }} icon={`flagpack:${value.value.toLowerCase()}`} />
-                                                                    {value.pais}</MenuItem>
-                                                            ))
-                                                        }
-                                                        <ListSubheader>Europa</ListSubheader>
-                                                        {
-                                                            paises.europa.map(value => (
-                                                                <MenuItem key={value.value} value={value.value}>
-                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
-                                                                    {value.pais}</MenuItem>
-                                                            ))
-                                                        }
-                                                        <ListSubheader>Asia</ListSubheader>
-                                                        {
-                                                            paises.asia.map(value => (
-                                                                <MenuItem key={value.value} value={value.value}>
-                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
-                                                                    {value.pais}</MenuItem>
-                                                            ))
-                                                        }
-                                                        <ListSubheader>África</ListSubheader>
-                                                        {
-                                                            paises.africa.map(value => (
-                                                                <MenuItem key={value.value} value={value.value}>
-                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
-                                                                    {value.pais}</MenuItem>
-                                                            ))
-                                                        }
-                                                        <ListSubheader>Oceanía</ListSubheader>
-                                                        {
-                                                            paises.oceania.map(value => (
-                                                                <MenuItem key={value.value} value={value.value}>
-                                                                    <Iconify style={{ marginRight: 5 }} icon={`flag:${value.value.toLowerCase()}-4x3`} />
-                                                                    {value.pais}</MenuItem>
-                                                            ))
-                                                        }
-                                                    </InputBox>
+                                                rules={{ required: 'País no puede quedar vacío' }}
+                                                render={({ field, fieldState }) => (
+                                                    <Form.Group controlId="pais">
+                                                        <Form.ControlLabel>País</Form.ControlLabel>
+                                                        <SelectPicker
+                                                            data={paises}
+                                                            size='lg'
+                                                            groupBy="continente"
+                                                            placement="top"
+                                                            labelKey="pais"
+                                                            valueKey="value"
+                                                            style={{
+                                                                width: "100%",
+                                                                marginBottom: 10
+                                                            }}
+                                                            onChange={pais => {
+                                                                let p = paises.find(value => value.value == pais);
+                                                                setValue('continente', p?.continenteAbrev!);
+                                                                field.onChange(pais);
+                                                            }}
+                                                            renderMenuItem={(label, item) => (
+                                                                <div key={label?.toString()}>
+                                                                    <Icon style={{ marginRight: 5 }} icon={`flagpack:${(item?.value as any).toLowerCase()}`} />
+                                                                    {label}</div>
+                                                            )}
+                                                        />
+                                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                            {fieldState.error?.message}
+                                                        </Form.ErrorMessage>
+                                                    </Form.Group>
                                                 )}
                                             />
                                             : null
@@ -438,38 +336,33 @@ export default function Page() {
                                     <Controller
                                         name="tipo"
                                         control={control}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                select
-                                                label='Tipo de convenio'
-                                                {...field}
-                                                inputRef={ref}
-                                                SelectProps={{
-                                                    MenuProps: {
-                                                        slotProps: {
-                                                            paper: {
-                                                                sx: {
-                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                    borderRadius: 3,
-                                                                    border: "1px solid #f1f1f1",
-                                                                    boxShadow: '-10px 10px 30px #00000022',
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem value='nacional'>Nacional</MenuItem>
-                                                <MenuItem value='internacional'>Internacional</MenuItem>
-                                            </InputBox>
+                                        render={({ field }) => (
+                                            <Form.Group controlId="tipo">
+                                                <Form.ControlLabel>Tipo de convenio</Form.ControlLabel>
+                                                <SelectPicker
+                                                    {...field}
+                                                    size="lg"
+                                                    cleanable={false}
+                                                    style={{ marginBottom: 10, width: "100%" }}
+                                                    data={[{ label: 'Nacional', value: 'nacional' },
+                                                    { label: 'Internacional', value: 'internacional' }
+                                                    ]}
+                                                    searchable={false}
+                                                />
+                                            </Form.Group>
+
                                         )}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Convenio</BotonFilled>
+                                    <Button
+                                        size="lg"
+                                        appearance="primary"
+                                        onClick={handleSubmit(onSubmit)}>
+                                        Crear Convenio</Button>
                                 </Grid>
                             </Grid>
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
                 </Grid>
             </Box>

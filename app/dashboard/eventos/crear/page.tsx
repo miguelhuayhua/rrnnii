@@ -25,8 +25,10 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { grey, red } from "@mui/material/colors";
-import { RiFileWord2Line } from "react-icons/ri";
+import { Icon } from '@iconify/react';
 import { IoMdLink } from "react-icons/io";
+import { Uploader, Text, Button, Panel, Form, Input, SelectPicker, DatePicker } from "rsuite";
+import dayjs from "dayjs";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Evento>({
@@ -34,7 +36,7 @@ export default function Page() {
     });
     const [load, setLoad] = useState(false);
     const [portada, setPortada] = useState<any>('');
-    const [documento, setDocumento] = useState<any>('');
+    const [documento, setDocumento] = useState<any>([]);
     const router = useRouter();
     const { openSnackbar } = useSnackbar();
     const { openModal } = useModal();
@@ -48,15 +50,6 @@ export default function Page() {
             openSnackbar('Imagen actualizada con éxito');
         }
     });
-    const PDFPicker = useFilePicker({
-        readAs: 'DataURL',
-        accept: '.pdf, .doc, .docx',
-        multiple: false,
-        onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setDocumento(plainFiles[0]);
-            openSnackbar('Documento actualizado con éxito');
-        }
-    });
 
     const onSubmit = (evento: Evento) => {
         if (portada) {
@@ -68,7 +61,7 @@ export default function Page() {
             form.append('inicio', evento.inicio);
             form.append('descripcion', evento.descripcion);
             form.append('imagen', portada);
-            form.append('doc', documento);
+            form.append('doc', documento[0].blobFile);
             openModal({
                 titulo: '¿Continuar?',
                 content: 'Un nuevo evento se agregará',
@@ -103,109 +96,77 @@ export default function Page() {
                 <Titulo sx={{ mb: 2 }}>
                     Crear nuevo evento
                 </Titulo>
-                <BotonSimple
+                <Button
+                    appearance="subtle"
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
-                </BotonSimple>
+                </Button>
+
                 <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <BoxSombra p={2}>
-                            <Box sx={{
+                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                            <div style={{
                                 aspectRatio: 1,
-                                bgcolor: grey[100],
-                                p: 1,
-                                border: `1px dashed ${grey[400]}`,
+                                border: `1px dashed #aaa`,
                                 flexDirection: 'column',
-                                borderRadius: 5,
+                                borderRadius: 12,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                color: grey[900],
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden',
-                                "&:hover": {
-                                    color: grey[500],
-                                    cursor: 'pointer'
-                                }
+                                overflow: 'hidden'
                             }}
+                                className='drop'
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={watch('imagen')} layout='fill' objectFit='contain' /> : null
                                 }
-                                <BsImageAlt color={'inherit'} fontSize={30} />
-                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                            </Box>
-                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-                            <Box px={{ xs: 2, sm: 0 }}>
-                                <Box sx={{
-                                    p: 2,
-                                    border: `1px solid ${grey[400]}`,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    borderRadius: 3,
-                                    color: grey[900],
-                                    position: 'relative',
-                                    transition: 'border .5s',
-                                    "&:hover": {
-                                        border: `1px solid ${red[300]}`
-                                    }
-                                }}
-                                    onClick={() => PDFPicker.openFilePicker()}
-                                >
-                                    <Normal sx={{ fontSize: 15, color: 'inherit', fontWeight: 600 }}>PDF o Word de Referencia</Normal>
-                                    <MdOutlineAttachFile style={{ fontSize: 20 }} />
-                                </Box>
-                                {
-                                    documento ?
-                                        <ChipBox icon={documento.type.includes('pdf') ?
-                                            <BsFileEarmarkPdfFill fontSize={20} color={red[500]} /> : <RiFileWord2Line fontSize={20} color='#1951b2' />}
-                                            sx={{
-                                                mt: 2,
-                                                border: `1px solid ${documento.type.includes('pdf') ? red[500] : '#1951b2'}`,
-                                                height: 40,
-                                                bgcolor: 'white'
-                                            }}
-                                            label={documento.name}
-                                            onDelete={() => {
-                                                setDocumento(null);
-                                            }}
-                                        />
-                                        : null
-                                }
-                            </Box>
-                        </BoxSombra>
-
+                                <Icon icon="stash:image-light" width="60" height="60" style={{ color: '#000' }} />
+                                <Text align='center'>+ Subir imagen</Text>
+                            </div>
+                            <Text
+                                style={{ margin: '15px 0' }}
+                                size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
+                            <Uploader
+                                fileList={documento}
+                                autoUpload={false}
+                                action="/"
+                                onChange={setDocumento}
+                                multiple={false}
+                                accept=".pdf, .doc, .docx"
+                            >
+                                <Button size='lg' block>Seleccionar archivo...</Button>
+                            </Uploader>
+                        </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <Panel shaded style={{ padding: 16, background: 'white' }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="titulo"
                                         control={control}
-                                        rules={{ required: 'Título es obligatorio' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Título'
-                                                error={!!errors.titulo}
-                                                helperText={errors.titulo?.message || 'Este es el título principal que será visible en el evento'}
-                                                inputRef={ref}
-                                            />
+                                        rules={{ required: 'Título no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                                <Input {...field} size='lg' />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     <Controller
                                         name="descripcion"
                                         control={control}
                                         render={({ field }) => (
-                                            <Box>
-                                                <Negrita sx={{ my: 1, fontWeight: 600 }}>
-                                                    Descripción:
-                                                </Negrita>
+                                            <Form.Group >
+                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
                                                 <Editor
                                                     value={field.value}
                                                     modules={{
@@ -220,86 +181,79 @@ export default function Page() {
                                                     className="editor"
                                                     onChange={(value) => { field.onChange(value) }}
                                                 />
-                                            </Box>
+                                            </Form.Group>
                                         )}
                                     />
                                 </Grid>
                                 <Grid item xs={12} lg={6}>
+
                                     <Controller
                                         name="tipo"
                                         control={control}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                select
-                                                label='Modalidad'
-                                                {...field}
-                                                inputRef={ref}
-                                                SelectProps={{
-                                                    MenuProps: {
-                                                        slotProps: {
-                                                            paper: {
-                                                                sx: {
-                                                                    background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                                    px: 0,
-                                                                    borderRadius: 3,
-                                                                    border: "1px solid #f1f1f1",
-                                                                    boxShadow: '-10px 10px 30px #00000022',
-                                                                    maxHeight: 400
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }}
-                                            >
-                                                <MenuItem value='online'>Online</MenuItem>
-                                                <MenuItem value='presencial'>Presencial</MenuItem>
-                                            </InputBox>
+                                        render={({ field }) => (
+                                            <Form.Group controlId="tipo">
+                                                <Form.ControlLabel>Modalidad</Form.ControlLabel>
+                                                <SelectPicker
+                                                    {...field}
+                                                    size="lg"
+                                                    cleanable={false}
+                                                    style={{ marginBottom: 10, width: "100%" }}
+                                                    data={[{ label: 'Online', value: 'online' },
+                                                    { label: 'Presencial', value: 'presencial' }
+                                                    ]}
+                                                    searchable={false}
+                                                />
+                                            </Form.Group>
+
                                         )}
                                     />
                                     <Controller
                                         name="inicio"
                                         control={control}
-                                        rules={{ required: 'Inicio de evento requerido' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <DatePickerBox
-                                                disablePast
-                                                onChange={(ev: any) => {
-                                                    field.onChange(ev?.format('DD/MM/YYYY'))
-                                                }}
-                                                slotProps={{
-                                                    textField: {
-                                                        inputRef: ref,
-                                                        label: 'Inicio de evento',
-                                                        error: !!errors.inicio,
-                                                        helperText: errors.inicio?.message
-                                                    }
-                                                }}
-                                            />
+                                        rules={{ required: 'Comienzo no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group controlId="fecha">
+                                                <Form.ControlLabel>Comienzo</Form.ControlLabel>
+                                                <DatePicker
+                                                    placement="top"
+                                                    block
+                                                    style={{ marginBottom: 10 }}
+                                                    size="lg"
+                                                    onChange={ev => {
+                                                        field.onChange(dayjs(ev).format("DD/MM/YYYY"))
+                                                    }} />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
                                     {
                                         watch('tipo') == 'online' ?
-
                                             <Controller
                                                 name="link"
                                                 control={control}
-                                                rules={{ required: 'Título es obligatorio' }}
-                                                render={({ field: { ref, ...field } }) => (
-                                                    <InputBox
-                                                        {...field}
-                                                        label='Link de acceso'
-                                                        InputProps={{ endAdornment: <IoMdLink fontSize={25} /> }}
-                                                    />
+                                                render={({ field }) => (
+                                                    <Form.Group style={{ marginBottom: 10 }}>
+                                                        <Form.ControlLabel>Link de acceso</Form.ControlLabel>
+                                                        <Input {...field} value={field.value!} size='lg' />
+                                                    </Form.Group>
                                                 )}
                                             /> : null
                                     }
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <BotonFilled type="submit" sx={{ float: 'right' }}>Crear Evento</BotonFilled>
+                                    <Button
+                                        size="lg"
+                                        appearance="primary"
+                                        onClick={handleSubmit(onSubmit)}>
+
+                                        Crear Evento</Button>
                                 </Grid>
                             </Grid>
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
+
                 </Grid>
             </Box>
             <Backdrop

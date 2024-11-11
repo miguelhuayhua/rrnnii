@@ -1,7 +1,6 @@
 
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
-import path from "path";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";
 import { getToken } from "next-auth/jwt";

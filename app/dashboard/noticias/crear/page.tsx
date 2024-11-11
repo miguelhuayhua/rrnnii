@@ -8,8 +8,6 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
-import { InputBox } from "@/app/componentes/Datos";
-import { BsImageAlt } from "react-icons/bs";
 import { Controller, useForm } from "react-hook-form";
 import { Noticia } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
@@ -22,11 +20,12 @@ import Image from 'next/legacy/image';
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
-import { grey } from "@mui/material/colors";
+import { Icon } from '@iconify/react';
 import { BoxSombra } from "@/app/componentes/Mostrar";
+import { Button, Form, Input, Text, Panel } from "rsuite";
 
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, watch, setValue } = useForm<Noticia>({
+    const { control, handleSubmit, watch, setValue } = useForm<Noticia>({
         defaultValues: { titulo: '', imagen: '', descripcion: '' }, shouldFocusError: true
     });
     const [portada, setPortada] = useState<any>(null);
@@ -82,73 +81,71 @@ export default function Page() {
                 <Titulo sx={{ mb: 2 }}>
                     Añadir noticia
                 </Titulo>
-
-                <BotonSimple
+                <Button
+                    appearance="subtle"
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
-                </BotonSimple>
+                </Button>
                 <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <BoxSombra p={2}>
-                            <Box sx={{
+                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                            <div style={{
                                 aspectRatio: 1,
-                                bgcolor: grey[100],
-                                p: 1,
-                                border: `1px dashed ${grey[400]}`,
+                                border: `1px dashed #aaa`,
                                 flexDirection: 'column',
-                                borderRadius: 5,
+                                borderRadius: 12,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                color: grey[900],
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden',
-                                "&:hover": {
-                                    color: grey[500],
-                                    cursor: 'pointer'
-                                }
+                                overflow: 'hidden'
                             }}
+                                className='drop'
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('imagen') ? <Image src={watch('imagen')} layout='fill' objectFit='cover' /> : null
+                                    watch('imagen') ?
+                                        <Image src={watch('imagen')} layout='fill' objectFit='contain' /> : null
                                 }
-                                <BsImageAlt color={'inherit'} fontSize={30} />
-                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                            </Box>
-                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
+                                <Icon icon="stash:image-light" width="60" height="60" style={{ color: '#000' }} />
+                                <Text align='center'>+ Subir imagen</Text>
+                            </div>
+                            <Text
+                                style={{ margin: '15px 0' }}
+                                size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
 
-                        </BoxSombra>
+                        </Panel>
 
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
                         <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="titulo"
                                         control={control}
-                                        rules={{ required: 'Título es obligatorio' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Título'
-                                                error={!!errors.titulo}
-                                                helperText={errors.titulo?.message || 'Este es el título principal que será visible en el noticia'}
-                                                inputRef={ref}
-                                            />
+                                        rules={{ required: 'Título no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                                <Input {...field} size='lg' />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
+
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="descripcion"
                                         control={control}
                                         render={({ field }) => (
-                                            <Box>
-                                                <Normal sx={{ fontSize: 16, my: 1, fontWeight: 500 }} >
-                                                    Descripción:
-                                                </Normal>
+                                            <Form.Group >
+                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
                                                 <Editor
                                                     value={field.value}
                                                     modules={{
@@ -163,13 +160,16 @@ export default function Page() {
                                                     className="editor"
                                                     onChange={(value) => { field.onChange(value) }}
                                                 />
-                                            </Box>
+                                            </Form.Group>
                                         )}
                                     />
                                 </Grid>
-
                                 <Grid item xs={12}>
-                                    <BotonFilled type="submit" sx={{ float: 'right' }}>Añadir a noticia</BotonFilled>
+                                    <Button
+                                        size="lg"
+                                        appearance="primary"
+                                        onClick={handleSubmit(onSubmit)}>
+                                        Añadir a noticia</Button>
                                 </Grid>
                             </Grid>
                         </BoxSombra>

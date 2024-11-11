@@ -19,6 +19,7 @@ import PasantiaComponent from "../componentes/items/Pasantia";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { InputBox } from "@/app/componentes/Datos";
 import { IoSearch } from "react-icons/io5";
+import { Button, Input, InputGroup } from "rsuite";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [Pasantias, setPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
@@ -48,20 +49,22 @@ export default function Page() {
                 Pasantías
             </Titulo>
             <Stack direction='row' my={2} spacing={2} >
-                <BotonFilled onClick={() => router.push('/dashboard/pasantias/crear')}>
+                <Button appearance='primary' onClick={() => router.push('/dashboard/pasantias/crear')}>
                     Añadir Pasantia
-                </BotonFilled>
-                <BotonSimple onClick={() => {
-                    setLoad(true);
-                    axios.post('/api/pasantia/todo', { opcion }).then(res => {
-                        setPasantias(res.data);
-                        setPrevPasantias(res.data);
-                        setOpcion('todo');
-                        setLoad(false);
-                    });
-                }}>
+                </Button>
+                <Button
+                    size='lg'
+                    appearance="subtle" onClick={() => {
+                        setLoad(true);
+                        axios.post('/api/pasantia/todo', { opcion }).then(res => {
+                            setPasantias(res.data);
+                            setPrevPasantias(res.data);
+                            setOpcion('todo');
+                            setLoad(false);
+                        });
+                    }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
@@ -123,13 +126,15 @@ export default function Page() {
                             label={prevPasantias.filter(value => !value.estado).length} />
                     </Box>} value='inactivo' />
             </Tabs>
-            <InputBox
-                onChange={ev => {
-                    setPasantias(prevPasantias.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                }}
-                placeholder="Buscar" InputProps={{
-                    endAdornment: <IoSearch fontSize={28} />
-                }} sx={{ maxWidth: 300 }} />
+
+            <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                <Input onChange={text => {
+                    setPasantias(prevPasantias.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                }} />
+                <InputGroup.Addon>
+                    <IoSearch fontSize={28} />
+                </InputGroup.Addon>
+            </InputGroup>
             {
                 load ?
                     <CircularProgress color="inherit"

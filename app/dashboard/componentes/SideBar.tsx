@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { MdWork } from "react-icons/md";
 import { Button, Divider, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
 import { IoPeople } from "react-icons/io5";
-import { FaHandsHelping, FaTools } from "react-icons/fa";
+import { FaHandsHelping, FaVideo } from "react-icons/fa";
 import { FaBuilding, FaBuildingUser } from "react-icons/fa6";
 import Image from 'next/legacy/image';
 import { HiHome, HiNewspaper } from 'react-icons/hi2';
@@ -19,6 +19,7 @@ import { CgMenuLeft } from 'react-icons/cg';
 import { BiSolidInstitution } from 'react-icons/bi';
 import { useSession } from 'next-auth/react';
 import { GrContactInfo } from 'react-icons/gr';
+import { IoIosVideocam } from 'react-icons/io';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
 
 const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: string, active: boolean, onclick?: any }) => {
@@ -96,6 +97,10 @@ const SideBar = () => {
                 router.push('/dashboard/carreras');
                 setMove(false);
             }} Icon={BiSolidInstitution} label='Carreras' active={pathname.includes('/carreras')} />
+            <SideBarItem onclick={() => {
+                router.push('/dashboard/videos');
+                setMove(false);
+            }} Icon={IoIosVideocam} label='Videos' active={pathname.includes('/videos')} />
             <Divider sx={{ borderColor: '#eee' }} />
 
             {
@@ -113,10 +118,6 @@ const SideBar = () => {
                 router.push('/dashboard/unidad');
                 setMove(false);
             }} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />
-            {/* <SideBarItem onclick={() => {
-                router.push('/dashboard/herramientas');
-                setMove(false);
-            }} Icon={FaTools} label='Herramientas' active={pathname.includes('/herramientas')} /> */}
             {
                 data?.user.rol == 'admin' ?
                     <SideBarItem onclick={() => {
