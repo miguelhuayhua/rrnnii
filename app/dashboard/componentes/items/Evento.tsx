@@ -1,13 +1,11 @@
 'use client';
-import { FaBuilding } from "react-icons/fa6";
-import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
+import { Negrita, Normal } from "@/app/componentes/Textos";
 import { Evento, Institucion } from "@prisma/client";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { BoxSombra } from "../Mostrar";
 import { Box, Grid, Stack } from "@mui/material";
 import Image from 'next/legacy/image';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { fileDomain } from "@/utils/globals";
 import { TbPdf } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
@@ -15,6 +13,7 @@ import { SwitchBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import { RiFileWord2Line } from "react-icons/ri";
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import { Button } from 'rsuite';
 interface Props {
     Evento: Evento & { Institucion: Institucion };
     setEvento: any;
@@ -47,12 +46,13 @@ const EventoComponent = ({ Evento, setEvento,
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <BotonOutline sx={{ fontSize: 14 }} onClick={() => {
-                            setEvento(Evento);
-                        }}>Modificar</BotonOutline>
+                        <Button
+                            appearance="ghost" onClick={() => {
+                                setEvento(Evento);
+                            }}>Modificar</Button>
                         {
                             Evento.pdf ?
-                                <BotonFilled
+                                <Button appearance='primary'
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Evento.pdf;
@@ -61,14 +61,13 @@ const EventoComponent = ({ Evento, setEvento,
                                         a.click();
                                         a.remove();
                                     }}
-                                    sx={{
+                                    style={{
                                         background: Evento.pdf.includes('pdf') ? red[700] : blue[500],
-                                        height: 40
                                     }}>
                                     {
                                         Evento.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                     }
-                                </BotonFilled> : null
+                                </Button> : null
                         }
                         <SwitchBox checked={Evento.estado} onChange={(ev, checked) => {
                             axios.post('/api/convenio/estado', { estado: checked, id: Evento.id }).then(res => {

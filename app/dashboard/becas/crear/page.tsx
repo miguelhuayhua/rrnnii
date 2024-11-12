@@ -1,10 +1,10 @@
 'use client';
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import {
     Box, Breadcrumbs,
     Backdrop, CircularProgress,
-    Grid, ListSubheader, MenuItem
+    Grid
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ import { paises } from "@/utils/globals";
 import { Button, Panel, Uploader, Text, Form, Input, DatePicker, AutoComplete, SelectPicker } from "rsuite";
 import dayjs from "dayjs";
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Beca & { Institucion: Institucion }>({
+    const { control, handleSubmit, setValue, watch } = useForm<Beca & { Institucion: Institucion }>({
         defaultValues: { titulo: '', descripcion: '', tipo: 'nacional' }, shouldFocusError: true
     });
     const { openSnackbar } = useSnackbar();
@@ -174,10 +174,8 @@ export default function Page() {
                                         name="descripcion"
                                         control={control}
                                         render={({ field }) => (
-                                            <Box>
-                                                <Normal sx={{ fontSize: 17, pb: 1, fontWeight: 600 }}>
-                                                    Descripción:
-                                                </Normal>
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
                                                 <Editor
                                                     value={field.value}
                                                     modules={{
@@ -192,7 +190,7 @@ export default function Page() {
                                                     className="editor"
                                                     onChange={(value) => { field.onChange(value) }}
                                                 />
-                                            </Box>
+                                            </Form.Group>
                                         )}
                                     />
                                 </Grid>

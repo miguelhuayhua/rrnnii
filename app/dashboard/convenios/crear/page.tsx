@@ -61,16 +61,7 @@ export default function Page() {
             openSnackbar('Imagen modificada con éxito');
         }
     });
-    const PDFPicker = useFilePicker({
-        readAs: 'DataURL',
-        accept: '.pdf, .doc, .docx',
-        multiple: false,
-        onFilesSuccessfullySelected: ({ plainFiles }) => {
-            setDocumento(plainFiles[0]);
-            setValue('pdf', plainFiles[0].name);
-            openSnackbar('Documento modificado con éxito');
-        }
-    });
+
     const { openSnackbar } = useSnackbar();
     useEffect(() => {
         axios.post('/api/carrera/listar').then(res => {
@@ -204,7 +195,7 @@ export default function Page() {
                                         name="descripcion"
                                         control={control}
                                         render={({ field }) => (
-                                            <Box>
+                                            <Form.Group style={{ marginBottom: 10 }}>
                                                 <Form.ControlLabel>Descripción</Form.ControlLabel>
                                                 <Editor
                                                     value={field.value}
@@ -220,7 +211,7 @@ export default function Page() {
                                                     className="editor"
                                                     onChange={(value) => { field.onChange(value) }}
                                                 />
-                                            </Box>
+                                            </Form.Group>
                                         )}
                                     />
                                 </Grid>

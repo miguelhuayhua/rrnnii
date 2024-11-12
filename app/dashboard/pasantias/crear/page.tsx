@@ -177,10 +177,8 @@ export default function Page() {
                                         name="descripcion"
                                         control={control}
                                         render={({ field }) => (
-                                            <Box>
-                                                <Normal sx={{ fontSize: 16, mb: 1, fontWeight: 500 }} >
-                                                    Descripción:
-                                                </Normal>
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
                                                 <Editor
                                                     value={field.value}
                                                     modules={{
@@ -195,7 +193,7 @@ export default function Page() {
                                                     className="editor"
                                                     onChange={(value) => { field.onChange(value) }}
                                                 />
-                                            </Box>
+                                            </Form.Group>
                                         )}
                                     />
                                 </Grid>

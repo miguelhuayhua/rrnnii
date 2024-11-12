@@ -7,7 +7,6 @@ import { BoxSombra } from "../Mostrar";
 import { Icon } from '@iconify/react';
 import { Box, Grid, Stack } from "@mui/material";
 import Image from 'next/legacy/image';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { fileDomain } from "@/utils/globals";
 import { TbPdf } from "react-icons/tb";
 import { blue, grey, red } from "@mui/material/colors";
@@ -19,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { IoEye } from "react-icons/io5";
 import 'dayjs/locale/es';
 import { IoMdPeople } from "react-icons/io";
+import { Button } from "rsuite";
 dayjs.locale('es');
 interface Props {
     Beca: Beca & { Institucion: Institucion, Participantes: ParticipanteBeca[] };
@@ -61,12 +61,13 @@ const BecaComponent = ({ Beca, setBeca,
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <BotonOutline sx={{ fontSize: 14 }} onClick={() => {
-                            setBeca(Beca);
-                        }}>Modificar</BotonOutline>
+                        <Button appearance='ghost'
+                            onClick={() => {
+                                setBeca(Beca);
+                            }}>Modificar</Button>
                         {
                             Beca.pdf ?
-                                <BotonFilled
+                                <Button appearance='primary'
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Beca.pdf;
@@ -75,20 +76,20 @@ const BecaComponent = ({ Beca, setBeca,
                                         a.click();
                                         a.remove();
                                     }}
-                                    sx={{
+                                    style={{
                                         background: Beca.pdf.includes('pdf') ? red[700] : blue[500],
-                                        height: 40
                                     }}>
                                     {
                                         Beca.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                     }
-                                </BotonFilled> : null
+                                </Button> : null
                         }
-                        <BotonOutline onClick={() => {
-                            router.push(`/dashboard/becas/${Beca.id}`)
-                        }}>
-                            <Icon style={{ fontSize: 24 }} icon="solar:eye-bold" />
-                        </BotonOutline>
+                        <Button appearance='ghost'
+                            onClick={() => {
+                                router.push(`/dashboard/becas/${Beca.id}`)
+                            }}>
+                            <Icon style={{ fontSize: 24, height: 20 }} icon="solar:eye-bold" />
+                        </Button>
                         <SwitchBox checked={Beca.estado} onChange={(ev, checked) => {
                             axios.post('/api/convenio/estado', { estado: checked, id: Beca.id }).then(res => {
                                 openSnackbar(res.data.mensaje);

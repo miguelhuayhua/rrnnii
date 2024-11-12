@@ -14,6 +14,7 @@ import { SwitchBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import { RiFileWord2Line } from "react-icons/ri";
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import { Button } from "rsuite";
 interface Props {
     Pasantia: Pasantia & { Institucion: Institucion };
     setPasantia: any;
@@ -45,13 +46,13 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <BotonOutline sx={{ fontSize: 14 }} onClick={() => {
-                            setPasantia(Pasantia);
-                        }}>Modificar</BotonOutline>
+                        <Button appearance='ghost'
+                            onClick={() => {
+                                setPasantia(Pasantia);
+                            }}>Modificar</Button>
                         {
                             Pasantia.pdf ?
-                                <BotonFilled
-
+                                <Button appearance="primary"
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Pasantia.pdf;
@@ -60,14 +61,13 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                                         a.click();
                                         a.remove();
                                     }}
-                                    sx={{
+                                    style={{
                                         background: Pasantia.pdf.includes('pdf') ? red[700] : blue[500],
-                                        height: 40
                                     }}>
                                     {
                                         Pasantia.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                     }
-                                </BotonFilled> : null
+                                </Button> : null
                         }
                         <SwitchBox checked={Pasantia.estado} onChange={(ev, checked) => {
                             axios.post('/api/pasantia/estado', { estado: checked, id: Pasantia.id }).then(res => {

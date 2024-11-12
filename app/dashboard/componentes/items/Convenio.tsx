@@ -1,12 +1,11 @@
 'use client';
-import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
+import { Negrita, Normal } from "@/app/componentes/Textos";
 import { Convenio, Institucion } from "@prisma/client";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { BoxSombra } from "../Mostrar";
 import { Box, Grid, Stack } from "@mui/material";
 import Image from 'next/legacy/image';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { fileDomain } from "@/utils/globals";
 import { TbPdf } from "react-icons/tb";
 import { blue, red } from "@mui/material/colors";
@@ -15,6 +14,7 @@ import axios from "axios";
 import { RiFileWord2Line } from "react-icons/ri";
 import { Icon as Iconify } from '@iconify/react';
 import { useSnackbar } from "@/providers/SnackbarProvider";
+import { Button } from "rsuite";
 interface Props {
     Convenio: Convenio & { Institucion: Institucion };
     setConvenio: any;
@@ -28,7 +28,6 @@ const ConvenioComponent = ({ Convenio, setConvenio,
     setPrevConvenios
 }: Props) => {
     const { openSnackbar } = useSnackbar();
-    console.log(Convenio)
     return (
         <BoxSombra p={3} bgcolor='white' borderRadius={4} >
             <Grid container spacing={2}>
@@ -53,12 +52,13 @@ const ConvenioComponent = ({ Convenio, setConvenio,
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <BotonOutline sx={{ fontSize: 14 }} onClick={() => {
-                            setConvenio(Convenio);
-                        }}>Modificar</BotonOutline>
+                        <Button appearance='ghost'
+                            onClick={() => {
+                                setConvenio(Convenio);
+                            }}>Modificar</Button>
                         {
                             Convenio.pdf ?
-                                <BotonFilled
+                                <Button appearance="primary"
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Convenio.pdf;
@@ -67,14 +67,13 @@ const ConvenioComponent = ({ Convenio, setConvenio,
                                         a.click();
                                         a.remove();
                                     }}
-                                    sx={{
+                                    style={{
                                         background: Convenio.pdf.includes('pdf') ? red[700] : blue[500],
-                                        height: 40
                                     }}>
                                     {
                                         Convenio.pdf.includes('pdf') ? <TbPdf fontSize={22} /> : <RiFileWord2Line fontSize={22} />
                                     }
-                                </BotonFilled> : null
+                                </Button> : null
                         }
                         <SwitchBox checked={Convenio.estado} onChange={(ev, checked) => {
                             axios.post('/api/convenio/estado', { estado: checked, id: Convenio.id }).then(res => {

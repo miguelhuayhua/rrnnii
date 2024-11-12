@@ -17,6 +17,7 @@ import ModalBeca from "./ModalBeca";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import BecaComponent from "../componentes/items/Beca";
 import { IoSearch } from "react-icons/io5";
+import { Button, Input, InputGroup } from "rsuite";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -47,20 +48,23 @@ export default function Page() {
                 Becas
             </Titulo>
             <Stack direction='row' my={2} spacing={2} >
-                <BotonFilled onClick={() => router.push('/dashboard/becas/crear')}>
+                <Button
+                    appearance='primary'
+                    onClick={() => router.push('/dashboard/becas/crear')}>
                     Añadir beca
-                </BotonFilled>
-                <BotonSimple onClick={() => {
-                    setLoad(true);
-                    axios.post('/api/beca/todo', {}).then(res => {
-                        setBecas(res.data);
-                        setPrevBecas(res.data);
-                        setOpcion('todo');
-                        setLoad(false);
-                    });
-                }}>
+                </Button>
+                <Button
+                    appearance="subtle" onClick={() => {
+                        setLoad(true);
+                        axios.post('/api/beca/todo', {}).then(res => {
+                            setBecas(res.data);
+                            setPrevBecas(res.data);
+                            setOpcion('todo');
+                            setLoad(false);
+                        });
+                    }}>
                     <Icon icon="mdi:reload" fontSize={26} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
@@ -122,13 +126,14 @@ export default function Page() {
                             label={prevBecas.filter(value => !value.estado).length} />
                     </Box>} value='inactivo' />
             </Tabs>
-            <InputBox
-                onChange={ev => {
-                    setBecas(prevBecas.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                }}
-                placeholder="Buscar" InputProps={{
-                    endAdornment: <IoSearch fontSize={28} />
-                }} sx={{ maxWidth: 300 }} />
+            <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                <Input onChange={text => {
+                    setBecas(prevBecas.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                }} />
+                <InputGroup.Addon>
+                    <IoSearch fontSize={28} />
+                </InputGroup.Addon>
+            </InputGroup>
             {
                 load ?
                     <CircularProgress color="inherit"
