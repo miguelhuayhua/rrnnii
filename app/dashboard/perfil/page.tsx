@@ -21,6 +21,8 @@ import { useModal } from "@/providers/ModalProvider";
 import dayjs from "dayjs";
 import { fileDomain } from "@/utils/globals";
 import Link from "next/link";
+import { Button, Form, Input, InputGroup, Panel } from "rsuite";
+import { red } from "@mui/material/colors";
 export default function Main() {
     const { openSnackbar } = useSnackbar();
     const [load, setLoad] = useState(false);
@@ -57,7 +59,8 @@ export default function Main() {
                 personaId,
                 usuario: '',
                 password: '',
-                avatar: ''
+                avatar: '',
+                password2: ''
             }, shouldFocusError: true
         });
     const { openModal } = useModal();
@@ -81,23 +84,24 @@ export default function Main() {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-            <Breadcrumbs sx={{ mb: 2 }} >
+            <Breadcrumbs sx={{ m: 2 }} >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
                 <Negrita>Perfil</Negrita>
             </Breadcrumbs>
-            <BotonSimple
+            <Button
+                appearance="subtle"
                 startIcon={<MdArrowLeft fontSize={20} />}
                 onClick={() => router.back()}>
                 Regresar
-            </BotonSimple>
+            </Button>
             <Titulo sx={{ mt: 1 }}>
                 Perfil de usuario
             </Titulo>
             <Grid container mt={1} spacing={2}>
                 <Grid item xs={12} sm={6}>
-                    <BoxSombra p={2}>
+                    <Panel shaded style={{ background: 'white' }}>
                         <Box
                             borderRadius={100}
                             overflow='hidden'
@@ -109,57 +113,54 @@ export default function Main() {
                             mx='auto'>
                             <Image
                                 layout="fill"
-                                src={(fileDomain + data?.user.image) || '/default-image.jpg'} />
+                                objectFit="cover"
+                                src={data?.user.image ? (fileDomain + data?.user.image) : '/default-image.jpg'} />
                         </Box>
-                        <BotonOutline
+                        <Button
+                            block
                             onClick={openFilePicker}
-                            size="small"
-                            sx={{ fontSize: 13, mx: 'auto', display: 'block', mb: 2 }}>
+                            size='md'
+                            style={{ margin: '20px 0', fontSize: 13 }}
+                            appearance='ghost'>
                             Cambiar avatar
-                        </BotonOutline>
+                        </Button>
+
                         <Controller
-                            control={control}
                             name="usuario"
+                            control={control}
                             rules={{
                                 required: 'No puede quedar vacío',
                                 onBlur: async () => {
                                     let res = await axios.post('/api/usuario/existe', { usuario: watch('usuario') });
                                     res.data.existe ? setError('usuario', { message: 'Usuario en uso' }) : clearErrors('usuario');
                                 }
-                            }}
-                            render={({ field: { ref, ...field }, fieldState }) => (
-                                <InputBox
-                                    {...field}
-                                    sx={{ mt: 4 }}
-                                    color='success'
-                                    inputRef={ref}
-                                    label='Usuario'
-                                    error={!!fieldState.error}
-                                    helperText={fieldState.error?.message}
-                                />
+                            }} render={({ field, fieldState }) => (
+                                <Form.Group style={{ marginBottom: 10 }}>
+                                    <Form.ControlLabel>Usuario</Form.ControlLabel>
+                                    <Input {...field} size='lg' />
+                                    <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                        {fieldState.error?.message}
+                                    </Form.ErrorMessage>
+                                </Form.Group>
                             )}
                         />
                         <Controller
-                            name="password"
                             control={control}
-                            render={({ field, fieldState }) => (
-                                <InputBox
-                                    {...field}
-                                    label='Contraseña'
-                                    size="small"
-                                    type={showPassword ? 'text' : 'password'}
-                                    InputProps={{
-                                        endAdornment:
-                                            <IconButton
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                edge="end"
-                                            >
-                                                {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-                                            </IconButton>
-                                    }}
-                                    helperText={fieldState.error?.message}
-
-                                />
+                            name="password"
+                            render={({ field }) => (
+                                <Form.Group style={{ marginBottom: 10 }}>
+                                    <Form.ControlLabel>Contraseña</Form.ControlLabel>
+                                    <InputGroup inside >
+                                        <Input
+                                            size='lg' {...field} type={showPassword ? 'text' : 'password'} />
+                                        <InputGroup.Button
+                                            style={{ height: "100%" }} onClick={() => {
+                                                setShowPassword(!showPassword);
+                                            }}>
+                                            {showPassword ? <MdVisibilityOff fontSize={25} /> : <MdVisibility fontSize={23} />}
+                                        </InputGroup.Button>
+                                    </InputGroup>
+                                </Form.Group>
                             )}
                         />
                         <Controller
@@ -167,29 +168,32 @@ export default function Main() {
                             control={control}
                             rules={{ validate: value => value === (watch('password') || '') || 'Las contraseñas no coinciden' }}
                             render={({ field, fieldState }) => (
-                                <InputBox
-                                    {...field}
-                                    label='Verificar contraseña'
-                                    size="small"
-                                    type={showPassword2 ? 'text' : 'password'}
-                                    InputProps={{
-                                        endAdornment:
-                                            <IconButton
-                                                onClick={() => setShowPassword2(!showPassword2)}
-                                                edge="end"
-                                            >
-                                                {showPassword2 ? <MdVisibilityOff /> : <MdVisibility />}
-                                            </IconButton>
-                                    }}
-                                    helperText={fieldState.error?.message}
-                                    error={!!fieldState.error}
-                                />
+                                <Form.Group style={{ marginBottom: 10 }}>
+                                    <Form.ControlLabel>Verificar contraseña</Form.ControlLabel>
+                                    <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                        {fieldState.error?.message}
+                                    </Form.ErrorMessage>
+                                    <InputGroup inside >
+                                        <Input
+                                            size='lg' {...field} type={showPassword2 ? 'text' : 'password'} />
+                                        <InputGroup.Button
+                                            style={{ height: "100%" }} onClick={() => {
+                                                setShowPassword2(!showPassword2);
+                                            }}>
+                                            {showPassword ? <MdVisibilityOff fontSize={25} /> : <MdVisibility fontSize={23} />}
+                                        </InputGroup.Button>
+                                    </InputGroup>
+                                </Form.Group>
                             )}
                         />
 
                         {
                             isDirty ?
-                                <BotonFilled
+                                <Button
+                                    size='lg'
+                                    block
+                                    appearance='primary'
+                                    style={{ background: red[700], marginTop: 20 }}
                                     onClick={handleSubmit((Usuario) => {
                                         openModal({
                                             async callback() {
@@ -209,9 +213,9 @@ export default function Main() {
                                         })
                                     })} >
                                     Guardar cambios
-                                </BotonFilled> : null
+                                </Button> : null
                         }
-                    </BoxSombra>
+                    </Panel>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Negrita sx={{ mb: 2, fontSize: 16 }}>

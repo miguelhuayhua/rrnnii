@@ -134,7 +134,8 @@ export default function Page() {
                         "": (<>
                             <Stack direction='row' alignItems='center' spacing={2}>
                                 <Button appearance='ghost'
-                                    size='md' onClick={() => {
+                                    size='sm' style={{ fontSize: 13 }}
+                                    onClick={() => {
                                         setCarrera(value);
                                     }}>Modificar</Button>
 

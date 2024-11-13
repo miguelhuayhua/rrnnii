@@ -1,30 +1,31 @@
 'use client';
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, CircularProgress, Backdrop, MenuItem, IconButton } from "@mui/material";
+import { Box, Breadcrumbs, Grid, CircularProgress, Backdrop } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
 import { Controller, useForm } from "react-hook-form";
 import { Persona, Usuario } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import { useModal } from "@/providers/ModalProvider";
 import { useState } from "react";
-import { BoxSombra } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import axios from "axios";
 import { MdArrowLeft, MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { Button, Panel, Form, Input, InputNumber, SelectPicker, DatePicker, InputGroup } from "rsuite";
+import { parseLetter } from "@/utils/data";
+import { red } from "@mui/material/colors";
 export default function Page() {
     const { control,
         watch,
         setError, clearErrors, handleSubmit } = useForm<Persona & { Usuario: Usuario & { password2: string } }>({
             defaultValues: {
                 nombre: '', paterno: '', materno: '',
-                cargo: '', f_nacimiento: dayjs().format('DD/MM/YYYY'),
+                cargo: 'tecnico', f_nacimiento: dayjs().format('DD/MM/YYYY'),
                 Usuario: {
                     rol: 'usuario',
                     usuario: '',
-                    password: ''
+                    password: '',
+                    password2: ''
                 }
             }, shouldFocusError: true
         });
@@ -44,7 +45,7 @@ export default function Page() {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }} >
+                <Breadcrumbs sx={{ my: 2 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -54,242 +55,225 @@ export default function Page() {
                     <Negrita>Crear</Negrita>
                 </Breadcrumbs>
 
-                <Titulo sx={{ mb: 2 }}>
+                <Titulo sx={{ mb: 1 }}>
                     Crear nuevo personal
                 </Titulo>
-                <BotonSimple
+                <Button
+                    appearance="subtle"
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
-                </BotonSimple>
+                </Button>
 
-                <Grid container spacing={2} px={{ xs: 0, md: 10, lg: 20, xl: 5 }} mt={2}>
-
+                <Grid container spacing={4} py={2}>
                     <Grid item xs={12} sm={6}>
-                        <BoxSombra p={2}>
+                        <Panel shaded style={{ background: 'white' }}>
 
                             <Controller
                                 name="nombre"
                                 control={control}
-                                rules={{ required: 'Nombre es obligatorio' }}
-                                render={({ field: { ref, ...field }, fieldState }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Nombre'
-                                        error={!!fieldState.error}
-                                        helperText={fieldState.error?.message}
-                                        inputRef={ref}
-                                    />
+                                rules={{ required: 'Nombre no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Nombres</Form.ControlLabel>
+                                        <Input {...field} size='lg'
+                                            onChange={text => field.onChange(parseLetter(text))} />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="paterno"
                                 control={control}
                                 render={({ field }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Ap. Paterno'
-                                    />
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Apellido Paterno</Form.ControlLabel>
+                                        <Input {...field} size='lg' onChange={text => field.onChange(parseLetter(text))} />
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="materno"
                                 control={control}
-                                render={({ field }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Ap. Materno'
-                                    />
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Apellido Materno</Form.ControlLabel>
+                                        <Input {...field} size='lg' onChange={text => field.onChange(parseLetter(text))} />
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="ci"
                                 control={control}
-                                rules={{ required: 'C.I. es requerido' }}
-                                render={({ field: { ref, ...field }, fieldState }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Carnet de identidad'
-                                        inputRef={ref}
-                                        error={!!fieldState.error}
-                                        helperText={fieldState.error?.message}
-                                    />
+                                rules={{
+                                    required: 'CI no puede quedar vacío',
+                                    maxLength: { message: 'CI no puede exceder de 8 dígitos', value: 8 }
+                                }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Cédula Identidad</Form.ControlLabel>
+                                        <InputNumber {...field} size='lg' />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="f_nacimiento"
                                 control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <DatePickerBox
-                                        disableFuture
-                                        inputRef={ref}
-                                        label='Fecha de nacimiento'
-                                        onChange={ev => {
-                                            field.onChange(ev?.format('DD/MM/YYYY'))
-                                        }}
-                                        value={dayjs(field.value, 'DD/MM/YYYY')}
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="cargo"
-                                rules={{ required: 'Cargo es requerido' }}
-                                control={control}
-                                render={({ field: { ref, ...field }, fieldState }) => (
-                                    <InputBox
-                                        select
-                                        label='Cargo en la unidad'
-                                        helperText={fieldState.error?.message}
-                                        error={!!fieldState.error}
-                                        {...field}
-                                        inputRef={ref}
-                                        SelectProps={{
-                                            MenuProps: {
-                                                slotProps: {
-                                                    paper: {
-                                                        sx: {
-                                                            background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                            px: 0,
-                                                            borderRadius: 3,
-                                                            border: "1px solid #f1f1f1",
-                                                            boxShadow: '-10px 10px 30px #00000022',
-                                                            maxHeight: 400
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        <MenuItem value='jefe'>Jefe de unidad</MenuItem>
-                                        <MenuItem value='tecnico'>Técnico</MenuItem>
-                                        <MenuItem value='secretario'>{"Secretario(a)"}</MenuItem>
-                                    </InputBox>
+                                rules={{ required: 'Fecha de nacimiento no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group controlId="fecha">
+                                        <Form.ControlLabel>Fecha de nacimiento</Form.ControlLabel>
+                                        <DatePicker
+                                            placement="top"
+                                            style={{ width: "100%", marginBottom: 10 }}
+                                            size="lg"
+                                            // Deshabilitar fechas futuras
+                                            shouldDisableDate={(date) => date > new Date()}
+                                            onChange={(ev) => {
+                                                field.onChange(dayjs(ev).format("DD/MM/YYYY"));
+                                            }}
+                                        />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
                                 )}
                             />
 
-                        </BoxSombra>
+                            <Controller
+                                name="cargo"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group controlId="tipo">
+                                        <Form.ControlLabel>Cargo de Unidad</Form.ControlLabel>
+                                        <SelectPicker
+                                            {...field}
+                                            size="lg"
+                                            defaultValue={field.value}
+                                            cleanable={false}
+                                            style={{ marginBottom: 10, width: "100%" }}
+                                            data={[{ label: 'Jefe de unidad', value: 'jefe' },
+                                            { label: 'Técnico', value: 'tecnico' },
+                                            { label: 'Secretario(a)', value: 'secretario' }
+                                            ]}
+                                            searchable={false}
+                                        />
+                                    </Form.Group>
+                                )}
+                            />
+                        </Panel>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <BoxSombra p={2}>
+                        <Panel style={{ background: 'white' }} shaded>
                             <Controller
-                                control={control}
                                 name="Usuario.usuario"
+                                control={control}
                                 rules={{
                                     required: 'No puede quedar vacío',
                                     onBlur: async () => {
                                         let res = await axios.post('/api/usuario/existe', { usuario: watch('Usuario.usuario') });
                                         res.data.existe ? setError('Usuario.usuario', { message: 'Usuario en uso' }) : clearErrors('Usuario.usuario');
                                     }
-                                }}
-                                render={({ field: { ref, ...field }, fieldState }) => (
-                                    <InputBox
-                                        {...field}
-                                        sx={{ mt: 4 }}
-                                        color='success'
-                                        inputRef={ref}
-                                        label='Usuario'
-                                        error={!!fieldState.error}
-                                        helperText={fieldState.error?.message}
-                                    />
+                                }} render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Usuario</Form.ControlLabel>
+                                        <Input {...field} size='lg' />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
-                                name="Usuario.password"
                                 control={control}
-                                rules={{ required: 'No puede quedar vacío' }}
-                                render={({ field, fieldState }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Contraseña'
-                                        error={!!fieldState.error}
-                                        type={showPassword ? 'text' : 'password'}
-                                        InputProps={{
-                                            endAdornment:
-                                                <IconButton
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    edge="end"
-                                                >
-                                                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-                                                </IconButton>
-                                        }}
-                                        helperText={fieldState.error?.message}
-
-                                    />
+                                name="Usuario.password"
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Contraseña</Form.ControlLabel>
+                                        <InputGroup inside >
+                                            <Input
+                                                size='lg' {...field} type={showPassword ? 'text' : 'password'} />
+                                            <InputGroup.Button
+                                                style={{ height: "100%" }} onClick={() => {
+                                                    setShowPassword(!showPassword);
+                                                }}>
+                                                {showPassword ? <MdVisibilityOff fontSize={25} /> : <MdVisibility fontSize={23} />}
+                                            </InputGroup.Button>
+                                        </InputGroup>
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="Usuario.password2"
                                 control={control}
-                                rules={{ validate: value => value === watch('Usuario.password') || 'Las contraseñas no coinciden' }}
+                                rules={{ validate: value => value === (watch('Usuario.password') || '') || 'Las contraseñas no coinciden' }}
                                 render={({ field, fieldState }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Verificar contraseña'
-                                        type={showPassword2 ? 'text' : 'password'}
-                                        InputProps={{
-                                            endAdornment:
-                                                <IconButton
-                                                    onClick={() => setShowPassword2(!showPassword2)}
-                                                    edge="end"
-                                                >
-                                                    {showPassword2 ? <MdVisibilityOff /> : <MdVisibility />}
-                                                </IconButton>
-                                        }}
-                                        helperText={fieldState.error?.message}
-                                        error={!!fieldState.error}
-                                    />
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Verificar contraseña</Form.ControlLabel>
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                        <InputGroup inside >
+                                            <Input
+                                                size='lg' {...field} type={showPassword2 ? 'text' : 'password'} />
+                                            <InputGroup.Button
+                                                style={{ height: "100%" }} onClick={() => {
+                                                    setShowPassword2(!showPassword2);
+                                                }}>
+                                                {showPassword ? <MdVisibilityOff fontSize={25} /> : <MdVisibility fontSize={23} />}
+                                            </InputGroup.Button>
+                                        </InputGroup>
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="Usuario.rol"
                                 control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        select
-                                        label='Rol de usuario'
-                                        {...field}
-                                        inputRef={ref}
-                                        SelectProps={{
-                                            MenuProps: {
-                                                slotProps: {
-                                                    paper: {
-                                                        sx: {
-                                                            background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                            px: 0,
-                                                            borderRadius: 3,
-                                                            border: "1px solid #f1f1f1",
-                                                            boxShadow: '-10px 10px 30px #00000022',
-                                                            maxHeight: 400
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        <MenuItem value='admin'>Administrador</MenuItem>
-                                        <MenuItem value='usuario'>Usuario</MenuItem>
-                                    </InputBox>
+                                render={({ field }) => (
+                                    <Form.Group controlId="tipo">
+                                        <Form.ControlLabel>Tipo de usuario</Form.ControlLabel>
+                                        <SelectPicker
+                                            {...field}
+                                            size="lg"
+                                            defaultValue={field.value}
+                                            cleanable={false}
+                                            style={{ marginBottom: 10, width: "100%" }}
+                                            data={[{ label: 'Jefe de unidad', value: 'jefe' },
+                                            { label: 'Administrador', value: 'admin' },
+                                            { label: 'Usuario', value: 'usuario' }
+                                            ]}
+                                            searchable={false}
+                                        />
+                                    </Form.Group>
                                 )}
                             />
 
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
-                    <Grid item xs={12}>
-                        <BotonFilled onClick={handleSubmit(Persona => {
-                            openModal({
-                                titulo: '¿Continuar?',
-                                content: 'Se agregará un nuevo personal',
-                                async callback() {
-                                    setLoad(true);
-                                    let res = await axios.post('/api/persona/crear', Persona);
-                                    router.replace('/dashboard/usuarios');
-                                    setLoad(false);
-                                    return res.data.mensaje;
-                                }
-                            })
-                        })} sx={{ float: 'right' }}>
+                    <Grid item xs={6} mx='auto'>
+                        <Button appearance="primary"
+                            block
+                            size='lg'
+                            style={{ background: red[700] }} onClick={handleSubmit(Persona => {
+                                openModal({
+                                    titulo: '¿Continuar?',
+                                    content: 'Se agregará un nuevo personal',
+                                    async callback() {
+                                        setLoad(true);
+                                        let res = await axios.post('/api/persona/crear', Persona);
+                                        router.replace('/dashboard/usuarios');
+                                        setLoad(false);
+                                        return res.data.mensaje;
+                                    }
+                                })
+                            })} >
                             Crear nuevo personal
-                        </BotonFilled>
+                        </Button>
                     </Grid>
                 </Grid>
             </Box>

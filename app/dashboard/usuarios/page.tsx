@@ -15,8 +15,9 @@ import ModalPersonal from "./ModalPersonal";
 import axios from "axios";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import { ChipBox } from "@/app/componentes/Mostrar";
+import { Button } from "rsuite";
 export default function Main() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -33,7 +34,7 @@ export default function Main() {
     }, [opcion, Persona]);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <Breadcrumbs >
+            <Breadcrumbs sx={{ my: 2 }} >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -47,10 +48,11 @@ export default function Main() {
             </Titulo>
 
             <Stack direction='row' my={2} spacing={2} >
-                <BotonFilled onClick={() => router.push('/dashboard/usuarios/crear')}>
+                <Button
+                    size='lg' appearance='primary' onClick={() => router.push('/dashboard/usuarios/crear')}>
                     Añadir Personal
-                </BotonFilled>
-                <BotonSimple onClick={() => {
+                </Button>
+                <Button size='lg' appearance='subtle' onClick={() => {
                     axios.post('/api/persona/todo').then(res => {
                         setPersonas(res.data);
                         setPrevPersonas(res.data);
@@ -58,11 +60,11 @@ export default function Main() {
                     });
                 }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -122,18 +124,20 @@ export default function Main() {
                         "": (
                             <>
                                 <Stack direction='row' spacing={1} alignItems='center'>
-                                    <BotonOutline
+                                    <Button appearance='ghost'
+                                        size='sm' style={{ fontSize: 13 }}
                                         onClick={() => { setPersona(value) }}
-                                        sx={{ fontSize: 12 }}>
+                                    >
                                         Modificar
-                                    </BotonOutline>
-                                    <BotonOutline
-                                        sx={{ p: 1.16 }}
+                                    </Button>
+                                    <Button
+                                        appearance='ghost'
+                                        size='md'
                                         onClick={() => {
                                             setPersonaId(value.id);
                                         }}>
                                         <FaUser />
-                                    </BotonOutline>
+                                    </Button>
                                     <SwitchBox checked={value.estado}
                                         onChange={(ev, checked) => {
                                             axios.post('/api/persona/estado', { estado: checked, id: value.id }).then(res => {

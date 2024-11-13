@@ -10,6 +10,7 @@ import axios from "axios";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
+import { Button } from "rsuite";
 dayjs.locale('es');
 export default function Page() {
     const [acciones, setAccions] = useState<(Acciones & { Usuario: Usuario })[]>([]);
@@ -20,7 +21,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs >
+            <Breadcrumbs sx={{ my: 2 }} >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -29,18 +30,18 @@ export default function Page() {
                 </Link>
                 <Negrita>Revisar</Negrita>
             </Breadcrumbs>
-            <Titulo sx={{ mt: 1 }}>
+            <Titulo >
                 Acciones
             </Titulo>
-            <Stack direction='row' my={2} spacing={2} >
-
-                <BotonSimple onClick={() => {
-                    axios.post('/api/acciones/todo', {}).then(res => {
-                        setAccions(res.data);
-                    });
-                }}>
+            <Stack direction='row' mt={1} mb={2} spacing={2} >
+                <Button appearance='subtle'
+                    size='lg' onClick={() => {
+                        axios.post('/api/acciones/todo', {}).then(res => {
+                            setAccions(res.data);
+                        });
+                    }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
 
             <Tabla hasSearch hasPagination data={acciones.map(value => (

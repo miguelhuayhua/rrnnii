@@ -126,7 +126,7 @@ export default function Page() {
                                 {
                                     "Título": value.titulo,
                                     "Creado el": (
-                                        <Box minWidth={90} py={1}>
+                                        <Box minWidth={90}>
                                             <Negrita sx={{ fontSize: 14 }}>
                                                 {dayjs(value.createdAt).format('DD/MM/YYYY')}
                                             </Negrita>
@@ -136,7 +136,7 @@ export default function Page() {
                                         </Box>
                                     ),
                                     "": (<>
-                                        <Stack direction='row' spacing={2} alignItems='center'>
+                                        <Stack py={1.5} direction='row' spacing={2} alignItems='center'>
                                             <Button
                                                 appearance="ghost" size="md" onClick={() => {
                                                     setVideo(value);

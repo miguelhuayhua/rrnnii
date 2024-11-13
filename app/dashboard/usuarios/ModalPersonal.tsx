@@ -1,14 +1,16 @@
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+'use client';
 import { Titulo } from "@/app/componentes/Textos";
 import { useModal } from "@/providers/ModalProvider";
-import { Dialog, DialogContent, Grid, MenuItem, Backdrop, CircularProgress } from "@mui/material";
+import { Grid, Backdrop, CircularProgress } from "@mui/material";
 import { Persona } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
-import { IoClose } from "react-icons/io5";
-import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
+import { DatePickerBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { Button, Modal, Form, Input, InputNumber, DatePicker, SelectPicker } from "rsuite";
+import { parseLetter, toUpperCase } from "@/utils/data";
+import { text } from "node:stream/consumers";
 
 interface Props {
     Persona: Persona;
@@ -25,147 +27,149 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
     const [load, setLoad] = useState(false);
     return (
         <>
-            <Dialog
+            <Modal
+                overflow
+                size='md'
+                backdrop='static'
                 open={!!Persona}
-                keepMounted={false}
-                maxWidth='sm'
                 onClose={() => { setPersona(null) }}
             >
-                <DialogContent sx={{ position: 'relative', p: 2 }}>
-                    <BotonSimple onClick={() => setPersona(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
-                        <IoClose fontSize={25} />
-                    </BotonSimple>
-                    <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
+                <Modal.Header>
+                    <Titulo mb={2}>
                         Modificar Personal
                     </Titulo>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} >
-                            <Controller
-                                name="nombre"
-                                control={control}
-                                rules={{ required: 'Nombre es obligatorio' }}
-                                render={({ field: { ref, ...field }, fieldState }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Nombre'
-                                        error={!!fieldState.error}
-                                        helperText={fieldState.error?.message}
-                                        inputRef={ref}
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="paterno"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Ap. Paterno'
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="materno"
-                                control={control}
-                                render={({ field }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Ap. Materno'
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="ci"
-                                control={control}
-                                rules={{ required: 'C.I. es requerido' }}
-                                render={({ field: { ref, ...field }, fieldState }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Carnet de identidad'
-                                        inputRef={ref}
-                                        error={!!fieldState.error}
-                                        helperText={fieldState.error?.message}
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="f_nacimiento"
-                                control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <DatePickerBox
-                                        disableFuture
-                                        inputRef={ref}
-                                        label='Fecha de nacimiento'
-                                        onChange={ev => {
-                                            field.onChange(ev?.format('DD/MM/YYYY'))
-                                        }}
-                                        value={dayjs(field.value, 'DD/MM/YYYY')}
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="cargo"
-                                control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        select
-                                        label='Cargo en la unidad'
-                                        {...field}
-                                        inputRef={ref}
-                                        SelectProps={{
-                                            MenuProps: {
-                                                slotProps: {
-                                                    paper: {
-                                                        sx: {
-                                                            background: 'linear-gradient(25deg, rgba(255,245,245,1) 0%, rgba(255,255,255,1) 51%, rgba(255,255,255,1) 72%, rgba(244,247,255,1) 100%)',
-                                                            px: 0,
-                                                            borderRadius: 3,
-                                                            border: "1px solid #f1f1f1",
-                                                            boxShadow: '-10px 10px 30px #00000022',
-                                                            maxHeight: 400
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        <MenuItem value='jefe'>Jefe de unidad</MenuItem>
-                                        <MenuItem value='tecnico'>Técnico</MenuItem>
-                                        <MenuItem value='secretario'>{"Secretario(a)"}</MenuItem>
-                                    </InputBox>
-                                )}
-                            />
-                        </Grid>
-                        {
-                            isDirty ?
-                                <Grid item xs={12}>
-                                    <BotonFilled
-                                        sx={{ float: 'right' }}
-                                        onClick={handleSubmit((Persona) => {
-                                            openModal({
-                                                async callback() {
-                                                    setLoad(true);
-                                                    let res = await axios.post('/api/persona/modificar', Persona);
-                                                    setPersona(null);
-                                                    axios.post('/api/persona/todo').then(res => {
-                                                        setPersonas(res.data);
-                                                        setPrevPersonas(res.data);
-                                                    });
-                                                    setLoad(false);
-                                                    return res.data.mensaje;
-                                                },
-                                                content: 'El personal será modificado',
-                                                titulo: '¿Continuar?'
-                                            })
-                                        })} >
-                                        Guardar cambios
-                                    </BotonFilled>
-                                </Grid> : null
-                        }
-                    </Grid>
-                </DialogContent>
+                </Modal.Header>
+                <Modal.Body style={{ padding: 12 }}>
 
-            </Dialog >
+                    <Controller
+                        name="nombre"
+                        control={control}
+                        rules={{ required: 'Nombre no puede quedar vacío' }}
+                        render={({ field, fieldState }) => (
+                            <Form.Group style={{ marginBottom: 10 }}>
+                                <Form.ControlLabel>Nombres</Form.ControlLabel>
+                                <Input {...field} size='lg'
+                                    onChange={text => field.onChange(parseLetter(text))} />
+                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                    {fieldState.error?.message}
+                                </Form.ErrorMessage>
+                            </Form.Group>
+                        )}
+                    />
+                    <Controller
+                        name="paterno"
+                        control={control}
+                        render={({ field }) => (
+                            <Form.Group style={{ marginBottom: 10 }}>
+                                <Form.ControlLabel>Apellido Paterno</Form.ControlLabel>
+                                <Input {...field} size='lg' onChange={text => field.onChange(parseLetter(text))} />
+                            </Form.Group>
+                        )}
+                    />
+                    <Controller
+                        name="materno"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <Form.Group style={{ marginBottom: 10 }}>
+                                <Form.ControlLabel>Apellido Materno</Form.ControlLabel>
+                                <Input {...field} size='lg' onChange={text => field.onChange(parseLetter(text))} />
+                            </Form.Group>
+                        )}
+                    />
+                    <Controller
+                        name="ci"
+                        control={control}
+                        rules={{
+                            required: 'CI no puede quedar vacío',
+                            maxLength: { message: 'CI no puede exceder de 8 dígitos', value: 8 }
+                        }}
+                        render={({ field, fieldState }) => (
+                            <Form.Group style={{ marginBottom: 10 }}>
+                                <Form.ControlLabel>Cédula Identidad</Form.ControlLabel>
+                                <InputNumber {...field} size='lg' />
+                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                    {fieldState.error?.message}
+                                </Form.ErrorMessage>
+                            </Form.Group>
+                        )}
+                    />
+                    <Controller
+                        name="f_nacimiento"
+                        control={control}
+                        rules={{ required: 'Fecha de nacimiento no puede quedar vacío' }}
+                        render={({ field, fieldState }) => (
+                            <Form.Group controlId="fecha">
+                                <Form.ControlLabel>Fecha de nacimiento</Form.ControlLabel>
+                                <DatePicker
+                                    placement="top"
+                                    value={dayjs(field.value, 'DD/MM/YYYY').toDate()}
+                                    style={{ width: "100%", marginBottom: 10 }}
+                                    size="lg"
+                                    // Deshabilitar fechas futuras
+                                    shouldDisableDate={(date) => date > new Date()}
+                                    onChange={(ev) => {
+                                        field.onChange(dayjs(ev).format("DD/MM/YYYY"));
+                                    }}
+                                />
+                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                    {fieldState.error?.message}
+                                </Form.ErrorMessage>
+                            </Form.Group>
+                        )}
+                    />
+
+                    <Controller
+                        name="cargo"
+                        control={control}
+                        render={({ field }) => (
+                            <Form.Group controlId="tipo">
+                                <Form.ControlLabel>Cargo de Unidad</Form.ControlLabel>
+                                <SelectPicker
+                                    {...field}
+                                    size="lg"
+                                    defaultValue={field.value}
+                                    cleanable={false}
+                                    style={{ marginBottom: 10, width: "100%" }}
+                                    data={[{ label: 'Jefe de unidad', value: 'jefe' },
+                                    { label: 'Técnico', value: 'tecnico' },
+                                    { label: 'Secretario(a)', value: 'secretario' }
+                                    ]}
+                                    searchable={false}
+                                />
+                            </Form.Group>
+                        )}
+                    />
+
+                </Modal.Body>
+                <Modal.Footer>
+                    {
+                        isDirty ?
+                            <Button
+                                size='lg'
+                                appearance='primary'
+                                onClick={handleSubmit((Persona) => {
+                                    openModal({
+                                        async callback() {
+                                            setLoad(true);
+                                            let res = await axios.post('/api/persona/modificar', Persona);
+                                            setPersona(null);
+                                            axios.post('/api/persona/todo').then(res => {
+                                                setPersonas(res.data);
+                                                setPrevPersonas(res.data);
+                                            });
+                                            setLoad(false);
+                                            return res.data.mensaje;
+                                        },
+                                        content: 'El personal será modificado',
+                                        titulo: '¿Continuar?'
+                                    })
+                                })} >
+                                Guardar cambios
+                            </Button>
+                            : null
+                    }
+                </Modal.Footer>
+            </Modal >
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
                 open={load}

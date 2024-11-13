@@ -8,7 +8,12 @@ const parsePhone = (value: any) => {
         value.toString().substring(0, value.toString().length - 1)
         : value.toString() : ''
 }
-
+function parseLetter(input: string) {
+    // Eliminamos cualquier carácter que no sea letra usando una expresión regular
+    const letrasEspacios = input.replace(/[^a-zA-Z\s]/g, '');
+    // Convertimos las letras a mayúsculas
+    return letrasEspacios.toUpperCase();
+}
 
 const toUpperCase = (value: string) => {
     return value ? value.toUpperCase() : '';
@@ -32,4 +37,4 @@ function filtrarValorEnArray(array: any, valorBuscado: string) {
     return resultados;
 }
 
-export { parseNumber, parsePhone, toUpperCase, filtrarValorEnArray };
+export { parseNumber, parsePhone, toUpperCase, filtrarValorEnArray, parseLetter };

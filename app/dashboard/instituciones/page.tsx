@@ -135,7 +135,7 @@ export default function Page() {
                         "": (<>
                             <Stack direction='row' spacing={2} alignItems='center'>
                                 <Button
-                                    size='md'
+                                    size='sm' style={{ fontSize: 13 }}
                                     appearance="ghost" onClick={() => {
                                         setInstitucion(value);
                                     }}>Modificar</Button>

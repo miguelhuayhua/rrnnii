@@ -9,10 +9,10 @@ const Editor = dynamic(() => import('react-quill').then((module) => module.defau
 import { useModal } from '@/providers/ModalProvider';
 import EditorSkeleton from '@/app/skeletons/EditorSkeleton';
 import dynamic from 'next/dynamic';
-import { red } from '@mui/material/colors';
-import Player from 'next-video/player';
+import ReactPlayer from 'react-player/lazy'
 import axios from 'axios';
 import { Uploader, Modal, Form, Button, Input } from 'rsuite';
+import { fileDomain } from '@/utils/globals';
 interface Props {
     setVideo: any;
     video: VideoType;
@@ -23,7 +23,7 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
     const [load, setLoad] = useState(false);
     const { control, watch, formState: { isDirty }, handleSubmit,
         setValue } = useForm<VideoType>({
-            defaultValues: video, shouldFocusError: true,
+            defaultValues: { ...video, video: '' }, shouldFocusError: true,
         });
     const { openModal } = useModal();
     const [file, setFile] = useState<any>([]);
@@ -79,18 +79,13 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
                 <Modal.Body>
                     <Grid p={2} container spacing={4} component='form' onSubmit={handleSubmit(onSubmit)}>
                         <Grid item xs={12} md={6}>
-
-                            <Player
-                                accentColor={red[700]}
-                                autoPlay
-                                customDomain='localhost'
-                                muted
+                            <ReactPlayer
                                 controls
-                                style={{
-                                    borderRadius: 12,
-                                    border: `1px solid ${red[700]}`,
-                                    overflow: 'hidden', marginBottom: 10
-                                }} src={`http://localhost:4000/uploads/video/main/file-1731465712731-494012114.mp4`} />
+                                muted
+                                playing
+                                loop
+                                width="100%"
+                                url={`${watch('video') || fileDomain + video.video}`} />
                             <Uploader
                                 fileList={file}
                                 multiple={false}
@@ -102,6 +97,7 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
                                 <div
                                     style={{
                                         height: 200,
+                                        marginTop: 20,
                                         cursor: 'pointer',
                                         border: '1px #666 dashed',
                                         borderRadius: 12,
