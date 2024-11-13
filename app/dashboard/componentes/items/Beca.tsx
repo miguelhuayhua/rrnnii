@@ -50,7 +50,7 @@ const BecaComponent = ({ Beca, setBeca,
                             <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
                         </Negrita>
                     </Stack>
-                    <Normal sx={{ color: '#929fac', fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 15, mb: 2 }}>
                         {dayjs(Beca.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>

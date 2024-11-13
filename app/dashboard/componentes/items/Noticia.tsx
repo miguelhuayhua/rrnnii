@@ -5,12 +5,12 @@ import dayjs from "dayjs";
 import { BoxSombra } from "../Mostrar";
 import { Box, Grid, Stack } from "@mui/material";
 import Image from 'next/legacy/image';
-import { BotonOutline } from "@/app/componentes/Botones";
 import { SwitchBox } from "@/app/componentes/Datos";
 import parse from 'html-react-parser';
 import axios from "axios";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { fileDomain } from "@/utils/globals";
+import { Button } from "rsuite";
 interface Props {
     Noticia: Noticia & { Institucion: Institucion };
     setNoticia: any;
@@ -28,7 +28,7 @@ const NoticiaComponent = ({ Noticia, setNoticia,
         <BoxSombra p={3} bgcolor='white' borderRadius={4} >
             <Grid container spacing={2}>
                 <Grid item xs={8} position='relative'>
-                    <Normal sx={{ color: '#929fac', fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 15, mb: 2 }}>
                         {dayjs(Noticia.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
@@ -40,12 +40,10 @@ const NoticiaComponent = ({ Noticia, setNoticia,
                             parse(Noticia.descripcion.substring(0, 200) + "...")
                         }
                     </Box>
-
-
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <BotonOutline sx={{ fontSize: 14 }} onClick={() => {
+                        <Button appearance="ghost" onClick={() => {
                             setNoticia(Noticia);
-                        }}>Modificar</BotonOutline>
+                        }}>Modificar</Button>
 
                         <SwitchBox checked={Noticia.estado} onChange={(ev, checked) => {
                             axios.post('/api/noticia/estado', { estado: checked, id: Noticia.id }).then(res => {
@@ -61,7 +59,7 @@ const NoticiaComponent = ({ Noticia, setNoticia,
                 </Grid>
                 <Grid item xs={4}>
                     <Box position='relative' height="100%" borderRadius={3} overflow='hidden'>
-                        <Image src={fileDomain + Noticia.imagen} layout="fill" />
+                        <Image src={fileDomain + Noticia.imagen} layout="fill" objectFit="cover" />
                     </Box>
                 </Grid>
             </Grid>

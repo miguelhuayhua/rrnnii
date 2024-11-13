@@ -17,8 +17,9 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import ModalCarrera from "./Modal";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import { ChipBox } from "@/app/componentes/Mostrar";
+import { Button } from "rsuite";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -34,7 +35,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <Breadcrumbs>
+            <Breadcrumbs sx={{ my: 2 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -47,21 +48,23 @@ export default function Page() {
                 Carreras
             </Titulo>
             <Stack direction='row' my={2} spacing={2}>
-                <BotonFilled onClick={() => router.push('/dashboard/carreras/crear')}>
+                <Button
+                    size='lg' appearance="primary" onClick={() => router.push('/dashboard/carreras/crear')}>
                     Añadir carrera
-                </BotonFilled>
-                <BotonSimple onClick={() => {
-                    axios.post('/api/carrera/todo', {}).then(res => {
-                        setCarreras(res.data);
-                        setPrevCarreras(res.data);
-                    });
-                }}>
+                </Button>
+                <Button size='lg'
+                    appearance="subtle" onClick={() => {
+                        axios.post('/api/carrera/todo', {}).then(res => {
+                            setCarreras(res.data);
+                            setPrevCarreras(res.data);
+                        });
+                    }}>
                     <TbReload fontSize={22} />
-                </BotonSimple>
+                </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -130,9 +133,10 @@ export default function Page() {
                         ),
                         "": (<>
                             <Stack direction='row' alignItems='center' spacing={2}>
-                                <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
-                                    setCarrera(value);
-                                }}>Modificar</BotonOutline>
+                                <Button appearance='ghost'
+                                    size='md' onClick={() => {
+                                        setCarrera(value);
+                                    }}>Modificar</Button>
 
                                 <SwitchBox checked={value.estado} onChange={(ev, checked) => {
                                     axios.post('/api/carrera/estado', { estado: checked, id: value.id }).then(res => {

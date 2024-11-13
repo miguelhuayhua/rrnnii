@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { Video } from "@prisma/client";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { IoSearch } from "react-icons/io5";
@@ -36,7 +36,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs >
+            <Breadcrumbs sx={{ my: 2 }} >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -69,8 +69,8 @@ export default function Page() {
                 </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[700] } }}
                 ScrollButtonComponent={(props) =>
                     <Button
                         size='lg'
@@ -137,9 +137,10 @@ export default function Page() {
                                     ),
                                     "": (<>
                                         <Stack direction='row' spacing={2} alignItems='center'>
-                                            <Button size="xs" onClick={() => {
-                                                setVideo(value);
-                                            }}>Modificar</Button>
+                                            <Button
+                                                appearance="ghost" size="md" onClick={() => {
+                                                    setVideo(value);
+                                                }}>Modificar</Button>
 
                                             <SwitchBox checked={value.estado} onChange={(ev, checked) => {
                                                 axios.post('/api/video/estado', { estado: checked, id: value.id }).then(res => {

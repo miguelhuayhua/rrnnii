@@ -17,7 +17,6 @@ import { blue, red } from "@mui/material/colors";
 import axios from "axios";
 import PasantiaComponent from "../componentes/items/Pasantia";
 import { ChipBox } from "@/app/componentes/Mostrar";
-import { InputBox } from "@/app/componentes/Datos";
 import { IoSearch } from "react-icons/io5";
 import { Button, Input, InputGroup } from "rsuite";
 export default function Page() {
@@ -36,7 +35,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs sx={{ mb: 1 }}>
+            <Breadcrumbs sx={{ mb: 1, mt: 2 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -67,8 +66,8 @@ export default function Page() {
                 </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -128,10 +127,13 @@ export default function Page() {
             </Tabs>
 
             <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
-                <Input onChange={text => {
-                    setPasantias(prevPasantias.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
-                }} />
-                <InputGroup.Addon>
+                <Input
+                    placeholder="Buscar pasantías"
+                    style={{ fontFamily: 'inherit' }}
+                    onChange={text => {
+                        setPasantias(prevPasantias.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                    }} />
+                <InputGroup.Addon style={{ background: 'white' }}>
                     <IoSearch fontSize={28} />
                 </InputGroup.Addon>
             </InputGroup>
@@ -144,16 +146,23 @@ export default function Page() {
                             mx: 'auto'
                         }} /> : <Grid container spacing={2}>
                         {
-                            Pasantias.map(value => (
-                                <Grid item xs={12} lg={6} key={value.id}>
-                                    <PasantiaComponent
-                                        setPasantia={setPasantia}
-                                        setPasantias={setPasantias}
-                                        setOpcion={setOpcion}
-                                        setPrevPasantias={setPrevPasantias}
-                                        Pasantia={value as any} />
+                            Pasantias.length > 0 ?
+
+                                Pasantias.map(value => (
+                                    <Grid item xs={12} lg={6} key={value.id}>
+                                        <PasantiaComponent
+                                            setPasantia={setPasantia}
+                                            setPasantias={setPasantias}
+                                            setOpcion={setOpcion}
+                                            setPrevPasantias={setPrevPasantias}
+                                            Pasantia={value as any} />
+                                    </Grid>
+                                ))
+                                : <Grid item xs={12}>
+                                    <Normal sx={{ textAlign: 'center' }}>
+                                        Pasantías no encontradas
+                                    </Normal>
                                 </Grid>
-                            ))
                         }
                     </Grid>
             }

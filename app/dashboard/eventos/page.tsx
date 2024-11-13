@@ -11,7 +11,7 @@ import ModalEvento from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
 import { TbReload } from "react-icons/tb";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import axios from "axios";
 import { IoSearch } from "react-icons/io5";
 import EventoComponent from "../componentes/items/Evento";
@@ -35,7 +35,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs >
+            <Breadcrumbs sx={{ my: 2 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -68,8 +68,8 @@ export default function Page() {
                 </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -128,10 +128,12 @@ export default function Page() {
                     </Box>} value='inactivo' />
             </Tabs>
             <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
-                <Input onChange={text => {
-                    setEventos(prevEventos.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
-                }} />
-                <InputGroup.Addon>
+                <Input style={{ fontFamily: 'inherit' }}
+                    placeholder="Buscar eventos"
+                    onChange={text => {
+                        setEventos(prevEventos.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                    }} />
+                <InputGroup.Addon style={{ background: 'white' }}>
                     <IoSearch fontSize={28} />
                 </InputGroup.Addon>
             </InputGroup>

@@ -18,6 +18,8 @@ import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
+import { Icon } from '@iconify/react';
+import { Modal, Input, Button, Form, Text, InputNumber } from 'rsuite';
 import { fileDomain } from '@/utils/globals';
 interface Props {
     setCarrera: any;
@@ -74,94 +76,87 @@ export default function ModalCarrera({ setCarrera, Carrera,
     }
     return (
         <>
-            <Dialog
+            <Modal
+                overflow
+                size='md'
                 open={!!Carrera}
-                keepMounted={false}
-                maxWidth='md'
                 onClose={() => { setCarrera(null) }}
             >
-                <DialogContent sx={{ position: 'relative', p: 2 }}>
-                    <BotonSimple onClick={() => setCarrera(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
-                        <IoClose fontSize={25} />
-                    </BotonSimple>
-                    <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
-                        Información sobre el {Carrera.nombre}
+                <Modal.Header>
+                    <Titulo mb={2}>
+                        Editar {Carrera.nombre}
                     </Titulo>
+                </Modal.Header>
+                <Modal.Body>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <Box px={{ xs: 10, sm: 0 }}>
-                                <Box sx={{
-                                    aspectRatio: 1,
-                                    bgcolor: grey[100],
-                                    p: 1,
-                                    border: `1px dashed ${grey[400]}`,
-                                    flexDirection: 'column',
-                                    borderRadius: 5,
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    color: grey[900],
-                                    transition: 'color 0.25s',
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                    "&:hover": {
-                                        color: grey[500],
-                                        cursor: 'pointer'
-                                    }
-                                }}
-                                    onClick={() => openFilePicker()}
-                                >
-                                    {
-                                        watch('logo') ?
-                                            <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
-                                            : null
-                                    }
-                                    <BsImageAlt color={'inherit'} fontSize={30} />
-                                    <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                                </Box>
-                            </Box>
-                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-
+                            <div style={{
+                                aspectRatio: 1,
+                                border: `1px dashed #aaa`,
+                                flexDirection: 'column',
+                                borderRadius: 12,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                transition: 'color 0.25s',
+                                position: 'relative',
+                                overflow: 'hidden'
+                            }}
+                                className='drop'
+                                onClick={() => openFilePicker()}
+                            >
+                                {
+                                    watch('logo') ?
+                                        <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
+                                        : null
+                                }
+                                <Icon icon="stash:image-light" width="60" height="60" style={{ color: '#000' }} />
+                                <Text align='center'>+ Subir imagen</Text>
+                            </div>
+                            <Text
+                                style={{ margin: '15px 0' }}
+                                size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Controller
                                 name="nombre"
                                 control={control}
-                                rules={{ required: 'Nombre es obligatorio' }}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Título'
-                                        error={!!errors.nombre}
-                                        helperText={errors.nombre?.message || 'Este es el título principal que será visible en el carrera'}
-                                        inputRef={ref}
-                                    />
+                                rules={{ required: 'Nombre no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                        <Input {...field} size='lg' />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
                                 )}
                             />
-
                             <Controller
                                 name="contacto"
                                 control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Contacto'
-                                        inputRef={ref}
-                                    />
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Contacto</Form.ControlLabel>
+                                        <InputNumber {...field} value={field.value!} size='lg' />
+                                    </Form.Group>
                                 )}
                             />
                         </Grid>
-                        {
-                            isDirty ?
-                                <Grid item xs={12}>
-                                    <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >
-                                        Modificar Carrera
-                                    </BotonFilled>
-                                </Grid> : null
-                        }
                     </Grid>
-                </DialogContent>
-            </Dialog >
+                </Modal.Body>
+                <Modal.Footer>
+                    {
+                        isDirty ?
+                            <Button
+                                appearance='primary'
+                                onClick={handleSubmit(onSubmit)} >
+                                Modificar Carrera
+                            </Button>
+                            : null
+                    }
+                </Modal.Footer>
+            </Modal >
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
                 open={load}

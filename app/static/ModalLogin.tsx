@@ -1,5 +1,5 @@
 'use client';
-import { Box, IconButton } from "@mui/material";
+import { Box } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { useState } from "react";
@@ -12,10 +12,9 @@ import React from 'react';
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { Normal, Titulo } from "../componentes/Textos";
-import { InputBox } from "../componentes/Datos";
-import { BotonFilled } from "../componentes/Botones";
 import { makeid } from "@/utils/globals";
-import { blue, red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
+import { Form, Input, InputGroup, Button, Text } from "rsuite";
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
         children: React.ReactElement<any, any>;
@@ -67,18 +66,17 @@ export default function ModalLogin({ open, setOpen }: Props) {
                     py={2}
                 >
                     <Controller
-                        rules={{ required: 'Usuario es requerido' }}
-                        control={credencialsForm.control}
                         name="usuario"
-                        render={({ field }) => (
-                            <InputBox
-                                label='Usuario'
-                                disabled={loading}
-                                error={!!credencialsForm.formState.errors.usuario}
-                                {...field}
-                                helperText={credencialsForm.formState.errors.usuario?.message}
-                            >
-                            </InputBox>
+                        control={credencialsForm.control}
+                        rules={{ required: 'Usuario no puede quedar vacío' }}
+                        render={({ field, fieldState }) => (
+                            <Form.Group style={{ marginBottom: 10 }}>
+                                <Form.ControlLabel>Usuario</Form.ControlLabel>
+                                <Input {...field} size='lg' />
+                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                    {fieldState.error?.message}
+                                </Form.ErrorMessage>
+                            </Form.Group>
                         )}
                     />
                     <Controller
@@ -88,69 +86,52 @@ export default function ModalLogin({ open, setOpen }: Props) {
                         control={credencialsForm.control}
                         name="password"
                         render={({ field, fieldState }) => (
-                            <InputBox
-                                label='Contraseña'
-                                error={!!fieldState.error}
-                                disabled={loading}
-                                type={showPassword ? 'text' : 'password'}
-                                InputProps={{
-                                    endAdornment:
-                                        <IconButton
-                                            sx={{ mr: 0 }}
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-                                        </IconButton>
-                                }}
-                                helperText={fieldState.error?.message}
-                                {...field}
-                            />
-                        )}
-                    />
-                    <Controller
-                        rules={{ required: 'No puede quedar vacio' }}
-                        control={credencialsForm.control}
-                        name="captcha"
-                        render={({ field }) => (
-                            <InputBox
-                                label='Captcha'
-                                disabled
-                                sx={{ userSelect: 'none' }}
-                                {...field}
-                                InputProps={{
-                                    endAdornment: <BotonFilled
-                                        onClick={() => {
-                                            credencialsForm.setValue('captcha', makeid(7))
-                                        }}
-                                        sx={{
-                                            bgcolor: blue[500],
-                                            minWidth: 0,
-                                            height: 35, width: 40,
+                            <Form.Group style={{ marginBottom: 10 }}>
+                                <Form.ControlLabel>Contraseña</Form.ControlLabel>
+                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                    {fieldState.error?.message}
+                                </Form.ErrorMessage>
+                                <InputGroup inside >
+                                    <Input
+                                        size='lg' {...field} type={showPassword ? 'text' : 'password'} />
+                                    <InputGroup.Button
+                                        style={{ height: "100%" }} onClick={() => {
+                                            setShowPassword(!showPassword);
                                         }}>
-                                        <Icon fontSize={22} icon="pepicons-pop:reload" />
-
-                                    </BotonFilled>
-                                }}
-                            />
+                                        {showPassword ? <MdVisibilityOff fontSize={25} /> : <MdVisibility fontSize={23} />}
+                                    </InputGroup.Button>
+                                </InputGroup>
+                            </Form.Group>
                         )}
                     />
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 2 }}>
+                        <Text as='del'
+                            style={{ userSelect: 'none', fontSize: 25 }}>
+                            {credencialsForm.watch('captcha')}
+                        </Text>
+                        <Button
+                            onClick={() => {
+                                credencialsForm.setValue('captcha', makeid(7))
+                            }} appearance="ghost" style={{ marginLeft: 10, color: '#212121', border: '1px solid #212121' }} >
+                            <Icon icon='mdi:reload' fontSize={22} />
+                        </Button>
+                    </Box>
                     <Controller
                         rules={{
-                            required: 'No puede quedar vacio',
+                            required: 'Por favor confirme el Captcha',
                             validate: value => value === credencialsForm.watch('captcha') || 'El valor del captcha no coincide, inténtelo de nuevo'
-
                         }}
                         control={credencialsForm.control}
                         name="confirmCaptcha"
                         render={({ field, fieldState }) => (
-                            <InputBox
-                                label='Confirme el captcha'
-                                disabled={loading}
-                                error={!!fieldState.error}
-                                {...field}
-                                helperText={fieldState.error?.message}
-                            />
+                            <Form.Group style={{ marginBottom: 10 }}>
+                                <Form.ControlLabel>Confirme el Captcha</Form.ControlLabel>
+                                <Input {...field} size='lg' />
+                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                    {fieldState.error?.message}
+                                </Form.ErrorMessage>
+
+                            </Form.Group>
                         )}
                     />
                     {
@@ -163,9 +144,16 @@ export default function ModalLogin({ open, setOpen }: Props) {
                                 {mensaje}
                             </Normal> : null
                     }
-                    <BotonFilled
-                        disabled={loading}
-                        sx={{ display: 'block', mt: 2, mx: 'auto', px: 4 }} onClick={async () => {
+                    <Button
+                        appearance='primary'
+                        loading={loading}
+                        block
+                        size='lg'
+                        style={{
+                            marginTop: 10,
+                            background: grey[900]
+                        }}
+                        onClick={async () => {
                             if (await credencialsForm.trigger()) {
                                 setLoading(true);
                                 signIn('credentials', {
@@ -185,7 +173,7 @@ export default function ModalLogin({ open, setOpen }: Props) {
                             }
                         }}>
                         Ingresar
-                    </BotonFilled>
+                    </Button>
                 </Box>
             </DialogContent>
 

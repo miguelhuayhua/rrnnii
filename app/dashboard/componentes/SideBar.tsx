@@ -2,13 +2,12 @@
 import Box from '@mui/material/Box';
 import { usePathname, useRouter } from 'next/navigation';
 import { MdWork } from "react-icons/md";
-import { Button, Divider, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
+import { Divider, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
 import { IoPeople } from "react-icons/io5";
 import { FaHandsHelping, FaVideo } from "react-icons/fa";
 import { FaBuilding, FaBuildingUser } from "react-icons/fa6";
 import Image from 'next/legacy/image';
 import { HiHome, HiNewspaper } from 'react-icons/hi2';
-import { IconType } from 'react-icons/lib';
 import { GiMeepleCircle } from 'react-icons/gi';
 import { BsFillCalendar2EventFill } from 'react-icons/bs';
 import { BotonOutline, BotonSimple } from '@/app/componentes/Botones';
@@ -19,32 +18,32 @@ import { CgMenuLeft } from 'react-icons/cg';
 import { BiSolidInstitution } from 'react-icons/bi';
 import { useSession } from 'next-auth/react';
 import { GrContactInfo } from 'react-icons/gr';
-import { IoIosVideocam } from 'react-icons/io';
+import { Button } from 'rsuite';
+import { Icon } from '@iconify/react';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
 
-const SideBarItem = ({ Icon, label, active, onclick }: { Icon: IconType, label: string, active: boolean, onclick?: any }) => {
+const SideBarItem = ({ icon, label, active, onclick }: {
+    icon: string, label: string, active: boolean, onclick?: any
+}) => {
     return (
         <Button
             onClick={() => onclick()}
-            sx={{
+            style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'start',
                 textTransform: 'none',
-                fontSize: 10.5,
-                fontWeight: 700,
-                color: active ? blue[500] : grey[900],
-                mx: 'auto',
-                borderRadius: 4,
-                my: 0.25,
-                py: 1.1,
-                background: active ? blue[50] : 'transparent',
-                width: "90%"
+                fontSize: 13,
+                fontWeight: 500,
+                color: active ? grey[50] : grey[900],
+                margin: '5px auto',
+                borderRadius: 10,
+                padding: '10px 15px',
+                background: active ? grey[900] : 'transparent',
+                width: "92%"
             }}>
-            <Box sx={{ background: 'white', padding: 1, borderRadius: 3, height: 35 }}>
-                <Icon fontSize={22} />
-            </Box>
-            <Normal sx={{ color: grey[900], fontWeight: 700, fontSize: 15, ml: 1 }}>
+            <Icon icon={icon} fontSize={20} />
+            <Normal sx={{ fontWeight: 700, fontSize: 15, ml: 2 }}>
                 {label}
             </Normal>
         </Button >
@@ -61,55 +60,53 @@ const SideBar = () => {
     const Side = () => (
         <Box position='sticky'
             bgcolor='white'
-            top={0} borderRight='1px solid #eee' width={300} minWidth={95} overflow={'scroll'} px={0.5} height={"100vh"} zIndex={20}>
-            <Box display='flex' justifyContent='center' my={2}>
-                <Image src='/logorrnnii.png' width={50} height={48} layout='fixed' />
-            </Box>
+            pt={2}
+            top={0} borderRight={{ xs: 'none', md: '1px solid #ccc' }}
+            width={300} minWidth={95} overflow={'scroll'} height={"100vh"} zIndex={20}>
             <SideBarItem onclick={() => {
                 router.push('/dashboard/');
                 setMove(false);
-            }} Icon={HiHome} label='Principal' active={pathname == '/dashboard'} />
+            }} icon='carbon:home' label='Principal' active={pathname == '/dashboard'} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/convenios');
                 setMove(false);
-            }} Icon={FaHandsHelping} label='Convenios' active={pathname.includes('/convenios')} />
+            }} icon='fluent-emoji-high-contrast:handshake' label='Convenios' active={pathname.includes('/convenios')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/pasantias');
                 setMove(false);
-            }} Icon={MdWork} label='Pasantias' active={pathname.includes('/pasantias')} />
+            }} icon='solar:suitcase-outline' label='Pasantias' active={pathname.includes('/pasantias')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/becas');
                 setMove(false);
-            }} Icon={GiMeepleCircle} label='Becas' active={pathname.includes('/becas')} />
+            }} icon='mynaui:academic-hat' label='Becas' active={pathname.includes('/becas')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/eventos');
                 setMove(false);
-            }} Icon={BsFillCalendar2EventFill} label='Eventos' active={pathname.includes('/eventos')} />
+            }} icon='mynaui:calendar' label='Eventos' active={pathname.includes('/eventos')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/noticias');
                 setMove(false);
-            }} Icon={HiNewspaper} label='Noticias' active={pathname.includes('/noticias')} />
+            }} icon='fluent:news-28-regular' label='Noticias' active={pathname.includes('/noticias')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/instituciones');
                 setMove(false);
-            }} Icon={FaBuilding} label='Instituciones' active={pathname.includes('/instituciones')} />
+            }} icon='hugeicons:building-02' label='Instituciones' active={pathname.includes('/instituciones')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/carreras');
                 setMove(false);
-            }} Icon={BiSolidInstitution} label='Carreras' active={pathname.includes('/carreras')} />
+            }} icon='hugeicons:university' label='Carreras' active={pathname.includes('/carreras')} />
             <SideBarItem onclick={() => {
                 router.push('/dashboard/videos');
                 setMove(false);
-            }} Icon={IoIosVideocam} label='Videos' active={pathname.includes('/videos')} />
-            <Divider sx={{ borderColor: '#eee' }} />
-
+            }} icon='mynaui:video' label='Videos' active={pathname.includes('/videos')} />
+            <Divider sx={{ borderColor: '#ccc' }} />
             {
                 data?.user.rol == 'admin' ?
                     <SideBarItem onclick={() => {
                         router.push('/dashboard/usuarios');
                         setMove(false);
                     }}
-                        Icon={IoPeople}
+                        icon='ph:users-three'
                         label='Personal'
                         active={pathname.includes('/usuarios')} />
                     : null
@@ -117,13 +114,13 @@ const SideBar = () => {
             <SideBarItem onclick={() => {
                 router.push('/dashboard/unidad');
                 setMove(false);
-            }} Icon={FaBuildingUser} label='Unidad' active={pathname.includes('/unidad')} />
+            }} icon='ph:office-chair-light' label='Unidad' active={pathname.includes('/unidad')} />
             {
                 data?.user.rol == 'admin' ?
                     <SideBarItem onclick={() => {
                         router.push('/dashboard/acciones');
                         setMove(false);
-                    }} Icon={GrContactInfo} label='Acciones' active={pathname.includes('/acciones')} />
+                    }} icon='hugeicons:audit-02' label='Acciones' active={pathname.includes('/acciones')} />
                     : null
             }
         </Box>
@@ -133,15 +130,15 @@ const SideBar = () => {
             {
                 md ?
                     <>
-                        <BotonOutline
+                        <Button
+                            appearance='subtle'
                             onClick={() => { setMove(!move); }}
-                            sx={{
+                            style={{
                                 position: 'fixed',
-                                top: 17, left: 15, zIndex: 20,
-                                bgcolor: 'white'
+                                top: 12, right: 70, zIndex: 20,
                             }}>
-                            <CgMenuLeft fontSize={27} />
-                        </BotonOutline>
+                            <Icon icon='ci:menu-alt-05' fontSize={35} />
+                        </Button>
                         <SwipeableDrawer
                             sx={{ overflowY: 'scroll' }}
                             anchor={'left'}

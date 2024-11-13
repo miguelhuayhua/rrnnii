@@ -110,7 +110,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }}>
+                <Breadcrumbs sx={{ my: 1 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -119,7 +119,7 @@ export default function Page() {
                     </Link>
                     <Negrita>Crear</Negrita>
                 </Breadcrumbs>
-                <Titulo sx={{ mb: 2 }}>
+                <Titulo sx={{ mt: 2, mb: 1.5 }}>
                     Crear nuevo convenio
                 </Titulo>
                 <Button
@@ -129,9 +129,9 @@ export default function Page() {
                     Regresar
                 </Button>
 
-                <Grid container spacing={2} px={{ xs: 0, xl: 5 }} py={2}>
+                <Grid container spacing={4} py={3}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -173,7 +173,7 @@ export default function Page() {
                         </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}
+                        <Panel shaded style={{ background: 'white' }}
                             as='form' onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
@@ -345,9 +345,11 @@ export default function Page() {
                                         )}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6} mx='auto'>
                                     <Button
                                         size="lg"
+                                        block
+                                        style={{ background: red[700] }}
                                         appearance="primary"
                                         onClick={handleSubmit(onSubmit)}>
                                         Crear Convenio</Button>

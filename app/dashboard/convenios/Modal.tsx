@@ -173,9 +173,8 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                     <Form.Group style={{ marginBottom: 10 }}>
                                         <Form.ControlLabel>Institución</Form.ControlLabel>
                                         <AutoComplete
-                                            onBlur={ev => field.onChange((ev.target as any).value! as any)}
-                                            size="lg"
-                                            value={field.value}
+                                            {...field}
+                                            size='lg'
                                             data={
                                                 instituciones.map((value: Institucion) => value.nombre)
                                             } />

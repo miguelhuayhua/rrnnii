@@ -9,13 +9,15 @@ import { Noticia } from "@prisma/client";
 import ModalNoticia from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { IoSearch } from "react-icons/io5";
 import NoticiaComponent from "../componentes/items/Noticia";
 import { Button, Input, InputGroup } from "rsuite";
-
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [noticias, setNoticias] = useState<Noticia[]>([]);
@@ -32,7 +34,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs >
+            <Breadcrumbs sx={{ my: 2 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -65,8 +67,8 @@ export default function Page() {
                 </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[700] } }}
                 ScrollButtonComponent={(props) =>
                     <Button
                         size='lg'
@@ -109,11 +111,14 @@ export default function Page() {
                     </Box>} value='inactivo' />
 
             </Tabs>
+
             <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
-                <Input onChange={text => {
-                    setNoticias(prevNoticias.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
-                }} />
-                <InputGroup.Addon>
+                <Input style={{ fontFamily: 'inherit' }}
+                    placeholder="Buscar noticias"
+                    onChange={text => {
+                        setNoticias(prevNoticias.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                    }} />
+                <InputGroup.Addon style={{ background: 'white' }}>
                     <IoSearch fontSize={28} />
                 </InputGroup.Addon>
             </InputGroup>

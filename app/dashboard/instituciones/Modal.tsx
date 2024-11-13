@@ -1,25 +1,18 @@
 'use client';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
-import { Box, Grid, CircularProgress, Backdrop } from '@mui/material';
+import { Grid, CircularProgress, Backdrop } from '@mui/material';
 import { Institucion } from '@prisma/client';
-import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
-import { Normal, Titulo } from '@/app/componentes/Textos';
+import { Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
 import { useFilePicker } from 'use-file-picker';
-import { BsImageAlt } from 'react-icons/bs';
-import { InputBox } from '@/app/componentes/Datos';
 import { useModal } from '@/providers/ModalProvider';
 import Image from 'next/legacy/image';
-import { grey } from '@mui/material/colors';
+import { Icon } from '@iconify/react';
 import { useSnackbar } from '@/providers/SnackbarProvider';
-import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
 import { fileDomain } from '@/utils/globals';
-import { FaYoutube } from 'react-icons/fa';
-import { TbWorldWww } from 'react-icons/tb';
+import { Modal, Input, Form, Button, InputNumber, Text, } from 'rsuite';
 interface Props {
     setInstitucion: any;
     Institucion: Institucion;
@@ -72,119 +65,112 @@ export default function ModalInstitucion({ setInstitucion, Institucion, setInsti
             }
         });
     }
+
     return (
         <>
-            <Dialog
+            <Modal
+                overflow
+                size='md'
                 open={!!Institucion}
-                keepMounted={false}
-                maxWidth='md'
                 onClose={() => { setInstitucion(null) }}
             >
-                <DialogContent sx={{ position: 'relative', p: 2 }}>
-                    <BotonSimple onClick={() => setInstitucion(null)} sx={{ position: 'absolute', top: 5, right: 5 }}>
-                        <IoClose fontSize={25} />
-                    </BotonSimple>
-                    <Titulo sx={{ fontSize: 20, mb: 3, pr: 4 }}>
-                        Información sobre {Institucion.nombre}
+                <Modal.Header>
+                    <Titulo mb={2}>
+                        Editar {Institucion.nombre}
                     </Titulo>
-                    <Grid container spacing={2}>
+                </Modal.Header>
+                <Modal.Body>
+                    <Grid container spacing={4}>
                         <Grid item xs={12} sm={6}>
-                            <Box px={{ xs: 5, sm: 0 }}>
-                                <Box sx={{
-                                    aspectRatio: 1,
-                                    bgcolor: grey[100],
-                                    p: 1,
-                                    border: `1px dashed ${grey[400]}`,
-                                    flexDirection: 'column',
-                                    borderRadius: 5,
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    color: grey[900],
-                                    transition: 'color 0.25s',
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                    "&:hover": {
-                                        color: grey[500],
-                                        cursor: 'pointer'
-                                    }
-                                }}
-                                    onClick={() => openFilePicker()}
-                                >
-                                    {
-                                        watch('logo') ?
-                                            <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
-                                            : null
-                                    }
-                                    <BsImageAlt color={'inherit'} fontSize={30} />
-                                    <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                                </Box>
-                            </Box>
-                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
+                            <div style={{
+                                aspectRatio: 1,
+                                border: `1px dashed #aaa`,
+                                flexDirection: 'column',
+                                borderRadius: 12,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                transition: 'color 0.25s',
+                                position: 'relative',
+                                overflow: 'hidden'
+                            }}
+                                className='drop'
+                                onClick={() => openFilePicker()}
+                            >
+                                {
+                                    watch('logo') ?
+                                        <Image src={(portada ? '' : fileDomain) + watch('logo')} layout='fill' objectFit='cover' />
+                                        : null
+                                }
+                                <Icon icon="stash:image-light" width="60" height="60" style={{ color: '#000' }} />
+                                <Text align='center'>+ Subir imagen</Text>
+                            </div>
+                            <Text
+                                style={{ margin: '15px 0' }}
+                                size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Controller
                                 name="nombre"
                                 control={control}
-                                rules={{ required: 'Nombre es obligatorio' }}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Título'
-                                        error={!!errors.nombre}
-                                        helperText={errors.nombre?.message || 'Este es el título principal que será visible en el institucion'}
-                                        inputRef={ref}
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="contacto"
-                                control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Contacto'
-                                        inputRef={ref}
-                                    />
+                                rules={{ required: 'Nombre no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Nombre de institucion</Form.ControlLabel>
+                                        <Input {...field} size='lg' />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="video"
                                 control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Link de Youtube'
-                                        inputRef={ref}
-                                        InputProps={{ endAdornment: <FaYoutube fontSize={26} /> }}
-                                    />
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Link de Youtube</Form.ControlLabel>
+                                        <Input {...field} value={field.value!} size='lg' />
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="contacto"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Contacto</Form.ControlLabel>
+                                        <InputNumber {...field} value={field.value!} size='lg' />
+                                    </Form.Group>
                                 )}
                             />
                             <Controller
                                 name="web"
                                 control={control}
-                                render={({ field: { ref, ...field } }) => (
-                                    <InputBox
-                                        {...field}
-                                        label='Página web'
-                                        InputProps={{ endAdornment: <TbWorldWww fontSize={26} /> }}
-                                        inputRef={ref}
-                                    />
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Página web</Form.ControlLabel>
+                                        <Input {...field} value={field.value!} size='lg' />
+                                    </Form.Group>
                                 )}
                             />
                         </Grid>
-                        {
-                            isDirty ?
-                                <Grid item xs={12}>
-                                    <BotonFilled sx={{ float: 'right' }} onClick={handleSubmit(onSubmit)} >
-                                        Modificar Institución
-                                    </BotonFilled>
-                                </Grid> : null
-                        }
-                    </Grid>
-                </DialogContent>
-            </Dialog >
 
+                    </Grid>
+                </Modal.Body>
+                <Modal.Footer>
+                    {
+                        isDirty ?
+                            <Button
+                                appearance='primary'
+                                size='lg'
+                                onClick={handleSubmit(onSubmit)} >
+                                Modificar Institución
+                            </Button>
+                            : null
+                    }
+                </Modal.Footer>
+            </Modal >
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
                 open={load}

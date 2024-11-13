@@ -1,28 +1,28 @@
 'use client';
-import React, { createContext, useContext, useState } from 'react';
-import { Snackbar } from '@mui/material';
+import React, { createContext, useContext } from 'react';
+import { Icon } from '@iconify/react';
+import { Normal } from '@/app/componentes/Textos';
+import { Notification, useToaster } from 'rsuite';
 // Creamos un contexto para almacenar el estado del Snackbar
 const SnackbarContext = createContext({
     openSnackbar: (message: string) => {
     }
 });
 export const SnackbarProvider = ({ children }: any) => {
+    const toaster = useToaster();
     const openSnackbar = (message: string) => {
-        setMessage(message);
-        setOpen(true);
+        toaster.push(<Notification
+            type='info'>
+            <Normal sx={{ display: 'flex', alignItems: 'center' }}>
+                <Icon icon='lucide:info' fontSize={30}
+                    style={{ marginRight: 20 }} />
+                {message}
+            </Normal>
+        </Notification>, { placement: 'topEnd' });
     };
-    const [message, setMessage] = useState('');
-    const [open, setOpen] = useState(false);
     return (
         <SnackbarContext.Provider value={{ openSnackbar }}>
-            <Snackbar
-                open={open}
-                autoHideDuration={5000}
-                onClose={() => setOpen(false)}
-                message={message}
-            />
-            {/* Renderizamos el Snackbar aquí */}
-                {children}
+            {children}
         </SnackbarContext.Provider>
     );
 };

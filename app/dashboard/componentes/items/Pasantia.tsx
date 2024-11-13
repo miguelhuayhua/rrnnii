@@ -35,7 +35,7 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                     <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
                         <ChipBox sx={{ height: 30, }} label={Pasantia.estado ? 'Publicado' : 'Sin publicar'} />
                     </Stack>
-                    <Normal sx={{ color: '#929fac', fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 15, mb: 2 }}>
                         {dayjs(Pasantia.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>

@@ -11,17 +11,45 @@ html {
     /* Color para error */
     --rs-warning-500: #ffc107;
     /* Color para advertencias */
-    --rs-border-primary: rgb(183, 183, 183);
+    --rs-border-primary: rgb(182, 182, 182);
     --rs-btn-primary-hover-bg: #212121;
     --rs-btn-primary-bg: #212121;
     --rs-btn-ghost-hover-border: #212121;
     --rs-btn-ghost-border: #212121;
     --rs-btn-ghost-hover-text: #212121;
     --rs-btn-ghost-text: #212121;
+    --rs-input-focus-border: var(--rs-danger-500);
+    --rs-picker-value: #212121;
+    --rs-state-focus-shadow: rgba(237, 62, 62, 0.387);
+    --rs-listbox-option-hover-text: #212121;
+    --rs-checkbox-checked-bg: #212121;
+    --rs-listbox-option-hover-bg: rgba(255, 0, 0, 0.064);
+    --rs-calendar-cell-selected-hover-bg: rgb(184, 0, 0);
+    --rs-bg-active: #d32f2f;
+    --rs-text-active: #212121;
+    --rs-listbox-option-selected-text: #212121;
+    --rs-listbox-option-selected-bg: rgba(184, 0, 0, 0.083);
 }
 
 .rs-btn {
     font-size: 16px;
+    font-weight: 500;
+    font-family: inherit;
+    border-radius: 15px;
+}
+
+.rs-input-group {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 2px #21212122;
+}
+
+.rs-input:focus {
+    outline: none;
+}
+
+.rs-input-group-focus {
+    outline: 3px solid rgba(255, 64, 64, 0.242) !important;
 }
 
 .rs-breadcrumb-item {
@@ -106,28 +134,28 @@ html {
 }
 
 .c1 {
-    background: radial-gradient(#feb0b0 25%, transparent 50%);
+    background: radial-gradient(#ebaaaa 25%, transparent 50%);
     background-size: 60% 80%;
     background-position: 0 0;
     animation: c1 30s infinite linear;
 }
 
 .c2 {
-    background: radial-gradient(#e6a6a6 25%, transparent 50%);
+    background: radial-gradient(#f47d7d 25%, transparent 50%);
     background-size: 70% 80%;
     background-position: 0 100%;
     animation: c2 30s infinite linear;
 }
 
 .c3 {
-    background: radial-gradient(#c1baff 25%, transparent 50%);
+    background: radial-gradient(#b8b0ff 25%, transparent 50%);
     background-size: 80% 80%;
     background-position: 50% 0;
     animation: c3 35s infinite linear;
 }
 
 .c4 {
-    background: radial-gradient(#ffffff 25%, transparent 50%);
+    background: radial-gradient(#babeff 25%, transparent 50%);
     background-size: 80% 80%;
     background-position: 50% 100%;
     animation: c4 26s infinite linear;

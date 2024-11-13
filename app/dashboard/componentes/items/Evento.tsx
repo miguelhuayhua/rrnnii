@@ -35,7 +35,7 @@ const EventoComponent = ({ Evento, setEvento,
                         <ChipBox sx={{ height: 30, }} label={Evento.estado ? 'Publicado' : 'Sin publicar'} />
                         <ChipBox sx={{ height: 30, bgcolor: Evento.tipo == 'online' ? '#0074b7' : '#09b615', color: 'white', mx: 0, }} label={Evento.tipo == 'online' ? 'Online' : 'Presencial'} />
                     </Stack>
-                    <Normal sx={{ color: '#929fac', fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 15, mb: 2 }}>
                         {dayjs(Evento.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>

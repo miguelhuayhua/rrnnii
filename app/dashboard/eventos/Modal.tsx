@@ -55,7 +55,7 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
         form.append('id', evento.id)
         openModal({
             titulo: '¿Continuar?',
-            content: 'Un nuevo evento se agregará',
+            content: 'El evento se modificará',
             callback: async () => {
                 setLoad(true);
                 let res = await axios.post('/api/evento/modificar', form);

@@ -8,7 +8,7 @@ import { Box, Grid, Stack } from "@mui/material";
 import Image from 'next/legacy/image';
 import { fileDomain } from "@/utils/globals";
 import { TbPdf } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
+import { blue, grey, red } from "@mui/material/colors";
 import { SwitchBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import { RiFileWord2Line } from "react-icons/ri";
@@ -33,15 +33,14 @@ const ConvenioComponent = ({ Convenio, setConvenio,
             <Grid container spacing={2}>
                 <Grid item xs={8} position='relative'>
                     <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
-                        <ChipBox sx={{ height: 30, }} label={Convenio.estado ? 'Publicado' : 'Sin publicar'} />
-                        <ChipBox sx={{ height: 30, bgcolor: Convenio.tipo == 'nacional' ? '#0074b7' : '#09b615', color: 'white', mx: 0, }} label={Convenio.tipo == 'nacional' ? 'Convenio nacional' : 'Convenio internacional'} />
-                        <ChipBox sx={{ height: 30 }} label={
+                        <ChipBox label={Convenio.estado ? 'Publicado' : 'Sin publicar'} />
+                        <ChipBox label={
                             <Normal sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Iconify style={{ marginRight: 5 }} icon={`flag:${Convenio.tipo == 'nacional' ? 'bo' : Convenio.pais.toLowerCase()}-4x3`} />
                                 {Convenio.tipo == 'nacional' ? 'BO' : Convenio.pais}
                             </Normal>} />
                     </Stack>
-                    <Normal sx={{ color: '#929fac', fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 15, mb: 2, color: grey[700] }}>
                         {dayjs(Convenio.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>

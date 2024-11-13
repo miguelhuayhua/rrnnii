@@ -27,6 +27,7 @@ import {
     Text
 } from "rsuite";
 import dayjs from "dayjs";
+import { red } from "@mui/material/colors";
 export default function Page() {
     const { control, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
         defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
@@ -94,7 +95,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }}>
+                <Breadcrumbs sx={{ mb: 1, mt: 2 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -103,7 +104,7 @@ export default function Page() {
                     </Link>
                     <Negrita>Crear</Negrita>
                 </Breadcrumbs>
-                <Titulo sx={{ mb: 2 }}>
+                <Titulo sx={{ mt: 1, mb: 2 }}>
                     Crear nueva pasantía
                 </Titulo>
                 <Button
@@ -112,9 +113,9 @@ export default function Page() {
                     onClick={() => router.back()}>
                     Regresar
                 </Button>
-                <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
+                <Grid container spacing={4} py={3}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Panel shaded style={{ padding: 16 }}>
+                        <Panel shaded style={{ padding: 12, background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -156,7 +157,7 @@ export default function Page() {
                         </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <Panel shaded style={{ padding: 12, background: 'white' }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
@@ -290,12 +291,14 @@ export default function Page() {
                                 </Grid>
 
                                 <Grid item xs={12}>
-                                    <Button size='lg' appearance='primary' type="submit" >
+                                    <Button size='lg' appearance='primary'
+                                        style={{ background: red[700] }}
+                                        onClick={handleSubmit(onSubmit)} >
                                         Crear Pasantia
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
                 </Grid>
             </Box>

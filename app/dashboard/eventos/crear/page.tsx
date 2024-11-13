@@ -84,7 +84,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }}>
+                <Breadcrumbs sx={{ my: 2 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -103,9 +103,9 @@ export default function Page() {
                     Regresar
                 </Button>
 
-                <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
+                <Grid container spacing={4} py={4}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -144,8 +144,8 @@ export default function Page() {
                         </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}>
-                            <Grid container spacing={2}>
+                        <Panel shaded style={{ background: 'white' }}>
+                            <Grid container spacing={4}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="titulo"
@@ -242,9 +242,11 @@ export default function Page() {
                                             /> : null
                                     }
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6} mx='auto'>
                                     <Button
                                         size="lg"
+                                        block
+                                        style={{ background: red[700] }}
                                         appearance="primary"
                                         onClick={handleSubmit(onSubmit)}>
 

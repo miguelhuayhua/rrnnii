@@ -103,10 +103,13 @@ const Tabla = ({
                         hasSearch ?
                             <Box>
                                 <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
-                                    <Input placeholder='Buscar' onChange={text => {
-                                        setData(filtrarValorEnArray(data, text));
-                                    }} />
-                                    <InputGroup.Addon>
+                                    <Input style={{ fontFamily: 'inherit' }}
+                                        placeholder="Buscar"
+                                        onChange={text => {
+                                            setData(filtrarValorEnArray(data, text));
+
+                                        }} />
+                                    <InputGroup.Addon style={{ background: 'white' }}>
                                         <IoSearch fontSize={28} />
                                     </InputGroup.Addon>
                                 </InputGroup>

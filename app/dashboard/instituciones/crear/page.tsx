@@ -24,6 +24,7 @@ import { FaYoutube } from "react-icons/fa";
 import { TbWorldWww } from "react-icons/tb";
 import axios from "axios";
 import { Button, Form, Input, InputNumber, Panel, Text } from "rsuite";
+import { red } from "@mui/material/colors";
 
 export default function Page() {
     const { openSnackbar } = useSnackbar();
@@ -68,7 +69,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }}>
+                <Breadcrumbs sx={{ my: 2 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -87,9 +88,9 @@ export default function Page() {
                     onClick={() => router.back()}>
                     Regresar
                 </Button>
-                <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
+                <Grid container spacing={4} py={3}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -118,8 +119,8 @@ export default function Page() {
                         </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
-                            <Grid container columnSpacing={2}>
+                        <Panel shaded style={{ background: 'white' }}>
+                            <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="nombre"
@@ -169,14 +170,16 @@ export default function Page() {
                                         )}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6} mx='auto'>
                                     <Button size="lg"
+                                        style={{ background: red[700] }}
                                         appearance="primary"
+                                        block
                                         onClick={handleSubmit(onSubmit)}>
                                         Crear Institucion</Button>
                                 </Grid>
                             </Grid>
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
                 </Grid>
             </Box>

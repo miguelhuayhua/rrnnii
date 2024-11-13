@@ -23,6 +23,7 @@ import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
 import { Icon } from '@iconify/react';
 import { BoxSombra } from "@/app/componentes/Mostrar";
 import { Button, Form, Input, Text, Panel } from "rsuite";
+import { red } from "@mui/material/colors";
 
 export default function Page() {
     const { control, handleSubmit, watch, setValue } = useForm<Noticia>({
@@ -69,7 +70,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }} >
+                <Breadcrumbs sx={{ my: 2 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -87,9 +88,9 @@ export default function Page() {
                     onClick={() => router.back()}>
                     Regresar
                 </Button>
-                <Grid container spacing={2} px={{ xs: 0, md: 5, lg: 10, xl: 5 }} py={4}>
+                <Grid container spacing={4} py={3}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -115,12 +116,11 @@ export default function Page() {
                             <Text
                                 style={{ margin: '15px 0' }}
                                 size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
-
                         </Panel>
 
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <Panel shaded style={{ background: 'white' }} >
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
@@ -164,15 +164,17 @@ export default function Page() {
                                         )}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6} mx='auto'>
                                     <Button
                                         size="lg"
+                                        style={{ background: red[700] }}
                                         appearance="primary"
+                                        block
                                         onClick={handleSubmit(onSubmit)}>
-                                        Añadir a noticia</Button>
+                                        Crear noticia</Button>
                                 </Grid>
                             </Grid>
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
                 </Grid>
             </Box>

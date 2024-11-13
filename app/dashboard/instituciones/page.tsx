@@ -1,5 +1,5 @@
 'use client';
-import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { BotonOutline, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
@@ -17,7 +17,7 @@ import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
 import { fileDomain } from "@/utils/globals";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { Button } from "rsuite";
 export default function Page() {
@@ -35,7 +35,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <Breadcrumbs>
+            <Breadcrumbs sx={{ my: 2 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -66,8 +66,8 @@ export default function Page() {
                 </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '2px solid #ddd' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[700] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -134,9 +134,11 @@ export default function Page() {
                         ),
                         "": (<>
                             <Stack direction='row' spacing={2} alignItems='center'>
-                                <BotonOutline sx={{ fontSize: 12 }} onClick={() => {
-                                    setInstitucion(value);
-                                }}>Modificar</BotonOutline>
+                                <Button
+                                    size='md'
+                                    appearance="ghost" onClick={() => {
+                                        setInstitucion(value);
+                                    }}>Modificar</Button>
 
                                 <SwitchBox checked={value.estado} onChange={(ev, checked) => {
                                     axios.post('/api/institucion/estado', { estado: checked, id: value.id }).then(res => {

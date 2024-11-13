@@ -70,6 +70,33 @@ body {
   }
 }
 
+:root {
+  --rs-primary-500: #3498ff;
+  /* Color primario */
+  --rs-success-500: #28a745;
+  /* Color para éxito */
+  --rs-danger-500: #dc3545;
+  /* Color para error */
+  --rs-warning-500: #ffc107;
+  /* Color para advertencias */
+  --rs-border-primary: rgb(227, 227, 227);
+  --rs-btn-primary-hover-bg: #212121;
+  --rs-btn-primary-bg: #212121;
+  --rs-btn-ghost-hover-border: #212121;
+  --rs-btn-ghost-border: #212121;
+  --rs-btn-ghost-hover-text: #212121;
+  --rs-btn-ghost-text: #212121;
+  --rs-input-focus-border: var(--rs-danger-500);
+}
+
+.rs-btn {
+  font-size: 14.5px;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 12px;
+}
+
+
 .gradient-wrap {
   overflow: hidden;
   width: 100%;

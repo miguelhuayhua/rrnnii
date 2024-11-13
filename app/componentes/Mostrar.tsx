@@ -3,11 +3,10 @@ import { grey } from "@mui/material/colors";
 
 const ChipBox = styled(Chip)(() => {
     return {
-        height: 30,
-        borderRadius: 10,
-        fontSize: 14,
-        color: grey[700],
-        background: grey[200],
+        borderRadius: 16,
+        fontSize: 13,
+        color: grey[900],
+        background: grey[100],
         fontWeight: 700,
         marginRight: 5,
         marginTop: 5
@@ -17,7 +16,7 @@ const BoxSombra = styled(Box)(() => {
     return {
         overflow: 'hidden',
         borderRadius: 10,
-        boxShadow: 'rgba(145, 158, 171, 0.5) 0px 2px 5px 0px',
+        boxShadow: '#21212144 0px 0px 6px',
         background: 'white'
     }
 })

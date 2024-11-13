@@ -4,20 +4,33 @@ import { Avatar, ClickAwayListener, Divider, Stack, Tooltip } from "@mui/materia
 import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { BotonSimple } from '@/app/componentes/Botones';
-import { PiSignOutBold } from 'react-icons/pi';
+import Image from 'next/legacy/image';
 import { FaRegUser, FaUser } from 'react-icons/fa';
 import { RiLogoutCircleLine } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
 import { fileDomain } from '@/utils/globals';
-import { Normal } from '@/app/componentes/Textos';
+import { Negrita, Normal } from '@/app/componentes/Textos';
 import { grey } from '@mui/material/colors';
 const Navbar = () => {
     const [open, setOpen] = useState(false);
     const { data } = useSession();
     const router = useRouter();
     return (
-        <Box position={'sticky'} top={0} zIndex={18} width="100%" px={1}>
-            <Box className='blur-style' p={2} height={30} bgcolor='transparent' position={'relative'} >
+        <Box
+            position={'sticky'} top={0} bgcolor='#ffffff'
+            borderBottom='1px solid #ccc' height={75} zIndex={18} width="100%" px={1}>
+            <Box display='flex' position='absolute' left={20} top={13} alignItems='center'>
+                <Image src='/logorrnnii.png' width={50} height={48} layout='fixed' />
+                <Box px={0.5} >
+                    <Normal sx={{ fontSize: 10, textAlign: 'start', color: grey[900] }}>
+                        Relaciones  Internacionales
+                    </Normal>
+                    <Negrita sx={{ fontSize: 11, color: grey[900] }}>
+                        Universidad Pública de El Alto
+                    </Negrita>
+                </Box>
+            </Box>
+            <Box p={2} position={'relative'} >
                 <ClickAwayListener onClickAway={() => setOpen(false)}>
                     <Tooltip
                         PopperProps={{
@@ -73,7 +86,7 @@ const Navbar = () => {
                     >
                         <Avatar
                             onClick={() => setOpen(true)}
-                            sx={{ "&:hover": { cursor: 'pointer' }, position: 'absolute', right: 10, top: 15 }}
+                            sx={{ "&:hover": { cursor: 'pointer' }, position: 'absolute', right: 10, top: 16 }}
                             src={fileDomain + data?.user.image!}
                         />
                     </Tooltip>

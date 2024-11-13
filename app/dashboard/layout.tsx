@@ -23,20 +23,6 @@ export default async function Layout({ children }: any) {
 
                     <SnackbarProvider>
                         <ModalProvider>
-                            <Box bgcolor='transparent' display='flex'>
-                                <SideBar />
-                                <Box
-                                    bgcolor='transparent'
-                                    sx={{ width: { xs: "100%", md: "calc(100% -300px)" }, overflow: 'hidden' }}>
-                                    <Navbar />
-                                    <Box
-                                        bgcolor='transparent'
-                                        mt={5}>
-                                        {children}
-                                    </Box>
-                                </Box>
-
-                            </Box>
                             <div className="gradient-wrap">
                                 <div className="meshgradient">
                                     <div className="color c1"></div>
@@ -45,6 +31,31 @@ export default async function Layout({ children }: any) {
                                     <div className="color c4"></div>
                                 </div>
                             </div>
+                            <Box bgcolor='white'
+                                overflow='hidden'
+                                boxShadow='0 0 5px #21212133'
+                                display='flex'
+                                mx='auto'
+                                width={{ xs: "100%", md: '90%', xl: '80%' }}
+                                my={{ xs: 0, md: 2 }}
+                                height={{ xs: '100vh', md: "95.5vh" }}
+                                border='2px solid #ddd'
+                                borderRadius={{ xs: 0, md: 3 }}>
+                                <SideBar />
+                                <Box
+                                    sx={{
+                                        width: { xs: "100%", md: "calc(100% -300px)" },
+                                        overflowY: 'scroll',
+                                        bgcolor: "#f6f6f6"
+                                    }}>
+                                    <Navbar />
+                                    <Box>
+                                        {children}
+                                    </Box>
+                                </Box>
+
+                            </Box>
+
                         </ModalProvider>
                     </SnackbarProvider>
                 </CustomProvider>

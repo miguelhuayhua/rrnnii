@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import Image from 'next/legacy/image';
 import { Institucion } from "@prisma/client";
 import { fileDomain } from "@/utils/globals";
+import { Button } from "rsuite";
 
 export default function Page() {
     const { data } = useSession();
@@ -51,12 +52,12 @@ export default function Page() {
 
 
     return (
-        <Box bgcolor='transparent' px={{ xs: 1, md: 4, lg: 5 }}>
-           
-            <Titulo>
+        <Box bgcolor='transparent'
+            mb={2} px={{ xs: 1, md: 4, lg: 5 }}>
+            <Titulo my={2}>
                 Bienvenido {data?.user.name}
             </Titulo>
-            <Grid container spacing={4} my={2}>
+            <Grid container spacing={3}>
                 <Grid item xs={12} sm={6} lg={4} mx='auto'>
                     <BoxSombra p={2} >
                         <Box display='flex' justifyContent='space-between' alignItems='center'>
@@ -104,7 +105,7 @@ export default function Page() {
                                                 }
                                                 return null;
                                             }} />
-                                        <Line type="monotone" dataKey="Visitantes" stroke={green[500]} strokeWidth={2} />
+                                        <Line type="monotone" dataKey="Visitantes" stroke={grey[900]} strokeWidth={2} />
                                     </LineChart>
                                 </ResponsiveContainer>
                             </Box>
@@ -162,7 +163,7 @@ export default function Page() {
                                             dataKey="Cantidad"
                                         >
                                             {dashboard.archivos.map((entry, index) => (
-                                                <Cell fill={index == 0 ? red[500] : blue[500]} key={`cell-${index}`} />
+                                                <Cell fill={index == 0 ? red[700] : grey[900]} key={`cell-${index}`} />
                                             ))}
                                         </Pie>
 
@@ -201,7 +202,7 @@ export default function Page() {
                             <Box height={100} width={120}>
                                 <ResponsiveContainer >
                                     <BarChart height={60} data={dashboard.participantesXMes}>
-                                        <Bar dataKey="Participantes" fill={blue[500]} radius={10} />
+                                        <Bar dataKey="Participantes" fill={grey[900]} radius={10} />
                                         <Tooltip content={
                                             ({ active, payload }) => {
                                                 if (active && payload && payload.length) {
@@ -242,22 +243,20 @@ export default function Page() {
                                 {
                                     Titulo: value.titulo,
                                     "": (
-                                        <Stack direction='row' spacing={2} alignItems='center'>
+                                        <Stack direction='row' spacing={2} alignItems='center' py={1}>
                                             <Negrita sx={{ display: 'flex', alignItems: 'center', fontSize: 13 }}>
                                                 <Icon icon="solar:eye-bold" fontSize={20} style={{ marginRight: 5 }} />
                                                 {value.visitantes}
                                             </Negrita>
 
-                                            <BotonOutline
-                                                sx={{
-                                                    p: 0, m: 0,
-                                                    border: `1px solid ${blue[600]}`,
-                                                    color: blue[700],
-                                                    width: 30, minWidth: 0, height: 30
+                                            <Button
+                                                appearance='primary'
+                                                style={{
+                                                    background: red[700]
                                                 }}
                                                 onClick={() => router.push(`/${value.name}s/${value.id}`)}>
                                                 <Icon icon="tdesign:internet" fontSize={20} />
-                                            </BotonOutline>
+                                            </Button>
                                         </Stack>)
                                 }
                             ))} />
@@ -276,9 +275,8 @@ export default function Page() {
                                 width={500}
                                 data={dashboard.publicacionXContinente}
                                 margin={{ top: 20 }}
-                                barSize={15}
+                                barSize={25}
                             >
-                                <CartesianGrid vertical={false} strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis allowDecimals={false} />
                                 <Tooltip content={
@@ -303,8 +301,8 @@ export default function Page() {
                                         return null;
                                     }} />
                                 <Legend />
-                                <Bar width={20} radius={[0, 0, 10, 10]} dataKey="Becas" stackId="a" fill={green[500]} />
-                                <Bar radius={[10, 10, 0, 0]} dataKey="Convenios" stackId="a" fill={green[900]} />
+                                <Bar width={30} radius={[0, 0, 5, 5]} dataKey="Becas" stackId="a" fill={red[700]} />
+                                <Bar radius={[5, 5, 0, 0]} dataKey="Convenios" stackId="a" fill={grey[900]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </BoxSombra>
@@ -323,7 +321,7 @@ export default function Page() {
                                 layout="vertical" // Establece la disposición del gráfico como horizontal
                                 data={dashboard.mayorVisto}
                                 margin={{ top: 20, left: 30 }}
-                                barSize={15}
+                                barSize={25}
                             >
                                 <CartesianGrid horizontal={false} strokeDasharray="3 3" />
                                 <YAxis style={{ textTransform: 'capitalize' }} type="category" dataKey="name" />
@@ -347,7 +345,7 @@ export default function Page() {
                                     }
                                     return null;
                                 }} />
-                                <Bar dataKey="Visitas" radius={10} fill={grey[800]} />
+                                <Bar dataKey="Visitas" radius={5} fill={grey[900]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </BoxSombra>
@@ -392,11 +390,11 @@ export default function Page() {
                             <Normal >
                                 Mire los ultimos 10 instituciones creados
                             </Normal>
-                            <BotonFilled
+                            <Button appearance="primary"
                                 onClick={() => router.push('/dashboard/instituciones')}
-                                sx={{ height: 40, position: 'absolute', right: 10, top: 20 }}>
+                                style={{ height: 40, position: 'absolute', right: 10, top: 20, background: red[700] }}>
                                 Ver más
-                            </BotonFilled>
+                            </Button>
                         </Box>
                         <Tabla
                             hasSearch={false}

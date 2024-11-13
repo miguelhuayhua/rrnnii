@@ -16,11 +16,11 @@ import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { useState } from "react";
 import Image from 'next/legacy/image';
-import { parseNumber } from "@/utils/data";
-import { grey } from "@mui/material/colors";
+import { Icon } from '@iconify/react';
 import { useSnackbar } from "@/providers/SnackbarProvider";
-import { BoxSombra } from "@/app/componentes/Mostrar";
+import { Input, Panel, Text, Form, InputNumber, Button } from "rsuite";
 import axios from "axios";
+import { red } from "@mui/material/colors";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Carrera>({
         defaultValues: { nombre: '', logo: '' }, shouldFocusError: true
@@ -43,7 +43,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }} >
+                <Breadcrumbs sx={{ my: 2 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -56,79 +56,58 @@ export default function Page() {
                     Añadir carrera
                 </Titulo>
 
-                <BotonSimple
+                <Button appearance="subtle"
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
-                </BotonSimple>
-                <Grid container spacing={2} px={{ xs: 0, md: 10, lg: 20, xl: 5 }} py={4}>
+                </Button>
+                <Grid container spacing={4} py={3}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <BoxSombra p={2}>
-                            <Box sx={{
+                        <Panel shaded style={{ background: 'white' }}>
+                            <div style={{
                                 aspectRatio: 1,
-                                bgcolor: grey[100],
-                                p: 1,
-                                border: `1px dashed ${grey[400]}`,
+                                border: `1px dashed #aaa`,
                                 flexDirection: 'column',
-                                borderRadius: 5,
+                                borderRadius: 12,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                color: grey[900],
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden',
-                                "&:hover": {
-                                    color: grey[500],
-                                    cursor: 'pointer'
-                                }
+                                overflow: 'hidden'
                             }}
+                                className='drop'
                                 onClick={() => openFilePicker()}
                             >
                                 {
-                                    watch('logo') ? <Image src={watch('logo')} layout='fill' objectFit='cover' /> : null
+                                    watch('logo') ?
+                                        <Image src={watch('logo')} layout='fill' objectFit='contain' /> : null
                                 }
-                                <BsImageAlt color={'inherit'} fontSize={30} />
-                                <Normal sx={{ color: 'inherit', fontWeight: 600, mt: 1 }}>+ Subir imagen</Normal>
-                            </Box>
-                            <Normal sx={{ fontSize: 13, textAlign: 'center', my: 3 }}>Permitido: .png, .jpeg, .jpg</Normal>
-                        </BoxSombra>
+                                <Icon icon="stash:image-light" width="60" height="60" style={{ color: '#000' }} />
+                                <Text align='center'>+ Subir imagen</Text>
+                            </div>
+                            <Text
+                                style={{ margin: '15px 0' }}
+                                size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
+
+                        </Panel>
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit((carrera) => {
-                            let form = new FormData();
-                            form.append('nombre', carrera.nombre);
-                            form.append('contacto', carrera.contacto?.toString()!);
-                            form.append('portada', portada);
-                            openModal({
-                                titulo: '¿Continuar?',
-                                content: 'Una nueva carrera se agregará',
-                                callback: async () => {
-                                    setLoad(true);
-                                    let res = await axios.post('/api/carrera/crear', form);
-                                    if (!res.data.error) {
-                                        router.back();
-                                        router.refresh();
-                                        setLoad(false);
-                                    }
-                                    return res.data.mensaje;
-                                }
-                            });
-                        })}>
+                        <Panel shaded style={{ background: 'white' }} >
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="nombre"
                                         control={control}
-                                        rules={{ required: 'Nombre es obligatorio' }}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Nombre'
-                                                error={!!errors.nombre}
-                                                helperText={errors.nombre?.message || 'Este es el título principal que será visible en el carrera'}
-                                                inputRef={ref}
-                                            />
+                                        rules={{ required: 'Nombre no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                                <Input {...field} size='lg' />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
                                         )}
                                     />
 
@@ -137,23 +116,44 @@ export default function Page() {
                                     <Controller
                                         name="contacto"
                                         control={control}
-                                        render={({ field: { ref, ...field } }) => (
-                                            <InputBox
-                                                {...field}
-                                                label='Contacto'
-                                                inputRef={ref}
-                                                onChange={(ev) => field.onChange(parseNumber(ev.target.value))}
-                                            />
+                                        render={({ field }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Contacto</Form.ControlLabel>
+                                                <InputNumber {...field} value={field.value!} size='lg' />
+                                            </Form.Group>
                                         )}
                                     />
 
                                 </Grid>
 
-                                <Grid item xs={12}>
-                                    <BotonFilled type="submit" sx={{ float: 'right' }}>Añadir carrera</BotonFilled>
+                                <Grid item xs={6} mx='auto'>
+                                    <Button
+                                        size="lg" block
+                                        appearance='primary'
+                                        style={{ background: red[700] }}
+                                        onClick={handleSubmit((carrera) => {
+                                            let form = new FormData();
+                                            form.append('nombre', carrera.nombre);
+                                            form.append('contacto', carrera.contacto?.toString()!);
+                                            form.append('portada', portada);
+                                            openModal({
+                                                titulo: '¿Continuar?',
+                                                content: 'Una nueva carrera se agregará',
+                                                callback: async () => {
+                                                    setLoad(true);
+                                                    let res = await axios.post('/api/carrera/crear', form);
+                                                    if (!res.data.error) {
+                                                        router.back();
+                                                        router.refresh();
+                                                        setLoad(false);
+                                                    }
+                                                    return res.data.mensaje;
+                                                }
+                                            });
+                                        })} >Añadir carrera</Button>
                                 </Grid>
                             </Grid>
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
                 </Grid>
             </Box>

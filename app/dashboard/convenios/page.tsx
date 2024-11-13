@@ -1,5 +1,5 @@
 'use client';
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, CircularProgress, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
@@ -12,13 +12,12 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
 import { TbReload } from "react-icons/tb";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import ConvenioComponent from "../componentes/items/Convenio";
-import { InputBox } from "@/app/componentes/Datos";
 import { IoSearch } from "react-icons/io5";
-import { Breadcrumb, Button, Input, InputGroup, Text } from "rsuite";
+import { Button, Input, InputGroup } from "rsuite";
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -36,7 +35,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs sx={{ mb: 1 }}>
+            <Breadcrumbs sx={{ mb: 1, mt: 2 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -69,8 +68,8 @@ export default function Page() {
                 </Button>
             </Stack>
             <Tabs
-                sx={{ mb: 2, background: 'white', borderRadius: 3, border: '1px solid #ccc' }}
-                TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
+                TabIndicatorProps={{ sx: { bgcolor: red[600] } }}
                 ScrollButtonComponent={(props) =>
                     <BotonSimple  {...props}>
                         {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
@@ -129,10 +128,12 @@ export default function Page() {
                     </Box>} value='inactivo' />
             </Tabs>
             <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
-                <Input onChange={text => {
-                    setConvenios(prevConvenios.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
-                }} />
-                <InputGroup.Addon>
+                <Input style={{ fontFamily: 'inherit' }}
+                    placeholder="Buscar convenios"
+                    onChange={text => {
+                        setConvenios(prevConvenios.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                    }} />
+                <InputGroup.Addon style={{ background: 'transparent' }}>
                     <IoSearch fontSize={28} />
                 </InputGroup.Addon>
             </InputGroup>
@@ -145,16 +146,21 @@ export default function Page() {
                             mx: 'auto'
                         }} /> : <Grid container spacing={2}>
                         {
-                            convenios.map(value => (
-                                <Grid key={value.id} item xs={12} lg={6}>
-                                    <ConvenioComponent
-                                        setConvenio={setConvenio}
-                                        setConvenios={setConvenios}
-                                        setOpcion={setOpcion}
-                                        setPrevConvenios={setPrevConvenios}
-                                        Convenio={value as any} />
+                            convenios.length > 0 ?
+
+                                convenios.map(value => (
+                                    <Grid key={value.id} item xs={12} lg={6}>
+                                        <ConvenioComponent
+                                            setConvenio={setConvenio}
+                                            setConvenios={setConvenios}
+                                            setOpcion={setOpcion}
+                                            setPrevConvenios={setPrevConvenios}
+                                            Convenio={value as any} />
+                                    </Grid>
+                                )) :
+                                <Grid item xs={12}>
+                                    <Normal sx={{ textAlign: 'center' }}>Convenios no encontrados</Normal>
                                 </Grid>
-                            ))
                         }
                     </Grid>
             }

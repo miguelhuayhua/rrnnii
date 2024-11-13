@@ -26,6 +26,7 @@ import axios from "axios";
 import { paises } from "@/utils/globals";
 import { Button, Panel, Uploader, Text, Form, Input, DatePicker, AutoComplete, SelectPicker } from "rsuite";
 import dayjs from "dayjs";
+import { red } from "@mui/material/colors";
 export default function Page() {
     const { control, handleSubmit, setValue, watch } = useForm<Beca & { Institucion: Institucion }>({
         defaultValues: { titulo: '', descripcion: '', tipo: 'nacional' }, shouldFocusError: true
@@ -91,7 +92,7 @@ export default function Page() {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }} >
+                <Breadcrumbs sx={{ my: 2 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -108,9 +109,9 @@ export default function Page() {
                     onClick={() => router.back()}>
                     Regresar
                 </BotonSimple>
-                <Grid container spacing={2} px={{ xs: 0, xl: 5 }} py={2}>
+                <Grid container spacing={4} py={3}>
                     <Grid item xs={12} sm={5} lg={4}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -153,7 +154,7 @@ export default function Page() {
 
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
-                        <BoxSombra p={2} component='form' onSubmit={handleSubmit(onSubmit)}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} lg={6} >
                                     <Controller
@@ -205,6 +206,26 @@ export default function Page() {
                                             </Form.Group>
                                         )}
                                     />
+
+                                    <Controller
+                                        name="Institucion.nombre"
+                                        control={control}
+                                        rules={{ required: 'Institución no puede quedar vacío' }}
+                                        render={({ field, fieldState }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Institución</Form.ControlLabel>
+                                                <AutoComplete
+                                                    onBlur={ev => field.onChange((ev.target as any).value! as any)}
+                                                    size="lg"
+                                                    data={
+                                                        instituciones.map((value: Institucion) => value.nombre)
+                                                    } />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
+                                            </Form.Group>
+                                        )}
+                                    />
                                     <Controller
                                         name="termina"
                                         control={control}
@@ -219,25 +240,6 @@ export default function Page() {
                                                     onChange={ev => {
                                                         field.onChange(dayjs(ev).format("DD/MM/YYYY"))
                                                     }} />
-                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                    {fieldState.error?.message}
-                                                </Form.ErrorMessage>
-                                            </Form.Group>
-                                        )}
-                                    />
-                                    <Controller
-                                        name="Institucion.nombre"
-                                        control={control}
-                                        rules={{ required: 'Institución no puede quedar vacío' }}
-                                        render={({ field, fieldState }) => (
-                                            <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Institución</Form.ControlLabel>
-                                                <AutoComplete
-                                                    onBlur={ev => field.onChange((ev.target as any).value! as any)}
-                                                    size="lg"
-                                                    data={
-                                                        instituciones.map((value: Institucion) => value.nombre)
-                                                    } />
                                                 <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                                     {fieldState.error?.message}
                                                 </Form.ErrorMessage>
@@ -303,13 +305,18 @@ export default function Page() {
                                         )}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Button type="submit" appearance="primary" size='lg'>
+                                <Grid item xs={6} mx='auto'>
+                                    <Button
+                                        onClick={handleSubmit(onSubmit)}
+                                        appearance="primary"
+                                        block
+                                        style={{ background: red[700] }}
+                                        size='lg'>
                                         Crear Beca
                                     </Button>
                                 </Grid>
                             </Grid>
-                        </BoxSombra>
+                        </Panel>
                     </Grid>
                 </Grid>
             </Box>
