@@ -1,11 +1,12 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Button, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
 import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
 import dayjs from "dayjs";
+import { Button } from "rsuite";
 import { useEffect, useState } from "react";
 import { Icon as Iconify } from '@iconify/react';
 import axios from "axios";
@@ -72,9 +73,8 @@ export default function Cliente({ value }: Props) {
                         <Box alignItems='center' zIndex={10} display='flex' pl={{ xs: 2, sm: 6, xl: 40 }} position='absolute' bottom={40}>
                             <Avatar src={fileDomain + value.Institucion.logo} sx={{ width: 60, height: 60, bgcolor: grey[50] }} />
                             <Box ml={2}>
-                                <Button
-                                    sx={{ px: 0, mx: 0, minWidth: 0 }}
-                                    variant="text" onClick={() => {
+                                <Button appearance="subtle"
+                                    onClick={() => {
                                         setOpenModalInstitucion(true);
                                     }}>
                                     <Negrita sx={{ fontSize: 18, color: 'white' }}>
@@ -140,13 +140,14 @@ export default function Cliente({ value }: Props) {
                     <Box
                         position='relative'
                         sx={{ fontSize: 17, mx: { xs: 1, sm: 10, lg: 25 }, mt: 2 }}>
-                        <BotonFilled
+                        <Button size='lg' appearance='primary'
+                            style={{ background: '#212121', marginBottom: 20 }}
                             onClick={() => {
                                 setOpen(true);
                             }}
-                            sx={{ mb: 2 }} startIcon={<RiUserReceivedFill />}>
+                            startIcon={<RiUserReceivedFill />}>
                             Postular beca
-                        </BotonFilled>
+                        </Button>
                         <Normal
                             sx={{
                                 display: 'flex',

@@ -1,7 +1,7 @@
 'use client';
-import { BotonFilled, BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, ClickAwayListener, Grid, Stack, Tabs, Tooltip } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdArrowLeft } from "react-icons/md";
@@ -13,7 +13,7 @@ import { Icon } from '@iconify/react';
 import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useState } from "react";
-import { blue, blueGrey, green, grey } from "@mui/material/colors";
+import { green, grey, red } from "@mui/material/colors";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TabBox } from "../../componentes/Mostrar";
 import { IoCalendar } from "react-icons/io5";
@@ -21,12 +21,13 @@ import dayjs from "dayjs";
 import 'dayjs/locale/es';
 import { RiUserVoiceFill } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
-import { TbDotsVertical } from "react-icons/tb";
 import axios from "axios";
 import { useModal } from "@/providers/ModalProvider";
 import ParticipantesPDF from "./PDFPostulantes";
+import { Button, Panel } from "rsuite";
 import { pdf } from "@react-pdf/renderer";
 import ModalParticipante from "./ModalParticipante";
+import Tabla from "../../componentes/Tabla";
 interface Props {
     Beca: Beca & { Institucion: Institucion, Participantes: ParticipanteBeca[] };
 }
@@ -41,13 +42,16 @@ export default function Cliente({ Beca }: Props) {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <BotonSimple
-                    sx={{ mb: 2 }}
+
+                <Button
+                    appearance="subtle"
+                    style={{ marginTop: 10 }}
                     startIcon={<MdArrowLeft fontSize={20} />}
                     onClick={() => router.back()}>
                     Regresar
-                </BotonSimple>
-                <Breadcrumbs sx={{ mb: 1 }} >
+                </Button>
+
+                <Breadcrumbs sx={{ my: 2, mb: 4 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -72,11 +76,11 @@ export default function Cliente({ Beca }: Props) {
                 </Box>
                 <Tabs
                     sx={{ mb: 2 }}
-                    TabIndicatorProps={{ sx: { bgcolor: blue[500] } }}
+                    TabIndicatorProps={{ sx: { bgcolor: red[600] } }}
                     ScrollButtonComponent={(props) =>
-                        <BotonSimple  {...props}>
+                        <Button  {...props}>
                             {props.direction == 'left' ? <FaAngleLeft fontSize={15} /> : <FaAngleRight fontSize={15} />}
-                        </BotonSimple>}
+                        </Button>}
                     variant="scrollable"
                     allowScrollButtonsMobile
                     value={opcion}
@@ -93,19 +97,19 @@ export default function Cliente({ Beca }: Props) {
                                 label={Beca.Participantes.length} />
                         </Box>} value={2} />
                 </Tabs>
-                <Grid container spacing={2} pb={2}>
+                <Grid container spacing={4} pb={2}>
                     {
                         opcion == 1 ?
                             <>
                                 <Grid item xs={12} md={6}>
-                                    <BoxSombra sx={{ fontSize: 16, p: 2 }}>
+                                    <Panel shaded style={{ fontSize: 16, background: 'white' }}>
                                         {
                                             parse(Beca.descripcion)
                                         }
-                                    </BoxSombra>
+                                    </Panel>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <BoxSombra p={2}>
+                                    <Panel shaded style={{ background: 'white' }}>
                                         <Box display={'flex'}>
                                             <IoCalendar style={{ fontSize: 23, color: 'black' }} />
                                             <Box ml={1}>
@@ -139,9 +143,11 @@ export default function Cliente({ Beca }: Props) {
                                                 </Negrita>
                                             </Box>
                                         </Box>
-                                    </BoxSombra>
-                                    <BoxSombra mt={2} p={2} display='flex'>
-                                        <Box>
+                                    </Panel>
+                                    <Panel shaded style={{
+                                        background: 'white',
+                                        marginTop: 30, display: 'flex'
+                                    }}>                                        <Box>
                                             <Image
                                                 src={Beca.Institucion.logo ? (fileDomain + Beca.Institucion.logo) : '/default-image.jpg'} width={100} height={100}
                                                 layout="fixed"
@@ -159,7 +165,7 @@ export default function Cliente({ Beca }: Props) {
                                                 {Beca.Institucion.contacto || 'Sin contacto'}
                                             </Normal>
                                         </Box>
-                                    </BoxSombra>
+                                    </Panel>
                                 </Grid>
                             </> : null
                     }
@@ -168,10 +174,11 @@ export default function Cliente({ Beca }: Props) {
                             <>
                                 {
                                     Beca.Participantes.length > 0 ?
-                                        <Grid mt={1} container spacing={2} m={2}>
+                                        <Grid mt={2} container spacing={2} mx={2} >
                                             <Grid item xs={12}>
                                                 <Stack direction='row' spacing={2}>
-                                                    <BotonOutline
+                                                    <Button appearance='ghost'
+                                                        size='md'
                                                         onClick={() => {
                                                             pdf(<ParticipantesPDF
                                                                 Beca={Beca}
@@ -187,8 +194,49 @@ export default function Cliente({ Beca }: Props) {
                                                         }}
                                                     >
                                                         Generar listado
-                                                    </BotonOutline>
+                                                    </Button>
                                                 </Stack>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <Tabla data={Beca.Participantes.map(value => (
+                                                    {
+                                                        Nombre: value.nombre_completo,
+                                                        "Registro Universitario": value.ru,
+                                                        "Cédula de Identidad": value.ci,
+                                                        "": (
+                                                            <Stack direction='row' spacing={1} py={1}>
+                                                                <Button appearance='primary' style={{ background: grey[900] }}>
+                                                                    <Icon icon="carbon:phone-filled" />
+                                                                </Button>
+                                                                <Button appearance='primary' style={{ background: red[600] }}
+                                                                    onClick={() => {
+                                                                        let a = document.createElement('a');
+                                                                        a.href = fileDomain + value.cipath;
+                                                                        a.target = '_blank';
+                                                                        a.download = fileDomain + value.cipath;
+                                                                        a.click();
+                                                                        a.remove();
+                                                                        openSnackbar('Carnet descargado con éxito');
+                                                                    }}
+                                                                >
+                                                                    CI
+                                                                </Button>
+                                                                <Button appearance='primary'
+                                                                    onClick={() => {
+                                                                        let a = document.createElement('a');
+                                                                        a.href = fileDomain + value.rupath;
+                                                                        a.target = '_blank';
+                                                                        a.download = fileDomain + value.rupath;
+                                                                        a.click();
+                                                                        a.remove();
+                                                                        openSnackbar('Registro universitario descargado con éxito');
+                                                                    }}
+                                                                    style={{ background: red[600] }}>
+                                                                    RU
+                                                                </Button>
+                                                            </Stack>)
+                                                    }
+                                                ))} />
                                             </Grid>
                                             {
                                                 Beca.Participantes.map((value, index) => (
@@ -206,13 +254,13 @@ export default function Cliente({ Beca }: Props) {
                                                                                     marginTop: 10
                                                                                 }} />
                                                                         </Box>
-                                                                        <BotonSimple onClick={() => {
+                                                                        <Button onClick={() => {
                                                                             setParticipante(value);
                                                                         }}>
                                                                             <Icon icon="material-symbols:edit-outline"
                                                                                 fontSize={25}
                                                                                 style={{ color: grey[500] }} />
-                                                                        </BotonSimple>
+                                                                        </Button>
                                                                     </Stack> :
                                                                     <Stack
                                                                         sx={{ mb: 2 }}
@@ -250,49 +298,7 @@ export default function Cliente({ Beca }: Props) {
                                                                         </BotonFilled>
                                                                     </Stack>
                                                             }
-                                                            <Box pl={1}>
-                                                                <Negrita>
-                                                                    {value.nombre_completo}
-                                                                </Negrita>
-                                                                <Normal>
-                                                                    {value.contacto}
-                                                                    <br />
-                                                                    Registro universitario: {value.ru}
-                                                                    <br />
-                                                                    Carnet de identidad: {value.ci}
-                                                                </Normal>
-                                                                <Stack mt={1} direction='row' spacing={2}>
-                                                                    <BotonSimple sx={{ bgcolor: green[500], color: 'white', px: 1.5 }}>
-                                                                        <Icon icon="carbon:phone-filled" />
-                                                                    </BotonSimple>
-                                                                    <BotonSimple
-                                                                        onClick={() => {
-                                                                            let a = document.createElement('a');
-                                                                            a.href = fileDomain + value.cipath;
-                                                                            a.target = '_blank';
-                                                                            a.download = fileDomain + value.cipath;
-                                                                            a.click();
-                                                                            a.remove();
-                                                                            openSnackbar('Carnet descargado con éxito');
-                                                                        }}
-                                                                        sx={{ bgcolor: blue[500], color: 'white', px: 1.3 }}>
-                                                                        C.I.
-                                                                    </BotonSimple>
-                                                                    <BotonSimple
-                                                                        onClick={() => {
-                                                                            let a = document.createElement('a');
-                                                                            a.href = fileDomain + value.rupath;
-                                                                            a.target = '_blank';
-                                                                            a.download = fileDomain + value.rupath;
-                                                                            a.click();
-                                                                            a.remove();
-                                                                            openSnackbar('Registro universitario descargado con éxito');
-                                                                        }}
-                                                                        sx={{ bgcolor: blueGrey[500], color: 'white', px: 0.8 }}>
-                                                                        R.U.
-                                                                    </BotonSimple>
-                                                                </Stack>
-                                                            </Box>
+
                                                         </BoxSombra>
                                                     </Grid>
                                                 ))

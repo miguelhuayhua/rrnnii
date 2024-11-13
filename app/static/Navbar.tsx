@@ -5,17 +5,19 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Link from 'next/link';
-import { FaAngleDown, FaAngleRight, FaNewspaper } from "react-icons/fa";
+import { FaAngleDown, FaAngleRight } from "react-icons/fa";
 import { usePathname } from 'next/navigation';
-import { GoDotFill, GoHomeFill } from "react-icons/go";
+import { GoDotFill } from "react-icons/go";
 import { BotonSimple } from '../componentes/Botones';
 import { Negrita, Normal } from '../componentes/Textos';
 import { HiOutlineBars3BottomLeft } from 'react-icons/hi2';
 import ModalLogin from './ModalLogin';
-import { BiDownArrow } from 'react-icons/bi';
-import { IoPeople } from 'react-icons/io5';
-import { PiDotOutlineFill, PiSquaresFourFill } from 'react-icons/pi';
+import { BiDownArrow, BiNews, BiVideo } from 'react-icons/bi';
+import { PiDotOutlineFill } from 'react-icons/pi';
 import { grey, red } from '@mui/material/colors';
+import { RiHome5Line } from 'react-icons/ri';
+import { GrGroup } from 'react-icons/gr';
+import { MdOutlineHandshake } from 'react-icons/md';
 //estilos
 const Navbar = () => {
     const pathname = usePathname();
@@ -49,8 +51,7 @@ const Navbar = () => {
                     transition: 'background .25s',
                     position: 'sticky',
                     top: 0,
-                    left: 0,
-                    
+                    left: 0
                 }}
             >
                 {
@@ -203,6 +204,12 @@ const Navbar = () => {
                                     Sobre Nosotros
                                 </Normal>
                             </Link>
+                            <Link style={{ textDecoration: 'none' }} href={'/videos'}>
+                                <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
+                                    {pathname == '/videos' ? <GoDotFill color='inherit' /> : null}
+                                    Videos
+                                </Normal>
+                            </Link>
                         </Stack>
                         <BotonSimple endIcon={<FaAngleRight />} sx={{ color: 'white', background: pathname.endsWith('/') ? trigger ? grey[900] : "#00000033" : grey[900], backdropFilter: 'blur(6px)', fontSize: 13 }} onClick={() => {
                             setOpen2(true);
@@ -222,13 +229,13 @@ const Navbar = () => {
             <Drawer anchor='top' open={open} onClose={() => setOpen(false)} sx={{ display: { xs: 'block', md: 'none' } }}>
                 <Box py={1}>
                     <Link style={{ textDecoration: 'none' }} href={'/'}>
-                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/' ? red[700] : grey[800] }} startIcon={<GoHomeFill />} fullWidth>
+                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/' ? red[700] : grey[800] }} startIcon={<RiHome5Line />} fullWidth>
                             Principal
                         </BotonSimple>
                     </Link>
                     <BotonSimple
                         onClick={() => setOpen3(!open3)}
-                        sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == 'f' ? red[700] : grey[800] }} startIcon={<FaNewspaper />} fullWidth>
+                        sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == 'f' ? red[700] : grey[800] }} startIcon={<MdOutlineHandshake />} fullWidth>
                         Convocatorias <BiDownArrow style={{ position: 'absolute', right: 10, transform: open3 ? 'rotateZ(180deg)' : 'rotateZ(0deg)', transition: 'transform 0.5s' }} />
                     </BotonSimple>
                     <Box display={open3 ? 'block' : 'none'}>
@@ -254,13 +261,18 @@ const Navbar = () => {
                         </Link>
                     </Box>
                     <Link style={{ textDecoration: 'none' }} href={'/noticias'}>
-                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/noticias' ? red[700] : grey[800] }} startIcon={<PiSquaresFourFill />} fullWidth>
+                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/noticias' ? red[700] : grey[800] }} startIcon={<BiNews />} fullWidth>
                             Noticias
                         </BotonSimple>
                     </Link>
                     <Link style={{ textDecoration: 'none' }} href={'/about'}>
-                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/about' ? red[700] : grey[800] }} startIcon={<IoPeople />} fullWidth>
+                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/about' ? red[700] : grey[800] }} startIcon={<GrGroup />} fullWidth>
                             Sobre Nosotros
+                        </BotonSimple>
+                    </Link>
+                    <Link style={{ textDecoration: 'none' }} href={'/videos'}>
+                        <BotonSimple sx={{ borderRadius: 0, p: 2, justifyContent: 'start', color: pathname == '/videos' ? red[700] : grey[800] }} startIcon={<BiVideo />} fullWidth>
+                            Videos
                         </BotonSimple>
                     </Link>
                 </Box>

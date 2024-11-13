@@ -39,7 +39,6 @@ export default async function Layout({ children }: any) {
                                 width={{ xs: "100%", md: '90%', xl: '80%' }}
                                 my={{ xs: 0, md: 2 }}
                                 height={{ xs: '100vh', md: "95.5vh" }}
-                                border='2px solid #ddd'
                                 borderRadius={{ xs: 0, md: 3 }}>
                                 <SideBar />
                                 <Box

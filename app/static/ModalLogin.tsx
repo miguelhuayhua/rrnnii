@@ -14,22 +14,14 @@ import { Controller, useForm } from "react-hook-form";
 import { Normal, Titulo } from "../componentes/Textos";
 import { makeid } from "@/utils/globals";
 import { grey, red } from "@mui/material/colors";
-import { Form, Input, InputGroup, Button, Text } from "rsuite";
-const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement<any, any>;
-    },
-    ref: React.Ref<unknown>,
-) {
-    return <Slide direction="down" ref={ref} {...props} />;
-});
+import { Form, Input, InputGroup, Button, Text, Modal } from "rsuite";
+
 interface Props {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     open: boolean;
 }
 export default function ModalLogin({ open, setOpen }: Props) {
     const router = useRouter();
-    const [showTransition, setShowTransition] = useState<'password' | 'register' | ''>('');
     const [showPassword, setShowPassword] = React.useState(false);
     //controlador de eventos para el submit
 
@@ -45,138 +37,133 @@ export default function ModalLogin({ open, setOpen }: Props) {
     const [loading, setLoading] = useState(false);
     const [mensaje, setMensaje] = useState('');
     return (
-        <Dialog
-            open={open}
-            TransitionComponent={Transition}
-            maxWidth='sm'
-            PaperProps={{ sx: { borderRadius: 2.5 } }}
-            fullWidth
-            onClose={() => {
-                setShowTransition('');
-                setOpen(false);
-                setMensaje('');
+        <Modal
+            size='sm'
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2001 // Asegura que esté al frente
             }}
+            open={!!open}
+            onClose={() => { setOpen(false) }}
         >
-            <DialogContent sx={{ position: 'relative' }} >
+            <Modal.Header>
                 <Titulo sx={{ textAlign: 'center' }}>
                     Ingrese sus credenciales
                 </Titulo>
-                <Box
-                    display={showTransition == '' ? 'block' : 'none'}
-                    py={2}
-                >
-                    <Controller
-                        name="usuario"
-                        control={credencialsForm.control}
-                        rules={{ required: 'Usuario no puede quedar vacío' }}
-                        render={({ field, fieldState }) => (
-                            <Form.Group style={{ marginBottom: 10 }}>
-                                <Form.ControlLabel>Usuario</Form.ControlLabel>
-                                <Input {...field} size='lg' />
-                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                    {fieldState.error?.message}
-                                </Form.ErrorMessage>
-                            </Form.Group>
-                        )}
-                    />
-                    <Controller
-                        rules={{
-                            required: 'La contraseña es requerida',
-                        }}
-                        control={credencialsForm.control}
-                        name="password"
-                        render={({ field, fieldState }) => (
-                            <Form.Group style={{ marginBottom: 10 }}>
-                                <Form.ControlLabel>Contraseña</Form.ControlLabel>
-                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                    {fieldState.error?.message}
-                                </Form.ErrorMessage>
-                                <InputGroup inside >
-                                    <Input
-                                        size='lg' {...field} type={showPassword ? 'text' : 'password'} />
-                                    <InputGroup.Button
-                                        style={{ height: "100%" }} onClick={() => {
-                                            setShowPassword(!showPassword);
-                                        }}>
-                                        {showPassword ? <MdVisibilityOff fontSize={25} /> : <MdVisibility fontSize={23} />}
-                                    </InputGroup.Button>
-                                </InputGroup>
-                            </Form.Group>
-                        )}
-                    />
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 2 }}>
-                        <Text as='del'
-                            style={{ userSelect: 'none', fontSize: 25 }}>
-                            {credencialsForm.watch('captcha')}
-                        </Text>
-                        <Button
-                            onClick={() => {
-                                credencialsForm.setValue('captcha', makeid(7))
-                            }} appearance="ghost" style={{ marginLeft: 10, color: '#212121', border: '1px solid #212121' }} >
-                            <Icon icon='mdi:reload' fontSize={22} />
-                        </Button>
-                    </Box>
-                    <Controller
-                        rules={{
-                            required: 'Por favor confirme el Captcha',
-                            validate: value => value === credencialsForm.watch('captcha') || 'El valor del captcha no coincide, inténtelo de nuevo'
-                        }}
-                        control={credencialsForm.control}
-                        name="confirmCaptcha"
-                        render={({ field, fieldState }) => (
-                            <Form.Group style={{ marginBottom: 10 }}>
-                                <Form.ControlLabel>Confirme el Captcha</Form.ControlLabel>
-                                <Input {...field} size='lg' />
-                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                    {fieldState.error?.message}
-                                </Form.ErrorMessage>
-
-                            </Form.Group>
-                        )}
-                    />
-                    {
-                        mensaje ?
-                            <Normal sx={{
-                                fontSize: 13,
-                                textAlign: 'center',
-                                color: red[500]
-                            }}>
-                                {mensaje}
-                            </Normal> : null
-                    }
+            </Modal.Header>
+            <Modal.Body style={{ padding: "0 10px" }}>
+                <Controller
+                    name="usuario"
+                    control={credencialsForm.control}
+                    rules={{ required: 'Usuario no puede quedar vacío' }}
+                    render={({ field, fieldState }) => (
+                        <Form.Group style={{ marginBottom: 10 }}>
+                            <Form.ControlLabel>Usuario</Form.ControlLabel>
+                            <Input {...field} size='lg' />
+                            <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                {fieldState.error?.message}
+                            </Form.ErrorMessage>
+                        </Form.Group>
+                    )}
+                />
+                <Controller
+                    rules={{
+                        required: 'La contraseña es requerida',
+                    }}
+                    control={credencialsForm.control}
+                    name="password"
+                    render={({ field, fieldState }) => (
+                        <Form.Group style={{ marginBottom: 10 }}>
+                            <Form.ControlLabel>Contraseña</Form.ControlLabel>
+                            <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                {fieldState.error?.message}
+                            </Form.ErrorMessage>
+                            <InputGroup inside >
+                                <Input
+                                    size='lg' {...field} type={showPassword ? 'text' : 'password'} />
+                                <InputGroup.Button
+                                    style={{ height: "100%" }} onClick={() => {
+                                        setShowPassword(!showPassword);
+                                    }}>
+                                    {showPassword ? <MdVisibilityOff fontSize={25} /> : <MdVisibility fontSize={23} />}
+                                </InputGroup.Button>
+                            </InputGroup>
+                        </Form.Group>
+                    )}
+                />
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 2 }}>
+                    <Text as='del'
+                        style={{ userSelect: 'none', fontSize: 25 }}>
+                        {credencialsForm.watch('captcha')}
+                    </Text>
                     <Button
-                        appearance='primary'
-                        loading={loading}
-                        block
-                        size='lg'
-                        style={{
-                            marginTop: 10,
-                            background: grey[900]
-                        }}
-                        onClick={async () => {
-                            if (await credencialsForm.trigger()) {
-                                setLoading(true);
-                                signIn('credentials', {
-                                    redirect: false,
-                                    callbackUrl: '/dashboard',
-                                    password: credencialsForm.getValues('password'),
-                                    usuario: credencialsForm.getValues('usuario')
-                                }).then(response => {
-                                    if (response?.status == 401) {
-                                        setMensaje('Usuario o Contraseña inválida');
-                                        setLoading(false);
-                                    }
-                                    else if (response?.status == 200 && response.url) {
-                                        router.push(response.url);
-                                    }
-                                })
-                            }
-                        }}>
-                        Ingresar
+                        onClick={() => {
+                            credencialsForm.setValue('captcha', makeid(7))
+                        }} appearance="ghost" style={{ marginLeft: 10, color: '#212121', border: '1px solid #212121' }} >
+                        <Icon icon='mdi:reload' fontSize={22} />
                     </Button>
                 </Box>
-            </DialogContent>
+                <Controller
+                    rules={{
+                        required: 'Por favor confirme el Captcha',
+                        validate: value => value === credencialsForm.watch('captcha') || 'El valor del captcha no coincide, inténtelo de nuevo'
+                    }}
+                    control={credencialsForm.control}
+                    name="confirmCaptcha"
+                    render={({ field, fieldState }) => (
+                        <Form.Group style={{ marginBottom: 10 }}>
+                            <Form.ControlLabel>Confirme el Captcha</Form.ControlLabel>
+                            <Input {...field} size='lg' />
+                            <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                {fieldState.error?.message}
+                            </Form.ErrorMessage>
 
-        </Dialog >
+                        </Form.Group>
+                    )}
+                />
+                {
+                    mensaje ?
+                        <Normal sx={{
+                            fontSize: 13,
+                            textAlign: 'center',
+                            color: red[500]
+                        }}>
+                            {mensaje}
+                        </Normal> : null
+                }
+                <Button
+                    appearance='primary'
+                    loading={loading}
+                    block
+                    size='lg'
+                    style={{
+                        marginTop: 10,
+                        background: grey[900]
+                    }}
+                    onClick={async () => {
+                        if (await credencialsForm.trigger()) {
+                            setLoading(true);
+                            signIn('credentials', {
+                                redirect: false,
+                                callbackUrl: '/dashboard',
+                                password: credencialsForm.getValues('password'),
+                                usuario: credencialsForm.getValues('usuario')
+                            }).then(response => {
+                                if (response?.status == 401) {
+                                    setMensaje('Usuario o Contraseña inválida');
+                                    setLoading(false);
+                                }
+                                else if (response?.status == 200 && response.url) {
+                                    router.push(response.url);
+                                }
+                            })
+                        }
+                    }}>
+                    Ingresar
+                </Button>
+            </Modal.Body>
+        </Modal >
     );
 }

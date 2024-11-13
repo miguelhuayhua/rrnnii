@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import Footer from '../static/Footer';
 import { Suspense } from 'react';
 export const metadata = {
-    title: 'Pasantías - UPEA'
+    title: 'Pasantías - Relaciones Internacionales UPEA'
 }
 export default function Home() {
     return (

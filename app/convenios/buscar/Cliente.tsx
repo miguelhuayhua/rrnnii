@@ -11,6 +11,8 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { Normal } from "../../componentes/Textos";
 import Filtros from "./Filtros";
+import { Button, Input, InputGroup } from "rsuite";
+import { IoSearch } from "react-icons/io5";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
@@ -44,32 +46,27 @@ const Cliente = () => {
             </div>
             <Grid container spacing={2} >
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
-                    <InputBox
-                        sx={{
-                            width: 200,
-                            'fieldset': { border: '1px solid #aaa !important' },
-                        }}
-                        placeholder='Buscar'
-                        InputProps={{
-                            startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
-                        }}
-                        onChange={(ev) => {
-                            setConvenios(ConveniosMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                        }}
-                    />
-                    <Badge invisible={!(params.has('carrera') ||
-                        params.has('d') || params.has('co'))}
+                    <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                        <Input style={{ fontFamily: 'inherit' }}
+                            placeholder="Buscar convenios"
+                            onChange={text => {
+                                setConvenios(ConveniosMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                            }} />
+                        <InputGroup.Addon style={{ background: 'white' }}>
+                            <IoSearch fontSize={28} />
+                        </InputGroup.Addon>
+                    </InputGroup>
+                    <Badge invisible={!(
+                        params.has('t') || params.has('co') || params.has('c'))}
                         color="primary"
                         variant="dot">
-                        <BotonFilled
-                            onClick={() => {
-                                setOpen(true);
-                            }} >
+                        <Button appearance='primary' style={{ background: '#212121', height: 48 }} size='sm'
+                            onClick={() => { setOpen(true); }} >
                             Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                        </BotonFilled>
+                        </Button>
                     </Badge>
                 </Grid>
+
                 {
                     Convenios.length > 0 ?
                         Convenios.map(value => (

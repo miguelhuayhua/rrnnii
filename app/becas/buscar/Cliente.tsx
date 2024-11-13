@@ -11,6 +11,8 @@ import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import BecaItem from "@/app/componentes/items/Beca";
 import { Normal } from "@/app/componentes/Textos";
 import Filtros from "./Filtros";
+import { Button, Input, InputGroup } from "rsuite";
+import { IoSearch } from "react-icons/io5";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const [Becas, setBecas] = useState<Beca[]>([]);
@@ -44,29 +46,24 @@ const Cliente = () => {
             </div>
             <Grid container spacing={2}>
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
-                    <InputBox sx={{
-                        width: 200,
-                        'fieldset': { border: '1px solid #aaa !important' },
-                    }}
-                        placeholder='Buscar'
-                        InputProps={{
-                            startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
-                        }}
-                        onChange={ev => {
-                            setBecas(BecasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                        }}
-                    />
+                    <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                        <Input style={{ fontFamily: 'inherit' }}
+                            placeholder="Buscar becas"
+                            onChange={text => {
+                                setBecas(BecasMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                            }} />
+                        <InputGroup.Addon style={{ background: 'white' }}>
+                            <IoSearch fontSize={28} />
+                        </InputGroup.Addon>
+                    </InputGroup>
                     <Badge invisible={!(params.has('co') ||
                         params.has('s') || params.has('t'))}
                         color="primary"
                         variant="dot">
-                        <BotonFilled
-                            onClick={() => {
-                                setOpen(true);
-                            }} >
+                        <Button appearance='primary' style={{ background: '#212121', height: 48 }} size='sm'
+                            onClick={() => { setOpen(true); }} >
                             Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                        </BotonFilled>
+                        </Button>
                     </Badge>
                 </Grid>
                 {
@@ -92,7 +89,7 @@ const Cliente = () => {
                                     take: 12, skip
                                 }).then(res => {
                                     setBecas(prev => ([...prev, ...res.data]));
-                                    setBecasMain(res.data);
+                                    setBecasMain(prev => ([...prev, ...res.data]));
                                     setLoad(false)
                                     setSkip(prev => prev + 1);
                                 })

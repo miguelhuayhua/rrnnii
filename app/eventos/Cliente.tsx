@@ -1,8 +1,6 @@
 'use client';
 import { Badge, CircularProgress, Grid, } from "@mui/material";
-import { InputBox } from "../componentes/Datos";
-import { BiSearch } from "react-icons/bi";
-import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
+import { BotonFilled, BotonOutline } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
 import EventoItem from "../componentes/items/Evento";
@@ -11,6 +9,8 @@ import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Evento } from "@prisma/client";
 import { Normal } from "../componentes/Textos";
+import { Button, Input, InputGroup } from "rsuite";
+import { IoSearch } from "react-icons/io5";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const params = useSearchParams();
@@ -39,29 +39,26 @@ const Cliente = () => {
             </div>
             <Grid container spacing={2}>
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
-                    <InputBox
-                        sx={{
-                            width: 200,
-                            'fieldset': { border: '1px solid #aaa !important' },
-                        }}
-                        placeholder='Buscar'
-                        InputProps={{
-                            startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
-                        }}
-                        onChange={ev => {
-                            setEventos(EventosMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                        }}
-                    />
+                    <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                        <Input style={{ fontFamily: 'inherit' }}
+                            placeholder="Buscar becas"
+                            onChange={text => {
+                                setEventos(EventosMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                            }} />
+                        <InputGroup.Addon style={{ background: 'white' }}>
+                            <IoSearch fontSize={28} />
+                        </InputGroup.Addon>
+                    </InputGroup>
                     <Badge invisible={!(
                         params.has('t') || params.has('s'))}
                         color="primary"
                         variant="dot">
-                        <BotonFilled
+                        <Button appearance='primary' style={{ background: '#212121', height: 48 }} size='sm'
                             onClick={() => { setOpen(true); }} >
                             Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                        </BotonFilled>
+                        </Button>
                     </Badge>
+
                 </Grid>
 
                 {

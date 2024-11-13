@@ -79,7 +79,7 @@ body {
   /* Color para error */
   --rs-warning-500: #ffc107;
   /* Color para advertencias */
-  --rs-border-primary: rgb(227, 227, 227);
+  --rs-border-primary: rgb(182, 182, 182);
   --rs-btn-primary-hover-bg: #212121;
   --rs-btn-primary-bg: #212121;
   --rs-btn-ghost-hover-border: #212121;
@@ -87,15 +87,24 @@ body {
   --rs-btn-ghost-hover-text: #212121;
   --rs-btn-ghost-text: #212121;
   --rs-input-focus-border: var(--rs-danger-500);
+  --rs-picker-value: #212121;
+  --rs-state-focus-shadow: rgba(237, 62, 62, 0.387);
+  --rs-listbox-option-hover-text: #212121;
+  --rs-checkbox-checked-bg: #212121;
+  --rs-listbox-option-hover-bg: rgba(255, 0, 0, 0.064);
+  --rs-calendar-cell-selected-hover-bg: rgb(184, 0, 0);
+  --rs-bg-active: #d32f2f;
+  --rs-text-active: #212121;
+  --rs-listbox-option-selected-text: #212121;
+  --rs-listbox-option-selected-bg: rgba(184, 0, 0, 0.083);
 }
 
 .rs-btn {
-  font-size: 14.5px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   font-family: inherit;
-  border-radius: 12px;
+  border-radius: 15px;
 }
-
 
 .gradient-wrap {
   overflow: hidden;

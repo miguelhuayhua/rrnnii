@@ -16,7 +16,7 @@ const POST = async (request: Request) => {
         let sizee = await prisma.evento.count({
             where: { estado: true }
         });
-        let sizen = await prisma.evento.count({
+        let sizen = await prisma.noticia.count({
             where: { estado: true }
         });
         let contacto = await prisma.unidad.findFirst({ where: { id: 'rrnnii' } });

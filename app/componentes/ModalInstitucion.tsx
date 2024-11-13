@@ -44,17 +44,7 @@ export default function ModalInstitucion({ Institucion, open, setOpen }: Props) 
                                 src={"https://www.youtube.com/embed/" + Institucion.video?.split('=')[1]}
                                 title="Video institucional" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             /> :
-                            <Box sx={{
-                                width: "100%",
-                                borderRadius: 4, mt: 6,
-                                height: { xs: 200, sm: 300, md: 400, lg: 500 },
-                                display: 'flex', alignItems: 'center',
-                                justifyContent: 'center', border: `1px solid ${red[300]}`
-                            }}>
-                                <Negrita>
-                                    La institución no cuenta con alguna presentación
-                                </Negrita>
-                            </Box>
+                            null
                     }
                     <Grid container spacing={2} py={2}>
                         <Grid item xs={12} md={6}>

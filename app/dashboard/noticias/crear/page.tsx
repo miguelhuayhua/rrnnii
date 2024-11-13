@@ -129,7 +129,7 @@ export default function Page() {
                                         rules={{ required: 'Título no puede quedar vacío' }}
                                         render={({ field, fieldState }) => (
                                             <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                                <Form.ControlLabel>Título de noticia</Form.ControlLabel>
                                                 <Input {...field} size='lg' />
                                                 <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                                     {fieldState.error?.message}

@@ -228,7 +228,7 @@ export default function Page() {
                         </Box>
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={7} >
+                <Grid item xs={12} lg={7} >
                     <BoxSombra >
                         <Box px={2} pt={2}>
                             <Negrita sx={{ fontSize: 18 }}>
@@ -248,7 +248,6 @@ export default function Page() {
                                                 <Icon icon="solar:eye-bold" fontSize={20} style={{ marginRight: 5 }} />
                                                 {value.visitantes}
                                             </Negrita>
-
                                             <Button
                                                 appearance='primary'
                                                 style={{
@@ -262,7 +261,7 @@ export default function Page() {
                             ))} />
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={5}>
+                <Grid item xs={12} lg={5}>
                     <BoxSombra p={2}>
                         <Negrita sx={{ fontSize: 18 }}>
                             Continentes más interesados

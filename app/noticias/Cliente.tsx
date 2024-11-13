@@ -1,7 +1,5 @@
 'use client';
 import { Badge, CircularProgress, Grid, } from "@mui/material";
-import { InputBox } from "../componentes/Datos";
-import { BiSearch } from "react-icons/bi";
 import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
@@ -10,7 +8,10 @@ import axios from "axios";
 import { Noticia } from "@prisma/client";
 import { Normal } from "../componentes/Textos";
 import NoticiaItem from "../componentes/items/Noticia";
+
 import Filtros from "./Filtros";
+import { Button, Input, InputGroup } from "rsuite";
+import { IoSearch } from "react-icons/io5";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
     const [skip, setSkip] = useState(0);
@@ -40,31 +41,24 @@ const Cliente = () => {
             </div>
             <Grid container spacing={2}>
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
-                    <InputBox
-                        sx={{
-                            width: 200,
-                            'fieldset': { border: '1px solid #aaa !important' },
-                        }}
-                        placeholder='Buscar'
-                        InputProps={{
-                            startAdornment:
-                                <BiSearch fontSize={28} style={{ marginRight: 10 }} />
-                        }}
-                        onChange={ev => {
-                            setNoticias(NoticiasMain.filter(value => value.titulo.toLowerCase().includes(ev.target.value.toLowerCase())))
-                        }}
-                    />
-
-
-                    <Badge invisible={!params.has('s')}
+                    <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
+                        <Input style={{ fontFamily: 'inherit' }}
+                            placeholder="Buscar noticias"
+                            onChange={text => {
+                                setNoticias(NoticiasMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                            }} />
+                        <InputGroup.Addon style={{ background: 'white' }}>
+                            <IoSearch fontSize={28} />
+                        </InputGroup.Addon>
+                    </InputGroup>
+                    <Badge invisible={!(
+                        params.has('s'))}
                         color="primary"
                         variant="dot">
-                        <BotonFilled
-                            onClick={() => {
-                                setOpen(true);
-                            }} >
+                        <Button appearance='primary' style={{ background: '#212121', height: 48 }} size='sm'
+                            onClick={() => { setOpen(true); }} >
                             Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                        </BotonFilled>
+                        </Button>
                     </Badge>
                 </Grid>
                 {
@@ -82,12 +76,12 @@ const Cliente = () => {
                         disabled={load}
                         onClick={() => {
                             setLoad(true);
-                            axios.post('/api/noticias/listar',
+                            axios.post('/api/noticia/listar',
                                 {
                                     skip
                                 }).then(res => {
                                     setNoticias(prev => ([...prev, ...res.data]));
-                                    setNoticiasMain(res.data);
+                                    setNoticiasMain(prev => ([...prev, ...res.data]));
                                     setLoad(false)
                                     setSkip(prev => prev + 1);
                                 })

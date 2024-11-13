@@ -37,4 +37,5 @@ function filtrarValorEnArray(array: any, valorBuscado: string) {
     return resultados;
 }
 
+
 export { parseNumber, parsePhone, toUpperCase, filtrarValorEnArray, parseLetter };

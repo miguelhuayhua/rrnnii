@@ -59,6 +59,7 @@ const Filtros = ({ open, setOpen }: Props) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={12} p={2}>
+
                         <InputBox
                             value={carrera}
                             sx={{ ".MuiTypography-root": { fontSize: 11 } }}

@@ -1,22 +1,29 @@
 import { Switch, TextField, styled } from "@mui/material";
 import { blue, blueGrey } from "@mui/material/colors";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Form, Input } from 'rsuite';
-const InputBox = ({ field, error, ...rest }: any) => {
-    return (
-        <Form.Group>
-            <Input
-                id={field.name}
-                value={field.value}
-                onChange={value => field.onChange(value)}
-                {...rest}
-            />
-            <Form.ErrorMessage show={!!error} placement="bottomStart">
-                {error}
-            </Form.ErrorMessage>
-        </Form.Group>
-    );
-};
+const InputBox = styled(TextField)(() => {
+    return {
+        width: "100%",
+        marginBottom: 16,
+        '& .MuiOutlinedInput-root': {
+            borderRadius: 10,
+            'fieldset': { border: '1px solid #ddd' },
+            '&:hover fieldset': {
+                borderColor: blue[600], // Cambia el color al hacer hover
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: blue[600], // Cambia el color al hacer focus
+            },
+        },
+        ".MuiFormLabel-root": {
+            fontWeight: 600,
+            fontSize: 17
+        },
+        ".MuiInputBase-input": {
+            fontSize: 18
+        }
+    }
+});
 const DatePickerBox = styled(DatePicker)(() => {
     return {
         marginBottom: 16,

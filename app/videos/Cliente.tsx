@@ -3,33 +3,31 @@ import { Badge, CircularProgress, Grid, } from "@mui/material";
 import { BotonOutline } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
-import Filtros from "./Filtros";
-import PasantiaItem from "../componentes/items/Pasantia";
-import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { Pasantia } from "@prisma/client";
+import axios from "axios";
+import { Video } from "@prisma/client";
 import { Normal } from "../componentes/Textos";
 import { Button, Input, InputGroup } from "rsuite";
 import { IoSearch } from "react-icons/io5";
+import Filtros from "./Filtro";
+import VideoItem from "../componentes/items/Video";
+import ModalVideo from "./Modal";
 const Cliente = () => {
     const [open, setOpen] = useState(false);
-    const [Pasantias, setPasantias] = useState<Pasantia[]>([]);
-    const [PasantiasMain, setPasantiasMain] = useState<Pasantia[]>([]);
-    const [load, setLoad] = useState(true);
-    const [skip, setSkip] = useState(0);
     const params = useSearchParams();
-    const duracion = params.get('d') || '';
-    const carrera = params.get('carrera') || '';
-    const orden = params.get('s');
+    const [Videos, setVideos] = useState<Video[]>([]);
+    const [video, setVideo] = useState<any>(null);
+    const [skip, setSkip] = useState(0);
+    const [load, setLoad] = useState(true);
+    const [VideosMain, setVideosMain] = useState<Video[]>([]);
     useEffect(() => {
-
-        axios.post('/api/pasantia/listar',
-            { duracion, carrera, orden, skip: 0 }).then(res => {
-                setPasantias(res.data);
-                setPasantiasMain(res.data);
+        axios.post('/api/video/listar',
+            { orden: params.get('s'), skip: 0 }).then(res => {
+                setVideos(res.data);
+                setVideosMain(res.data);
                 setLoad(false);
                 setSkip(1);
-            });
+            })
     }, [params]);
     return (
         <>
@@ -45,9 +43,9 @@ const Cliente = () => {
                 <Grid item xs={12} display='flex' justifyContent='space-between'>
                     <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
                         <Input style={{ fontFamily: 'inherit' }}
-                            placeholder="Buscar noticias"
+                            placeholder="Buscar videos"
                             onChange={text => {
-                                setPasantias(PasantiasMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                                setVideos(VideosMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
                             }} />
                         <InputGroup.Addon style={{ background: 'white' }}>
                             <IoSearch fontSize={28} />
@@ -63,14 +61,15 @@ const Cliente = () => {
                         </Button>
                     </Badge>
                 </Grid>
+
                 {
-                    Pasantias.length > 0 ?
-                        Pasantias.map(value => (
-                            <Grid key={value.id} item xs={12} sm={8} md={6} mx='auto'>
-                                <PasantiaItem value={value as any} />
+                    Videos.length > 0 ?
+                        Videos.map(value => (
+                            <Grid key={value.id} item xs={12} sm={6} lg={4} mx='auto'>
+                                <VideoItem setVideo={setVideo} value={value as any} />
                             </Grid>))
-                        : <Normal ml={2}>
-                            Pasantias no encontradas
+                        : <Normal m={2}>
+                            Videos no encontrados
                         </Normal>
                 }
                 <Grid xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -78,13 +77,16 @@ const Cliente = () => {
                         disabled={load}
                         onClick={() => {
                             setLoad(true);
-                            axios.post('/api/pasantia/listar',
-                                { duracion, carrera, orden, skip }).then(res => {
-                                    setPasantias(prev => [...prev, ...res.data]);
-                                    setPasantiasMain(prev => [...prev, ...res.data]);
-                                    setLoad(false);
+                            axios.post('/api/video/listar',
+                                {
+                                    orden: params.get('s'),
+                                    take: 12, skip
+                                }).then(res => {
+                                    setVideos(prev => ([...prev, ...res.data]));
+                                    setVideosMain(prev => ([...prev, ...res.data]));
+                                    setLoad(false)
                                     setSkip(prev => prev + 1);
-                                });
+                                })
                         }}
                         sx={{ mt: 4, fontSize: 13 }}>
                         Cargas más
@@ -94,11 +96,13 @@ const Cliente = () => {
                         }
                     </BotonOutline>
                 </Grid>
-
             </Grid>
             <Suspense>
                 <Filtros setOpen={setOpen} open={open} />
             </Suspense>
+            {
+                video ? <ModalVideo setVideo={setVideo} video={video} /> : null
+            }
         </>
     )
 }

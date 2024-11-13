@@ -38,7 +38,7 @@ export default function Cliente({ value }: Props) {
     }, []);
     return (
         <>
-            <Grid container >
+            <Grid container  >
                 <Grid item xs={12}>
                     <Box sx={{ height: 500, position: 'relative' }}>
                         <Stack sx={{
@@ -214,7 +214,7 @@ export default function Cliente({ value }: Props) {
                     </Box>
 
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} pb={2}>
                     <Titulo sx={{ textAlign: 'center', my: 1 }}>
                         Más convenios
                     </Titulo>
@@ -232,7 +232,7 @@ export default function Cliente({ value }: Props) {
                         }
                     </Grid>
                 </Grid>
-                /</Grid >
+            </Grid >
             <ModalInstitucion Institucion={value.Institucion}
                 open={openModalInstitucion} setOpen={setOpenModalInstitucion} />
         </>

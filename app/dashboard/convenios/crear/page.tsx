@@ -110,7 +110,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ my: 1 }}>
+                <Breadcrumbs sx={{ my: 1, mt: 2 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>

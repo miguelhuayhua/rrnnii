@@ -136,7 +136,7 @@ export default function Page() {
                                         </Box>
                                     ),
                                     "": (<>
-                                        <Stack py={1.5} direction='row' spacing={2} alignItems='center'>
+                                        <Stack py={1.5} direction='row' spacing={3} alignItems='center'>
                                             <Button
                                                 appearance="ghost" size="md" onClick={() => {
                                                     setVideo(value);
