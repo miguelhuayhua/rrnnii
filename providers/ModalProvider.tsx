@@ -74,14 +74,14 @@ export const ModalProvider = ({ children }: any) => {
                 <Modal.Body>
                     {
                         typeof action.params.content == 'string' ?
-                            <Normal sx={{ my: 2, textAlign: 'center' }}>
+                            <Normal sx={{ textAlign: 'center' }}>
                                 {action.params.content}
                             </Normal>
                             : action.params.content
                     }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Stack direction='row' justifyContent={'center'} spacing={3}>
+                    <Stack direction='row' justifyContent={'center'} spacing={2}>
                         <Button
                             size='lg'
                             appearance='primary'
@@ -89,6 +89,7 @@ export const ModalProvider = ({ children }: any) => {
                             {action.params.ButtonText?.no}
                         </Button>
                         <Button
+                            appearance='subtle'
                             size='lg'
                             onClick={async () => {
                                 openSnackbar(await action.params.callback());

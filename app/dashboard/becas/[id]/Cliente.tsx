@@ -205,104 +205,64 @@ export default function Cliente({ Beca }: Props) {
                                                         "Cédula de Identidad": value.ci,
                                                         "": (
                                                             <Stack direction='row' spacing={1} py={1}>
-                                                                <Button appearance='primary' style={{ background: grey[900] }}>
-                                                                    <Icon icon="carbon:phone-filled" />
-                                                                </Button>
-                                                                <Button appearance='primary' style={{ background: red[600] }}
+                                                                <Button
                                                                     onClick={() => {
-                                                                        let a = document.createElement('a');
-                                                                        a.href = fileDomain + value.cipath;
-                                                                        a.target = '_blank';
-                                                                        a.download = fileDomain + value.cipath;
-                                                                        a.click();
-                                                                        a.remove();
-                                                                        openSnackbar('Carnet descargado con éxito');
+                                                                        setParticipante(value);
                                                                     }}
-                                                                >
-                                                                    CI
+                                                                    appearance='subtle'
+                                                                    size='sm' >
+                                                                    <Icon icon="solar:eye-linear" />
                                                                 </Button>
-                                                                <Button appearance='primary'
-                                                                    onClick={() => {
-                                                                        let a = document.createElement('a');
-                                                                        a.href = fileDomain + value.rupath;
-                                                                        a.target = '_blank';
-                                                                        a.download = fileDomain + value.rupath;
-                                                                        a.click();
-                                                                        a.remove();
-                                                                        openSnackbar('Registro universitario descargado con éxito');
-                                                                    }}
-                                                                    style={{ background: red[600] }}>
-                                                                    RU
-                                                                </Button>
-                                                            </Stack>)
+                                                            </Stack>),
+                                                        "Revisado": (
+                                                            value.aceptado ?
+                                                                <Box display='flex' justifyContent='center'>
+                                                                    <Icon icon="lets-icons:done-round-duotone"
+                                                                        fontSize={35}
+                                                                        style={{
+                                                                            color: green[500],
+                                                                        }} />
+                                                                </Box> :
+                                                                <Stack direction='row' spacing={1}>
+                                                                    <Button
+                                                                        size='sm'
+                                                                        appearance='ghost'
+                                                                        onClick={() => {
+                                                                            openModal({
+                                                                                titulo: '¿Está seguro?',
+                                                                                content: 'El postulante será eliminado',
+                                                                                async callback() {
+                                                                                    let res = await axios.post('/api/beca/participante/rechazar', { id: value.id });
+                                                                                    router.refresh();
+                                                                                    return res.data.mensaje;
+                                                                                }
+                                                                            })
+                                                                        }}
+                                                                    >
+                                                                        <Icon icon='ic:outline-close' />
+                                                                    </Button>
+                                                                    <Button
+                                                                        size='sm'
+                                                                        appearance='primary'
+                                                                        onClick={() => {
+                                                                            openModal({
+                                                                                titulo: '¿Está seguro?',
+                                                                                content: 'El postulante será registrado',
+                                                                                async callback() {
+                                                                                    let res = await axios.post('/api/beca/participante/aceptar', { id: value.id });
+                                                                                    router.refresh();
+                                                                                    return res.data.mensaje;
+                                                                                }
+                                                                            })
+                                                                        }}>
+                                                                        <Icon icon='ic:round-check' />
+                                                                    </Button>
+                                                                </Stack>)
                                                     }
                                                 ))} />
                                             </Grid>
-                                            {
-                                                Beca.Participantes.map((value, index) => (
-                                                    <Grid key={value.id} item xs={12} sm={6} lg={4}>
-                                                        <BoxSombra position='relative' p={2}>
-                                                            {
-                                                                value.aceptado ?
-                                                                    <Stack spacing={2} direction='row'
-                                                                        sx={{ position: 'absolute', top: 10, right: 15 }}>
-                                                                        <Box>
-                                                                            <Icon icon="lets-icons:done-round-duotone"
-                                                                                fontSize={35}
-                                                                                style={{
-                                                                                    color: green[500],
-                                                                                    marginTop: 10
-                                                                                }} />
-                                                                        </Box>
-                                                                        <Button onClick={() => {
-                                                                            setParticipante(value);
-                                                                        }}>
-                                                                            <Icon icon="material-symbols:edit-outline"
-                                                                                fontSize={25}
-                                                                                style={{ color: grey[500] }} />
-                                                                        </Button>
-                                                                    </Stack> :
-                                                                    <Stack
-                                                                        sx={{ mb: 2 }}
-                                                                        direction='row' spacing={1} >
-                                                                        <BotonOutline
-                                                                            sx={{ height: 30, fontSize: 13 }}
-                                                                            onClick={() => {
-                                                                                openModal({
-                                                                                    titulo: '¿Está seguro?',
-                                                                                    content: 'El postulante será rechazado',
-                                                                                    async callback() {
-                                                                                        let res = await axios.post('/api/beca/participante/rechazar', { id: value.id });
-                                                                                        router.refresh();
-                                                                                        return res.data.mensaje;
-                                                                                    }
-                                                                                })
-                                                                            }}
-                                                                        >
-                                                                            Rechazar
-                                                                        </BotonOutline>
-                                                                        <BotonFilled
-                                                                            sx={{ height: 30, fontSize: 13 }}
-                                                                            onClick={() => {
-                                                                                openModal({
-                                                                                    titulo: '¿Está seguro?',
-                                                                                    content: 'El postulante quedará registrado en la beca',
-                                                                                    async callback() {
-                                                                                        let res = await axios.post('/api/beca/participante/aceptar', { id: value.id });
-                                                                                        router.refresh();
-                                                                                        return res.data.mensaje;
-                                                                                    }
-                                                                                })
-                                                                            }}>
-                                                                            Aceptar
-                                                                        </BotonFilled>
-                                                                    </Stack>
-                                                            }
 
-                                                        </BoxSombra>
-                                                    </Grid>
-                                                ))
-                                            }
+
                                         </Grid>
                                         :
                                         <Grid item xs={12}>

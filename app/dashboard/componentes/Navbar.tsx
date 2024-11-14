@@ -18,7 +18,7 @@ const Navbar = () => {
     return (
         <Box
             position={'sticky'} top={0} bgcolor='#ffffff'
-            borderBottom='1px solid #ccc' height={75} zIndex={18} width="100%" px={1}>
+            borderBottom='1px solid #ccc' height={75} zIndex={1000} width="100%" px={1}>
             <Box display='flex' position='absolute' left={20} top={13} alignItems='center'>
                 <Image src='/logorrnnii.png' width={50} height={48} layout='fixed' />
                 <Box px={0.5} >
