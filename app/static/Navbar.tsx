@@ -77,7 +77,7 @@ const Navbar = () => {
                                 height={45}
                                 layout='fixed'
                                 src={"/logorrnnii.png"}
-                                alt='logo de UAYUA'
+                                alt='Logo de la unidad de relaciones internacionales'
                             />
                             <Box px={0.5} display='flex' flexDirection='column' alignItems='start'>
                                 <Normal sx={{ fontSize: 10, textAlign: 'start', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
@@ -91,12 +91,6 @@ const Navbar = () => {
                     </Link>
                     <Box display='flex' alignItems='center'>
                         <Stack display={{ xs: 'none', md: 'flex' }} direction='row' spacing={2} mr={2}>
-                            <Link style={{ textDecoration: 'none' }} href={'/'}>
-                                <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
-                                    {pathname == '/' ? <GoDotFill color='inherit' /> : null}
-                                    Principal
-                                </Normal>
-                            </Link>
                             <Tooltip
                                 PopperProps={{
                                     sx: {

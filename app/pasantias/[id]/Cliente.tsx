@@ -12,7 +12,6 @@ import axios from "axios";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import PasantiaItem from "@/app/componentes/items/Pasantia";
-import { BotonFilled } from "@/app/componentes/Botones";
 import { red, blue, grey, green } from "@mui/material/colors";
 import { Icon } from '@iconify/react';
 import { RiFileWord2Line } from "react-icons/ri";
@@ -20,6 +19,7 @@ import { fileDomain } from "@/utils/globals";
 import { MdPhone } from "react-icons/md";
 import { IoMdCalendar } from "react-icons/io";
 import { FaBuildingColumns } from "react-icons/fa6";
+import { Button } from "rsuite";
 interface Props {
     value: Pasantia & { PasantiaCarrera: (PasantiaCarrera & { Carrera: Carrera })[], Institucion: Institucion };
 }
@@ -141,14 +141,23 @@ export default function Cliente({ value }: Props) {
                         sx={{ height: 30, position: 'absolute', top: -7, right: 0, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[500] : red[500], color: 'white' }}
                         label={dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
                     {
-                        value.descripcion ? parse(value.descripcion) :
+                        value.descripcion ? <Box sx={{
+                            textAlign: 'justify',
+                            p: {
+                                color: grey[900], lineHeight: 2,
+                            },
+                            h2: { color: red[500] },
+                        }}>
+                            {
+                                parse(value.descripcion)
+                            }
+                        </Box> :
                             <Normal>Sin descripción</Normal>
                     }
                 </Box>
             </Grid>
             <Grid item xs={12}>
                 <Box sx={{ mx: { xs: 1, sm: 10, lg: 25 }, mt: 2 }}>
-                    <Negrita>Disponible para:</Negrita>
                     <Stack direction='row' py={2} flexWrap='wrap'>
                         {
                             value.PasantiaCarrera.map(value =>
@@ -168,18 +177,11 @@ export default function Cliente({ value }: Props) {
                     {
                         value.pdf ?
                             <>
-
-                                <Normal mb={2}>
-                                    <i>Archivos adjuntos</i>
-                                </Normal>
                                 {
                                     value.pdf ?
-                                        <BotonFilled
-                                            startIcon={
-                                                value.pdf.includes('pdf') ?
-                                                    <Icon icon="proicons:pdf" width={30} height={30} />
-                                                    : <RiFileWord2Line fontSize={22} />
-                                            }
+                                        <Button
+                                            size='lg'
+                                            appearance='link'
                                             onClick={() => {
                                                 let a = document.createElement('a');
                                                 a.download = fileDomain + value.pdf;
@@ -188,9 +190,9 @@ export default function Cliente({ value }: Props) {
                                                 a.click();
                                                 a.remove();
                                             }}
-                                            sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
-                                            Descargar
-                                        </BotonFilled> : null
+                                        >
+                                            Descargar archivo adjunto
+                                        </Button> : null
                                 }</> : null
                     }
                 </Box>

@@ -28,20 +28,20 @@ const EventoComponent = ({ Evento, setEvento,
 }: Props) => {
     const { openSnackbar } = useSnackbar();
     return (
-        <BoxSombra p={3} bgcolor='white' borderRadius={4} >
-            <Grid container spacing={2}>
+        <BoxSombra p={1} bgcolor='white' borderRadius={4} >
+            <Grid container spacing={1}>
                 <Grid item xs={8} position='relative'>
                     <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
                         <ChipBox sx={{ height: 30, }} label={Evento.estado ? 'Publicado' : 'Sin publicar'} />
                         <ChipBox sx={{ height: 30, bgcolor: Evento.tipo == 'online' ? '#0074b7' : '#09b615', color: 'white', mx: 0, }} label={Evento.tipo == 'online' ? 'Online' : 'Presencial'} />
                     </Stack>
-                    <Normal sx={{ fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 12 }}>
                         {dayjs(Evento.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Evento.titulo}
                     </Negrita>
-                    <Normal sx={{ mt: 1 }}>
+                    <Normal sx={{ fontSize: 12 }}>
                         Inicia el: {Evento.inicio}
                     </Normal>
 

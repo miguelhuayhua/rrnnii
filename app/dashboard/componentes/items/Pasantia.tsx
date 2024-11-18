@@ -29,19 +29,19 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
 }: Props) => {
     const { openSnackbar } = useSnackbar();
     return (
-        <BoxSombra p={3} bgcolor='white' borderRadius={4} >
-            <Grid container spacing={2}>
+        <BoxSombra p={1} bgcolor='white' borderRadius={4} >
+            <Grid container spacing={1}>
                 <Grid item xs={8} position='relative'>
                     <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
                         <ChipBox sx={{ height: 30, }} label={Pasantia.estado ? 'Publicado' : 'Sin publicar'} />
                     </Stack>
-                    <Normal sx={{ fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 12 }}>
                         {dayjs(Pasantia.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Pasantia.titulo}
                     </Negrita>
-                    <Normal sx={{ mt: 1 }}>
+                    <Normal sx={{ fontSize: 12 }}>
                         Termina el: {Pasantia.finalizacion}
                     </Normal>
 

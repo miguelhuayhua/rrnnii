@@ -29,7 +29,7 @@ const ConvenioComponent = ({ Convenio, setConvenio,
 }: Props) => {
     const { openSnackbar } = useSnackbar();
     return (
-        <BoxSombra p={3} bgcolor='white' borderRadius={4} >
+        <BoxSombra p={1} bgcolor='white' borderRadius={4} >
             <Grid container spacing={2}>
                 <Grid item xs={8} position='relative'>
                     <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
@@ -40,13 +40,13 @@ const ConvenioComponent = ({ Convenio, setConvenio,
                                 {Convenio.tipo == 'nacional' ? 'BO' : Convenio.pais}
                             </Normal>} />
                     </Stack>
-                    <Normal sx={{ fontSize: 15, mb: 2, color: grey[700] }}>
+                    <Normal sx={{ fontSize: 12, color: grey[700] }}>
                         {dayjs(Convenio.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Convenio.titulo}
                     </Negrita>
-                    <Normal sx={{ mt: 1 }}>
+                    <Normal sx={{ fontSize: 12 }}>
                         Termina el: {Convenio.finalizacion}
                     </Normal>
 

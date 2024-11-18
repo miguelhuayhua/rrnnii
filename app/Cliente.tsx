@@ -105,6 +105,7 @@ const Cliente = () => {
                                         <Grid key={value.id} item xs={6}>
                                             <Imagen
                                                 objectFit="cover"
+                                                alt={value.titulo}
                                                 style={{ borderRadius: 10 }}
                                                 src={value.imagen} width={100} height={100} layout="responsive" />
                                         </Grid>
@@ -182,7 +183,7 @@ const Cliente = () => {
                 <Negrita sx={{ textAlign: 'center', py: 2 }}>
                     rrnnii.upea.bo
                 </Negrita>
-                <Titulo sx={{ textAlign: 'center' }} variant="h3">Próximos eventos</Titulo>
+                <Titulo sx={{ textAlign: 'center' }} variant="h2">Próximos eventos</Titulo>
                 <Grid container spacing={2} px={{ xs: 1, sm: 10, md: 1, lg: 5, xl: 20 }} py={4}>
                     {
                         Eventos.map(value => (
@@ -195,7 +196,7 @@ const Cliente = () => {
             </Box>
             <Grid container bgcolor='#fff' px={2} py={5} borderTop={`1px solid ${grey[400]}`}>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }}>
-                    <Imagen width={100} height={80} src='/revista.png' layout='responsive' />
+                    <Imagen alt="" width={100} height={80} src='/revista.png' layout='responsive' />
                 </Grid>
                 <Grid item xs={6}>
                     <Negrita>
@@ -230,7 +231,7 @@ const Cliente = () => {
                     </BotonOutline>
                 </Grid>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }} pt={5}>
-                    <Imagen width={100} height={60} src='/gorro.png' layout='responsive' />
+                    <Imagen alt="" width={100} height={60} src='/gorro.png' layout='responsive' />
                 </Grid>
             </Grid>
             <Box py={10}>

@@ -218,26 +218,26 @@ export default function Main() {
                     </Panel>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <Negrita sx={{ mb: 2, fontSize: 16 }}>
-                        Información personal
-                    </Negrita>
-                    <Normal>
-                        <b>Cédula de identidad: </b> {persona.ci}
-                    </Normal>
-                    <Normal>
-                        <b>Nombre completo: </b> {`${persona.nombre} ${persona.paterno} ${persona.materno}`}
-                    </Normal>
-                    <Normal>
-                        <b>Fecha de nacimiento: </b> {persona.f_nacimiento}
-                    </Normal>
-                    <Normal>
-                        <b>Cargo en la unidad: </b> {persona.cargo}
-                    </Normal>
-                    <Normal sx={{ mt: 2 }}>
-                        <i>
+                    <Box px={2}>
+                        <Negrita sx={{ mb: 2, fontSize: 20 }}>
+                            Información personal
+                        </Negrita>
+                        <Normal>
+                            <b>Cédula de identidad: </b> {persona.ci}
+                        </Normal>
+                        <Normal>
+                            <b>Nombre completo: </b> {`${persona.nombre} ${persona.paterno} ${persona.materno}`}
+                        </Normal>
+                        <Normal>
+                            <b>Fecha de nacimiento: </b> {persona.f_nacimiento}
+                        </Normal>
+                        <Normal>
+                            <b>Cargo en la unidad: </b> {persona.cargo}
+                        </Normal>
+                        <Normal sx={{ mt: 2 }}>
                             Registrado el {dayjs(persona.createdAt).format('DD/MM/YYYY - HH:mm:ss')}
-                        </i>
-                    </Normal>
+                        </Normal>
+                    </Box>
                 </Grid>
             </Grid >
         </Box >

@@ -1,5 +1,5 @@
 "use client";
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import { Beca } from "@prisma/client";
 import { Icon } from '@iconify/react';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import axios from "axios";
 import ModalBeca from "./ModalBeca";
 import { ChipBox } from "@/app/componentes/Mostrar";
@@ -46,14 +46,14 @@ export default function Page() {
             <Titulo sx={{ mt: 1 }}>
                 Becas
             </Titulo>
-            <Stack direction='row' my={2} spacing={2} >
-                <Button
-                    appearance='primary'
+            <Stack direction='row' my={2} spacing={1} >
+                <Button appearance="primary"
                     onClick={() => router.push('/dashboard/becas/crear')}>
                     Añadir beca
                 </Button>
                 <Button
-                    appearance="subtle" onClick={() => {
+                    appearance="subtle"
+                    onClick={() => {
                         setLoad(true);
                         axios.post('/api/beca/todo', {}).then(res => {
                             setBecas(res.data);
@@ -62,7 +62,13 @@ export default function Page() {
                             setLoad(false);
                         });
                     }}>
-                    <Icon icon="mdi:reload" fontSize={26} />
+                    <Icon icon='nrk:reload' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
             <Tabs

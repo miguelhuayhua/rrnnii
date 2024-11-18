@@ -1,5 +1,5 @@
 "use client";
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
@@ -10,10 +10,10 @@ import { Institucion, Pasantia } from "@prisma/client";
 import ModalPasantia from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
-import { TbPdf, TbReload } from "react-icons/tb";
 import 'dayjs/locale/es';
 dayjs.locale('es');
-import { blue, red } from "@mui/material/colors";
+import { Icon } from '@iconify/react';
+import { red } from "@mui/material/colors";
 import axios from "axios";
 import PasantiaComponent from "../componentes/items/Pasantia";
 import { ChipBox } from "@/app/componentes/Mostrar";
@@ -47,13 +47,15 @@ export default function Page() {
             <Titulo sx={{ mb: 2 }}>
                 Pasantías
             </Titulo>
-            <Stack direction='row' my={2} spacing={2} >
-                <Button appearance='primary' onClick={() => router.push('/dashboard/pasantias/crear')}>
-                    Añadir Pasantia
+
+            <Stack direction='row' my={2} spacing={1} >
+                <Button appearance="primary"
+                    onClick={() => router.push('/dashboard/pasantias/crear')}>
+                    Añadir pasantia
                 </Button>
                 <Button
-                    size='lg'
-                    appearance="subtle" onClick={() => {
+                    appearance="subtle"
+                    onClick={() => {
                         setLoad(true);
                         axios.post('/api/pasantia/todo', { opcion }).then(res => {
                             setPasantias(res.data);
@@ -62,7 +64,13 @@ export default function Page() {
                             setLoad(false);
                         });
                     }}>
-                    <TbReload fontSize={22} />
+                    <Icon icon='nrk:reload' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
             <Tabs

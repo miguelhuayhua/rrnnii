@@ -74,17 +74,18 @@ model Beca {
 }
 
 model ParticipanteBeca {
-  id              String   @id @default(dbgenerated("generate_object_id()"))
-  nombre_completo String   @default("")
-  contacto        String   @default("")
-  becaId          String   @default("")
-  Beca            Beca?    @relation(fields: [becaId], references: [id])
-  ru              String   @default("")
-  ci              String   @default("")
-  rupath          String   @default("")
-  cipath          String   @default("")
-  createdAt       DateTime @default(now())
-  aceptado        Boolean  @default(false)
+  id              String    @id @default(dbgenerated("generate_object_id()"))
+  nombre_completo String    @default("")
+  contacto        String    @default("")
+  becaId          String    @default("")
+  Beca            Beca?     @relation(fields: [becaId], references: [id])
+  ru              String    @default("")
+  ci              String    @default("")
+  rupath          String    @default("")
+  cipath          String    @default("")
+  createdAt       DateTime  @default(now())
+  aceptado        Boolean   @default(false)
+  Archivos        Archivo[]
 }
 
 model Evento {
@@ -196,4 +197,11 @@ model Visitantes {
   ip          String   @default("")
   dispositivo String   @default("")
   createdAt   DateTime @default(now())
+}
+
+model Archivo {
+  id                 String            @id @default(dbgenerated("generate_object_id()"))
+  participanteBecaid String            @default("")
+  ParticipanteBeca   ParticipanteBeca? @relation(fields: [participanteBecaid], references: [id])
+  ruta               String            @default("")
 }

@@ -18,6 +18,7 @@ import { ChipBox } from "@/app/componentes/Mostrar";
 import ConvenioComponent from "../componentes/items/Convenio";
 import { IoSearch } from "react-icons/io5";
 import { Button, Input, InputGroup } from "rsuite";
+import { Icon } from '@iconify/react';
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -47,13 +48,12 @@ export default function Page() {
             <Titulo>
                 Convenios
             </Titulo>
-            <Stack direction='row' my={2} spacing={2} >
-                <Button size='lg' appearance="primary"
+            <Stack direction='row' my={2} spacing={1} >
+                <Button appearance="primary"
                     onClick={() => router.push('/dashboard/convenios/crear')}>
                     Añadir convenio
                 </Button>
                 <Button
-                    size='lg'
                     appearance="subtle"
                     onClick={() => {
                         setLoad(true);
@@ -64,7 +64,13 @@ export default function Page() {
                             setLoad(false);
                         });
                     }}>
-                    <TbReload fontSize={22} />
+                    <Icon icon='nrk:reload' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
             <Tabs
@@ -133,7 +139,7 @@ export default function Page() {
                     onChange={text => {
                         setConvenios(prevConvenios.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
                     }} />
-                <InputGroup.Addon style={{ background: 'transparent' }}>
+                <InputGroup.Addon style={{ background: 'white' }}>
                     <IoSearch fontSize={28} />
                 </InputGroup.Addon>
             </InputGroup>

@@ -1,5 +1,5 @@
 'use client';
-import { BotonOutline, BotonSimple } from "@/app/componentes/Botones";
+import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
@@ -16,8 +16,9 @@ import { TbReload } from "react-icons/tb";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
+import { Icon } from '@iconify/react';
 import { fileDomain } from "@/utils/globals";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { Button } from "rsuite";
 export default function Page() {
@@ -33,6 +34,7 @@ export default function Page() {
             setPrevInstituciones(res.data);
         });
     }, []);
+    const [load, setLoad] = useState(false);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
             <Breadcrumbs sx={{ my: 2 }}>
@@ -47,22 +49,28 @@ export default function Page() {
             <Titulo sx={{ mt: 1 }}>
                 Instituciones
             </Titulo>
-            <Stack direction='row' my={2} spacing={2}>
-                <Button size='lg' appearance="primary"
+            <Stack direction='row' my={2} spacing={1} >
+                <Button appearance="primary"
                     onClick={() => router.push('/dashboard/instituciones/crear')}>
                     Añadir institución
                 </Button>
                 <Button
-                    size='lg'
                     appearance="subtle"
                     onClick={() => {
+                        setLoad(true);
                         axios.post('/api/institucion/todo', {}).then(res => {
                             setInstituciones(res.data);
                             setPrevInstituciones(res.data);
                             setOpcion('todo');
                         });
                     }}>
-                    <TbReload fontSize={22} />
+                    <Icon icon='nrk:reload' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
             <Tabs

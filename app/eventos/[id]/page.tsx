@@ -35,7 +35,7 @@ export default async function Home({ params }: any) {
     if (value) {
         await incrementarVista(params.id)
         return (
-            <Box bgcolor='#f4f6f8'>
+            <Box bgcolor='white'>
                 <Navbar />
                 <Cliente value={value as any} />
                 <Footer />

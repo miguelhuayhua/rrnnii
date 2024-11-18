@@ -1,6 +1,6 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Button, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
@@ -21,12 +21,12 @@ dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
 import { BotonFilled } from "@/app/componentes/Botones";
 import { blue, green, grey, red } from "@mui/material/colors";
-import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
 import { MdPhone } from "react-icons/md";
 import { FaBuildingColumns } from "react-icons/fa6";
 import ModalInstitucion from "@/app/componentes/ModalInstitucion";
+import { Button } from "rsuite";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [convenios, setConvenios] = useState([]);
@@ -76,8 +76,8 @@ export default function Cliente({ value }: Props) {
                                 src={value.Institucion.logo ? fileDomain + value.Institucion.logo : ''} />
                             <Box ml={2}>
                                 <Button
-                                    sx={{ px: 0, mx: 0, minWidth: 0 }}
-                                    variant="text" onClick={() => {
+                                    appearance='link'
+                                    onClick={() => {
                                         setOpenModalInstitucion(true);
                                     }}>
                                     <Negrita sx={{ fontSize: 18, color: 'white' }}>
@@ -159,14 +159,24 @@ export default function Cliente({ value }: Props) {
                             sx={{ height: 30, position: 'absolute', top: -7, right: 0, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[500] : red[500], color: 'white' }}
                             label={dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
                         {
-                            value.descripcion ? parse(value.descripcion) :
+                            value.descripcion ? <Box sx={{
+                                textAlign: 'justify',
+                                p: {
+                                    color: grey[900], lineHeight: 2,
+                                },
+                                h2: { color: red[500] },
+                                strong: { color: blue[700] }
+                            }}>
+                                {
+                                    parse(value.descripcion)
+                                }
+                            </Box> :
                                 <Normal>Sin descripción</Normal>
                         }
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
                     <Box sx={{ mx: { xs: 1, sm: 10, lg: 25 }, mt: 2 }}>
-                        <Negrita>Disponible para:</Negrita>
                         <Stack direction='row' py={2} flexWrap='wrap'>
                             {
                                 value.ConvenioCarrera.map(value =>
@@ -186,18 +196,11 @@ export default function Cliente({ value }: Props) {
                         {
                             value.pdf ?
                                 <>
-
-                                    <Normal mb={2}>
-                                        <i>Archivos adjuntos</i>
-                                    </Normal>
                                     {
                                         value.pdf ?
-                                            <BotonFilled
-                                                startIcon={
-                                                    value.pdf.includes('pdf') ?
-                                                        <Icon icon="proicons:pdf" width={30} height={30} />
-                                                        : <RiFileWord2Line fontSize={22} />
-                                                }
+                                            <Button
+                                                size='lg'
+                                                appearance='link'
                                                 onClick={() => {
                                                     let a = document.createElement('a');
                                                     a.download = fileDomain + value.pdf;
@@ -206,9 +209,9 @@ export default function Cliente({ value }: Props) {
                                                     a.click();
                                                     a.remove();
                                                 }}
-                                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
-                                                Descargar
-                                            </BotonFilled> : null
+                                            >
+                                                Descargar archivo adjunto
+                                            </Button> : null
                                     }</> : null
                         }
                     </Box>

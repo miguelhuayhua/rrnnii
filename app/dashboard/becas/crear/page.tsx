@@ -137,6 +137,7 @@ export default function Page() {
                             <Text
                                 style={{ margin: '15px 0' }}
                                 size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
+                            <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
                             <Uploader
                                 fileList={documento}
                                 autoUpload={false}
@@ -145,10 +146,8 @@ export default function Page() {
                                 multiple={false}
                                 accept=".pdf, .doc, .docx"
                             >
-                                <>
-                                    <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
-                                    <Button size='lg' block>Seleccionar archivo...</Button>
-                                </>
+
+                                <Button size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
                         </Panel>
 

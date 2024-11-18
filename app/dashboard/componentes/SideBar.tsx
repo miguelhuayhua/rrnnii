@@ -1,23 +1,11 @@
 'use client';
 import Box from '@mui/material/Box';
 import { usePathname, useRouter } from 'next/navigation';
-import { MdWork } from "react-icons/md";
 import { Divider, SwipeableDrawer, useMediaQuery, useTheme } from "@mui/material";
-import { IoPeople } from "react-icons/io5";
-import { FaHandsHelping, FaVideo } from "react-icons/fa";
-import { FaBuilding, FaBuildingUser } from "react-icons/fa6";
-import Image from 'next/legacy/image';
-import { HiHome, HiNewspaper } from 'react-icons/hi2';
-import { GiMeepleCircle } from 'react-icons/gi';
-import { BsFillCalendar2EventFill } from 'react-icons/bs';
-import { BotonOutline, BotonSimple } from '@/app/componentes/Botones';
 import { Normal } from '@/app/componentes/Textos';
 import { blue, grey, red } from '@mui/material/colors';
 import { useState } from 'react';
-import { CgMenuLeft } from 'react-icons/cg';
-import { BiSolidInstitution } from 'react-icons/bi';
 import { useSession } from 'next-auth/react';
-import { GrContactInfo } from 'react-icons/gr';
 import { Button } from 'rsuite';
 import { Icon } from '@iconify/react';
 //SECCIÓN DE BOTONES PARA EL SIDEBAR
@@ -135,7 +123,8 @@ const SideBar = () => {
                             onClick={() => { setMove(!move); }}
                             style={{
                                 position: 'fixed',
-                                top: 12, right: 70, zIndex: 20,
+                                top: 12, right: 70, zIndex: 2000,
+
                             }}>
                             <Icon icon='ci:menu-alt-05' fontSize={35} />
                         </Button>

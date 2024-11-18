@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 import { Noticia } from "@prisma/client";
 import ModalNoticia from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { TbReload } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
+import { Icon } from '@iconify/react';
+import { red } from "@mui/material/colors";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { IoSearch } from "react-icons/io5";
@@ -46,13 +46,12 @@ export default function Page() {
             <Titulo sx={{ mt: 1 }}>
                 Noticias
             </Titulo>
-            <Stack direction='row' my={2} spacing={2} >
-                <Button size='lg' appearance="primary"
+            <Stack direction='row' my={2} spacing={1} >
+                <Button appearance="primary"
                     onClick={() => router.push('/dashboard/noticias/crear')}>
                     Añadir noticia
                 </Button>
                 <Button
-                    size='lg'
                     appearance="subtle"
                     onClick={() => {
                         setLoad(true);
@@ -63,7 +62,13 @@ export default function Page() {
                             setLoad(false);
                         });
                     }}>
-                    <TbReload fontSize={22} />
+                    <Icon icon='nrk:reload' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
             <Tabs

@@ -35,7 +35,7 @@ const BecaComponent = ({ Beca, setBeca,
     const { openSnackbar } = useSnackbar();
     const router = useRouter();
     return (
-        <BoxSombra p={3} bgcolor='white' borderRadius={4} >
+        <BoxSombra p={1} bgcolor='white' borderRadius={4} >
             <Grid container spacing={2}>
                 <Grid item xs={8} position='relative'>
                     <Stack direction='row' spacing={2} sx={{ mb: 2, alignItems: 'center' }}>
@@ -50,17 +50,17 @@ const BecaComponent = ({ Beca, setBeca,
                             <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
                         </Negrita>
                     </Stack>
-                    <Normal sx={{ fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 12 }}>
                         {dayjs(Beca.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Beca.titulo}
                     </Negrita>
-                    <Normal sx={{ mt: 1 }}>
+                    <Normal sx={{ mt: 1, fontSize: 12 }}>
                         Termina el: {Beca.termina}
                     </Normal>
 
-                    <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
+                    <Stack direction='row' sx={{ mt: 1 }} spacing={1} alignItems='center'>
                         <Button appearance='ghost'
                             onClick={() => {
                                 setBeca(Beca);

@@ -61,23 +61,24 @@ export default function Cliente({ value }: Props) {
                                 <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
                             </Negrita>
                         </Stack>
-                        <Titulo sx={{
-                            position: 'absolute',
-                            fontSize: 30,
-                            top: 60,
-                            pl: { xs: 2, sm: 6, xl: 40 },
-                            zIndex: 10, color: 'white'
-                        }}>
+                        <Titulo
+                            lang="es" aria-label="Título de la beca" variant="h1" sx={{
+                                position: 'absolute',
+                                fontSize: 30,
+                                top: 60,
+                                pl: { xs: 2, sm: 6, xl: 40 },
+                                zIndex: 10, color: 'white'
+                            }}>
                             {value.titulo}
                         </Titulo>
                         <Box alignItems='center' zIndex={10} display='flex' pl={{ xs: 2, sm: 6, xl: 40 }} position='absolute' bottom={40}>
-                            <Avatar src={fileDomain + value.Institucion.logo} sx={{ width: 60, height: 60, bgcolor: grey[50] }} />
+                            <Avatar alt="" src={fileDomain + value.Institucion.logo} sx={{ width: 60, height: 60, bgcolor: grey[50] }} />
                             <Box ml={2}>
                                 <Button appearance="subtle"
                                     onClick={() => {
                                         setOpenModalInstitucion(true);
                                     }}>
-                                    <Negrita sx={{ fontSize: 18, color: 'white' }}>
+                                    <Negrita variant="h2" sx={{ fontSize: 18, color: 'white' }}>
                                         {value.Institucion.nombre}
                                     </Negrita>
                                 </Button>
@@ -113,7 +114,7 @@ export default function Cliente({ value }: Props) {
                             </SpeedDial>
                         </Box>
                         <Zoom>
-                            <Image
+                            <Image alt=""
                                 style={{ filter: 'brightness(0.3)' }}
                                 src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
                         </Zoom>
@@ -165,7 +166,17 @@ export default function Cliente({ value }: Props) {
                             }}
                             label={dayjs(value.termina, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
                         {
-                            value.descripcion ? parse(value.descripcion) :
+                            value.descripcion ? <Box sx={{
+                                p: {
+                                    color: grey[900], lineHeight: 2,
+                                },
+                                strong: { color: blue[700] },
+                                h2: { color: red[500] },
+                            }}>
+                                {
+                                    parse(value.descripcion)
+                                }
+                            </Box> :
                                 <Normal>Sin descripción</Normal>
                         }
                         <Normal mb={2} sx={{ color: grey[700], display: 'flex', alignItems: 'center' }}>
@@ -177,18 +188,11 @@ export default function Cliente({ value }: Props) {
                         {
                             value.pdf ?
                                 <>
-
-                                    <Normal mb={2}>
-                                        <i>Archivos adjuntos</i>
-                                    </Normal>
                                     {
                                         value.pdf ?
-                                            <BotonFilled
-                                                startIcon={
-                                                    value.pdf.includes('pdf') ?
-                                                        <Icon icon="proicons:pdf" width={30} height={30} />
-                                                        : <RiFileWord2Line fontSize={22} />
-                                                }
+                                            <Button
+                                                size='lg'
+                                                appearance='link'
                                                 onClick={() => {
                                                     let a = document.createElement('a');
                                                     a.download = fileDomain + value.pdf;
@@ -197,9 +201,9 @@ export default function Cliente({ value }: Props) {
                                                     a.click();
                                                     a.remove();
                                                 }}
-                                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500] }}>
-                                                Descargar
-                                            </BotonFilled> : null
+                                            >
+                                                Descargar archivo adjunto
+                                            </Button> : null
                                     }</> : null
                         }
 
@@ -208,7 +212,7 @@ export default function Cliente({ value }: Props) {
                 </Grid>
 
                 <Grid item xs={12} pb={2}>
-                    <Titulo sx={{ textAlign: 'center', my: 3 }}>
+                    <Titulo variant="h3" sx={{ textAlign: 'center', my: 3 }}>
                         Más becas
                     </Titulo>
                     <Grid container spacing={2} px={{ xs: 5, sm: 10, md: 15 }} >

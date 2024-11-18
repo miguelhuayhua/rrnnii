@@ -43,7 +43,9 @@ html {
     overflow: hidden;
     box-shadow: 0 0 2px #21212122;
 }
-
+.rs-input, .rs-picker{
+    border-radius: 12px;
+}
 .rs-input:focus {
     outline: none;
 }

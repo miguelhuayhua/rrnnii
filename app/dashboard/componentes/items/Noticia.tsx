@@ -25,17 +25,17 @@ const NoticiaComponent = ({ Noticia, setNoticia,
 }: Props) => {
     const { openSnackbar } = useSnackbar();
     return (
-        <BoxSombra p={3} bgcolor='white' borderRadius={4} >
-            <Grid container spacing={2}>
+        <BoxSombra p={1} bgcolor='white' borderRadius={4} >
+            <Grid container spacing={1}>
                 <Grid item xs={8} position='relative'>
-                    <Normal sx={{ fontSize: 15, mb: 2 }}>
+                    <Normal sx={{ fontSize: 12 }}>
                         {dayjs(Noticia.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Noticia.titulo}
                     </Negrita>
 
-                    <Box sx={{ fontSize: 15 }}>
+                    <Box sx={{ fontSize: 12 }}>
                         {
                             parse(Noticia.descripcion.substring(0, 200) + "...")
                         }

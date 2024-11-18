@@ -1,5 +1,5 @@
 "use client";
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
+import { BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
@@ -8,10 +8,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Evento } from "@prisma/client";
 import ModalEvento from "./Modal";
+import { Icon } from '@iconify/react';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
-import { TbReload } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import axios from "axios";
 import { IoSearch } from "react-icons/io5";
 import EventoComponent from "../componentes/items/Evento";
@@ -47,13 +47,12 @@ export default function Page() {
             <Titulo sx={{ mt: 1 }}>
                 Eventos
             </Titulo>
-            <Stack direction='row' my={2} spacing={2} >
-                <Button size='lg' appearance="primary"
-                    onClick={() => router.push('/dashboard/eventos/crear')}>
+            <Stack direction='row' my={2} spacing={1} >
+                <Button appearance="primary"
+                    onClick={() => router.push('/dashboard/evento/crear')}>
                     Añadir evento
                 </Button>
                 <Button
-                    size='lg'
                     appearance="subtle"
                     onClick={() => {
                         setLoad(true);
@@ -64,7 +63,13 @@ export default function Page() {
                             setLoad(false);
                         });
                     }}>
-                    <TbReload fontSize={22} />
+                    <Icon icon='nrk:reload' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'>
+                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
             <Tabs

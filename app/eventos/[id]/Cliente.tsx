@@ -14,14 +14,13 @@ import EventoItem from "@/app/componentes/items/Evento";
 interface Props { value: Evento; }
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
-import { BotonFilled } from "@/app/componentes/Botones";
-import { TbPdf } from "react-icons/tb";
 import { RiFileWord2Line } from "react-icons/ri";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import { blue, grey, red } from "@mui/material/colors";
 import { fileDomain } from "@/utils/globals";
 import { IoMdCalendar } from "react-icons/io";
+import { Button } from "rsuite";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [eventos, setEventos] = useState([]);
@@ -123,30 +122,40 @@ export default function Cliente({ value }: Props) {
                         <IoMdCalendar style={{ marginRight: 5, fontSize: 22 }} />
                         {dayjs(value.inicio, 'DD/MM/YYYY').format('[Inicia el] DD [de] MMMM [del] YYYY')}
                     </Normal>
-
                     {
-                        value.descripcion ? parse(value.descripcion) :
+                        value.descripcion ? <Box sx={{
+                            textAlign: 'justify',
+                            p: {
+                                color: grey[900], lineHeight: 2,
+                            },
+                            h2: { color: red[500] },
+                        }}>
+                            {
+                                parse(value.descripcion)
+                            }
+                        </Box> :
                             <Normal>Sin descripción</Normal>
                     }
                     {
                         value.pdf ?
-                            <BotonFilled
-                                startIcon={
-                                    value.pdf.includes('pdf') ?
-                                        <Icon icon="proicons:pdf" width={30} height={30} />
-                                        : <RiFileWord2Line fontSize={22} />
-                                }
-                                onClick={() => {
-                                    let a = document.createElement('a');
-                                    a.download = fileDomain + value.pdf;
-                                    a.href = fileDomain + value.pdf;
-                                    a.target = '_blank';
-                                    a.click();
-                                    a.remove();
-                                }}
-                                sx={{ background: value.pdf.includes('pdf') ? red[700] : blue[500], mt: 4 }}>
-                                Descargar
-                            </BotonFilled> : null
+                            <>
+                                {
+                                    value.pdf ?
+                                        <Button
+                                            size='lg'
+                                            appearance='link'
+                                            onClick={() => {
+                                                let a = document.createElement('a');
+                                                a.download = fileDomain + value.pdf;
+                                                a.href = fileDomain + value.pdf;
+                                                a.target = '_blank';
+                                                a.click();
+                                                a.remove();
+                                            }}
+                                        >
+                                            Descargar archivo adjunto
+                                        </Button> : null
+                                }</> : null
                     }
                 </Box>
             </Grid>

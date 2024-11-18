@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Home(props: any) {
     const value = await get(props.params.id) as Beca;
     return (
-        <Box bgcolor='#f4f6f8'>
+        <Box bgcolor='white'>
             <Navbar />
             <Cliente value={value as any} />
             <Footer />
