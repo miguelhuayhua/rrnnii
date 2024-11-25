@@ -8,6 +8,21 @@ const parsePhone = (value: any) => {
         value.toString().substring(0, value.toString().length - 1)
         : value.toString() : ''
 }
+function compartirEnlaceEnWhatsApp(url: string, mensaje: string) {
+    const encodedMessage = encodeURIComponent(`${mensaje}\n${url}`);
+    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+}
+const compartirEnFacebook = (url: string) => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank');
+};
+
+const compartirEnX = (url: string, mensaje: string) => {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(mensaje)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, '_blank');
+};
+
 function parseLetter(input: string) {
     // Eliminamos cualquier carácter que no sea letra usando una expresión regular
     const letrasEspacios = input.replace(/[^a-zA-Z\s]/g, '');
@@ -38,4 +53,10 @@ function filtrarValorEnArray(array: any, valorBuscado: string) {
 }
 
 
-export { parseNumber, parsePhone, toUpperCase, filtrarValorEnArray, parseLetter };
+export {
+    parseNumber,
+    compartirEnlaceEnWhatsApp,
+    compartirEnFacebook,
+    compartirEnX,
+    parsePhone, toUpperCase, filtrarValorEnArray, parseLetter
+};

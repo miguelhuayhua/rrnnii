@@ -1,11 +1,11 @@
 'use client';
 import { Badge, FormControlLabel, Box, Grid, Radio, RadioGroup, Stack, SwipeableDrawer, MenuItem, Button } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Titulo, Negrita, Normal } from "../../componentes/Textos";
-import { BotonSimple } from "../../componentes/Botones";
+import { Titulo, Negrita, Normal } from "../componentes/Textos";
+import { BotonSimple } from "../componentes/Botones";
 import { IoReload } from "react-icons/io5";
 import { CgClose } from "react-icons/cg";
-import { InputBox } from "../../componentes/Datos";
+import { InputBox } from "../componentes/Datos";
 import { useEffect, useState } from "react";
 import { Carrera } from "@prisma/client";
 import Image from 'next/legacy/image';

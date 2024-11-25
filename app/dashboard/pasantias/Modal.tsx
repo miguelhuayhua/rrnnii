@@ -20,6 +20,7 @@ import { useSnackbar } from '@/providers/SnackbarProvider';
 import axios from 'axios';
 import { fileDomain } from '@/utils/globals';
 import { Uploader, Input, Form, AutoComplete, SelectPicker, Text, Button, TagPicker, DatePicker, Modal } from 'rsuite';
+import { toUpperCase } from '@/utils/data';
 interface Props {
     setPasantia: any;
     Pasantia: Pasantia & { PasantiaCarrera: PasantiaCarrera[] };
@@ -129,6 +130,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                             <Text
                                 style={{ margin: '15px 0' }}
                                 size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
+                            <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
                             <Uploader
                                 fileList={documento}
                                 autoUpload={false}
@@ -137,10 +139,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                 multiple={false}
                                 accept=".pdf, .doc, .docx"
                             >
-                                <>
-                                    <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
-                                    <Button size='lg' block>Seleccionar archivo...</Button>
-                                </>
+                                <Button size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
                             <Controller
                                 name="titulo"
@@ -149,7 +148,9 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
                                         <Form.ControlLabel>Título de la pasantía</Form.ControlLabel>
-                                        <Input {...field} size='lg' />
+                                        <Input {...field}
+                                            onChange={text => field.onChange(toUpperCase(text))}
+                                            size='lg' />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
                                         </Form.ErrorMessage>
@@ -195,7 +196,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                             renderMenuItem={(label, item) => (
                                                 <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
                                                     <div style={{ width: 25, minWidth: 25, aspectRatio: 1, position: 'relative', marginRight: 10 }}>
-                                                        <Image layout='fill' src={fileDomain + item.logo} style={{ borderRadius: 10 }} />
+                                                        <Image layout='fill' src={item.logo ? fileDomain + item.logo : '/default-image.jpg'} style={{ borderRadius: 10 }} />
                                                     </div>
                                                     <Negrita sx={{ fontSize: 14 }}>{item.nombre}</Negrita>
                                                 </div>

@@ -1,7 +1,7 @@
 import { prisma } from "../../client";
 const POST = async (request: Request) => {
     try {
-        let { tipo, skip, id, continente, take } = await request.json();
+        let { tipo, skip, id, continente, take, carrera } = await request.json();
         take = take || 15;
         skip = skip || 0;
         let becas = await prisma.beca.findMany({

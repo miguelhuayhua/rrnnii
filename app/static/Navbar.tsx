@@ -14,10 +14,12 @@ import { HiOutlineBars3BottomLeft } from 'react-icons/hi2';
 import ModalLogin from './ModalLogin';
 import { BiDownArrow, BiNews, BiVideo } from 'react-icons/bi';
 import { PiDotOutlineFill } from 'react-icons/pi';
-import { grey, red } from '@mui/material/colors';
+import { green, grey, red } from '@mui/material/colors';
+import { Icon } from '@iconify/react';
 import { RiHome5Line } from 'react-icons/ri';
 import { GrGroup } from 'react-icons/gr';
 import { MdOutlineHandshake } from 'react-icons/md';
+import { Button } from 'rsuite';
 //estilos
 const Navbar = () => {
     const pathname = usePathname();
@@ -43,6 +45,30 @@ const Navbar = () => {
     }, []);
     return (
         <>
+            {
+                pathname.endsWith('/') ? null :
+                    <Box bgcolor='white' borderBottom='1px solid #ddd' zIndex={1001}>
+                        <Stack spacing={0.5} direction='row'>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='ic:outline-facebook' style={{ marginLeft: 10 }} fontSize={20} />
+                            </Button>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='basil:instagram-solid' fontSize={20}
+                                    style={{ marginLeft: 10 }} />
+                            </Button>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='mdi:youtube' fontSize={20}
+                                    style={{ marginLeft: 10 }} />
+                            </Button>
+                            <Button appearance='link'>
+                                <Icon
+                                    color={green[600]}
+                                    icon='mage:whatsapp-filled' fontSize={20}
+                                />
+                            </Button>
+                        </Stack>
+                    </Box>
+            }
             <Box
                 sx={{
                     boxShadow: trigger ? 'rgba(135, 158, 171, 0.16) 0px 8px 16px 0px' : 'none',
@@ -115,12 +141,12 @@ const Navbar = () => {
                                                     Convenios
                                                 </Negrita>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/convenios/buscar?t=nacional'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?t=nacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Nacionales
                                                 </Normal>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/convenios/buscar?t=internacional'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/convenios?t=internacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Internacionales
                                                 </Normal>
@@ -149,12 +175,12 @@ const Navbar = () => {
                                                     Becas
                                                 </Negrita>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/becas/buscar?t=nacional'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/becas?t=nacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Nacionales
                                                 </Normal>
                                             </Link>
-                                            <Link style={{ textDecoration: 'none' }} href={'/becas/buscar?t=internacional'}>
+                                            <Link style={{ textDecoration: 'none' }} href={'/becas?t=internacional'}>
                                                 <Normal sx={{ my: 1 }}>
                                                     Internacionales
                                                 </Normal>
@@ -205,13 +231,15 @@ const Navbar = () => {
                                 </Normal>
                             </Link>
                         </Stack>
-                        <BotonSimple endIcon={<FaAngleRight />} sx={{ color: 'white', background: pathname.endsWith('/') ? trigger ? grey[900] : "#00000033" : grey[900], backdropFilter: 'blur(6px)', fontSize: 13 }} onClick={() => {
-                            setOpen2(true);
-                        }}>
+                        <Button
+                            appearance='primary'
+                            endIcon={<FaAngleRight />} style={{ color: 'white', background: pathname.endsWith('/') ? trigger ? red[900] : "#00000033" : red[900], backdropFilter: 'blur(6px)', fontSize: 13 }} onClick={() => {
+                                setOpen2(true);
+                            }}>
                             Iniciar sesión
-                        </BotonSimple>
+                        </Button>
 
-                        <BotonSimple sx={{ display: { xs: 'block', md: 'none' }, height: 36, color: 'white', background: pathname.endsWith('/') ? trigger ? grey[900] : "#00000033" : grey[900], backdropFilter: 'blur(6px)', position: 'relative', left: 10 }} onClick={() => {
+                        <BotonSimple sx={{ display: { xs: 'block', md: 'none' }, height: 36, color: 'white', background: pathname.endsWith('/') ? trigger ? [900] : "#00000033" : grey[900], backdropFilter: 'blur(6px)', position: 'relative', left: 10 }} onClick={() => {
                             setOpen(true);
                         }}>
                             <HiOutlineBars3BottomLeft fontSize={24} />

@@ -1,5 +1,4 @@
 'use client';
-import { BotonFilled, BotonOutline } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Box, Breadcrumbs, Grid, Stack, Tabs } from "@mui/material";
 import Link from "next/link";
@@ -9,11 +8,10 @@ import parse from 'html-react-parser';
 import { Beca, Institucion, ParticipanteBeca } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
 import Image from 'next/legacy/image';
+import { ChipBox } from "@/app/componentes/Mostrar";
 import { Icon } from '@iconify/react';
-import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
-import { useSnackbar } from "@/providers/SnackbarProvider";
 import { useState } from "react";
-import { green, grey, red } from "@mui/material/colors";
+import { green, red } from "@mui/material/colors";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TabBox } from "../../componentes/Mostrar";
 import { IoCalendar } from "react-icons/io5";
@@ -34,8 +32,6 @@ interface Props {
 dayjs.locale('es')
 export default function Cliente({ Beca }: Props) {
     const { openModal } = useModal();
-    const { openSnackbar } = useSnackbar();
-    const [open, setOpen] = useState<any>(null);
     const [opcion, setOpcion] = useState(1);
     const router = useRouter();
     const [participante, setParticipante] = useState<any>(null);
@@ -97,17 +93,11 @@ export default function Cliente({ Beca }: Props) {
                                 label={Beca.Participantes.length} />
                         </Box>} value={2} />
                 </Tabs>
-                <Grid container spacing={4} pb={2}>
+                <Grid container spacing={2} pb={2}>
                     {
                         opcion == 1 ?
                             <>
-                                <Grid item xs={12} md={6}>
-                                    <Panel shaded style={{ fontSize: 16, background: 'white' }}>
-                                        {
-                                            parse(Beca.descripcion)
-                                        }
-                                    </Panel>
-                                </Grid>
+
                                 <Grid item xs={12} md={6}>
                                     <Panel shaded style={{ background: 'white' }}>
                                         <Box display={'flex'}>
@@ -144,27 +134,37 @@ export default function Cliente({ Beca }: Props) {
                                             </Box>
                                         </Box>
                                     </Panel>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
                                     <Panel shaded style={{
-                                        background: 'white',
-                                        marginTop: 30, display: 'flex'
-                                    }}>                                        <Box>
+                                        background: 'white'
+                                    }}>
+                                        <Box sx={{ display: 'flex' }}>
                                             <Image
-                                                src={Beca.Institucion.logo ? (fileDomain + Beca.Institucion.logo) : '/default-image.jpg'} width={100} height={100}
+                                                src={Beca.Institucion.logo ? (fileDomain + Beca.Institucion.logo) : '/default-image.jpg'}
+                                                width={100} height={100}
                                                 layout="fixed"
                                                 objectFit="cover"
                                                 style={{ borderRadius: 10 }} />
+                                            <Box ml={2}>
+                                                <Negrita sx={{ fontSize: 20 }}>
+                                                    {Beca.Institucion.nombre}
+                                                </Negrita>
+                                                <Normal>
+                                                    {Beca.Institucion.ubicacion || 'Sin ubicación'}
+                                                </Normal>
+                                                <Normal>
+                                                    {Beca.Institucion.contacto || 'Sin contacto'}
+                                                </Normal>
+                                            </Box>
                                         </Box>
-                                        <Box p={2}>
-                                            <Negrita>
-                                                {Beca.Institucion.nombre}
-                                            </Negrita>
-                                            <Normal>
-                                                {Beca.Institucion.ubicacion || 'Sin referencia'}
-                                            </Normal>
-                                            <Normal>
-                                                {Beca.Institucion.contacto || 'Sin contacto'}
-                                            </Normal>
-                                        </Box>
+                                    </Panel>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Panel shaded style={{ fontSize: 16, background: 'white' }}>
+                                        {
+                                            parse(Beca.descripcion)
+                                        }
                                     </Panel>
                                 </Grid>
                             </> : null
@@ -172,46 +172,54 @@ export default function Cliente({ Beca }: Props) {
                     {
                         opcion == 2 ?
                             <>
+                                <Grid item xs={12}>
+                                    <Stack direction='row' spacing={2}>
+                                        <Button appearance='ghost'
+                                            size='md'
+                                            onClick={() => {
+                                                pdf(<ParticipantesPDF
+                                                    Beca={Beca}
+                                                    Participantes={Beca.Participantes}
+                                                />).toBlob().then(res => {
+                                                    let url = URL.createObjectURL(res);
+                                                    let a = document.createElement('a');
+                                                    a.download = "participantes-beca-" + Beca.id;
+                                                    a.href = url;
+                                                    a.click();
+                                                    a.remove();
+                                                });
+                                            }}
+                                        >
+                                            Generar listado
+                                        </Button>
+                                        <Button appearance="subtle"
+                                            onClick={() => {
+                                                router.refresh();
+                                            }}>
+                                            <Icon icon='nrk:reload' fontSize={22} />
+                                        </Button>
+                                    </Stack>
+                                </Grid>
                                 {
                                     Beca.Participantes.length > 0 ?
-                                        <Grid mt={2} container spacing={2} mx={2} >
-                                            <Grid item xs={12}>
-                                                <Stack direction='row' spacing={2}>
-                                                    <Button appearance='ghost'
-                                                        size='md'
-                                                        onClick={() => {
-                                                            pdf(<ParticipantesPDF
-                                                                Beca={Beca}
-                                                                Participantes={Beca.Participantes}
-                                                            />).toBlob().then(res => {
-                                                                let url = URL.createObjectURL(res);
-                                                                let a = document.createElement('a');
-                                                                a.download = "participantes-beca-" + Beca.id;
-                                                                a.href = url;
-                                                                a.click();
-                                                                a.remove();
-                                                            });
-                                                        }}
-                                                    >
-                                                        Generar listado
-                                                    </Button>
-                                                </Stack>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <Tabla data={Beca.Participantes.map(value => (
+
+                                        <Grid item xs={12}>
+                                            <Tabla
+                                                hasPagination
+                                                data={Beca.Participantes.map(value => (
                                                     {
                                                         Nombre: value.nombre_completo,
                                                         "Registro Universitario": value.ru,
                                                         "Cédula de Identidad": value.ci,
                                                         "": (
-                                                            <Stack direction='row' spacing={1} py={1}>
+                                                            <Stack direction='row' spacing={1} py={1.5}>
                                                                 <Button
                                                                     onClick={() => {
                                                                         setParticipante(value);
                                                                     }}
                                                                     appearance='subtle'
                                                                     size='sm' >
-                                                                    <Icon icon="solar:eye-linear" />
+                                                                    <Icon icon="solar:eye-linear" fontSize={22} />
                                                                 </Button>
                                                             </Stack>),
                                                         "Revisado": (
@@ -239,7 +247,7 @@ export default function Cliente({ Beca }: Props) {
                                                                             })
                                                                         }}
                                                                     >
-                                                                        <Icon icon='ic:outline-close' />
+                                                                        <Icon icon='ic:outline-close' fontSize={19} />
                                                                     </Button>
                                                                     <Button
                                                                         size='sm'
@@ -255,14 +263,11 @@ export default function Cliente({ Beca }: Props) {
                                                                                 }
                                                                             })
                                                                         }}>
-                                                                        <Icon icon='ic:round-check' />
+                                                                        <Icon icon='ic:round-check' fontSize={19} />
                                                                     </Button>
                                                                 </Stack>)
                                                     }
                                                 ))} />
-                                            </Grid>
-
-
                                         </Grid>
                                         :
                                         <Grid item xs={12}>

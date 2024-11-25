@@ -1,17 +1,15 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
+import { Avatar, Box, Breadcrumbs, Grid, Stack } from "@mui/material";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import Image from 'next/legacy/image';
+import { Icon } from '@iconify/react';
 import parse from 'html-react-parser';
 import Link from "next/link";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { Icon } from '@iconify/react';
 import axios from "axios";
-import { IoMdCalendar } from "react-icons/io";
-import ConvenioItem from "@/app/componentes/items/Convenio";
 interface Props {
     value: Convenio & { ConvenioCarrera: (ConvenioCarrera & { Carrera: Carrera })[], Institucion: Institucion };
 }
@@ -19,89 +17,306 @@ import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
-import { BotonFilled } from "@/app/componentes/Botones";
-import { blue, green, grey, red } from "@mui/material/colors";
-import { RiFileWord2Line } from "react-icons/ri";
-import { fileDomain } from "@/utils/globals";
-import { MdPhone } from "react-icons/md";
+import { grey, red } from "@mui/material/colors";
+import { fileDomain, paises } from "@/utils/globals";
 import { FaBuildingColumns } from "react-icons/fa6";
-import ModalInstitucion from "@/app/componentes/ModalInstitucion";
-import { Button } from "rsuite";
+import { Button, Panel, Tabs } from "rsuite";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [convenios, setConvenios] = useState([]);
-    const [openModalInstitucion, setOpenModalInstitucion] = useState(false);
     useEffect(() => {
-        axios.post('/api/convenio/listar', { id: value.id, skip: 0 }).then(res => {
+        axios.post('/api/convenio/listar', { id: value.id, skip: 0, take: 5 }).then(res => {
             setConvenios(res.data);
         });
     }, []);
     return (
         <>
-            <Grid container  >
-                <Grid item xs={12}>
-                    <Box sx={{ height: 500, position: 'relative' }}>
-                        <Stack sx={{
-                            position: 'absolute', top: 20, zIndex: 10,
-                            mx: { xs: 2, sm: 6, xl: 40 },
-                        }} direction='row' spacing={2}>
-                            <ChipBox label={value.tipo == 'internacional' ? 'Convenio internacional' : 'Convenio nacional'}
-                                sx={{ bgcolor: grey[900], color: 'white' }} />
-                            <Normal sx={{
-                                display: 'flex',
-                                color: '#ddd',
-                                alignItems: 'center',
-                            }}>
-                                <Icon fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
-                                {value.tipo == 'nacional' ? 'BO' : value.pais}
-                            </Normal>
-                            <Negrita sx={{ display: 'flex', alignItems: 'center', color: grey[500] }}>
-                                {value.conteo}
-                                <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
-                            </Negrita>
-                        </Stack>
-                        <Titulo sx={{
+            <Grid container>
+                <Grid item xs={12} mb={4}>
+                    <Box sx={{ height: { xs: 500, md: 450 }, position: 'relative' }}>
+                        <Box sx={{
                             position: 'absolute',
-                            fontSize: 30,
-                            top: 60,
-                            mx: { xs: 2, sm: 6, xl: 40 },
-                            zIndex: 10, color: 'white'
+                            width: "80%",
+                            right: 0, left: 0, margin: '0 auto',
+                            zIndex: 10,
+                            height: "100%",
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center'
                         }}>
-                            {value.titulo}
-                        </Titulo>
-                        <Box alignItems='center' zIndex={10} display='flex' pl={{ xs: 2, sm: 6, xl: 40 }} position='absolute' bottom={40}>
-                            <Avatar sx={{
-                                bgcolor: 'white', height: 70, width: 70
-                            }}
-                                src={value.Institucion.logo ? fileDomain + value.Institucion.logo : ''} />
-                            <Box ml={2}>
-                                <Button
-                                    appearance='link'
-                                    onClick={() => {
-                                        setOpenModalInstitucion(true);
-                                    }}>
-                                    <Negrita sx={{ fontSize: 18, color: 'white' }}>
+                            <Titulo sx={{
+                                fontSize: 32,
+                                fontWeight: 600,
+                                textAlign: 'center',
+                                color: 'white'
+                            }}>
+                                {value.titulo}
+                            </Titulo>
+                            <Normal sx={{
+                                mt: 5,
+                                textAlign: 'center',
+                                color: 'white', fontSize: 17
+                            }}>
+                                {value.titulo}
+                            </Normal>
+                            <Breadcrumbs
+                                color="white" sx={{
+                                    position: 'absolute', bottom: 10,
+                                    color: 'white', alignItems: 'center'
+                                }} separator="＞" aria-label="breadcrumb">
+                                <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/" >
+                                    <Icon icon='lucide:home' />
+                                </Link>,
+                                <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/becas" >
+                                    Convenios
+                                </Link>
+                                <Normal sx={{ color: 'white', fontSize: 13 }}>
+                                    {value.titulo}
+                                </Normal>
+                            </Breadcrumbs>
+                        </Box>
+                        <Zoom>
+                            <Image
+                                style={{ filter: 'brightness(0.6)' }}
+                                src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
+                        </Zoom>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} md={9} px={{ xs: 2, sm: 5, md: 10, lg: 20 }}>
+                    <Normal sx={{ color: grey[700], fontWeight: 300 }}>
+                        Publicado el {dayjs(value.createdAt).format('DD [de] MMMM [del] YYYY')}
+                    </Normal>
+                    <Negrita sx={{ fontSize: 30, mt: 3 }}>
+                        Detalles
+                    </Negrita>
+                    {
+                        value.descripcion ?
+                            <Box sx={{
+                                fontSize: 17.5, fontWeight: 300,
+                                textAlign: 'justify',
+                                p: {
+                                    color: grey[900],
+                                },
+                                "h2, h3, h4": { color: red[500] },
+                                li: {
+                                    listStyleType: 'square', "::marker": {
+                                        color: red[500], fontSize: 25
+                                    }
+                                }
+                            }}>
+                                {
+                                    parse(value.descripcion)
+                                }
+                            </Box> :
+                            <Normal>Sin descripción</Normal>
+                    }
+                </Grid>
+                <Grid item xs={0} md={3} display={{ xs: 'none', md: 'block' }} >
+                    <Box px={1} position='sticky' top={90} bottom={0}>
+                        <Stack spacing={2}>
+                            <Button appearance="primary" size='lg'>
+                                Contactarme
+                            </Button>
+                        </Stack>
+
+                        <Stack spacing={0.1} direction='row' mt={2}>
+                            <Normal>
+                                Compartir:
+                            </Normal>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='ic:outline-facebook' fontSize={20} />
+                            </Button>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='basil:instagram-solid' fontSize={20}
+                                />
+                            </Button>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='mdi:youtube' fontSize={20} />
+                            </Button>
+                        </Stack>
+                    </Box>
+                </Grid>
+            </Grid >
+            <Grid container>
+                <Grid item xs={4} mx='auto'>
+                    <Stack alignItems='center' my={2}>
+                        <Icon fontSize={50} icon='fluent:earth-48-regular' />
+                        <Negrita mt={1}>
+                            {value.tipo == 'nacional' ?
+                                'Convenio Nacional' :
+                                'Convenio Internacional'}
+                        </Negrita>
+                    </Stack>
+                </Grid>
+                <Grid item xs={4} mx='auto'>
+                    <Stack alignItems='center' my={2}>
+                        <Icon fontSize={50} icon='fluent:shifts-availability-20-regular' />
+                        <Negrita mt={1}>
+                            {value.estado ?
+                                'Vigente' :
+                                'No disponible'}
+                        </Negrita>
+                    </Stack>
+                </Grid>
+                <Grid item xs={4} mx='auto'>
+                    <Stack alignItems='center' my={2}>
+                        <Icon fontSize={50} icon='mage:eye' />
+                        <Negrita mt={1}>
+                            {value.conteo} Visitas
+                        </Negrita>
+                    </Stack>
+                </Grid>
+                <Grid item xs={12} my={6}>
+                    <Negrita sx={{ fontSize: 32, textAlign: 'center' }}>
+                        {dayjs(value.finalizacion, 'DD/MM/YYYY').format('DD [de] MMMM [del] YYYY')}
+                    </Negrita>
+                    <Normal sx={{ textAlign: 'center' }}>
+                        Conclusión del convenio
+                    </Normal>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box sx={{ mx: { xs: 0, sm: 10, lg: 25 }, mt: 2 }}>
+                        <Tabs defaultActiveKey="1"
+                            style={{ border: 'none' }}
+                            vertical appearance="subtle">
+                            <Tabs.Tab eventKey="1" title="Institución">
+                                <Box display='flex' flexDirection='column'
+                                    alignItems='center' justifyContent='center'
+                                    py={3}>
+                                    <Image
+                                        layout="fixed"
+                                        width={100}
+                                        height={100}
+                                        style={{ borderRadius: "50%" }}
+                                        src={value.Institucion.logo ? fileDomain + value.Institucion.logo : '/default-image.jpg'} />
+                                    <Negrita mt={2}>
                                         {value.Institucion.nombre}
                                     </Negrita>
-                                </Button>
-                                <Normal sx={{ color: '#bbb' }}>
-                                    {dayjs(value.createdAt).format('DD MMMM YYYY')}
-                                </Normal>
-                                <Normal sx={{ color: '#bbb', display: 'flex', alignItems: 'center' }}>
-                                    <MdPhone style={{ marginRight: 5 }} />
-                                    {value.Institucion.contacto || 'Sin número'}
-                                </Normal>
-                            </Box>
-                        </Box>
-                        <Box pr={{ xs: 2, sm: 6, xl: 40 }}
-                            zIndex={11}
-                            position='absolute' bottom={50} right={0}>
-                            <SpeedDial
-                                ariaLabel="Mas"
-                                icon={<SpeedDialIcon />}
-                            >   {
-                                    value.pdf ?
-                                        <SpeedDialAction
+                                    {
+                                        value.Institucion.contacto ?
+                                            <Normal sx={{
+                                                display: 'flex',
+                                                my: 2,
+                                                alignItems: 'center'
+                                            }}>
+                                                <Icon icon='si:phone-line'
+                                                    fontSize={22} style={{ marginRight: 10 }} />
+                                                {value.Institucion.contacto}
+                                            </Normal> : null
+                                    }
+                                    {
+                                        value.Institucion.web ?
+                                            <Normal sx={{
+                                                display: 'flex',
+                                                my: 1,
+                                                alignItems: 'center'
+                                            }}>
+                                                <Icon icon="pepicons-pencil:internet"
+                                                    fontSize={20} style={{ marginRight: 10 }} />
+                                                <Link
+                                                    href={value.Institucion.web!} target='_blank'>
+                                                    {value.Institucion.web}
+                                                </Link>
+                                            </Normal>
+                                            : null
+                                    }
+                                    {
+                                        value.Institucion.video ?
+                                            <Box component='iframe'
+                                                sx={{
+                                                    width: "80%",
+                                                    border: 'none', borderRadius: 4,
+                                                    height: { xs: 200, sm: 300 },
+                                                    maxWidth: 500, mt: 2
+                                                }}
+                                                src={"https://www.youtube.com/embed/" + value.Institucion.video?.split('=')[1]}
+                                                title="Video institucional" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            /> :
+                                            null
+                                    }
+
+                                </Box>
+                            </Tabs.Tab>
+                            <Tabs.Tab eventKey="2" title="Fechas">
+                                <Box display='flex' flexDirection='column'
+                                    alignItems='center' justifyContent='center'
+                                    py={3} px={1}>
+
+                                    <Titulo sx={{ textAlign: 'center', fontWeight: 500 }}>
+                                        {dayjs(value.createdAt).format('[Del] DD [de] MMMM YYYY [-]')}
+                                        {dayjs(value.finalizacion, 'DD/MM/YYYY').format('[Hasta el] DD [de] MMMM YYYY')}
+                                    </Titulo>
+
+                                </Box>
+                            </Tabs.Tab>
+                            <Tabs.Tab eventKey="3" title="Carreras">
+                                <Box py={1}>
+                                    <Stack direction='row' flexWrap='wrap'>
+                                        {
+                                            value.ConvenioCarrera.map(value =>
+                                            (<ChipBox
+                                                key={value.id}
+                                                label={<Normal sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', fontWeight: 700 }}>
+                                                    {value.Carrera.logo ?
+                                                        <Image src={fileDomain + value.Carrera.logo}
+                                                            width={30} height={30} style={{ borderRadius: 4 }}
+                                                            layout='fixed' /> : <FaBuildingColumns fontSize={15} />}
+                                                    <span style={{ marginLeft: 5 }}>
+                                                        {value.Carrera.nombre}
+                                                    </span></Normal>} />)
+                                            )
+                                        }
+                                    </Stack>
+                                </Box>
+                            </Tabs.Tab>
+                            <Tabs.Tab eventKey="5" title="País">
+                                <Box height={{ xs: 200, sm: 250, md: 300 }}
+                                    sx={{
+                                        display: 'flex', alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }} position='relative'>
+
+                                    <Image layout="fill"
+                                        objectFit="contain"
+                                        style={{ opacity: 0.1 }}
+                                        src={'/assets/' + (value.continente == 'NA' ?
+                                            'america-norte.png' : '')
+                                        } />
+                                    <Stack alignItems='center'>
+                                        <Icon fontSize={40}
+                                            style={{ borderRadius: 10 }}
+                                            icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
+                                        <Negrita mt={2}>
+                                            {
+                                                paises.find(pais => pais.value == value.pais)?.pais
+                                            }
+                                        </Negrita>
+                                    </Stack>
+                                </Box>
+                            </Tabs.Tab>
+                        </Tabs>
+
+                        {
+                            value.pdf ?
+                                <Box px={{ xs: 2, sm: 5, md: 10, lg: 15, xl: 20 }}>
+                                    <Panel bordered
+                                        style={{
+                                            marginTop: 40,
+                                        }}
+                                    >
+                                        <Negrita sx={{
+                                            fontSize: 18,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            marginBottom: 3
+                                        }}>
+                                            <Icon icon='mdi-light:file'
+                                                fontSize={35} />
+                                            Documento de convocatoria
+                                        </Negrita>
+                                        <Button
+                                            style={{ background: grey[900] }}
                                             onClick={() => {
                                                 let a = document.createElement('a');
                                                 a.download = fileDomain + value.pdf;
@@ -110,134 +325,72 @@ export default function Cliente({ value }: Props) {
                                                 a.click();
                                                 a.remove();
                                             }}
-                                            sx={{ background: 'white' }}
-                                            icon={value.pdf.includes('pdf') ?
-                                                <Icon icon="proicons:pdf" width={30} height={30} />
-                                                : <RiFileWord2Line fontSize={22} />}
-                                            tooltipTitle={'Descargar archivo'}
-                                        />
-                                        : null
-                                }
-                            </SpeedDial>
-                        </Box>
-                        <Zoom>
-                            <Image
-                                style={{ filter: 'brightness(0.3)' }}
-                                src={fileDomain + value.imagen} layout="fill" objectFit="cover" />
-
-                        </Zoom>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} >
-                    <Box borderBottom='1px solid #ddd' py={4}>
-                        <Breadcrumbs sx={{
-                            px: { xs: 1, sm: 5, lg: 25 },
-                        }} separator="•" aria-label="breadcrumb">
-                            <Link style={{ textDecoration: 'none' }} href="/" >
-                                Convocatorias
-                            </Link>,
-                            <Link style={{ textDecoration: 'none' }} href="/becas" >
-                                Convenios
-                            </Link>,
-                            <Negrita sx={{ fontSize: 16 }}>
-                                {value.titulo}
-                            </Negrita>
-                        </Breadcrumbs>
-                    </Box>
-                </Grid>
-                <Grid item xs={12}  >
-                    <Box sx={{ fontSize: 17, mx: { xs: 1, sm: 10, lg: 25 }, mt: 2 }} position='relative'>
-                        <Normal
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center', color: '#777'
-                            }}>
-                            <IoMdCalendar style={{ marginRight: 5, fontSize: 22 }} />
-                            {dayjs(value.finalizacion, 'DD/MM/YYYY').format('[Finaliza el] DD [de] MMMM [del] YYYY')}
-                        </Normal>
-                        <ChipBox
-                            sx={{ height: 30, position: 'absolute', top: -7, right: 0, background: dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? green[500] : red[500], color: 'white' }}
-                            label={dayjs(value.finalizacion, 'DD/MM/YYYY').diff(dayjs()) > 0 ? 'Vigente' : 'Concluído'} />
-                        {
-                            value.descripcion ? <Box sx={{
-                                textAlign: 'justify',
-                                p: {
-                                    color: grey[900], lineHeight: 2,
-                                },
-                                h2: { color: red[500] },
-                                strong: { color: blue[700] }
-                            }}>
-                                {
-                                    parse(value.descripcion)
-                                }
-                            </Box> :
-                                <Normal>Sin descripción</Normal>
+                                            appearance="primary" size='lg'>
+                                            Ver documento
+                                        </Button>
+                                    </Panel>
+                                </Box> : null
                         }
                     </Box>
                 </Grid>
-                <Grid item xs={12}>
-                    <Box sx={{ mx: { xs: 1, sm: 10, lg: 25 }, mt: 2 }}>
-                        <Stack direction='row' py={2} flexWrap='wrap'>
-                            {
-                                value.ConvenioCarrera.map(value =>
-                                (<ChipBox
-                                    key={value.id}
-                                    label={<Normal sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', fontWeight: 700 }}>
-                                        {value.Carrera.logo ?
-                                            <Image src={fileDomain + value.Carrera.logo}
-                                                width={20} height={20} style={{ borderRadius: 4 }}
-                                                layout='fixed' /> : <FaBuildingColumns fontSize={15} />}
-                                        <span style={{ marginLeft: 5 }}>
-                                            {value.Carrera.nombre}
-                                        </span></Normal>} />)
-                                )
-                            }
-                        </Stack>
-                        {
-                            value.pdf ?
-                                <>
-                                    {
-                                        value.pdf ?
-                                            <Button
-                                                size='lg'
-                                                appearance='link'
-                                                onClick={() => {
-                                                    let a = document.createElement('a');
-                                                    a.download = fileDomain + value.pdf;
-                                                    a.href = fileDomain + value.pdf;
-                                                    a.target = '_blank';
-                                                    a.click();
-                                                    a.remove();
-                                                }}
-                                            >
-                                                Descargar archivo adjunto
-                                            </Button> : null
-                                    }</> : null
-                        }
-                    </Box>
-
-                </Grid>
-                <Grid item xs={12} pb={2}>
-                    <Titulo sx={{ textAlign: 'center', my: 1 }}>
+                <Grid item xs={12} pb={2}
+                    px={{ xs: 3, sm: 10 }}>
+                    <Titulo sx={{ textAlign: 'center', my: 6 }}>
                         Más convenios
                     </Titulo>
-                    <Grid container spacing={2} px={{ xs: 2, sm: 5, md: 10 }} >
-                        {
-                            convenios.length == 0 ?
-                                <Grid item xs={12} >
-                                    <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
-                                </Grid> :
-                                convenios.map((value: any) => (
-                                    <Grid key={value.id} item xs={12} sm={6} lg={4} xl={3} mx='auto'>
-                                        <ConvenioItem value={value} />
-                                    </Grid>
-                                ))
-                        }
+                    {
+                        convenios.length == 0 ?
+                            <Grid item xs={12} >
+                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
+                            </Grid> :
+                            convenios.map((value: Convenio) => (
+                                <Grid key={value.id} item xs={12} my={2}>
+                                    <Link style={{
+                                        textDecoration: 'none'
+                                    }} href={`/convenios/${value.id}`}>
+                                        <Negrita sx={{ color: red[600], textAlign: 'center' }}>
+                                            {value.titulo}
+                                        </Negrita>
+                                    </Link>
+                                </Grid>
+                            ))
+                    }
+                </Grid>
+            </Grid>
+            <Box sx={{
+                position: 'fixed', bottom: 0, width: "100%",
+                bgcolor: 'white',
+                display: { xs: 'block', md: 'none' },
+                zIndex: 100
+            }}>
+                <Grid container>
+
+                    <Grid item xs={6}>
+                        <Button appearance="primary" block size='lg'
+                            style={{ borderRadius: 0 }}>
+                            Contactarme
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Stack spacing={0.1} direction='row'
+                            height="100%"
+                            alignItems='center' justifyContent='center'>
+                            <Normal>
+                                Compartir:
+                            </Normal>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='ic:outline-facebook' fontSize={20} />
+                            </Button>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='basil:instagram-solid' fontSize={20} />
+                            </Button>
+                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                <Icon icon='mdi:youtube' fontSize={20} />
+                            </Button>
+                        </Stack>
                     </Grid>
                 </Grid>
-            </Grid >
-            <ModalInstitucion Institucion={value.Institucion}
-                open={openModalInstitucion} setOpen={setOpenModalInstitucion} />
+            </Box>
         </>
     )
 }

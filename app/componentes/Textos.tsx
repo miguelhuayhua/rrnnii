@@ -12,7 +12,7 @@ const Titulo = styled(Typography)(({ theme }) =>
     fontSize: 25,
     fontWeight: 800,
     [theme.breakpoints.down('sm')]: {
-        fontSize: 20
+        fontSize: 24
     }
 }));
 const Negrita = styled(Typography)(() =>

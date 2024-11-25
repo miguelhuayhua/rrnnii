@@ -6,7 +6,7 @@ import { Convenio } from "@prisma/client";
 import Cliente from "./Cliente";
 import Footer from "@/app/static/Footer";
 import { notFound } from "next/navigation";
-import './styles.scss';
+
 const get = async (id: string) => {
     return await prisma.convenio.findUnique({
         where: { id },
@@ -36,7 +36,9 @@ export default async function Home({ params }: any) {
             <Box bgcolor='white'>
                 <Navbar />
                 <Cliente value={convenio as any} />
-                <Footer />
+                <Box sx={{ pb: { xs: 5, md: 0 } }}>
+                    <Footer />
+                </Box>
             </Box>
         );
 

@@ -32,61 +32,7 @@ export default function ModalInstitucion({ Institucion, open, setOpen }: Props) 
                     <IoClose fontSize={25} />
                 </BotonSimple>
 
-                <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-                    {
-                        Institucion.video ?
-                            <Box component='iframe'
-                                sx={{
-                                    width: "100%",
-                                    border: 'none', borderRadius: 4, mt: 6,
-                                    height: { xs: 200, sm: 300, md: 400, lg: 500 }
-                                }}
-                                src={"https://www.youtube.com/embed/" + Institucion.video?.split('=')[1]}
-                                title="Video institucional" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            /> :
-                            null
-                    }
-                    <Grid container spacing={2} py={2}>
-                        <Grid item xs={12} md={6}>
-                            <Box display='flex' alignItems='center' justifyContent='center'>
-                                <Avatar sx={{
-                                    bgcolor: 'white',
-                                    height: 70, width: 70
-                                }}
-                                    src={Institucion.logo ? (fileDomain + Institucion.logo) : '/default-image.jpg'} />
-                                <Box ml={2}>
-                                    <Negrita sx={{ fontSize: 18 }}>
-                                        {Institucion.nombre}
-                                    </Negrita>
-                                    <Normal sx={{ color: '#777', display: 'flex', alignItems: 'center' }}>
-                                        <MdPhone style={{ marginRight: 5 }} />
-                                        {Institucion.contacto || 'Sin número'}
-                                    </Normal>
-                                </Box>
-                            </Box>
-
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Box display='flex' flexDirection='column'
-                                alignItems='center' >
-                                <Negrita
-                                    textAlign='center'
-                                    my={1} display='flex'
-                                    alignItems='center'>
-                                    <Icon icon="streamline:web" fontSize={25} style={{ marginRight: 10 }} />
-                                    {
-                                        Institucion.web ? `Visite la página web de ${Institucion.nombre}` :
-                                            `La institución no cuenta con una página web`
-                                    }
-                                </Negrita>
-                                <Link
-                                    href={Institucion.web!} target='_blank'>
-                                    {Institucion.web}
-                                </Link>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </Box>
+                
             </DialogContent>
 
         </Dialog >

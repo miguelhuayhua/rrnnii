@@ -10,17 +10,17 @@ import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
 import { InputBox } from '@/app/componentes/Datos';
 import { useModal } from '@/providers/ModalProvider';
-import { ParticipanteBeca, } from '@prisma/client';
+import { Archivo, ParticipanteBeca, } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { Button, Form, Input, InputNumber, Modal, Panel, Stack } from 'rsuite';
+import { Button, Form, Input, InputNumber, List, Modal, Panel, Stack } from 'rsuite';
 import { parseLetter } from '@/utils/data';
 import { useSnackbar } from '@/providers/SnackbarProvider';
 import { fileDomain } from '@/utils/globals';
-import { red } from '@mui/material/colors';
+import Link from 'next/link';
 interface Props {
     setParticipante: any;
-    Participante: ParticipanteBeca;
+    Participante: ParticipanteBeca & { Archivos: Archivo[] };
 }
 export default function ModalParticipante({ Participante, setParticipante }: Props) {
     const { control, formState: { isDirty }, handleSubmit } =
@@ -29,7 +29,6 @@ export default function ModalParticipante({ Participante, setParticipante }: Pro
         });
     const [load, setLoad] = useState(false);
     const { openModal } = useModal();
-    const { openSnackbar } = useSnackbar();
     const router = useRouter();
     return (
         <>
@@ -129,51 +128,19 @@ export default function ModalParticipante({ Participante, setParticipante }: Pro
                             }
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <Panel shaded >
-                                <Button
-                                    block
-                                    size='lg'
-                                    appearance='primary' style={{ background: red[600] }}
-                                    onClick={() => {
-                                        let a = document.createElement('a');
-                                        a.href = fileDomain + Participante.cipath;
-                                        a.target = '_blank';
-                                        a.download = fileDomain + Participante.cipath;
-                                        a.click();
-                                        a.remove();
-                                        openSnackbar('Carnet descargado con éxito');
-                                    }}
-                                >
-                                    Descargar Cédula de Identidad
-                                </Button>
-                                <Button size='lg'
-                                    block appearance='primary'
-                                    onClick={() => {
-                                        let a = document.createElement('a');
-                                        a.href = fileDomain + Participante.rupath;
-                                        a.target = '_blank';
-                                        a.download = fileDomain + Participante.rupath;
-                                        a.click();
-                                        a.remove();
-                                        openSnackbar('Registro universitario descargado con éxito');
-                                    }}
-                                    style={{ background: red[600], marginTop: 20 }}>
-                                    Descargar Registro Universitario
-                                </Button>
-                                <Button size='lg'
-                                    block appearance='primary'
-                                    onClick={() => {
-                                        let a = document.createElement('a');
-                                        a.href = fileDomain + Participante.rupath;
-                                        a.target = '_blank';
-                                        a.download = fileDomain + Participante.rupath;
-                                        a.click();
-                                        a.remove();
-                                        openSnackbar('Registro universitario descargado con éxito');
-                                    }}
-                                    style={{ marginTop: 20 }}>
-                                    Contactar
-                                </Button>
+                            <Panel shaded header='Archivos adjuntos' >
+                                <List >
+                                    {
+                                        Participante.Archivos.map((value, index) => (
+                                            <List.Item key={value.id} index={index}>
+                                                <Link target='_blank' href={fileDomain + value.ruta} download>
+                                                    {value.nombre}
+                                                </Link>
+                                            </List.Item>
+
+                                        ))
+                                    }
+                                </List>
                             </Panel>
                         </Grid>
                     </Grid>

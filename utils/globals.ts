@@ -29,6 +29,7 @@ const paises = [
     { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Paraguay', value: 'PY' },
     { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Uruguay', value: 'UY' },
     { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Ecuador', value: 'EC' },
+    { continente: 'América del Sur', continenteAbrev: 'SA', pais: 'Bolivia', value: 'BO' },
     { continente: 'Europa', continenteAbrev: 'EU', pais: 'Alemania', value: 'DE' },
     { continente: 'Europa', continenteAbrev: 'EU', pais: 'Francia', value: 'FR' },
     { continente: 'Europa', continenteAbrev: 'EU', pais: 'Italia', value: 'IT' },
@@ -67,4 +68,13 @@ const paises = [
     { continente: 'Asia', continenteAbrev: 'AS', pais: 'Pakistán', value: 'PK' },
     { continente: 'Asia', continenteAbrev: 'AS', pais: 'Rusia', value: 'RU' }
 ];
-export { domain, fileDomain, paises, makeid };
+const continentes = [
+    { value: 'na', label: 'América Norte', image: '/assets/america-norte.png' },
+    { value: 'sa', label: 'América Sur', image: '/assets/america-sur.png' },
+    { value: 'as', label: 'Asia', image: '/assets/asia.png' },
+    { value: 'eu', label: 'Europa', image: '/assets/europa.png' },
+    { value: 'af', label: 'África', image: '/assets/africa.png' },
+    { value: 'oc', label: 'Oceanía', image: '/assets/oceania.png' },
+];
+
+export { domain, fileDomain, paises, makeid, continentes };

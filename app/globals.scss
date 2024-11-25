@@ -97,6 +97,32 @@ body {
   --rs-text-active: #212121;
   --rs-listbox-option-selected-text: #212121;
   --rs-listbox-option-selected-bg: rgba(184, 0, 0, 0.083);
+  --rs-btn-ghost-hover-border: rgb(190, 0, 0) !important;
+  --rs-btn-ghost-hover-text: rgb(190, 0, 0) !important;
+  --rs-btn-ghost-border: #d32f2f !important;
+  --rs-btn-ghost-text: #212121 !important;
+  --rs-text-secondary: #21212186 !important;
+  --rs-input-focus-border: #d32f2f !important;
+  --rs-border-primary: #2121218f !important;
+  --rs-state-focus-shadow: 0 0 3px #d32f2f !important;
+  --rs-btn-primary-bg: #d32f2f !important;
+  --rs-btn-link-text: #212121 !important;
+  --rs-btn-link-hover-text: #d32f2f !important;
+  --rs-navs-selected: #d32f2f !important;
+}
+
+.rs-nav-item {
+  margin-top: 25px;
+  padding: 18px;
+  font-size: 16px;
+  border: none;
+
+}
+
+.rs-nav-item-active {
+  font-weight: 700;
+  color: #212121 !important;
+  font-family: inherit;
 }
 
 .rs-btn {
@@ -114,6 +140,11 @@ body {
   top: 0;
   left: 0;
   z-index: -1;
+}
+
+.rs-input {
+
+  border: 1px solid #212121;
 }
 
 .meshgradient>.color {

@@ -3,7 +3,7 @@ import { grey } from "@mui/material/colors";
 
 const ChipBox = styled(Chip)(() => {
     return {
-        borderRadius: 16,
+        borderRadius: 6,
         fontSize: 13,
         color: grey[900],
         background: grey[100],

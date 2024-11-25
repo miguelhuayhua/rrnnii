@@ -8,15 +8,19 @@ const POST = async (request: NextRequest) => {
     if (token?.name) {
         try {
             let { id } = await request.json();
-            let participante = await prisma.participanteBeca.delete({
-                where: { id }
+            let archivos = await prisma.archivo.findMany({ where: { participanteBecaid: id } });
+            archivos.map(async value => {
+                await axios.post(fileDomain + '/delete', {
+                }, {
+                    headers: {
+                        path: value.ruta
+                    }
+                });
             });
-            await axios.post(fileDomain + '/delete', { path: participante.rupath },
-                { headers: { 'path': participante.rupath } }
-            );
-            await axios.post(fileDomain + '/delete', { path: participante.cipath },
-                { headers: { 'path': participante.cipath } }
-            );
+            await prisma.archivo.deleteMany({
+                where: { participanteBecaid: id }
+            });
+            await prisma.participanteBeca.delete({ where: { id } });
             return Response.json({ error: false, mensaje: `Participante eliminado` });
         } catch (error) {
             console.log(error)

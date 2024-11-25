@@ -1,35 +1,40 @@
 'use client';
-import { Box, Grid, Stack, useMediaQuery, useTheme, } from "@mui/material";
-import { Suspense, useEffect, useState } from "react";
-import PasantiaItem from "../componentes/items/Pasantia";
-import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Pasantia } from "@prisma/client";
-import Image from 'next/legacy/image';
+import { CircularProgress, Grid, Box, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { BotonOutline } from "../componentes/Botones";
 import { Icon } from '@iconify/react';
-import { Negrita, Normal } from "../componentes/Textos";
+import ConvenioItem from "../componentes/items/Convenio";
+import { Suspense, useEffect, useState } from "react";
+import { Convenio } from "@prisma/client";
+import axios from "axios";
+import { useSearchParams } from "next/navigation";
+import { Normal, Negrita } from "../componentes/Textos";
+import Image from 'next/legacy/image';
 import { Button, Input, InputGroup, SelectPicker } from "rsuite";
 import { IoSearch } from "react-icons/io5";
 import { grey, red } from "@mui/material/colors";
-import { fileDomain } from "@/utils/globals";
+import { useRouter } from "next/navigation";
+import { continentes, fileDomain } from "@/utils/globals";
 const Cliente = () => {
-    const [Pasantias, setPasantias] = useState<Pasantia[]>([]);
-    const [PasantiasMain, setPasantiasMain] = useState<Pasantia[]>([]);
-    const [load, setLoad] = useState(true);
-    const [skip, setSkip] = useState(0);
+    const params = useSearchParams();
     const router = useRouter();
     const theme = useTheme();
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
-    const params = useSearchParams();
-    const duracion = params.get('d') || '';
-    const carrera = params.get('c') || '';
-    const orden = params.get('s');
+    const [skip, setSkip] = useState(0);
     const [carreras, setCarreras] = useState([]);
+    const [load, setLoad] = useState(true);
+    const [Convenios, setConvenios] = useState<Convenio[]>([]);
+    const [ConveniosMain, setConveniosMain] = useState<Convenio[]>([]);
     useEffect(() => {
-        axios.post('/api/pasantia/listar',
-            { duracion, carrera, orden, skip: 0 }).then(res => {
-                setPasantias(res.data);
-                setPasantiasMain(res.data);
+        axios.post('/api/convenio/listar',
+            {
+                tipo: params.get('t') || undefined,
+                carrera: params.get('c') || undefined,
+                continente: params.get('co') || undefined,
+                orden: params.get('s') || undefined,
+                skip: 0
+            }).then(res => {
+                setConvenios(res.data);
+                setConveniosMain(res.data);
                 setLoad(false);
                 setSkip(1);
             });
@@ -39,16 +44,17 @@ const Cliente = () => {
     }, [params]);
     return (
         <>
+
             <InputGroup style={{
                 position: 'absolute', top: 170, right: 0, left: 0,
                 margin: '0 auto',
                 width: "60%", maxWidth: 500
             }} >
                 <Input style={{ fontFamily: 'inherit' }}
-                    placeholder="Buscar pasantias"
+                    placeholder="Buscar convenios"
                     size="lg"
                     onChange={text => {
-                        setPasantias(PasantiasMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                        setConvenios(ConveniosMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
                     }} />
                 <InputGroup.Addon>
                     <IoSearch fontSize={20} />
@@ -64,18 +70,50 @@ const Cliente = () => {
                 }}>
                 <Stack direction='row' alignItems='center' >
                     <Negrita fontSize={18}>
-                        Filtrar Pasantías
+                        Filtrar Convenios
                     </Negrita>
                     <Button
                         style={{ marginLeft: 10 }}
                         appearance="subtle" onClick={() => {
-                            router.push('/pasantias')
+                            router.push('/convenios')
                         }}>
                         <Icon fontSize={18} icon="ant-design:reload-outlined" />
                     </Button>
                 </Stack>
                 <Grid container spacing={1} mt={0.5} >
-                    <Grid item xs={6} sm={4}>
+                    <Grid item xs={6} sm={3}>
+                        <SelectPicker
+                            data={continentes}
+                            size={sm ? 'xs' : 'lg'}
+                            searchable={false}
+                            placeholder='Continente'
+                            labelKey="label"
+                            valueKey="value"
+                            style={{
+                                width: "100%",
+                                marginBottom: 10
+                            }}
+                            cleanable={false}
+                            value={params.get('co')}
+                            onChange={pais => {
+                                router.replace(`/convenios?co=${pais}${params.has('s') ? '&s=' + params.get('s') : ''}${params.has('t') ? '&t=' + params.get('t') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
+                            }}
+                            renderMenuItem={(label, item) => (
+                                <div
+                                    style={{ display: 'flex', alignItems: 'center' }}
+                                    key={label?.toString()} >
+                                    <Image
+                                        src={item.image} width={30} height={30}
+                                        layout="fixed"
+                                    />
+                                    <span style={{ marginLeft: 15 }}>
+                                        {label}
+                                    </span>
+                                </div>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
                         <SelectPicker
                             searchable={false}
                             data={[{ label: 'Más antiguos', value: '1' }, { label: 'Más recientes', value: '0' }]}
@@ -90,32 +128,30 @@ const Cliente = () => {
                                 marginBottom: 10
                             }}
                             onChange={orden => {
-                                router.replace(`/pasantias?s=${orden}${params.has('d') ? '&d=' + params.get('d') : ''}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
+                                router.replace(`/convenios?s=${orden}${params.has('t') ? '&t=' + params.get('t') : ''}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
                             }}
                         />
                     </Grid>
-                    <Grid item xs={6} sm={4}>
+                    <Grid item xs={6} sm={3}>
                         <SelectPicker
                             searchable={false}
                             cleanable={false}
-                            value={params.get('d')}
-                            data={[{ label: '6 meses', value: '6' },
-                            { label: '3 meses', value: '3' },
-                            { label: 'Más de 6 meses', value: 'more' }]}
+                            value={params.get('t')}
+                            data={[{ label: 'Nacionales', value: 'nacional' }, { label: 'Internacionales', value: 'internacional' }]}
                             size={sm ? 'xs' : 'lg'}
-                            placeholder='Duración'
+                            placeholder='Tipo'
                             labelKey="label"
                             valueKey="value"
                             style={{
                                 width: "100%",
                                 marginBottom: 10
                             }}
-                            onChange={duracion => {
-                                router.replace(`/pasantias?d=${duracion}${params.has('c') ? '&c=' + params.get('c') : ''}${params.has('s') ? '&s=' + params.get('s') : ''}`)
+                            onChange={tipo => {
+                                router.replace(`/convenios?t=${tipo}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('s') ? '&s=' + params.get('s') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
                             }}
                         />
                     </Grid>
-                    <Grid item xs={6} sm={4}>
+                    <Grid item xs={6} sm={3}>
                         <SelectPicker
                             searchable={false}
                             value={params.get('c')}
@@ -130,7 +166,7 @@ const Cliente = () => {
                                 marginBottom: 10
                             }}
                             onChange={carrera => {
-                                router.replace(`/pasantias?c=${carrera}${params.has('d') ? '&d=' + params.get('d') : ''}${params.has('s') ? '&s=' + params.get('s') : ''}`)
+                                router.replace(`/convenios?c=${carrera}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('s') ? '&s=' + params.get('s') : ''}${params.has('t') ? '&t=' + params.get('t') : ''}`)
                             }}
                             renderMenuItem={(label, item) => (
                                 <div
@@ -153,12 +189,11 @@ const Cliente = () => {
                 px={{ xs: 1, sm: 10, md: 20, lg: 40, xl: 60 }}
                 display='flex' flexDirection='column' alignItems='center'>
                 {
-                    Pasantias.length > 0 ?
-                        Pasantias.map(value => (
-                            <PasantiaItem key={value.id} value={value as any} />))
-                        :
-                        <Normal m={2}>
-                            Pasantías no encontradas
+                    Convenios.length > 0 ?
+                        Convenios.map(value => (
+                            <ConvenioItem key={value.id} value={value as any} />))
+                        : <Normal m={2}>
+                            Convenios no encontrados
                         </Normal>
                 }
                 <Button
@@ -171,19 +206,24 @@ const Cliente = () => {
                     }}
                     onClick={() => {
                         setLoad(true);
-                        axios.post('/api/pasantia/listar',
-                            { duracion, carrera, orden, skip }).then(res => {
-                                setPasantias(prev => ([...prev, ...res.data]));
-                                setPasantiasMain(prev => ([...prev, ...res.data]));
+                        axios.post('/api/convenio/listar',
+                            {
+                                tipo: params.get('t') || undefined,
+                                carrera: params.get('c') || undefined,
+                                continente: params.get('co') || undefined,
+                                take: 12, skip
+                            }).then(res => {
+                                setConvenios(prev => ([...prev, ...res.data]));
+                                setConveniosMain(prev => ([...prev, ...res.data]));
                                 setLoad(false)
                                 setSkip(prev => prev + 1);
                             })
                     }}
                 >
                     Cargas más
+
                 </Button>
             </Box>
-
         </>
     )
 }

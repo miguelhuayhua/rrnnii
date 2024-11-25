@@ -34,7 +34,7 @@ const BotonFilled = styled(Button)(() =>
 const BotonSimple = styled(Button)(() =>
 ({
     background: 'transparent',
-    borderRadius: 12,
+    borderRadius: 6,
     fontSize: 16,
     color: grey[900],
     minWidth: 0,

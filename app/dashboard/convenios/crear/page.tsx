@@ -36,6 +36,7 @@ import {
 } from "rsuite";
 import dayjs from "dayjs";
 import UploadTrigger from "rsuite/esm/Uploader/UploadTrigger";
+import { toUpperCase } from "@/utils/data";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } =
@@ -184,15 +185,14 @@ export default function Page() {
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
                                         <Form.ControlLabel>Título del convenio</Form.ControlLabel>
-                                        <Input {...field} size='lg' />
+                                        <Input {...field}
+                                            onChange={text => field.onChange(toUpperCase(text))} size='lg' />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
                                         </Form.ErrorMessage>
                                     </Form.Group>
                                 )}
                             />
-
-
                             <Controller
                                 name="Institucion.nombre"
                                 control={control}
@@ -231,7 +231,7 @@ export default function Page() {
                                             renderMenuItem={(label, item) => (
                                                 <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
                                                     <div style={{ width: 25, minWidth: 25, aspectRatio: 1, position: 'relative', marginRight: 10 }}>
-                                                        <Image layout='fill' src={fileDomain + item.logo} style={{ borderRadius: 10 }} />
+                                                        <Image layout='fill' src={item.logo ? fileDomain + item.logo : '/default-image.jpg'} style={{ borderRadius: 10 }} />
                                                     </div>
                                                     <Negrita sx={{ fontSize: 14 }}>{item.nombre}</Negrita>
                                                 </div>

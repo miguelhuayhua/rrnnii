@@ -6,8 +6,6 @@ import { useState } from "react";
 import { Icon } from '@iconify/react';
 import { signIn } from "next-auth/react";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
 import React from 'react';
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";

@@ -1,54 +1,68 @@
 'use client';
-import { Avatar, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import Link from "next/link";
 import Image from 'next/legacy/image';
-import { TbWorld } from "react-icons/tb";
-import { ChipBox } from "../Mostrar";
+import { BoxSombra } from "../Mostrar";
 import { Negrita, Normal } from "../Textos";
-import { blue, green, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 import { Evento } from "@prisma/client";
 import { Icon } from '@iconify/react';
 import dayjs from "dayjs";
 interface Props { value: Evento }
 import 'dayjs/locale/es';
 import { fileDomain } from "@/utils/globals";
-import { FaUserGroup } from "react-icons/fa6";
+import { Button } from "rsuite";
+import { useRouter } from "next/navigation";
 dayjs.locale('es');
 const EventoItem = ({ value }: Props) => {
+    const router = useRouter();
     return (
-        <Box bgcolor='white !important' sx={{ overflow: 'hidden', borderRadius: 4, boxShadow: 'rgba(145, 158, 171, 0.16) 0px 1px 2px 0px', }}>
-            <Box position='relative'>
-                <Link href={`/eventos/${value.id}`}>
-                    <Image layout='responsive'
-                        objectFit="cover" width={100} height={70}
-                        src={fileDomain + value.imagen} alt={`Imagen de: ${value.titulo}`} />
-                </Link>
-                <svg className='dec' fill="none" viewBox="0 0 144 62" xmlns="http://www.w3.org/2000/svg"><path d="m111.34 23.88c-10.62-10.46-18.5-23.88-38.74-23.88h-1.2c-20.24 0-28.12 13.42-38.74 23.88-7.72 9.64-19.44 11.74-32.66 12.12v26h144v-26c-13.22-.38-24.94-2.48-32.66-12.12z" fill="currentColor" fill-rule="evenodd"></path></svg>
-            </Box>
-            <Box p={2} position='relative'>
-                <Avatar sx={{ bgcolor: value.tipo == 'online' ? green[500] : blue[500], position: 'absolute', top: -18, left: 24, zIndex: 10 }}>
-                    {
-                        value.tipo == 'online' ? <TbWorld /> : <FaUserGroup />
-                    }
-                </Avatar>
-                <Normal sx={{ fontSize: 14, pt: 2, color: grey[600] }}>
-                    Inicia el: {value.inicio}
-                </Normal>
-                <Negrita sx={{
-                    display: 'flex', alignItems: 'center', color: grey[500],
-                    position: 'absolute', top: 30, right: 20, zIndex: 10
-                }}>
-                    {value.conteo}
-                    <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
-                </Negrita>
-                <Link href={`/eventos/${value.id}`} style={{ textDecoration: 'none' }}>
-                    <Negrita py={2}>
-                        {value.titulo}
-                    </Negrita>
-                </Link>
-                <ChipBox label={`Evento ${value.tipo}`} />
-            </Box>
-        </Box >
+        <BoxSombra width={"100%"} position='relative'>
+            <Negrita sx={{
+                display: 'flex', alignItems: 'center', color: grey[50],
+                position: 'absolute', top: 10, right: 10, zIndex: 120
+            }}>
+                {value.conteo}
+                <Icon style={{ marginLeft: 4, fontSize: 16 }} icon="solar:eye-bold" />
+            </Negrita>
+            <Grid container>
+                <Grid item xs={8} p={1}>
+                    <Link href={`/eventos/${value.id}`} style={{ textDecoration: 'none' }}>
+                        <Negrita py={1} mb={2}>
+                            {value.titulo}
+                        </Negrita>
+                    </Link>
+                    <Normal sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon icon="lets-icons:calendar-light" fontSize={22} style={{ marginRight: 10 }} />
+                        {dayjs(value.inicio, 'DD/MM/YYYY').format('[Inicia el] DD [de] MMMM [del] YYYY')}
+                    </Normal>
+                    <Normal sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon icon="iconamoon:category-thin" fontSize={22} style={{ marginRight: 10 }} />
+                        {value.tipo == 'online' ? 'Evento online' : 'Evento presencial'}
+                    </Normal>
+                </Grid>
+
+                <Grid item xs={4} position='relative'>
+                    <Link href={`/eventos/${value.id}`}>
+                        <Image style={{ filter: 'brightness(0.4)', aspectRatio: 1 }}
+                            objectFit="cover" layout='fill' width={100} height={100}
+                            src={fileDomain + value.imagen} alt={`Imagen de: ${value.titulo}`} />
+                    </Link>
+                    <Button
+                        onClick={() => {
+                            router.push(`/eventos/${value.id}`)
+                        }}
+                        style={{
+                            position: 'absolute',
+                            borderRadius: 0,
+                            bottom: 0, width: "100%"
+                        }}
+                        appearance='primary'>
+                        <Icon icon="ep:right" fontSize={18} />
+                    </Button>
+                </Grid>
+            </Grid>
+        </BoxSombra >
     )
 }
 export default EventoItem;

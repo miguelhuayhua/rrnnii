@@ -34,7 +34,9 @@ export default async function Home({ params }: any) {
             <Box bgcolor='white'>
                 <Navbar />
                 <Cliente value={pasantias as any} />
-                <Footer />
+                <Box sx={{ pb: { xs: 5, md: 0 } }}>
+                    <Footer />
+                </Box>
             </Box>
         );
     }

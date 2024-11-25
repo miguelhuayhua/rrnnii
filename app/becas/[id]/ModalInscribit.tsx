@@ -1,45 +1,46 @@
 'use client';
 import React, { useState } from 'react';
-import { Grid } from '@mui/material';
-import { BotonFilled } from '@/app/componentes/Botones';
-import { Negrita, Titulo } from '@/app/componentes/Textos';
+import { Box, Grid } from '@mui/material';
+import { Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
-import { InputBox } from '@/app/componentes/Datos';
 import { useModal } from '@/providers/ModalProvider';
 import { ParticipanteBeca } from '@prisma/client';
 import axios from 'axios';
+import { Icon } from '@iconify/react';
 import { parseLetter } from '@/utils/data';
-import { blue } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
-import { TbReload } from 'react-icons/tb';
 import { makeid } from '@/utils/globals';
-import { Button, Form, Input, InputNumber, Modal, Uploader } from 'rsuite';
+import { Button, Form, Input, InputNumber, Modal, Uploader, Text } from 'rsuite';
 interface Props {
     open: boolean;
     setOpen: any;
     becaId: string;
 }
 export default function ModalInscribir({ becaId, open, setOpen }: Props) {
-    const { control, formState: { isDirty }, handleSubmit, setValue, watch } = useForm<ParticipanteBeca & {
-        captcha: string,
-        confirmCaptcha: string
-    }>({
-        defaultValues: { captcha: makeid(7) }, shouldFocusError: true
-    });
+    const { control, formState: { isDirty }, handleSubmit,
+        reset, setValue, watch } = useForm<ParticipanteBeca & {
+            captcha: string,
+            confirmCaptcha: string
+        }>({
+            defaultValues: { captcha: makeid(7) }, shouldFocusError: true
+        });
     const { openModal } = useModal();
     const { openSnackbar } = useSnackbar();
     const [ci, setCi] = useState<any>([]);
     const [ru, setRu] = useState<any>([]);
+    const [archivos, setArchivos] = useState<any>([]);
     const onSubmit = (participante: ParticipanteBeca) => {
+
         if (ci && ru) {
             let form = new FormData();
             form.append('nombre_completo', participante.nombre_completo);
             form.append('ru', participante.ru);
             form.append('ci', participante.ci);
             form.append('contacto', participante.contacto);
-            form.append('archivoru', ru[0].blobFile);
-            form.append('archivoci', ci[0].blobFile);
+            archivos.forEach((file: any) => {
+                form.append('archivos', file.blobFile); // Usamos el mismo nombre para todos los archivos
+            });
             form.append('becaId', becaId)
             openModal({
                 titulo: '¿Continuar?',
@@ -48,6 +49,7 @@ export default function ModalInscribir({ becaId, open, setOpen }: Props) {
                     let res = await axios.post('/api/beca/participante/crear', form);
                     if (!res.data.error) {
                         setOpen(false);
+                        reset();
                     }
                     return res.data.mensaje;
                 }
@@ -153,91 +155,73 @@ export default function ModalInscribir({ becaId, open, setOpen }: Props) {
                             Archivos de respaldo
                         </Titulo>
                     </Grid>
-                    <Grid item xs={12} lg={6}>
+                    <Grid item xs={12} >
                         <Uploader
-                            fileList={ci}
+                            fileList={archivos}
                             autoUpload={false}
                             action="/"
-                            onChange={setCi}
-                            multiple={false}
+                            onChange={setArchivos}
+                            multiple
+                            appearance='ghost'
                             accept=".pdf, .doc, .docx"
                         >
-                            <>
-                                <Negrita sx={{ mt: 2, mb: 1 }}>Suba su carnet de identidad</Negrita>
-                                <Button size='lg' block>Seleccionar archivo...</Button>
-                            </>
+                            <Button
+                                style={{
+                                    border: '1px solid #999',
+                                    color: '#212121'
+                                }}
+                                size='lg' block>Seleccionar archivos de convocatoria...</Button>
                         </Uploader>
-                    </Grid>
-                    <Grid item xs={12} lg={6}>
-                        <Uploader
-                            fileList={ru}
-                            autoUpload={false}
-                            action="/"
-                            onChange={setRu}
-                            multiple={false}
-                            accept=".pdf, .doc, .docx, .jpg, .png"
-                        >
-                            <>
-                                <Negrita sx={{ mt: 2, mb: 1 }}>Suba su registro universitario</Negrita>
-                                <Button size='lg' block>Seleccionar archivo...</Button>
-                            </>
-                        </Uploader>
-
                     </Grid>
                     <Grid item xs={8} sm={6} lg={3} mx='auto'>
-                        <Controller
-                            rules={{ required: 'No puede quedar vacio' }}
-                            control={control}
-                            name="captcha"
-                            render={({ field }) => (
-                                <InputBox
-                                    label='Captcha'
-                                    disabled
-                                    sx={{ userSelect: 'none', mt: 1 }}
-                                    {...field}
-                                    InputProps={{
-                                        endAdornment: <BotonFilled
-                                            onClick={() => {
-                                                setValue('captcha', makeid(7))
-                                            }}
-                                            sx={{
-                                                bgcolor: blue[500],
-                                                minWidth: 0,
-                                                height: 35, width: 40,
-                                            }}>
-                                            <TbReload fontSize={24} /></BotonFilled>
-                                    }}
-                                />
-                            )}
-                        />
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 2 }}>
+                            <Text as='del'
+                                style={{ userSelect: 'none', fontSize: 25 }}>
+                                {watch('captcha')}
+                            </Text>
+                            <Button
+                                onClick={() => {
+                                    setValue('captcha', makeid(7))
+                                }} appearance="ghost" style={{ marginLeft: 10, color: '#212121', border: '1px solid #212121' }} >
+                                <Icon icon='mdi:reload' fontSize={22} />
+                            </Button>
+                        </Box>
                         <Controller
                             rules={{
-                                required: 'No puede quedar vacio',
+                                required: 'Por favor confirme el Captcha',
                                 validate: value => value === watch('captcha') || 'El valor del captcha no coincide, inténtelo de nuevo'
-
                             }}
                             control={control}
                             name="confirmCaptcha"
                             render={({ field, fieldState }) => (
-                                <InputBox
-                                    label='Confirme el captcha'
-                                    error={!!fieldState.error}
-                                    {...field}
-                                    helperText={fieldState.error?.message}
-                                />
+                                <Form.Group style={{ marginBottom: 10 }}>
+                                    <Form.ControlLabel>Confirme el Captcha</Form.ControlLabel>
+                                    <Input {...field} size='lg' />
+                                    <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                        {fieldState.error?.message}
+                                    </Form.ErrorMessage>
+                                </Form.Group>
                             )}
                         />
-                        {
-                            isDirty ?
-                                <BotonFilled onClick={handleSubmit(onSubmit)} fullWidth>
-                                    Solicitar mi postulación
-                                </BotonFilled>
-                                : null
-                        }
+
                     </Grid>
                 </Grid>
-            </Modal.Body>
 
+            </Modal.Body>
+            <Modal.Footer >
+                {
+                    isDirty ?
+                        <Button
+                            style={{ background: "#212121" }}
+                            block
+                            appearance='primary'
+                            size='lg'
+                            onClick={handleSubmit(onSubmit)}>
+                            Solicitar mi postulación
+                        </Button>
+                        : null
+                }
+            </Modal.Footer>
         </Modal >
     );
 }

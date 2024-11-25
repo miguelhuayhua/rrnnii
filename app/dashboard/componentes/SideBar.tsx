@@ -25,7 +25,7 @@ const SideBarItem = ({ icon, label, active, onclick }: {
                 fontWeight: 500,
                 color: active ? grey[50] : grey[900],
                 margin: '5px auto',
-                borderRadius: 10,
+                borderRadius: 7,
                 padding: '10px 15px',
                 background: active ? grey[900] : 'transparent',
                 width: "92%"
@@ -123,7 +123,7 @@ const SideBar = () => {
                             onClick={() => { setMove(!move); }}
                             style={{
                                 position: 'fixed',
-                                top: 12, right: 70, zIndex: 2000,
+                                top: 12, right: 70, zIndex: 1000,
 
                             }}>
                             <Icon icon='ci:menu-alt-05' fontSize={35} />

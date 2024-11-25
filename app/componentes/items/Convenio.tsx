@@ -2,7 +2,7 @@
 import { Avatar, Box, Divider, Grid, Stack, } from "@mui/material";
 import Link from "next/link";
 import { Negrita, Normal } from "../Textos";
-import { ChipBox } from "../Mostrar";
+import { BoxSombra, ChipBox } from "../Mostrar";
 import Image from 'next/legacy/image';
 import { Icon } from '@iconify/react';
 import { FaBuildingColumns } from "react-icons/fa6";
@@ -14,6 +14,8 @@ import { MdPhone } from "react-icons/md";
 import 'dayjs/locale/es';
 import plugin from 'dayjs/plugin/customParseFormat';
 import { IoMdCalendar } from "react-icons/io";
+import { Button } from "rsuite";
+import { useRouter } from "next/navigation";
 dayjs.extend(plugin)
 dayjs.locale('es');
 interface Props {
@@ -21,86 +23,64 @@ interface Props {
 }
 
 const ConvenioItem = ({ value }: Props) => {
+    const router = useRouter();
     return (
-        <Box bgcolor='white' borderRadius={4} overflow='hidden' border={`1px solid ${grey[300]}`} position='relative'>
+        <BoxSombra width={"100%"}
+            display='flex' position='relative' mb={5}>
+            <Negrita sx={{
+                display: 'flex', alignItems: 'center', color: grey[50],
+                position: 'absolute', top: 10, right: 10, zIndex: 2
+            }}>
+                {value.conteo}
+                <Icon style={{ marginLeft: 4, fontSize: 16 }} icon="solar:eye-bold" />
+            </Negrita>
             <Grid container>
-                <Grid item xs={12} position='relative'>
-                    <Negrita sx={{
-                        display: 'flex', alignItems: 'center', color: grey[500],
-                        position: 'absolute', top: 15, right: 20, zIndex: 10
-                    }}>
-                        {value.conteo}
-                        <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
-                    </Negrita>
-                    <Normal sx={{
-                        display: 'flex',
-                        color: '#ddd',
-                        alignItems: 'center',
-                        zIndex: 10,
-                        position: 'absolute', left: 15, top: 15
-                    }}>
-                        <Icon fontSize={30} style={{ marginRight: 5, borderRadius: 10 }} icon={`flag:${value.tipo == 'nacional' ? 'bo' : value.pais.toLowerCase()}-4x3`} />
-                        {value.tipo == 'nacional' ? 'BO' : value.pais}
-                    </Normal>
-                    <Link href={`/convenios/${value.id}`}>
-                        <Image style={{ filter: 'brightness(0.4)' }} src={fileDomain + value.imagen} height={90} objectFit="cover" width={100} layout="responsive" />
-                    </Link>
-                    <Box alignItems='center' zIndex={10} display='flex' position='absolute' left={10} bottom={20}>
-                        <Avatar sx={{ background: 'white', height: 70, width: 70 }}
-                            src={value.Institucion.logo ? fileDomain + value.Institucion.logo : ''} />
-                        <Box ml={2}>
-                            <Negrita sx={{ fontSize: 18, color: 'white' }}>
-                                {value.Institucion.nombre}
-                            </Negrita>
-
-                            <Normal sx={{ color: '#bbb', display: 'flex', alignItems: 'center' }}>
-                                <MdPhone style={{ marginRight: 5 }} />
-                                {value.Institucion.contacto || 'Sin número'}
-                            </Normal>
-                        </Box>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} p={2}>
-                    <Normal sx={{ color: '#999' }}>
-                        {dayjs(value.createdAt).format('DD MMMM YYYY')}
-                    </Normal>
-
-                    <Link href={`/convenios/${value.id}`} style={{ textDecoration: 'none' }}>
-                        <Negrita my={1} >
+                <Grid item xs={8} p={1}>
+                    <Link href={`/becas/${value.id}`} style={{ textDecoration: 'none' }}>
+                        <Negrita py={1} mb={2}>
                             {value.titulo}
                         </Negrita>
                     </Link>
-                    <Normal sx={{ display: 'flex', alignItems: 'center', color: '#777' }}>
-                        <IoMdCalendar style={{ marginRight: 5, fontSize: 22 }} />
+
+                    <Normal sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon icon="iconamoon:category-thin" fontSize={22} style={{ marginRight: 10 }} />
+                        {value.tipo == 'nacional' ? 'Convenio nacional' : 'Convenio internacional'}
+                    </Normal>
+                    <Normal sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Icon icon="lets-icons:calendar-light" fontSize={22} style={{ marginRight: 10 }} />
                         {dayjs(value.finalizacion, 'DD/MM/YYYY').format('[Finaliza el] DD [de] MMMM [del] YYYY')}
                     </Normal>
+                    <Normal sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Image
+                            width={22} height={22} layout="fixed"
+                            style={{ borderRadius: "50%", border: '1px solid #eee' }}
+                            src={value.Institucion.logo ? (fileDomain + value.Institucion.logo) : '/default-image.jpg'} />
+                        <span style={{ marginLeft: 10 }}>
+                            Institución {`"${value.Institucion.nombre}"`}
+                        </span>
+                    </Normal>
+                </Grid>
+                <Grid item xs={4} position='relative'>
+                    <Link href={`/convenios/${value.id}`}>
+                        <Image style={{ filter: 'brightness(0.4)', aspectRatio: 1 }}
+                            objectFit="cover" layout='fill' width={100} height={100}
+                            src={fileDomain + value.imagen} alt={`Imagen de: ${value.titulo}`} />
+                    </Link>
+                    <Button
+                        onClick={() => {
+                            router.push(`/convenios/${value.id}`)
+                        }}
+                        style={{
+                            position: 'absolute',
+                            borderRadius: 0,
+                            bottom: 0, width: "100%"
+                        }}
+                        appearance='primary'>
+                        <Icon icon="ep:right" fontSize={18} />
+                    </Button>
                 </Grid>
             </Grid>
-            <Divider sx={{ borderColor: grey[300], my: 0, py: 0 }} />
-            <Stack direction='row' p={0.7} flexWrap='wrap'>
-                {
-                    value.ConvenioCarrera.map(value =>
-                    (<ChipBox
-                        key={value.id}
-                        label={<Normal
-                            sx={{
-                                fontSize: 12,
-                                fontWeight: 700,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-around'
-                            }}>
-                            {value.Carrera.logo ?
-                                <Image src={fileDomain + value.Carrera.logo} width={20} height={20} style={{ borderRadius: 4 }}
-                                    layout='fixed' /> : <FaBuildingColumns style={{ marginRight: 5 }} fontSize={15} />}
-                            <span style={{ marginLeft: 5 }}>
-                                {value.Carrera.nombre}
-                            </span>
-                        </Normal>} />)
-                    )
-                }
-            </Stack>
-        </Box>
+        </BoxSombra >
     )
 }
 export default ConvenioItem;

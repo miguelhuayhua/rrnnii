@@ -60,7 +60,7 @@ const BecaComponent = ({ Beca, setBeca,
                         Termina el: {Beca.termina}
                     </Normal>
 
-                    <Stack direction='row' sx={{ mt: 1 }} spacing={1} alignItems='center'>
+                    <Stack direction='row' sx={{ mt: 2 }} spacing={1} alignItems='center'>
                         <Button appearance='ghost'
                             onClick={() => {
                                 setBeca(Beca);
@@ -91,9 +91,9 @@ const BecaComponent = ({ Beca, setBeca,
                             <Icon style={{ fontSize: 24, height: 20 }} icon="solar:eye-bold" />
                         </Button>
                         <SwitchBox checked={Beca.estado} onChange={(ev, checked) => {
-                            axios.post('/api/convenio/estado', { estado: checked, id: Beca.id }).then(res => {
+                            axios.post('/api/beca/estado', { estado: checked, id: Beca.id }).then(res => {
                                 openSnackbar(res.data.mensaje);
-                                axios.post('/api/convenio/todo', {}).then(res => {
+                                axios.post('/api/beca/todo', {}).then(res => {
                                     setBecas(res.data);
                                     setPrevBecas(res.data);
                                     setOpcion('todo');
