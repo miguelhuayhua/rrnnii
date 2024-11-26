@@ -20,6 +20,7 @@ import axios from 'axios';
 import { fileDomain, paises } from '@/utils/globals';
 import dayjs from 'dayjs';
 import { Uploader, Text, Input, AutoComplete, SelectPicker, Button, Form, DatePicker, Modal } from 'rsuite';
+import { toUpperCase } from '@/utils/data';
 interface Props {
     setBeca: any;
     Beca: Beca;
@@ -61,6 +62,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
         form.append('documento', documento);
         form.append('institucion', beca.Institucion.nombre);
         form.append('encargado', beca.encargado);
+        form.append('descripcioncorta', beca.descripcionCorta);
         form.append('termina', beca.termina);
         form.append('continente', beca.continente);
         form.append('pais', beca.pais);
@@ -87,7 +89,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
     return (
         <>
             <Modal
-                size='md'
+                size='lg'
                 open={!!Beca}
                 onClose={() => { setBeca(null) }}
                 overflow
@@ -146,10 +148,25 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
                                         <Form.ControlLabel>Título del convenio</Form.ControlLabel>
-                                        <Input {...field} size='lg' />
+                                        <Input {...field} size='lg' onChange={text => field.onChange(toUpperCase(text))} />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
                                         </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="descripcionCorta"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                        <Input {...field}
+                                            multiple
+                                            style={{ maxHeight: 200 }}
+                                            as='textarea'
+                                            rows={3}
+                                            size='lg' />
                                     </Form.Group>
                                 )}
                             />

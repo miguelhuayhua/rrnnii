@@ -33,6 +33,7 @@ const POST = async (request: NextRequest) => {
                 data: {
                     titulo: form.get('titulo'),
                     descripcion: form.get('descripcion'),
+                    descripcionCorta: form.get('descripcioncorta'),
                     tipo: form.get('tipo'),
                     pais: form.get('tipo') == 'nacional' ? 'BO' : form.get('pais'),
                     continente: form.get('tipo') == 'nacional' ? 'SA' : form.get('continente'),

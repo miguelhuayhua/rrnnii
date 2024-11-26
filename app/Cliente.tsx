@@ -193,7 +193,7 @@ const Cliente = () => {
                     rrnnii.upea.bo
                 </Negrita>
                 <Titulo sx={{ textAlign: 'center' }} variant="h2">Próximos eventos</Titulo>
-                <Grid container spacing={2} px={{ xs: 1, sm: 10, md: 1, lg: 5, xl: 20 }} py={4}>
+                <Grid container spacing={2} px={{ xs: 1, sm: 10, md: 20, lg: 30, xl: 50 }} py={4}>
                     {
                         Eventos.map(value => (
                             <Grid item xs={12} key={value.id}>

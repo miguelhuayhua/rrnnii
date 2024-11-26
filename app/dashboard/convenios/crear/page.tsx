@@ -1,15 +1,14 @@
 'use client';
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import {
-    Autocomplete, Box, Breadcrumbs,
+    Box, Breadcrumbs,
     Backdrop, CircularProgress,
-    Grid, LinearProgress, ListSubheader, MenuItem
+    Grid
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from '@iconify/react';
-import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
+import { MdArrowLeft } from "react-icons/md";
 import { Controller, useForm } from "react-hook-form";
 import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
@@ -17,13 +16,11 @@ const Editor = dynamic(() => import('react-quill').then((module) => module.defau
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { useEffect, useState } from "react";
-import { BoxSombra, ChipBox } from "@/app/componentes/Mostrar";
 import Image from 'next/legacy/image';
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
-import { grey, red } from "@mui/material/colors";
-import { RiFileWord2Line } from "react-icons/ri";
+import { red } from "@mui/material/colors";
 import axios from "axios";
 import { fileDomain, paises } from "@/utils/globals";
 import {
@@ -31,15 +28,13 @@ import {
     , Input, SelectPicker, TagPicker,
     Button,
     Uploader,
-    UploaderLocale,
     Panel
 } from "rsuite";
 import dayjs from "dayjs";
-import UploadTrigger from "rsuite/esm/Uploader/UploadTrigger";
 import { toUpperCase } from "@/utils/data";
 
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, setValue, watch } =
+    const { control, handleSubmit, setValue, watch } =
         useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
             defaultValues: {
                 titulo: '', tipo: 'nacional',
@@ -81,6 +76,7 @@ export default function Page() {
             form.append('documento', documento[0].blobFile);
             form.append('continente', convenio.continente);
             form.append('pais', convenio.pais);
+            form.append('descripcioncorta', convenio.descripcionCorta);
             form.append('tipo', convenio.tipo);
             form.append('institucion', convenio.Institucion.nombre);
             form.append('finalizacion', convenio.finalizacion!);
@@ -190,6 +186,21 @@ export default function Page() {
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
                                         </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="descripcionCorta"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                        <Input {...field}
+                                            multiple
+                                            style={{ maxHeight: 200 }}
+                                            as='textarea'
+                                            rows={3}
+                                            onChange={text => field.onChange(toUpperCase(text))} size='lg' />
                                     </Form.Group>
                                 )}
                             />

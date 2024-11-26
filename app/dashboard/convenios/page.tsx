@@ -153,7 +153,6 @@ export default function Page() {
                         }} /> : <Grid container spacing={2}>
                         {
                             convenios.length > 0 ?
-
                                 convenios.map(value => (
                                     <Grid key={value.id} item xs={12} lg={6}>
                                         <ConvenioComponent

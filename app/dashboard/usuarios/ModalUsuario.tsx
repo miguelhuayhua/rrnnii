@@ -121,9 +121,9 @@ const ModalUsuario = ({ personaId, setPersonaId }: Props) => {
                                     defaultValue={field.value}
                                     cleanable={false}
                                     style={{ marginBottom: 10, width: "100%" }}
-                                    data={[{ label: 'Jefe de unidad', value: 'jefe' },
-                                    { label: 'Administrador', value: 'admin' },
-                                    { label: 'Usuario', value: 'usuario' }
+                                    data={[
+                                        { label: 'Administrador', value: 'admin' },
+                                        { label: 'Usuario', value: 'usuario' }
                                     ]}
                                     searchable={false}
                                 />
@@ -138,6 +138,7 @@ const ModalUsuario = ({ personaId, setPersonaId }: Props) => {
                                 size='lg'
                                 appearance='primary'
                                 onClick={handleSubmit((Usuario) => {
+                                    console.log(Usuario)
                                     openModal({
                                         async callback() {
                                             setLoad(true);

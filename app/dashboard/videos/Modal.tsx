@@ -67,7 +67,7 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
         <>
             <Modal
                 overflow
-                size='md'
+                size='lg'
                 open={!!video}
                 onClose={() => { setVideo(null) }}
             >

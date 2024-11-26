@@ -34,7 +34,7 @@ const Cliente = () => {
     return (
         <>
             <InputGroup style={{
-                position: 'absolute', top: 170, right: 0, left: 0,
+                position: 'absolute', top: 220, right: 0, left: 0,
                 margin: '0 auto',
                 width: "60%", maxWidth: 500
             }} >
@@ -63,7 +63,7 @@ const Cliente = () => {
                     <Button
                         style={{ marginLeft: 10 }}
                         appearance="subtle" onClick={() => {
-                            router.push('/pasantias')
+                            router.push('/eventos')
                         }}>
                         <Icon fontSize={18} icon="ant-design:reload-outlined" />
                     </Button>
@@ -73,7 +73,7 @@ const Cliente = () => {
                         <SelectPicker
                             searchable={false}
                             data={[{ label: 'Más antiguos', value: '1' }, { label: 'Más recientes', value: '0' }]}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             cleanable={false}
                             value={params.get('s')}
                             placeholder='Orden'
@@ -92,12 +92,12 @@ const Cliente = () => {
                         <SelectPicker
                             searchable={false}
                             cleanable={false}
-                            value={params.get('d')}
-                            data={[{ label: '6 meses', value: '6' },
-                            { label: '3 meses', value: '3' },
-                            { label: 'Más de 6 meses', value: 'more' }]}
-                            size={sm ? 'xs' : 'lg'}
-                            placeholder='Duración'
+                            value={params.get('t')}
+                            data={[{ label: 'Presencial', value: 'presencial' },
+                            { label: 'Online', value: 'online' }
+                            ]}
+                            size={sm ? 'sm' : 'lg'}
+                            placeholder='Tipo'
                             labelKey="label"
                             valueKey="value"
                             style={{
@@ -105,7 +105,7 @@ const Cliente = () => {
                                 marginBottom: 10
                             }}
                             onChange={tipo => {
-                                router.replace(`/pasantias?t=${tipo}${params.has('s') ? '&s=' + params.get('s') : ''}`)
+                                router.replace(`/eventos?t=${tipo}${params.has('s') ? '&s=' + params.get('s') : ''}`)
                             }}
                         />
                     </Grid>

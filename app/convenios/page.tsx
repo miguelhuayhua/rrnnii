@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 }
 export default function Home() {
     return (
-        <Box bgcolor='white'>
+        <>
             <Navbar />
             <Box sx={{ position: 'relative' }}>
                 <Box width={"100%"} position='relative' height={350}>
@@ -39,7 +39,7 @@ export default function Home() {
                         sx={{
                             fontWeight: 700,
                             color: 'white', fontSize: 30,
-                            position: 'absolute', top: 20,
+                            position: 'absolute', top: 40,
                             width: "100%",
                             textAlign: 'center'
                         }}
@@ -49,10 +49,10 @@ export default function Home() {
                     <Typography
                         sx={{
                             color: 'white',
-                            position: 'absolute', top: 70,
+                            position: 'absolute', top: 90,
                             width: "100%",
                             textAlign: 'center',
-                            px: { xs: 2, sm: 5, md: 10, lg: 20 }
+                            px: { xs: 2, sm: 10, md: 20, lg: 30, xl: 50 }
                         }}
                     >
                         Los convenios realizados promueven una variedad de actividades en instituciones del exterior como nacionales,
@@ -66,6 +66,6 @@ export default function Home() {
             <Box mt={10}>
                 <Footer />
             </Box>
-        </Box >
+        </ >
     );
 }

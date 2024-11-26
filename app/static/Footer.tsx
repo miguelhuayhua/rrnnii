@@ -3,8 +3,6 @@ import { Box, Grid, Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Negrita, Normal } from '../componentes/Textos';
 import dayjs from "dayjs";
-import { BsPhone } from 'react-icons/bs';
-import { CiMail } from 'react-icons/ci';
 import axios from 'axios';
 import { Unidad } from '@prisma/client';
 import { green, grey } from '@mui/material/colors';
@@ -19,10 +17,13 @@ const Footer = () => {
         });
     }, []);
     return (
-        <Box component="footer" bgcolor={grey[900]} color={grey[200]} py={4} px={{ xs: 2, md: 8, lg: 16 }}>
-            <Grid container spacing={4}>
+        <Box
+            component="footer" bgcolor={grey[900]}
+            position='relative'
+            color={grey[200]} py={4} px={{ xs: 2, md: 8, lg: 16 }}>
+            <Grid container spacing={4} >
                 {/* Contact Information */}
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={5}>
                     <Negrita variant="h6" sx={{ mb: 2 }}>
                         Contáctanos
                     </Negrita>
@@ -32,7 +33,9 @@ const Footer = () => {
                     </Box>
                     <Box display="flex" alignItems="center" mb={1}>
                         <Icon icon='mage:email' fontSize={20} />
-                        <Normal sx={{ ml: 1 }}>Correo: relaciones.internacionales@upea.bo | {unidad?.email}</Normal>
+                        <Normal sx={{ ml: 1 }}>Correo: relaciones.internacionales@upea.bo
+                            <br />
+                            | {unidad?.email}</Normal>
                     </Box>
                     <Box display="flex" alignItems="center" mb={1}>
                         <Icon icon='mynaui:location' fontSize={20} />
@@ -72,28 +75,43 @@ const Footer = () => {
                 </Grid>
 
                 {/* Social Media */}
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={3}>
                     <Negrita variant="h6" sx={{ mb: 2 }}>
                         Síguenos
                     </Negrita>
-                    <Stack spacing={1} direction='row'>
-                        <Button size='xs' appearance='link'>
-                            <Icon fontSize={22} icon='ic:outline-facebook'
-                                color='white' />
-                        </Button>
-                        <Button size='xs' appearance='link'>
-                            <Icon color='white' icon='basil:instagram-solid' fontSize={22} />
-                        </Button>
-                        <Button size='xs' appearance='link'>
-                            <Icon icon='mdi:youtube' fontSize={22}
-                                color='white' />
-                        </Button>
-                        <Button appearance='link'>
-                            <Icon
-                                color='white'
-                                icon='mage:whatsapp-filled' fontSize={22}
-                            />
-                        </Button>
+                    <Stack spacing={0.5} direction='row'>
+                        {
+                            unidad?.facebook ?
+                                <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                    <Icon icon='ic:outline-facebook' color='white' style={{ marginLeft: 10 }} fontSize={20} />
+                                </Button> : null
+                        }
+                        {
+                            unidad?.instagram ?
+                                <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                    <Icon icon='basil:instagram-solid' color='white' fontSize={20}
+                                        style={{ marginLeft: 10 }} />
+                                </Button> : null
+                        }
+                        {
+                            unidad?.instagram ?
+                                <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                    <Icon icon='mdi:youtube' color='white' fontSize={20}
+                                        style={{ marginLeft: 10 }} />
+                                </Button> : null
+                        }
+                        {
+                            unidad?.contacto ?
+                                <Button onClick={() => {
+                                    const whatsappUrl = `https://wa.me/591${unidad.contacto}`;
+                                    window.open(whatsappUrl, '_blank');
+                                }} appearance='link'>
+                                    <Icon
+                                        icon='mage:whatsapp-filled' color='white' fontSize={20}
+                                    />
+                                </Button>
+                                : null
+                        }
                     </Stack>
                 </Grid>
 

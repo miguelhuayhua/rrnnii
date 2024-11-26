@@ -28,20 +28,20 @@ const NoticiaComponent = ({ Noticia, setNoticia,
         <BoxSombra p={1} bgcolor='white' borderRadius={4} >
             <Grid container spacing={1}>
                 <Grid item xs={8} position='relative'>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal >
                         {dayjs(Noticia.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Noticia.titulo}
                     </Negrita>
 
-                    <Box sx={{ fontSize: 12 }}>
+                    <Box >
                         {
                             parse(Noticia.descripcion.substring(0, 200) + "...")
                         }
                     </Box>
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <Button appearance="ghost" onClick={() => {
+                        <Button size='sm' appearance="ghost" onClick={() => {
                             setNoticia(Noticia);
                         }}>Modificar</Button>
 

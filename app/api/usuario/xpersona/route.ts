@@ -8,7 +8,8 @@ const POST = async (request: NextRequest) => {
             select: {
                 avatar: true,
                 rol: true,
-                usuario: true
+                usuario: true,
+                id: true
             }
         });
         return Response.json(usuario);

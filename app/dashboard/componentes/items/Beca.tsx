@@ -50,24 +50,24 @@ const BecaComponent = ({ Beca, setBeca,
                             <Icon style={{ marginLeft: 4, fontSize: 18 }} icon="solar:eye-bold" />
                         </Negrita>
                     </Stack>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal>
                         {dayjs(Beca.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Beca.titulo}
                     </Negrita>
-                    <Normal sx={{ mt: 1, fontSize: 12 }}>
+                    <Normal>
                         Termina el: {Beca.termina}
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={1} alignItems='center'>
-                        <Button appearance='ghost'
+                        <Button appearance='ghost' size='sm'
                             onClick={() => {
                                 setBeca(Beca);
                             }}>Modificar</Button>
                         {
                             Beca.pdf ?
-                                <Button appearance='primary'
+                                <Button appearance='primary' size='sm'
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Beca.pdf;
@@ -84,7 +84,7 @@ const BecaComponent = ({ Beca, setBeca,
                                     }
                                 </Button> : null
                         }
-                        <Button appearance='ghost'
+                        <Button appearance='ghost' size='sm'
                             onClick={() => {
                                 router.push(`/dashboard/becas/${Beca.id}`)
                             }}>

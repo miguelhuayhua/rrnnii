@@ -59,6 +59,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
         form.append('descripcion', pasantia.descripcion);
         form.append('portada', portada);
         form.append('documento', documento);
+        form.append('descripcioncorta', pasantia.descripcionCorta);
         form.append('finalizacion', pasantia.finalizacion!);
         form.append('id', pasantia.id);
         form.append('modalidad', pasantia.modalidad);
@@ -92,7 +93,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
         <>
             <Modal
                 overflow
-                size='md'
+                size='lg'
                 open={!!Pasantia}
                 onClose={() => { setPasantia(null) }}
             >
@@ -154,6 +155,21 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
                                         </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="descripcionCorta"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                        <Input {...field}
+                                            multiple
+                                            style={{ maxHeight: 200 }}
+                                            as='textarea'
+                                            rows={3}
+                                            onChange={text => field.onChange(toUpperCase(text))} size='lg' />
                                     </Form.Group>
                                 )}
                             />

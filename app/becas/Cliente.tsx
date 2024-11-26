@@ -41,7 +41,7 @@ const Cliente = () => {
     return (
         <>
             <InputGroup style={{
-                position: 'absolute', top: 150, right: 0, left: 0,
+                position: 'absolute', top: 230, right: 0, left: 0,
                 margin: '0 auto',
                 width: "60%", maxWidth: 500
             }} >
@@ -84,7 +84,7 @@ const Cliente = () => {
                                 width: "100%",
                                 marginBottom: 10
                             }}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             cleanable={false}
                             value={params.get('co')}
                             onChange={pais => {
@@ -109,7 +109,7 @@ const Cliente = () => {
                         <SelectPicker
                             searchable={false}
                             data={[{ label: 'Más antiguos', value: '1' }, { label: 'Más recientes', value: '0' }]}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             cleanable={false}
                             value={params.get('s')}
                             placeholder='Orden'
@@ -130,7 +130,7 @@ const Cliente = () => {
                             cleanable={false}
                             value={params.get('t')}
                             data={[{ label: 'Nacionales', value: 'nacional' }, { label: 'Internacionales', value: 'internacional' }]}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             placeholder='Tipo'
                             labelKey="label"
                             valueKey="value"

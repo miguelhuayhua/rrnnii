@@ -9,15 +9,9 @@ export const metadata = {
 }
 export default function Home() {
     return (
-        <Box bgcolor='transparent'>
+        <>
             <Navbar />
-            <Box px={{ xs: 2, md: 10, lg: 20, xl: 35 }}>
-                <Typography
-                    variant='h1'
-                    sx={{ fontWeight: 700, color: '#212b36', fontSize: 28, my: 3 }}
-                >
-                    Videos
-                </Typography>
+            <Box >
                 <Suspense>
                     <Cliente />
                 </Suspense>
@@ -26,6 +20,6 @@ export default function Home() {
             <Box mt={10}>
                 <Footer />
             </Box>
-        </Box>
+        </>
     );
 }

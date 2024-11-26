@@ -14,7 +14,7 @@ import { HiOutlineBars3BottomLeft } from 'react-icons/hi2';
 import ModalLogin from './ModalLogin';
 import { BiDownArrow, BiNews, BiVideo } from 'react-icons/bi';
 import { PiDotOutlineFill } from 'react-icons/pi';
-import { green, grey, red } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import { Icon } from '@iconify/react';
 import { RiHome5Line } from 'react-icons/ri';
 import { GrGroup } from 'react-icons/gr';
@@ -22,11 +22,12 @@ import { MdOutlineHandshake } from 'react-icons/md';
 import { Button } from 'rsuite';
 import { Unidad } from '@prisma/client';
 import axios from 'axios';
+import dayjs from 'dayjs';
 //estilos
 const Navbar = () => {
     const pathname = usePathname();
     const trigger = useScrollTrigger({
-        threshold: 0,
+        threshold: 1,
         disableHysteresis: true
     });
     const [y, setY] = useState(0);
@@ -55,7 +56,13 @@ const Navbar = () => {
         <>
             {
                 pathname.endsWith('/') ? null :
-                    <Box bgcolor='white' borderBottom='1px solid #ddd' zIndex={1001}>
+                    <Box bgcolor='white' borderBottom='1px solid #ddd' zIndex={2000}>
+                        <Normal sx={{
+                            fontSize: 11, color: grey[700], textAlign: 'center',
+                            position: 'absolute', top: 0, width: "100%"
+                        }}>
+                            rrnnii.upea.bo - {dayjs().year()}
+                        </Normal>
                         <Stack spacing={0.5} direction='row'>
                             {
                                 unidad?.facebook ?
@@ -129,10 +136,10 @@ const Navbar = () => {
                                 alt='Logo de la unidad de relaciones internacionales'
                             />
                             <Box px={0.5} display='flex' flexDirection='column' alignItems='start'>
-                                <Normal sx={{ fontSize: 10, textAlign: 'start', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
+                                <Normal sx={{ fontSize: 10, textAlign: 'start', color: (pathname.endsWith('/') || pathname.endsWith('videos')) ? trigger ? grey[900] : grey[50] : grey[900] }}>
                                     Relaciones  Internacionales
                                 </Normal>
-                                <Negrita sx={{ fontSize: 11, color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
+                                <Negrita sx={{ fontSize: 11, color: (pathname.endsWith('/') || pathname.endsWith('videos')) ? trigger ? grey[900] : grey[50] : grey[900] }}>
                                     Universidad Pública de El Alto
                                 </Negrita>
                             </Box>
@@ -229,26 +236,26 @@ const Navbar = () => {
                                     </Grid>
                                 }
                             >
-                                <Normal sx={{ display: 'flex', alignItems: 'center', color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900] }}>
+                                <Normal sx={{ display: 'flex', alignItems: 'center', color: (pathname.endsWith('/') || pathname.endsWith('videos')) ? trigger ? grey[900] : grey[50] : grey[900] }}>
                                     {(pathname.startsWith('/convenios') || pathname.startsWith('/pasantias') || pathname.startsWith('/eventos') || pathname.startsWith('/becas'))
                                         ? <GoDotFill color='inherit' /> : null}
                                     Convocatorias <FaAngleDown />
                                 </Normal>
                             </Tooltip>
                             <Link style={{ textDecoration: 'none' }} href={'/noticias'}>
-                                <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
+                                <Normal sx={{ color: (pathname.endsWith('/') || pathname.endsWith('videos')) ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/noticias' ? <GoDotFill color='inherit' /> : null}
                                     Noticias
                                 </Normal>
                             </Link>
                             <Link style={{ textDecoration: 'none' }} href={'/about'}>
-                                <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
+                                <Normal sx={{ color: (pathname.endsWith('/') || pathname.endsWith('videos')) ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/about' ? <GoDotFill color='inherit' /> : null}
                                     Sobre Nosotros
                                 </Normal>
                             </Link>
                             <Link style={{ textDecoration: 'none' }} href={'/videos'}>
-                                <Normal sx={{ color: pathname.endsWith('/') ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
+                                <Normal sx={{ color: (pathname.endsWith('/') || pathname.endsWith('videos')) ? trigger ? grey[900] : grey[50] : grey[900], alignItems: 'center', display: 'flex' }}>
                                     {pathname == '/videos' ? <GoDotFill color='inherit' /> : null}
                                     Videos
                                 </Normal>

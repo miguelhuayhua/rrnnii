@@ -70,7 +70,7 @@ export default function ModalInstitucion({ setInstitucion, Institucion, setInsti
         <>
             <Modal
                 overflow
-                size='md'
+                size='lg'
                 open={!!Institucion}
                 onClose={() => { setInstitucion(null) }}
             >

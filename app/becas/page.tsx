@@ -9,14 +9,14 @@ import { Metadata } from 'next';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
 export const metadata: Metadata = {
-    title: 'Buscar Becas'
+    title: 'Buscar Becas - UPEA'
 }
 export default function Home() {
     return (
-        <Box bgcolor='white'>
+        <>
             <Navbar />
             <Box sx={{ position: 'relative' }}>
-                <Box width={"100%"} position='relative' height={300}>
+                <Box width={"100%"} position='relative' height={350}>
                     <Image style={{ filter: 'brightness(.7)' }} src='/assets/portadabeca.jpg' layout='fill' objectFit='cover' />
                     <Breadcrumbs
                         color="white" sx={{
@@ -33,13 +33,13 @@ export default function Home() {
                         </Link>
                     </Breadcrumbs>
                 </Box>
-                <Box >
+                <Box bgcolor='transparent'>
                     <Typography
                         variant='h1'
                         sx={{
                             fontWeight: 700,
                             color: 'white', fontSize: 30,
-                            position: 'absolute', top: 20,
+                            position: 'absolute', top: 40,
                             width: "100%",
                             textAlign: 'center'
                         }}
@@ -49,13 +49,14 @@ export default function Home() {
 
                     <Typography
                         sx={{
-                            color: '#bbb',
-                            position: 'absolute', top: 70,
+                            color: 'white',
+                            position: 'absolute', top: 100,
                             width: "100%",
                             textAlign: 'center',
+                            px: { xs: 2, sm: 10, md: 20, lg: 30, xl: 50 }
                         }}
                     >
-                        Las Becas están comprometidas con el proyecto educativo con el objetivo de facilitar recursos limitados y la capacidad intelectual.
+                        La Unidad de Relaciones Internacionales de la UPEA ofrece oportunidades de becas para estudiantes destacados, promoviendo su desarrollo académico y profesional a través de financiamiento y convenios estratégicos.
                     </Typography>
                     <Suspense>
                         <Cliente />
@@ -65,6 +66,6 @@ export default function Home() {
             <Box mt={10}>
                 <Footer />
             </Box>
-        </Box>
+        </>
     );
 }

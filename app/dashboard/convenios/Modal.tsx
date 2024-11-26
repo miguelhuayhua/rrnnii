@@ -63,6 +63,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
         form.append('finalizacion', convenio.finalizacion!);
         form.append('institucion', convenio.Institucion.nombre);
         form.append('continente', convenio.continente);
+        form.append('descripcioncorta', convenio.descripcionCorta);
         form.append('pais', convenio.pais);
         form.append('logo', convenio.Institucion.logo!);
         form.append('portada', portada);
@@ -100,7 +101,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
     return (
         <>
             <Modal
-                size='md'
+                size='lg'
                 open={!!Convenio}
                 onClose={() => { setConvenio(null) }}
                 overflow
@@ -163,6 +164,18 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
                                         </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="descripcionCorta"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                        <Input {...field}
+                                            multiple
+                                            onChange={text => field.onChange(toUpperCase(text))} size='lg' />
                                     </Form.Group>
                                 )}
                             />

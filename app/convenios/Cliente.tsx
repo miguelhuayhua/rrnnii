@@ -45,7 +45,7 @@ const Cliente = () => {
         <>
 
             <InputGroup style={{
-                position: 'absolute', top: 170, right: 0, left: 0,
+                position: 'absolute', top: 220, right: 0, left: 0,
                 margin: '0 auto',
                 width: "60%", maxWidth: 500
             }} >
@@ -83,7 +83,7 @@ const Cliente = () => {
                     <Grid item xs={6} sm={3}>
                         <SelectPicker
                             data={continentes}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             searchable={false}
                             placeholder='Continente'
                             labelKey="label"
@@ -116,7 +116,7 @@ const Cliente = () => {
                         <SelectPicker
                             searchable={false}
                             data={[{ label: 'Más antiguos', value: '1' }, { label: 'Más recientes', value: '0' }]}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             cleanable={false}
                             value={params.get('s')}
                             placeholder='Orden'
@@ -137,7 +137,7 @@ const Cliente = () => {
                             cleanable={false}
                             value={params.get('t')}
                             data={[{ label: 'Nacionales', value: 'nacional' }, { label: 'Internacionales', value: 'internacional' }]}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             placeholder='Tipo'
                             labelKey="label"
                             valueKey="value"
@@ -156,7 +156,7 @@ const Cliente = () => {
                             value={params.get('c')}
                             cleanable={false}
                             data={carreras}
-                            size={sm ? 'xs' : 'lg'}
+                            size={sm ? 'sm' : 'lg'}
                             placeholder='Carrera'
                             labelKey="nombre"
                             valueKey="id"

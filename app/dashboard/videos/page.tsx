@@ -138,7 +138,7 @@ export default function Page() {
                                     "": (<>
                                         <Stack py={1.5} direction='row' spacing={3} alignItems='center'>
                                             <Button
-                                                appearance="ghost" size="md" onClick={() => {
+                                                appearance="ghost" size="sm" onClick={() => {
                                                     setVideo(value);
                                                 }}>Modificar</Button>
 

@@ -28,7 +28,7 @@ const Cliente = () => {
             </div>
 
             <Grid container spacing={4} py={3}
-                pb={10} px={1} position='relative'>
+                pb={10} px={{ xs: 1, sm: 3, md: 5, lg: 10, xl: 20 }} position='relative'>
                 <Grid item xs={12}>
                     <Titulo sx={{ textAlign: 'center', py: 3 }}>
                         Sobre Nosotros

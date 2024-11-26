@@ -31,7 +31,7 @@ export default async function Layout({ children }: any) {
                                     <div className="color c4"></div>
                                 </div>
                             </div>
-                            <Box bgcolor='white'
+                            <Box 
                                 overflow='hidden'
                                 boxShadow='0 0 5px #21212133'
                                 display='flex'

@@ -1,22 +1,16 @@
 'use client';
-import { Avatar, Box } from "@mui/material";
-import Link from "next/link";
-import Image from 'next/legacy/image';
-import { TbWorld } from "react-icons/tb";
+import { Box } from "@mui/material";
 import { ChipBox } from "../Mostrar";
-import { Negrita, Normal } from "../Textos";
-import { blue, green, grey } from "@mui/material/colors";
+import { Negrita } from "../Textos";
+import { grey } from "@mui/material/colors";
 import { Video } from "@prisma/client";
-import { Icon } from '@iconify/react';
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import 'dayjs/locale/es';
 import { fileDomain } from "@/utils/globals";
-import { FaUserGroup } from "react-icons/fa6";
-import ReactPlayer from "react-player";
 
 dayjs.locale('es');
-
+import { Icon } from '@iconify/react';
 interface Props {
     value: Video,
     setVideo: any
@@ -38,7 +32,19 @@ const VideoItem = ({ value, setVideo }: Props) => {
 
     return (
         <Box>
+
             <Box position='relative'>
+                <Box
+                    onClick={() => {
+                        setVideo(value);
+                    }}
+                    sx={{
+                        position: 'absolute', width: "100%", height: "96%", background: '#00000055',
+                        top: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        borderRadius: 3, cursor: 'pointer'
+                    }}>
+                    <Icon icon='line-md:play' fontSize={50} color="white" />
+                </Box>
                 <ChipBox
                     sx={{
                         background: "#212121bb",
@@ -46,22 +52,20 @@ const VideoItem = ({ value, setVideo }: Props) => {
                         padding: 0.5,
                         color: grey[50],
                         position: 'absolute',
-                        bottom: 10,
-                        left: 5
+                        bottom: 20,
+                        left: 10
                     }}
                     label={duration}
                 />
                 <video
-                    onClick={() => {
-                        setVideo(value);
-                    }}
+
                     preload="metadata"
                     id={value.id}
                     disablePictureInPicture
                     controlsList="nodownload"
                     style={{
                         width: "100%",
-                        borderRadius: 16,
+                        borderRadius: 12,
                         cursor: 'pointer'
                     }}
                     src={`${fileDomain}${value.video}#t=1`}

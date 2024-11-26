@@ -5,7 +5,7 @@ import '@/app/globals.scss';
 import Footer from '../static/Footer';
 import { Suspense } from 'react';
 export const metadata = {
-    title: 'Sobre la unidad'
+    title: 'Sobre Relaciones Internacionales - UPEA'
 }
 export default function Home() {
     return (

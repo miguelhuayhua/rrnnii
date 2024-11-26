@@ -21,6 +21,7 @@ import { grey, red } from "@mui/material/colors";
 import { fileDomain, paises } from "@/utils/globals";
 import { FaBuildingColumns } from "react-icons/fa6";
 import { Button, Panel, Tabs } from "rsuite";
+import { compartirEnFacebook, compartirEnlaceEnWhatsApp, compartirEnX } from "@/utils/data";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [convenios, setConvenios] = useState([]);
@@ -68,7 +69,7 @@ export default function Cliente({ value }: Props) {
                                 <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/" >
                                     <Icon icon='lucide:home' />
                                 </Link>,
-                                <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/becas" >
+                                <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/convenios" >
                                     Convenios
                                 </Link>
                                 <Normal sx={{ color: 'white', fontSize: 13 }}>
@@ -115,25 +116,41 @@ export default function Cliente({ value }: Props) {
                 <Grid item xs={0} md={3} display={{ xs: 'none', md: 'block' }} >
                     <Box px={1} position='sticky' top={90} bottom={0}>
                         <Stack spacing={2}>
-                            <Button appearance="primary" size='lg'>
-                                Contactarme
-                            </Button>
+                            <Link
+                                target='_blank'
+                                href={`https://wa.me/${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}`}>
+                                <Button block
+                                    appearance="primary" size='lg'>
+                                    Contactarme
+                                </Button>
+                            </Link>
                         </Stack>
-
-                        <Stack spacing={0.1} direction='row' mt={2}>
+                        <Stack spacing={0.1} direction='row' mt={3}
+                            height="100%"
+                            alignItems='center' justifyContent='center'>
                             <Normal>
                                 Compartir:
                             </Normal>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                            <Button style={{ display: 'flex', alignItems: 'center' }}
+                                onClick={() => {
+                                    compartirEnFacebook(`https://rrnnii.upea.bo/convenios/${value.id}`);
+                                }}
+                                size='xs' appearance='link'>
                                 <Icon icon='ic:outline-facebook' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='basil:instagram-solid' fontSize={20}
-                                />
+                            <Button appearance='link' onClick={() => {
+                                compartirEnlaceEnWhatsApp(`https://rrnnii.upea.bo/convenios/${value.id}`,
+                                    'Mira este Convenio disponible'
+                                )
+                            }}>
+                                <Icon icon='mage:whatsapp-filled' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='mdi:youtube' fontSize={20} />
+                            <Button onClick={() => {
+                                compartirEnX(`https://rrnnii.upea.bo/convenios/${value.id}`, 'Mira este Convenio disponible')
+                            }} size='xs' appearance='link'>
+                                <Icon icon='fa6-brands:x-twitter' fontSize={16} />
                             </Button>
+
                         </Stack>
                     </Box>
                 </Grid>
@@ -369,10 +386,14 @@ export default function Cliente({ value }: Props) {
             }}>
                 <Grid container>
                     <Grid item xs={6}>
-                        <Button appearance="primary" block size='lg'
-                            style={{ borderRadius: 0 }}>
-                            Contactarme
-                        </Button>
+                        <Link style={{ borderRadius: 0 }}
+                            target='_blank'
+                            href={`https://wa.me/${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}`}>
+                            <Button block style={{ borderRadius: 0 }}
+                                appearance="primary" size='lg'>
+                                Contactarme
+                            </Button>
+                        </Link>
                     </Grid>
                     <Grid item xs={6}>
                         <Stack spacing={0.1} direction='row'
@@ -381,15 +402,26 @@ export default function Cliente({ value }: Props) {
                             <Normal>
                                 Compartir:
                             </Normal>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                            <Button style={{ display: 'flex', alignItems: 'center' }}
+                                onClick={() => {
+                                    compartirEnFacebook(`https://rrnnii.upea.bo/convenios/${value.id}`);
+                                }}
+                                size='xs' appearance='link'>
                                 <Icon icon='ic:outline-facebook' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='basil:instagram-solid' fontSize={20} />
+                            <Button appearance='link' onClick={() => {
+                                compartirEnlaceEnWhatsApp(`https://rrnnii.upea.bo/convenios/${value.id}`,
+                                    'Mira este Convenio disponible'
+                                )
+                            }}>
+                                <Icon icon='mage:whatsapp-filled' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='mdi:youtube' fontSize={20} />
+                            <Button onClick={() => {
+                                compartirEnX(`https://rrnnii.upea.bo/convenios/${value.id}`, 'Mira este Convenio disponible')
+                            }} size='xs' appearance='link'>
+                                <Icon icon='fa6-brands:x-twitter' fontSize={16} />
                             </Button>
+
                         </Stack>
                     </Grid>
                 </Grid>

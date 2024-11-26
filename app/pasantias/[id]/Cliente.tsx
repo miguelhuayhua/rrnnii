@@ -1,6 +1,6 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Avatar, Box, Breadcrumbs, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
+import { Box, Breadcrumbs, Grid, Stack } from "@mui/material";
 import { Carrera, Institucion, Pasantia, PasantiaCarrera } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
@@ -11,15 +11,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
-import PasantiaItem from "@/app/componentes/items/Pasantia";
-import { red, blue, grey, green } from "@mui/material/colors";
+import { red, grey } from "@mui/material/colors";
 import { Icon } from '@iconify/react';
-import { RiFileWord2Line } from "react-icons/ri";
 import { fileDomain } from "@/utils/globals";
-import { MdPhone } from "react-icons/md";
-import { IoMdCalendar } from "react-icons/io";
 import { FaBuildingColumns } from "react-icons/fa6";
 import { Button, Panel, Tabs } from "rsuite";
+import { compartirEnFacebook, compartirEnlaceEnWhatsApp, compartirEnX } from "@/utils/data";
 interface Props {
     value: Pasantia & { PasantiaCarrera: (PasantiaCarrera & { Carrera: Carrera })[], Institucion: Institucion };
 }
@@ -91,7 +88,7 @@ export default function Cliente({ value }: Props) {
                                     color: 'white', alignItems: 'center'
                                 }} separator="＞" aria-label="breadcrumb">
                                 <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/" >
-                                    <Icon icon='lucide:home' />
+                                    <Icon icon='lucide:home' style={{ marginTop: 6 }} />
                                 </Link>,
                                 <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/pasantias" >
                                     Pasantías
@@ -140,26 +137,44 @@ export default function Cliente({ value }: Props) {
                 <Grid item xs={0} md={3} display={{ xs: 'none', md: 'block' }} >
                     <Box px={1} position='sticky' top={90} bottom={0}>
                         <Stack spacing={2}>
-                            <Button appearance="primary" size='lg'>
-                                Contactarme
-                            </Button>
+                            <Link
+                                target='_blank'
+                                href={`https://wa.me/591${value.Institucion.contacto}`}>
+                                <Button block
+                                    appearance="primary" size='lg'>
+                                    Contactarme
+                                </Button>
+                            </Link>
                         </Stack>
 
-                        <Stack spacing={0.1} direction='row' mt={2}>
+                        <Stack spacing={0.1} direction='row'
+                            height="100%" mt={4}
+                            alignItems='center' justifyContent='center'>
                             <Normal>
                                 Compartir:
                             </Normal>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                            <Button style={{ display: 'flex', alignItems: 'center' }}
+                                onClick={() => {
+                                    compartirEnFacebook(`https://rrnnii.upea.bo/pasantias/${value.id}`);
+                                }}
+                                size='xs' appearance='link'>
                                 <Icon icon='ic:outline-facebook' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='basil:instagram-solid' fontSize={20}
-                                />
+                            <Button appearance='link' onClick={() => {
+                                compartirEnlaceEnWhatsApp(`https://rrnnii.upea.bo/pasantias/${value.id}`,
+                                    'Mira esta Pasantía disponible'
+                                )
+                            }}>
+                                <Icon icon='mage:whatsapp-filled' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='mdi:youtube' fontSize={20} />
+                            <Button onClick={() => {
+                                compartirEnX(`https://rrnnii.upea.bo/pasantias/${value.id}`, 'Mira esta Pasantía disponible')
+                            }} size='xs' appearance='link'>
+                                <Icon icon='fa6-brands:x-twitter' fontSize={16} />
                             </Button>
+
                         </Stack>
+
                     </Box>
                 </Grid>
             </Grid>
@@ -367,10 +382,14 @@ export default function Cliente({ value }: Props) {
             }}>
                 <Grid container>
                     <Grid item xs={6}>
-                        <Button appearance="primary" block size='lg'
-                            style={{ borderRadius: 0 }}>
-                            Contactarme
-                        </Button>
+                        <Link
+                            target='_blank' style={{ borderRadius: 0 }}
+                            href={`https://wa.me/591${value.Institucion.contacto}`}>
+                            <Button block style={{ borderRadius: 0 }}
+                                appearance="primary" size='lg'>
+                                Contactarme
+                            </Button>
+                        </Link>
                     </Grid>
                     <Grid item xs={6}>
                         <Stack spacing={0.1} direction='row'
@@ -379,15 +398,26 @@ export default function Cliente({ value }: Props) {
                             <Normal>
                                 Compartir:
                             </Normal>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                            <Button style={{ display: 'flex', alignItems: 'center' }}
+                                onClick={() => {
+                                    compartirEnFacebook(`https://rrnnii.upea.bo/pasantias/${value.id}`);
+                                }}
+                                size='xs' appearance='link'>
                                 <Icon icon='ic:outline-facebook' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='basil:instagram-solid' fontSize={20} />
+                            <Button appearance='link' onClick={() => {
+                                compartirEnlaceEnWhatsApp(`https://rrnnii.upea.bo/pasantias/${value.id}`,
+                                    'Mira esta Pasantía disponible'
+                                )
+                            }}>
+                                <Icon icon='mage:whatsapp-filled' fontSize={20} />
                             </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='mdi:youtube' fontSize={20} />
+                            <Button onClick={() => {
+                                compartirEnX(`https://rrnnii.upea.bo/pasantias/${value.id}`, 'Mira esta Pasantía disponible')
+                            }} size='xs' appearance='link'>
+                                <Icon icon='fa6-brands:x-twitter' fontSize={16} />
                             </Button>
+
                         </Stack>
                     </Grid>
                 </Grid>

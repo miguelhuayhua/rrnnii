@@ -7,7 +7,7 @@ const POST = async (request: NextRequest) => {
     if (token?.name) {
         try {
             await prisma.acciones.create({ data: { tabla: 'usuario', Usuario: { connect: { usuario: token.name } }, tipo: 'editar' } });
-            const { usuario, usuario2, password } = await request.json();
+            const { usuario, password, id } = await request.json();
             let res = await prisma.usuario.update({
                 data: {
                     usuario: usuario as any,
@@ -16,7 +16,7 @@ const POST = async (request: NextRequest) => {
                     } : null
                 },
                 where: {
-                    usuario: usuario2
+                    id
                 },
                 select: {
                     usuario: true, avatar: true, rol: true
@@ -27,7 +27,7 @@ const POST = async (request: NextRequest) => {
             console.log(error)
             return Response.json({
                 error: true,
-                mensaje: 'Error al modificar personal'
+                mensaje: 'Error al modificar usuario'
             });
         }
     }

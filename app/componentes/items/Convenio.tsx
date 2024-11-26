@@ -36,7 +36,7 @@ const ConvenioItem = ({ value }: Props) => {
             </Negrita>
             <Grid container>
                 <Grid item xs={8} p={1}>
-                    <Link href={`/becas/${value.id}`} style={{ textDecoration: 'none' }}>
+                    <Link href={`/convenios/${value.id}`} style={{ textDecoration: 'none' }}>
                         <Negrita py={1} mb={2}>
                             {value.titulo}
                         </Negrita>

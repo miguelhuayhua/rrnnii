@@ -35,24 +35,25 @@ const EventoComponent = ({ Evento, setEvento,
                         <ChipBox sx={{ height: 30, }} label={Evento.estado ? 'Publicado' : 'Sin publicar'} />
                         <ChipBox sx={{ height: 30, bgcolor: Evento.tipo == 'online' ? '#0074b7' : '#09b615', color: 'white', mx: 0, }} label={Evento.tipo == 'online' ? 'Online' : 'Presencial'} />
                     </Stack>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal>
                         {dayjs(Evento.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Evento.titulo}
                     </Negrita>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal>
                         Inicia el: {Evento.inicio}
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <Button
+                        <Button size='sm'
                             appearance="ghost" onClick={() => {
                                 setEvento(Evento);
                             }}>Modificar</Button>
                         {
                             Evento.pdf ?
                                 <Button appearance='primary'
+                                    size='sm'
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Evento.pdf;

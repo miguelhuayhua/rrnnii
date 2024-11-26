@@ -78,7 +78,7 @@ export default function ModalCarrera({ setCarrera, Carrera,
         <>
             <Modal
                 overflow
-                size='md'
+                size='lg'
                 open={!!Carrera}
                 onClose={() => { setCarrera(null) }}
             >

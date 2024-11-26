@@ -35,24 +35,24 @@ const PasantiaComponent = ({ Pasantia, setPasantia,
                     <Stack direction='row' spacing={2} sx={{ mb: 2 }}>
                         <ChipBox sx={{ height: 30, }} label={Pasantia.estado ? 'Publicado' : 'Sin publicar'} />
                     </Stack>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal>
                         {dayjs(Pasantia.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Pasantia.titulo}
                     </Negrita>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal >
                         Termina el: {Pasantia.finalizacion}
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <Button appearance='ghost'
+                        <Button appearance='ghost' size='sm'
                             onClick={() => {
                                 setPasantia(Pasantia);
                             }}>Modificar</Button>
                         {
                             Pasantia.pdf ?
-                                <Button appearance="primary"
+                                <Button appearance="primary" size='sm'
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Pasantia.pdf;

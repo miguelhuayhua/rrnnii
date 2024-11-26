@@ -40,24 +40,25 @@ const ConvenioComponent = ({ Convenio, setConvenio,
                                 {Convenio.tipo == 'nacional' ? 'BO' : Convenio.pais}
                             </Normal>} />
                     </Stack>
-                    <Normal sx={{ fontSize: 12, color: grey[700] }}>
+                    <Normal >
                         {dayjs(Convenio.createdAt).format('DD MMMM YYYY')}
                     </Normal>
                     <Negrita>
                         {Convenio.titulo}
                     </Negrita>
-                    <Normal sx={{ fontSize: 12 }}>
+                    <Normal>
                         Termina el: {Convenio.finalizacion}
                     </Normal>
 
                     <Stack direction='row' sx={{ mt: 2 }} spacing={2} alignItems='center'>
-                        <Button appearance='ghost'
+                        <Button appearance='ghost' size='sm'
                             onClick={() => {
                                 setConvenio(Convenio);
                             }}>Modificar</Button>
                         {
                             Convenio.pdf ?
                                 <Button appearance="primary"
+                                    size='sm'
                                     onClick={() => {
                                         let a = document.createElement('a');
                                         a.download = fileDomain + Convenio.pdf;

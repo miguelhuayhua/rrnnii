@@ -75,7 +75,7 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
         <>
             <Modal
                 overflow
-                size='md'
+                size='lg'
                 open={!!Evento}
                 onClose={() => { setEvento(null) }}
             >

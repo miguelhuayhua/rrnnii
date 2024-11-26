@@ -69,7 +69,7 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
         <>
             <Modal
                 overflow
-                size='md'
+                size='lg'
                 open={!!Noticia}
                 onClose={() => { setNoticia(null) }}
             >

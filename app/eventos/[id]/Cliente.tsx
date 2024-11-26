@@ -1,7 +1,7 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack } from "@mui/material";
-import { Evento } from "@prisma/client";
+import { Box, Breadcrumbs, Grid, Stack } from "@mui/material";
+import { Evento, Unidad } from "@prisma/client";
 import Image from 'next/legacy/image';
 import parse from 'html-react-parser';
 import Link from "next/link";
@@ -9,25 +9,26 @@ import { Icon } from '@iconify/react';
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import EventoItem from "@/app/componentes/items/Evento";
 interface Props { value: Evento; }
 dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
-import { RiFileWord2Line } from "react-icons/ri";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
-import { blue, grey, red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import { fileDomain } from "@/utils/globals";
-import { IoMdCalendar } from "react-icons/io";
 import { Button, Panel } from "rsuite";
 import { compartirEnFacebook, compartirEnlaceEnWhatsApp, compartirEnX } from "@/utils/data";
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [eventos, setEventos] = useState([]);
+    const [unidad, setUnidad] = useState<Partial<Unidad>>();
     useEffect(() => {
         axios.post('/api/evento/listar', { id: value.id, take: 4 }).then(res => {
             setEventos(res.data);
         });
+        axios.post('/api/unidad/x').then(res => {
+            setUnidad(res.data);
+        })
     }, []);
     return (
         <Grid container
@@ -35,7 +36,7 @@ export default function Cliente({ value }: Props) {
             <Grid item xs={12} md={5}>
                 <Zoom>
                     <Image
-                        style={{ filter: 'brightness(0.3)', zIndex: 0 }}
+                        style={{ filter: 'brightness(0.6)', zIndex: 0 }}
                         src={fileDomain + value.imagen}
                         width={100} height={40}
                         layout="responsive" objectFit="cover" />
@@ -100,6 +101,11 @@ export default function Cliente({ value }: Props) {
                         block
                         size='lg'
                         appearance="primary"
+                        onClick={() => {
+                            const encodedMessage = encodeURIComponent('Solicito mayor información sobre el evento: ' + value.titulo);
+                            const whatsappUrl = `https://wa.me/591${unidad?.contacto}?text=${encodedMessage}`;
+                            window.open(whatsappUrl, '_blank');
+                        }}
                         style={{
                             background: grey[900],
                             marginTop: 30,
@@ -120,13 +126,13 @@ export default function Cliente({ value }: Props) {
                         </Button>
                         <Button appearance='link' onClick={() => {
                             compartirEnlaceEnWhatsApp(`https://rrnnii.upea.bo/eventos/${value.id}`,
-                                'Mira esta Beca disponible'
+                                'Mira esta Eventos disponible'
                             )
                         }}>
                             <Icon icon='mage:whatsapp-filled' fontSize={28} />
                         </Button>
                         <Button onClick={() => {
-                            compartirEnX(`https://rrnnii.upea.bo/eventos/${value.id}`, 'Mira esta beca disponible')
+                            compartirEnX(`https://rrnnii.upea.bo/eventos/${value.id}`, 'Mira esta Evento disponible')
                         }} size='xs' appearance='link'>
                             <Icon icon='fa6-brands:x-twitter' fontSize={24} />
                         </Button>
@@ -136,7 +142,7 @@ export default function Cliente({ value }: Props) {
             </Grid>
             <Grid item xs={12} md={7}>
                 <Box
-                    sx={{ fontSize: 17, pl: 2, pr: { xs: 2,  md: 10, lg: 15, xl: 20 } }} position='relative'>
+                    sx={{ fontSize: 17, pl: 2, pr: { xs: 2, md: 10, lg: 15, xl: 20 } }} position='relative'>
                     {
                         value.descripcion ?
                             <Box sx={{

@@ -62,7 +62,7 @@ const Cliente = () => {
                     <Button
                         style={{ marginLeft: 10 }}
                         appearance="subtle" onClick={() => {
-                            router.push('/pasantias')
+                            router.push('/noticias')
                         }}>
                         <Icon fontSize={18} icon="ant-design:reload-outlined" />
                     </Button>
@@ -98,7 +98,7 @@ const Cliente = () => {
                                 sm={10} md={9} lg={8} xl={7} mx='auto'>
                                 <NoticiaItem value={value as any} />
                             </Grid>))
-                        : <Normal m={2}>
+                        : <Normal m={2} textAlign={'center'}>
                             Noticias no encontradas
                         </Normal>
                 }

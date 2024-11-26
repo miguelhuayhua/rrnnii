@@ -11,7 +11,7 @@ export const metadata = {
 }
 export default function Home() {
     return (
-        <Box bgcolor='white'>
+        <>
             <Navbar />
             <Box sx={{ position: 'relative' }}>
                 <Box width={"100%"} position='relative' height={350}>
@@ -63,6 +63,6 @@ export default function Home() {
             <Box mt={10}>
                 <Footer />
             </Box>
-        </Box>
+        </>
     );
 }

@@ -1,10 +1,22 @@
 body {
   margin: 0;
-  background-color: #f4f6f8;
+  position: relative; /* Necesario para que funcione el overlay */
+  background-image: url('/assets/vira.jpg');
+  background-repeat: repeat;
+  background-size: 130px;
 }
 
-
-
+body::before {
+  content: '';
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.975); /* Color blanco semitransparente */
+  pointer-events: none; /* Permite que el contenido sea interactivo */
+  z-index: -1; /* Asegura que la capa quede detrás del contenido */
+}
 .btn-cont {
   border-radius: 50% !important;
   width: 130px;

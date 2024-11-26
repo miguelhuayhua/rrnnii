@@ -125,14 +125,14 @@ export default function Main() {
                             <>
                                 <Stack direction='row' spacing={1} alignItems='center'>
                                     <Button appearance='ghost'
-                                        size='md' style={{ fontSize: 13 }}
+                                        size='sm' style={{ fontSize: 13 }}
                                         onClick={() => { setPersona(value) }}
                                     >
                                         Modificar
                                     </Button>
                                     <Button
                                         appearance='ghost'
-                                        size='md'
+                                        size='sm'
                                         onClick={() => {
                                             setPersonaId(value.id);
                                         }}>

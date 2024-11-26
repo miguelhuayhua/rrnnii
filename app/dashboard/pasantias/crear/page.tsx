@@ -54,6 +54,7 @@ export default function Page() {
         form.append('pdf', pasantia.pdf);
         form.append('descripcion', pasantia.descripcion);
         form.append('portada', portada);
+        form.append('descripcioncorta', pasantia.descripcionCorta);
         form.append('documento', documento[0].blobFile);
         form.append('modalidad', pasantia.modalidad);
         form.append('finalizacion', pasantia.finalizacion!);

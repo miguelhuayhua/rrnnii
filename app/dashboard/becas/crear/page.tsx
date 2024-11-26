@@ -27,6 +27,7 @@ import { paises } from "@/utils/globals";
 import { Button, Panel, Uploader, Text, Form, Input, DatePicker, AutoComplete, SelectPicker } from "rsuite";
 import dayjs from "dayjs";
 import { red } from "@mui/material/colors";
+import { toUpperCase } from "@/utils/data";
 export default function Page() {
     const { control, handleSubmit, setValue, watch } = useForm<Beca & { Institucion: Institucion }>({
         defaultValues: { titulo: '', descripcion: '', tipo: 'nacional' }, shouldFocusError: true
@@ -62,6 +63,7 @@ export default function Page() {
             form.append('portada', portada);
             form.append('documento', documento[0].blobFile);
             form.append('continente', beca.continente);
+            form.append('descripcioncorta', beca.descripcionCorta);
             form.append('pais', beca.pais);
             form.append('tipo', beca.tipo);
             form.append('institucion', beca.Institucion.nombre)
@@ -163,10 +165,26 @@ export default function Page() {
                                         render={({ field, fieldState }) => (
                                             <Form.Group style={{ marginBottom: 10 }}>
                                                 <Form.ControlLabel>Título del convenio</Form.ControlLabel>
-                                                <Input {...field} size='lg' />
+                                                <Input {...field} size='lg'
+                                                    onChange={text => field.onChange(toUpperCase(text))} />
                                                 <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                                     {fieldState.error?.message}
                                                 </Form.ErrorMessage>
+                                            </Form.Group>
+                                        )}
+                                    />
+                                    <Controller
+                                        name="descripcionCorta"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                                <Input {...field}
+                                                    multiple
+                                                    style={{ maxHeight: 200 }}
+                                                    as='textarea'
+                                                    rows={3}
+                                                    size='lg' />
                                             </Form.Group>
                                         )}
                                     />

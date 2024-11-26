@@ -18,7 +18,7 @@ dayjs.extend(require('dayjs/plugin/customParseFormat'));
 import 'dayjs/locale/es';
 import { grey, red } from "@mui/material/colors";
 import { fileDomain, paises } from "@/utils/globals";
-import { Button, Panel, Placeholder, Tabs } from "rsuite";
+import { Button, Panel, Tabs } from "rsuite";
 import ModalInscribir from "./ModalInscribit";
 import { compartirEnFacebook, compartirEnlaceEnWhatsApp, compartirEnX } from "@/utils/data";
 dayjs.locale('es');
@@ -121,7 +121,9 @@ export default function Cliente({ value }: Props) {
                                 size='lg' style={{ background: grey[900] }}>
                                 Solicitar participación
                             </Button>
-                            <Link href={`https://wa.me/${value.Institucion.contacto}`}>
+                            <Link
+                                target='_blank'
+                                href={`https://wa.me/${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}`}>
                                 <Button block
                                     appearance="primary" size='lg'>
                                     Contactarme
@@ -129,33 +131,32 @@ export default function Cliente({ value }: Props) {
                             </Link>
                         </Stack>
 
-                        <Stack mt={4} spacing={0.1} direction='row'
-                            height="100%"
+                        <Stack spacing={0.1} direction='row'
+                            height="100%" mt={4}
                             alignItems='center' justifyContent='center'>
                             <Normal>
                                 Compartir:
                             </Normal>
                             <Button style={{ display: 'flex', alignItems: 'center' }}
                                 onClick={() => {
-                                    compartirEnFacebook(`https://rrnnii.upea.bo`);
+                                    compartirEnFacebook(`https://rrnnii.upea.bo/becas/${value.id}`);
                                 }}
                                 size='xs' appearance='link'>
                                 <Icon icon='ic:outline-facebook' fontSize={20} />
                             </Button>
                             <Button appearance='link' onClick={() => {
-                                compartirEnlaceEnWhatsApp('https://rrnnii.upea.bo',
+                                compartirEnlaceEnWhatsApp(`https://rrnnii.upea.bo/becas/${value.id}`,
                                     'Mira esta Beca disponible'
                                 )
                             }}>
                                 <Icon icon='mage:whatsapp-filled' fontSize={20} />
                             </Button>
                             <Button onClick={() => {
-                                compartirEnX('https://rrnnii.upea.bo', 'Mira esta beca disponible')
+                                compartirEnX(`https://rrnnii.upea.bo/becas/${value.id}`, 'Mira esta Beca disponible')
                             }} size='xs' appearance='link'>
-                                <Icon icon='fa6-brands:x-twitter' fontSize={18} />
+                                <Icon icon='fa6-brands:x-twitter' fontSize={16} />
                             </Button>
                         </Stack>
-
                     </Box>
                 </Grid>
 
@@ -383,7 +384,7 @@ export default function Cliente({ value }: Props) {
                     {
                         becas.length == 0 ?
                             <Grid item xs={12} >
-                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más Becas disponibles</Normal>
+                                <Normal sx={{ textAlign: 'center', pb: 4 }}>No se encontraron más Becas disponibles</Normal>
                             </Grid> :
                             becas.map((value: any) => (
                                 <Grid key={value.id} item xs={12} my={2}>
@@ -417,10 +418,14 @@ export default function Cliente({ value }: Props) {
                         </Button>
                     </Grid>
                     <Grid item xs={6} sm={4}>
-                        <Button appearance="primary" block size='lg'
-                            style={{ borderRadius: 0 }}>
-                            Contactarme
-                        </Button>
+                        <Link style={{ borderRadius: 0 }}
+                            target='_blank'
+                            href={`https://wa.me/${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}`}>
+                            <Button block style={{ borderRadius: 0 }}
+                                appearance="primary" size='lg'>
+                                Contactarme
+                            </Button>
+                        </Link>
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <Stack spacing={0.1} direction='row'
@@ -431,22 +436,22 @@ export default function Cliente({ value }: Props) {
                             </Normal>
                             <Button style={{ display: 'flex', alignItems: 'center' }}
                                 onClick={() => {
-                                    compartirEnFacebook(`https://rrnnii.upea.bo`);
+                                    compartirEnFacebook(`https://rrnnii.upea.bo/becas/${value.id}`);
                                 }}
                                 size='xs' appearance='link'>
                                 <Icon icon='ic:outline-facebook' fontSize={20} />
                             </Button>
                             <Button appearance='link' onClick={() => {
-                                compartirEnlaceEnWhatsApp('https://rrnnii.upea.bo',
+                                compartirEnlaceEnWhatsApp(`https://rrnnii.upea.bo/becas/${value.id}`,
                                     'Mira esta Beca disponible'
                                 )
                             }}>
                                 <Icon icon='mage:whatsapp-filled' fontSize={20} />
                             </Button>
                             <Button onClick={() => {
-                                compartirEnX('https://rrnnii.upea.bo', 'Mira esta beca disponible')
+                                compartirEnX(`https://rrnnii.upea.bo/becas/${value.id}`, 'Mira esta Beca disponible')
                             }} size='xs' appearance='link'>
-                                <Icon icon='fa6-brands:x-twitter' fontSize={18} />
+                                <Icon icon='fa6-brands:x-twitter' fontSize={16} />
                             </Button>
 
                         </Stack>
