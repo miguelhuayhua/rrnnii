@@ -21,56 +21,59 @@ model Usuario {
 }
 
 model Convenio {
-  id              String            @id @default(dbgenerated("generate_object_id()"))
-  titulo          String            @default("")
-  finalizacion    String?           @default("")
-  createdAt       DateTime          @default(now())
-  estado          Boolean           @default(true)
-  tipo            String            @default("nacional")
-  descripcion     String            @default("")
-  pdf             String            @default("")
-  imagen          String            @default("")
-  institucionId   String            @default("")
-  pais            String            @default("")
-  continente      String            @default("")
-  Institucion     Institucion?      @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  ConvenioCarrera ConvenioCarrera[]
-  conteo          Int               @default(1)
+  id               String            @id @default(dbgenerated("generate_object_id()"))
+  titulo           String            @default("")
+  finalizacion     String?           @default("")
+  createdAt        DateTime          @default(now())
+  estado           Boolean           @default(true)
+  tipo             String            @default("nacional")
+  descripcion      String            @default("")
+  descripcionCorta String            @default("")
+  pdf              String            @default("")
+  imagen           String            @default("")
+  institucionId    String            @default("")
+  pais             String            @default("")
+  continente       String            @default("")
+  Institucion      Institucion?      @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ConvenioCarrera  ConvenioCarrera[]
+  conteo           Int               @default(1)
 }
 
 model Pasantia {
-  id              String            @id @default(dbgenerated("generate_object_id()"))
-  titulo          String            @default("")
-  finalizacion    String?           @default("")
-  createdAt       DateTime          @default(now())
-  modalidad       String            @default("")
-  descripcion     String            @default("")
-  pdf             String            @default("")
-  estado          Boolean           @default(true)
-  imagen          String            @default("")
-  institucionId   String?           @default("")
-  Institucion     Institucion?      @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  PasantiaCarrera PasantiaCarrera[]
-  conteo          Int               @default(1)
+  id               String            @id @default(dbgenerated("generate_object_id()"))
+  titulo           String            @default("")
+  finalizacion     String?           @default("")
+  createdAt        DateTime          @default(now())
+  modalidad        String            @default("")
+  descripcion      String            @default("")
+  descripcionCorta String            @default("")
+  pdf              String            @default("")
+  estado           Boolean           @default(true)
+  imagen           String            @default("")
+  institucionId    String?           @default("")
+  Institucion      Institucion?      @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  PasantiaCarrera  PasantiaCarrera[]
+  conteo           Int               @default(1)
 }
 
 model Beca {
-  id            String             @id @default(dbgenerated("generate_object_id()"))
-  titulo        String             @default("")
-  createdAt     DateTime           @default(now())
-  descripcion   String             @default("")
-  pdf           String             @default("")
-  termina       String             @default("")
-  estado        Boolean            @default(true)
-  imagen        String             @default("")
-  encargado     String             @default("")
-  pais          String             @default("")
-  continente    String             @default("")
-  Participantes ParticipanteBeca[]
-  tipo          String             @default("nacional")
-  institucionId String?            @default("")
-  Institucion   Institucion?       @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  conteo        Int                @default(1)
+  id               String             @id @default(dbgenerated("generate_object_id()"))
+  titulo           String             @default("")
+  createdAt        DateTime           @default(now())
+  descripcion      String             @default("")
+  descripcionCorta String             @default("")
+  pdf              String             @default("")
+  termina          String             @default("")
+  estado           Boolean            @default(true)
+  imagen           String             @default("")
+  encargado        String             @default("")
+  pais             String             @default("")
+  continente       String             @default("")
+  Participantes    ParticipanteBeca[]
+  tipo             String             @default("nacional")
+  institucionId    String?            @default("")
+  Institucion      Institucion?       @relation(fields: [institucionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  conteo           Int                @default(1)
 }
 
 model ParticipanteBeca {
@@ -94,6 +97,7 @@ model Evento {
   createdAt   DateTime @default(now())
   inicio      String   @default("")
   descripcion String   @default("")
+  ubicacion   String?  @default("")
   pdf         String   @default("")
   tipo        String   @default("")
   link        String?  @default("")
@@ -168,6 +172,10 @@ model Unidad {
   contacto  String @default("")
   email     String @default("")
   ubicacion String @default("")
+  facebook  String @default("")
+  youtube   String @default("")
+  x         String @default("")
+  instagram String @default("")
 }
 
 model Persona {

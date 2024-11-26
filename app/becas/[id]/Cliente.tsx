@@ -154,7 +154,6 @@ export default function Cliente({ value }: Props) {
                             }} size='xs' appearance='link'>
                                 <Icon icon='fa6-brands:x-twitter' fontSize={18} />
                             </Button>
-
                         </Stack>
 
                     </Box>

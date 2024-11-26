@@ -1,21 +1,22 @@
 'use client';
-import { Badge, CircularProgress, Grid, } from "@mui/material";
+import { Badge, Box, CircularProgress, Grid, Stack, } from "@mui/material";
 import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
 import { FiFilter } from "react-icons/fi";
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Noticia } from "@prisma/client";
-import { Normal } from "../componentes/Textos";
+import { Negrita, Normal } from "../componentes/Textos";
 import NoticiaItem from "../componentes/items/Noticia";
-
+import { Icon } from '@iconify/react';
 import Filtros from "./Filtros";
-import { Button, Input, InputGroup } from "rsuite";
+import { Button, Input, InputGroup, SelectPicker } from "rsuite";
 import { IoSearch } from "react-icons/io5";
+import { grey, red } from "@mui/material/colors";
 const Cliente = () => {
-    const [open, setOpen] = useState(false);
     const [skip, setSkip] = useState(0);
     const [load, setLoad] = useState(true);
+    const router = useRouter();
     const params = useSearchParams();
     const [Noticias, setNoticias] = useState<Noticia[]>([]);
     const [NoticiasMain, setNoticiasMain] = useState<Noticia[]>([]);
@@ -31,73 +32,103 @@ const Cliente = () => {
     }, [params]);
     return (
         <>
-            <div className="gradient-wrap">
-                <div className="meshgradient">
-                    <div className="color c1"></div>
-                    <div className="color c2"></div>
-                    <div className="color c3"></div>
-                    <div className="color c4"></div>
-                </div>
-            </div>
-            <Grid container spacing={2}>
-                <Grid item xs={12} display='flex' justifyContent='space-between'>
-                    <InputGroup style={{ maxWidth: 300, marginBottom: 20 }} >
-                        <Input style={{ fontFamily: 'inherit' }}
-                            placeholder="Buscar noticias"
-                            onChange={text => {
-                                setNoticias(NoticiasMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
-                            }} />
-                        <InputGroup.Addon style={{ background: 'white' }}>
-                            <IoSearch fontSize={28} />
-                        </InputGroup.Addon>
-                    </InputGroup>
-                    <Badge invisible={!(
-                        params.has('s'))}
-                        color="primary"
-                        variant="dot">
-                        <Button appearance='primary' style={{ background: '#212121', height: 48 }} size='sm'
-                            onClick={() => { setOpen(true); }} >
-                            Filtros <FiFilter fontSize={22} style={{ marginLeft: 10 }} />
-                        </Button>
-                    </Badge>
+            <InputGroup style={{
+                position: 'absolute', top: 170, right: 0, left: 0,
+                margin: '0 auto',
+                width: "60%", maxWidth: 500
+            }} >
+                <Input style={{ fontFamily: 'inherit' }}
+                    placeholder="Buscar noticias"
+                    size="lg"
+                    onChange={text => {
+                        setNoticias(NoticiasMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
+                    }} />
+                <InputGroup.Addon>
+                    <IoSearch fontSize={20} />
+                </InputGroup.Addon>
+            </InputGroup>
+            <Box py={{ xs: 1, sm: 2 }}
+                sx={{
+                    px: { xs: 1, sm: 5, md: 20, lg: 40, xl: 50 },
+                    background: grey[100],
+                    position: 'sticky',
+                    top: 65, zIndex: 1,
+                    borderBottom: '1px solid #ddd'
+                }}>
+                <Stack direction='row' alignItems='center' >
+                    <Negrita fontSize={18}>
+                        Filtrar Noticias
+                    </Negrita>
+                    <Button
+                        style={{ marginLeft: 10 }}
+                        appearance="subtle" onClick={() => {
+                            router.push('/pasantias')
+                        }}>
+                        <Icon fontSize={18} icon="ant-design:reload-outlined" />
+                    </Button>
+                </Stack>
+                <Grid container spacing={1} mt={0.5} >
+                    <Grid item xs={6} mx='auto'>
+                        <SelectPicker
+                            searchable={false}
+                            data={[{ label: 'Más antiguos', value: '1' }, { label: 'Más recientes', value: '0' }]}
+                            size={'lg'}
+                            cleanable={false}
+                            value={params.get('s')}
+                            placeholder='Orden'
+                            labelKey="label"
+                            valueKey="value"
+                            style={{
+                                width: "100%",
+                                marginBottom: 10
+                            }}
+                            onChange={orden => {
+                                router.replace(`/noticias?s=${orden}`)
+                            }}
+                        />
+                    </Grid>
                 </Grid>
+            </Box>
+            <Grid container spacing={2}
+                my={4}>
                 {
                     Noticias.length > 0 ?
                         Noticias.map(value => (
-                            <Grid key={value.id} item xs={12} mx='auto'>
+                            <Grid key={value.id} item xs={11}
+                                sm={10} md={9} lg={8} xl={7} mx='auto'>
                                 <NoticiaItem value={value as any} />
                             </Grid>))
                         : <Normal m={2}>
-                            Noticias no encontrados
+                            Noticias no encontradas
                         </Normal>
                 }
-                <Grid xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <BotonOutline
-                        disabled={load}
-                        onClick={() => {
-                            setLoad(true);
-                            axios.post('/api/noticia/listar',
-                                {
-                                    skip
-                                }).then(res => {
-                                    setNoticias(prev => ([...prev, ...res.data]));
-                                    setNoticiasMain(prev => ([...prev, ...res.data]));
-                                    setLoad(false)
-                                    setSkip(prev => prev + 1);
-                                })
-                        }}
-                        sx={{ mt: 4, fontSize: 13 }}>
-                        Cargas más
-                        {
-                            load ? <CircularProgress
-                                size='20px' sx={{ ml: 1 }} /> : null
-                        }
-                    </BotonOutline>
-                </Grid>
+
             </Grid>
-            <Suspense>
-                <Filtros setOpen={setOpen} open={open} />
-            </Suspense>
+            <Button
+                disabled={load}
+                loading={load}
+                appearance="primary"
+                style={{
+                    background: red[700],
+                    display: 'block',
+                    margin: '40px auto'
+                }}
+                onClick={() => {
+                    setLoad(true);
+                    axios.post('/api/noticia/listar',
+                        {
+                            skip, orden
+                        }).then(res => {
+                            setNoticias(prev => ([...prev, ...res.data]));
+                            setNoticiasMain(prev => ([...prev, ...res.data]));
+                            setLoad(false)
+                            setSkip(prev => prev + 1);
+                        })
+                }}
+            >
+                Cargas más
+
+            </Button>
         </>
     )
 }

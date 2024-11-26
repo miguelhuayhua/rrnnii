@@ -20,6 +20,8 @@ import { RiHome5Line } from 'react-icons/ri';
 import { GrGroup } from 'react-icons/gr';
 import { MdOutlineHandshake } from 'react-icons/md';
 import { Button } from 'rsuite';
+import { Unidad } from '@prisma/client';
+import axios from 'axios';
 //estilos
 const Navbar = () => {
     const pathname = usePathname();
@@ -33,6 +35,7 @@ const Navbar = () => {
         setY(scrollY)
 
     }, []);
+    const [unidad, setUnidad] = useState<Partial<Unidad>>();
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [open3, setOpen3] = useState(false);
@@ -43,29 +46,49 @@ const Navbar = () => {
             window.removeEventListener("scroll", onScroll);
         }
     }, []);
+    useEffect(() => {
+        axios.post('/api/unidad/x').then(res => {
+            setUnidad(res.data);
+        })
+    }, []);
     return (
         <>
             {
                 pathname.endsWith('/') ? null :
                     <Box bgcolor='white' borderBottom='1px solid #ddd' zIndex={1001}>
                         <Stack spacing={0.5} direction='row'>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='ic:outline-facebook' style={{ marginLeft: 10 }} fontSize={20} />
-                            </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='basil:instagram-solid' fontSize={20}
-                                    style={{ marginLeft: 10 }} />
-                            </Button>
-                            <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                <Icon icon='mdi:youtube' fontSize={20}
-                                    style={{ marginLeft: 10 }} />
-                            </Button>
-                            <Button appearance='link'>
-                                <Icon
-                                    color={green[600]}
-                                    icon='mage:whatsapp-filled' fontSize={20}
-                                />
-                            </Button>
+                            {
+                                unidad?.facebook ?
+                                    <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                        <Icon icon='ic:outline-facebook' style={{ marginLeft: 10 }} fontSize={20} />
+                                    </Button> : null
+                            }
+                            {
+                                unidad?.instagram ?
+                                    <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                        <Icon icon='basil:instagram-solid' fontSize={20}
+                                            style={{ marginLeft: 10 }} />
+                                    </Button> : null
+                            }
+                            {
+                                unidad?.instagram ?
+                                    <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
+                                        <Icon icon='mdi:youtube' fontSize={20}
+                                            style={{ marginLeft: 10 }} />
+                                    </Button> : null
+                            }
+                            {
+                                unidad?.contacto ?
+                                    <Button onClick={() => {
+                                        const whatsappUrl = `https://wa.me/591${unidad.contacto}`;
+                                        window.open(whatsappUrl, '_blank');
+                                    }} appearance='link'>
+                                        <Icon
+                                            icon='mage:whatsapp-filled' fontSize={20}
+                                        />
+                                    </Button>
+                                    : null
+                            }
                         </Stack>
                     </Box>
             }
@@ -239,7 +262,7 @@ const Navbar = () => {
                             Iniciar sesión
                         </Button>
 
-                        <BotonSimple sx={{ display: { xs: 'block', md: 'none' }, height: 36, color: 'white', background: pathname.endsWith('/') ? trigger ? [900] : "#00000033" : grey[900], backdropFilter: 'blur(6px)', position: 'relative', left: 10 }} onClick={() => {
+                        <BotonSimple sx={{ display: { xs: 'block', md: 'none' }, height: 36, color: 'white', background: grey[900], backdropFilter: 'blur(6px)', position: 'relative', left: 10 }} onClick={() => {
                             setOpen(true);
                         }}>
                             <HiOutlineBars3BottomLeft fontSize={24} />

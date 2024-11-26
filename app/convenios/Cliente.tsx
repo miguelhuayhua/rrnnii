@@ -1,6 +1,5 @@
 'use client';
-import { CircularProgress, Grid, Box, Stack, useMediaQuery, useTheme } from "@mui/material";
-import { BotonOutline } from "../componentes/Botones";
+import { Grid, Box, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { Icon } from '@iconify/react';
 import ConvenioItem from "../componentes/items/Convenio";
 import { Suspense, useEffect, useState } from "react";

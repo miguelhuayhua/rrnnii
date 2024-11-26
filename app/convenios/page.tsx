@@ -1,11 +1,13 @@
 import Navbar from '../static/Navbar';
-import { Box, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Typography } from "@mui/material";
 import Footer from '../static/Footer';
 import { Suspense } from 'react';
 import Cliente from './Cliente';
 import '@/app/globals.scss';
 import Image from 'next/legacy/image';
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { Icon } from '@iconify/react';
 export const metadata: Metadata = {
     title: 'UPEA - Convenios'
 }
@@ -14,8 +16,22 @@ export default function Home() {
         <Box bgcolor='white'>
             <Navbar />
             <Box sx={{ position: 'relative' }}>
-                <Box width={"100%"} position='relative' height={300}>
+                <Box width={"100%"} position='relative' height={350}>
                     <Image style={{ filter: 'brightness(.7)' }} src='/assets/portadabeca.jpg' layout='fill' objectFit='cover' />
+                    <Breadcrumbs
+                        color="white" sx={{
+                            position: 'absolute', bottom: 10,
+                            color: 'white',
+                            width: "100%", display: 'flex',
+                            justifyContent: 'center'
+                        }} separator="＞" aria-label="breadcrumb">
+                        <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/" >
+                            <Icon icon='lucide:home' style={{ marginTop: 7 }} />
+                        </Link>,
+                        <Link style={{ textDecoration: 'none', color: 'white', fontSize: 13 }} href="/convenios" >
+                            Convenios
+                        </Link>
+                    </Breadcrumbs>
                 </Box>
                 <Box >
                     <Typography
@@ -32,7 +48,7 @@ export default function Home() {
                     </Typography>
                     <Typography
                         sx={{
-                            color: '#bbb',
+                            color: 'white',
                             position: 'absolute', top: 70,
                             width: "100%",
                             textAlign: 'center',

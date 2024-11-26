@@ -5,13 +5,19 @@ const POST = async (request: NextRequest) => {
     const token = await getToken({ secret: process.env.NEXTAUTH_SECRET as string, req: request });
     if (token?.name) {
         try {
-            const { contacto, email, ubicacion } = await request.json();
+            const { contacto, email, ubicacion,
+                x, facebook, instagram, youtube
+            } = await request.json();
             await prisma.unidad.update({
                 where: { id: 'rrnnii' },
                 data: {
                     contacto,
                     email,
-                    ubicacion
+                    ubicacion,
+                    x,
+                    facebook,
+                    instagram,
+                    youtube
                 }
             })
             return Response.json({ error: false, mensaje: `Unidad modificada con éxito` });

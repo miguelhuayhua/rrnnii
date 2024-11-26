@@ -1,11 +1,10 @@
 'use client';
-import { Box, Divider, Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { CiSearch } from "react-icons/ci";
 import Footer from "./static/Footer";
-import Link from 'next/link';
 import CountUp from 'react-countup';
 import { Negrita, Normal, Titulo } from "./componentes/Textos";
-import { BotonOutline, BotonFilled, BotonSimple } from "./componentes/Botones";
+import { BotonOutline } from "./componentes/Botones";
 import EventoItem from "./componentes/items/Evento";
 import { BsWhatsapp } from "react-icons/bs";
 import { useCallback, useEffect, useState } from "react";
@@ -19,6 +18,10 @@ import Imagen from 'next/legacy/image';
 import { MdPhone } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { fileDomain } from "@/utils/globals";
+import dayjs from 'dayjs';
+import plugin from 'dayjs/plugin/customParseFormat';
+import { Button } from "rsuite";
+dayjs.extend(plugin);
 const Cliente = () => {
     const theme = useTheme();
     const downsm = useMediaQuery(theme.breakpoints.down('md'));
@@ -68,22 +71,28 @@ const Cliente = () => {
                             </span>
                         </Titulo>
                         <Normal sx={{ fontSize: 17, pt: 14 }}>
-                            Descubre los convenios y ofertas disponibles para toda la comunidad universitaria.
-                            Explora nuestra publicaciones y contáctanos para mayor información.
+                            Descubre los convenios y ofertas disponibles para toda la comunidad universitaria y
+                            explora nuestras publicaciones
                         </Normal>
                         <Stack direction='row' spacing={2} justifyContent='center' my={4}>
-                            <Link style={{ textDecoration: 'none' }} href='/convenios'>
-                                <BotonFilled sx={{ height: 40 }} endIcon={<FaAngleRight />}>
-                                    Ver convenios
-                                </BotonFilled>
-                            </Link>
-                            <Link
-                                href={`https://wa.me/591${count.contacto}`}
-                            >
-                                <BotonSimple endIcon={<MdPhone />}>
-                                    Contactarnos
-                                </BotonSimple>
-                            </Link>
+                            <Button
+                                appearance='primary' style={{ background: grey[900] }}
+                                onClick={() => {
+                                    router.push('/convenios')
+                                }}
+                                size='lg' endIcon={<FaAngleRight />}>
+                                Ver convenios
+                            </Button>
+                            <Button
+                                size='lg'
+                                appearance='subtle'
+                                onClick={() => {
+                                    const encodedMessage = encodeURIComponent('Solicito mayor información sobre la unidad');
+                                    const whatsappUrl = `https://wa.me/591${count.contacto}?text=${encodedMessage}`;
+                                    window.open(whatsappUrl, '_blank');
+                                }} endIcon={<MdPhone />}>
+                                Contactarnos
+                            </Button>
                         </Stack>
                     </Box>
                 </Grid>
@@ -187,7 +196,7 @@ const Cliente = () => {
                 <Grid container spacing={2} px={{ xs: 1, sm: 10, md: 1, lg: 5, xl: 20 }} py={4}>
                     {
                         Eventos.map(value => (
-                            <Grid item xs={6} md={3} key={value.id}>
+                            <Grid item xs={12} key={value.id}>
                                 <EventoItem value={value} />
                             </Grid>))
                     }
@@ -208,11 +217,14 @@ const Cliente = () => {
                     <Normal sx={{ pb: 3 }}>
                         Explora los convenios vigentes que tiene la Unidad de Relaciones Internacionales con instituciones extranjeras o nacionales con la Universidad Pública de El Alto.
                     </Normal>
-                    <BotonOutline onClick={() => {
-                        router.push('/convenios')
-                    }} startIcon={<CiSearch />}>
+                    <Button
+                        size='lg'
+                        appearance='ghost'
+                        onClick={() => {
+                            router.push('/convenios')
+                        }} startIcon={<CiSearch />}>
                         Explorar Convenios
-                    </BotonOutline>
+                    </Button>
                 </Grid>
                 <Grid item xs={6}>
                     <Negrita textAlign='end'>
@@ -224,11 +236,14 @@ const Cliente = () => {
                     <Normal sx={{ textAlign: 'end', pb: 3 }}>
                         Las becas te ayudarán en oportunidades económicas para fortalecer el nivel intelectual que puedes adquirir mediante las afiliaciones firmadas con nuestra Universidad.
                     </Normal>
-                    <BotonOutline onClick={() => {
-                        router.push('/becas')
-                    }} startIcon={<CiSearch />} sx={{ float: 'right' }}>
+                    <Button
+                        appearance='ghost' size='lg'
+                        onClick={() => {
+                            router.push('/becas')
+                        }} startIcon={<CiSearch />}
+                        style={{ float: 'right' }}>
                         Explorar Becas
-                    </BotonOutline>
+                    </Button>
                 </Grid>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }} pt={5}>
                     <Imagen alt="" width={100} height={60} src='/gorro.png' layout='responsive' />
@@ -254,9 +269,21 @@ const Cliente = () => {
                 <Titulo sx={{ textAlign: 'center', fontSize: { xs: 18, md: 22 }, py: 3 }}>
                     ¿Tienes dudas?
                 </Titulo>
-                <BotonFilled sx={{ display: 'flex', mx: 'auto', bgcolor: blue[600], px: 2 }} startIcon={<BsWhatsapp style={{ fontSize: 20 }} />}>
+                <Button
+                    onClick={() => {
+                        const encodedMessage = encodeURIComponent('Solicito mayor información sobre la unidad');
+                        const whatsappUrl = `https://wa.me/591${count.contacto}?text=${encodedMessage}`;
+                        window.open(whatsappUrl, '_blank');
+                    }}
+                    size='lg'
+                    appearance='primary'
+                    style={{
+                        display: 'flex',
+                        margin: 'auto',
+                        background: grey[900],
+                    }} startIcon={<BsWhatsapp style={{ fontSize: 20 }} />}>
                     Contactanos
-                </BotonFilled>
+                </Button>
             </Box>
             <Footer />
         </>

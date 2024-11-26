@@ -12,7 +12,7 @@ import { IoSearch } from "react-icons/io5";
 import { grey, red } from "@mui/material/colors";
 import plugin from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
-dayjs.extend(plugin)
+dayjs.extend(plugin);
 const Cliente = () => {
     const params = useSearchParams();
     const [Eventos, setEventos] = useState<Evento[]>([]);

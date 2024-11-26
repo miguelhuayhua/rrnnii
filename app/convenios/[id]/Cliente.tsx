@@ -281,7 +281,11 @@ export default function Cliente({ value }: Props) {
                                         objectFit="contain"
                                         style={{ opacity: 0.1 }}
                                         src={'/assets/' + (value.continente == 'NA' ?
-                                            'america-norte.png' : '')
+                                            'america-norte.png' :
+                                            value.continente == 'SA' ? 'america-sur.png' :
+                                                value.continente == 'AF' ? 'africa.png' :
+                                                    value.continente == 'OC' ? 'oceania.png' :
+                                                        value.continente == 'AS' ? 'asia.png' : '')
                                         } />
                                     <Stack alignItems='center'>
                                         <Icon fontSize={40}
@@ -341,7 +345,7 @@ export default function Cliente({ value }: Props) {
                     {
                         convenios.length == 0 ?
                             <Grid item xs={12} >
-                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenio disponibles</Normal>
+                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenios disponibles</Normal>
                             </Grid> :
                             convenios.map((value: Convenio) => (
                                 <Grid key={value.id} item xs={12} my={2}>
@@ -364,7 +368,6 @@ export default function Cliente({ value }: Props) {
                 zIndex: 100
             }}>
                 <Grid container>
-
                     <Grid item xs={6}>
                         <Button appearance="primary" block size='lg'
                             style={{ borderRadius: 0 }}>

@@ -32,7 +32,7 @@ const Footer = () => {
                     </Box>
                     <Box display="flex" alignItems="center" mb={1}>
                         <Icon icon='mage:email' fontSize={20} />
-                        <Normal sx={{ ml: 1 }}>Correo: relaciones.internacionales@upea.bo</Normal>
+                        <Normal sx={{ ml: 1 }}>Correo: relaciones.internacionales@upea.bo | {unidad?.email}</Normal>
                     </Box>
                     <Box display="flex" alignItems="center" mb={1}>
                         <Icon icon='mynaui:location' fontSize={20} />

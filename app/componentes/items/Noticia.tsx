@@ -21,7 +21,7 @@ const NoticiaItem = ({ value }: Props) => {
             <Grid container>
                 <Grid item xs={8} mx='auto' sm={4} md={3}>
                     <Zoom>
-                        <Image style={{ zIndex: 20, borderRadius: 10 }}
+                        <Image style={{ borderRadius: 10 }}
                             src={fileDomain + value.imagen}
                             width={100} height={100}
                             layout="responsive" objectFit="cover" />
