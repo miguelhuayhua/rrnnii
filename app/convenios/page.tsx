@@ -9,7 +9,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Icon } from '@iconify/react';
 export const metadata: Metadata = {
-    title: 'UPEA - Convenios'
+    title: 'Buscar Convenios - UPEA'
 }
 export default function Home() {
     return (

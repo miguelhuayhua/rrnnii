@@ -1,6 +1,6 @@
 'use client';
-import { Badge, Box, Grid, useMediaQuery, useTheme, } from "@mui/material";
-import { Suspense, useEffect, useState } from "react";
+import { Box, Grid, useMediaQuery, useTheme, } from "@mui/material";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Beca } from "@prisma/client";
@@ -10,11 +10,9 @@ import { Negrita, Normal } from "@/app/componentes/Textos";
 import { Button, Input, InputGroup, SelectPicker, Stack } from "rsuite";
 import { IoSearch } from "react-icons/io5";
 import { grey, red } from "@mui/material/colors";
-import { continentes, fileDomain } from "@/utils/globals";
-import Filtros from "./Filtros";
+import { continentes } from "@/utils/globals";
 import { Icon } from '@iconify/react';
 const Cliente = () => {
-    const [open, setOpen] = useState(false);
     const [Becas, setBecas] = useState<Beca[]>([]);
     const [BecasMain, setBecasMain] = useState<Beca[]>([]);
     const params = useSearchParams();
@@ -40,21 +38,28 @@ const Cliente = () => {
     }, [params]);
     return (
         <>
-            <InputGroup style={{
-                position: 'absolute', top: 230, right: 0, left: 0,
-                margin: '0 auto',
-                width: "60%", maxWidth: 500
-            }} >
-                <Input style={{ fontFamily: 'inherit' }}
+            <InputGroup
+                style={{
+                    position: 'absolute', top: 230, right: 0, left: 0,
+                    margin: '0 auto',
+                    width: "60%", maxWidth: 500
+                }}
+                aria-label="Barra de búsqueda de becas"  // Añadir label para la barra de búsqueda
+            >
+                <Input
+                    style={{ fontFamily: 'inherit' }}
                     placeholder="Buscar becas"
                     size="lg"
                     onChange={text => {
                         setBecas(BecasMain.filter(value => value.titulo.toLowerCase().includes(text.toLowerCase())))
-                    }} />
+                    }}
+                    aria-label="Buscar becas por título"  
+                />
                 <InputGroup.Addon>
-                    <IoSearch fontSize={20} />
+                    <IoSearch fontSize={20} aria-label="Icono de búsqueda" />  
                 </InputGroup.Addon>
             </InputGroup>
+
             <Box py={{ xs: 0, sm: 2 }}
                 sx={{
                     px: { xs: 1, sm: 5, md: 20, lg: 40, xl: 50 },
@@ -62,18 +67,24 @@ const Cliente = () => {
                     position: 'sticky',
                     top: 65, zIndex: 1,
                     borderBottom: '1px solid #ddd'
-                }}>
-                <Stack >
-                    <Negrita fontSize={18}>
+                }}
+                role="region" aria-labelledby="filter-section"  // Definir el área como un bloque accesible
+            >
+                <Stack>
+                    <Negrita fontSize={18} id="filter-section">
                         Filtrar Becas
                     </Negrita>
-                    <Button appearance="subtle" onClick={() => {
-                        router.push('/becas')
-                    }}>
-                        <Icon fontSize={20} icon="ant-design:reload-outlined" />
+                    <Button
+                        appearance="subtle"
+                        onClick={() => {
+                            router.push('/becas')
+                        }}
+                        aria-label="Recargar filtros de becas"
+                    >
+                        <Icon fontSize={20} icon="ant-design:reload-outlined" aria-hidden="true" />  
                     </Button>
                 </Stack>
-                <Grid container spacing={1} mt={0.5} >
+                <Grid container spacing={1} mt={0.5}>
                     <Grid item xs={6} sm={4} mx='auto'>
                         <SelectPicker
                             data={continentes}
@@ -90,13 +101,17 @@ const Cliente = () => {
                             onChange={pais => {
                                 router.replace(`/becas?co=${pais}${params.has('s') ? '&s=' + params.get('s') : ''}${params.has('t') ? '&t=' + params.get('t') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
                             }}
+                            aria-label="Seleccionar continente"  // Añadir aria-label al selector
                             renderMenuItem={(label, item) => (
                                 <div
                                     style={{ display: 'flex', alignItems: 'center' }}
-                                    key={label?.toString()} >
+                                    key={label?.toString()}
+                                    aria-live="polite"  // Anunciar cambios en el menú
+                                >
                                     <Image
                                         src={item.image} width={30} height={30}
                                         layout="fixed"
+                                        alt={`Bandera del continente ${label}`}  // Descripción accesible para la imagen
                                     />
                                     <span style={{ marginLeft: 15 }}>
                                         {label}
@@ -105,6 +120,7 @@ const Cliente = () => {
                             )}
                         />
                     </Grid>
+
                     <Grid item xs={6} sm={4} mx='auto'>
                         <SelectPicker
                             searchable={false}
@@ -122,8 +138,10 @@ const Cliente = () => {
                             onChange={orden => {
                                 router.replace(`/becas?s=${orden}${params.has('t') ? '&t=' + params.get('t') : ''}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
                             }}
+                            aria-label="Seleccionar orden de becas"  // Añadir aria-label al selector
                         />
                     </Grid>
+
                     <Grid item xs={6} sm={4} mx='auto'>
                         <SelectPicker
                             searchable={false}
@@ -141,22 +159,27 @@ const Cliente = () => {
                             onChange={tipo => {
                                 router.replace(`/becas?t=${tipo}${params.has('co') ? '&co=' + params.get('co') : ''}${params.has('s') ? '&s=' + params.get('s') : ''}${params.has('c') ? '&c=' + params.get('c') : ''}`)
                             }}
+                            aria-label="Seleccionar tipo de beca"  // Añadir aria-label al selector
                         />
                     </Grid>
-
                 </Grid>
             </Box>
+
             <Box mt={4}
                 px={{ xs: 1, sm: 10, md: 20, lg: 40, xl: 60 }}
-                display='flex' flexDirection='column' alignItems='center'>
-                {
-                    Becas.length > 0 ?
-                        Becas.map(value => (
-                            <BecaItem key={value.id} value={value as any} />))
-                        : <Normal m={2}>
-                            Becas no encontradas
-                        </Normal>
-                }
+                display='flex' flexDirection='column' alignItems='center'
+                role="region" aria-labelledby="becas-list"
+            >
+                <div id="becas-list">
+                    {
+                        Becas.length > 0 ?
+                            Becas.map(value => (
+                                <BecaItem key={value.id} value={value as any} />
+                            )) : <Normal m={2}>
+                                Becas no encontradas
+                            </Normal>
+                    }
+                </div>
                 <Button
                     disabled={load}
                     loading={load}
@@ -180,9 +203,9 @@ const Cliente = () => {
                                 setSkip(prev => prev + 1);
                             })
                     }}
+                    aria-label="Cargar más becas"  // Descripción accesible para el botón de carga
                 >
-                    Cargas más
-
+                    Cargar más
                 </Button>
             </Box>
         </>

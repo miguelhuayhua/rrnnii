@@ -57,6 +57,18 @@ const VideoItem = ({ value, setVideo }: Props) => {
                     }}
                     label={duration}
                 />
+                <ChipBox
+                    sx={{
+                        background: "#212121bb",
+                        borderRadius: 1,
+                        padding: 0,
+                        color: grey[50],
+                        position: 'absolute',
+                        top: 1,
+                        right: 1
+                    }}
+                    label={<Box sx={{ display: 'flex', alignItems: 'center', }}>{value.conteo} <Icon icon='basil:eye-solid' fontSize={17} style={{ marginLeft: 5}} /></Box>}
+                />
                 <video
 
                     preload="metadata"

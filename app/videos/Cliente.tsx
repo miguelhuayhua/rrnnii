@@ -1,19 +1,17 @@
 'use client';
 import { Box, Grid, Stack, } from "@mui/material";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Video } from "@prisma/client";
 import { Negrita, Normal, Titulo } from "../componentes/Textos";
 import { Button, Input, InputGroup, SelectPicker } from "rsuite";
 import { IoSearch } from "react-icons/io5";
-import Filtros from "./Filtro";
 import { Icon } from '@iconify/react';
 import VideoItem from "../componentes/items/Video";
 import ModalVideo from "./Modal";
 import { grey, red } from "@mui/material/colors";
 const Cliente = () => {
-    const [open, setOpen] = useState(false);
     const params = useSearchParams();
     const [Videos, setVideos] = useState<Video[]>([]);
     const router = useRouter();
@@ -75,7 +73,7 @@ const Cliente = () => {
                             <Button
                                 style={{ marginLeft: 10 }}
                                 appearance="subtle" onClick={() => {
-                                    router.replace('/videos')
+                                    router.push('/videos')
                                 }}>
                                 <Icon fontSize={18} icon="ant-design:reload-outlined" />
                             </Button>
@@ -110,7 +108,7 @@ const Cliente = () => {
                         {
                             Videos.length > 0 ?
                                 Videos.map(value => (
-                                    <Grid key={value.id} item xs={6} sm={4} lg={3} xl={2} mx='auto'>
+                                    <Grid key={value.id} item xs={6} sm={4} lg={3} mx='auto'>
                                         <VideoItem setVideo={setVideo} value={value as any} />
                                     </Grid>))
                                 : <Grid item xs={12}>

@@ -64,38 +64,66 @@ const Navbar = () => {
                             rrnnii.upea.bo - {dayjs().year()}
                         </Normal>
                         <Stack spacing={0.5} direction='row'>
+                            {unidad?.facebook && (
+                                <Button
+                                    style={{ display: 'flex', alignItems: 'center' }}
+                                    size='xs' appearance='link'
+                                    aria-label="Facebook"
+                                    onClick={() => window.open(unidad.facebook, '_blank')}
+                                >
+                                    <Icon icon='ic:outline-facebook' style={{ marginLeft: 10 }} fontSize={20} />
+                                </Button>
+                            )}
+
+                            {unidad?.instagram && (
+                                <Button
+                                    style={{ display: 'flex', alignItems: 'center' }}
+                                    size='xs' appearance='link'
+                                    aria-label="Instagram"
+                                    onClick={() => window.open(unidad.instagram, '_blank')}
+                                >
+                                    <Icon icon='basil:instagram-solid' fontSize={20} style={{ marginLeft: 10 }} />
+                                </Button>
+                            )}
+
                             {
-                                unidad?.facebook ?
-                                    <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                        <Icon icon='ic:outline-facebook' style={{ marginLeft: 10 }} fontSize={20} />
+                                unidad?.youtube ?
+                                    <Button
+                                        style={{ display: 'flex', alignItems: 'center' }}
+                                        size='xs' appearance='link'
+                                        aria-label="YouTube"
+                                        onClick={() => window.open(unidad.youtube, '_blank')}
+                                    >
+                                        <Icon icon='ri:youtube-fill' fontSize={20} style={{ marginLeft: 10 }} />
                                     </Button> : null
                             }
+
                             {
-                                unidad?.instagram ?
-                                    <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                        <Icon icon='basil:instagram-solid' fontSize={20}
-                                            style={{ marginLeft: 10 }} />
+                                unidad?.x ?
+                                    <Button
+                                        style={{ display: 'flex', alignItems: 'center' }}
+                                        size='xs' appearance='link'
+                                        aria-label="X (Twitter)"
+                                        onClick={() => window.open(unidad.x, '_blank')}
+                                    >
+                                        <Icon icon='hugeicons:new-twitter' fontSize={18} style={{ marginLeft: 10 }} />
                                     </Button> : null
                             }
-                            {
-                                unidad?.instagram ?
-                                    <Button style={{ display: 'flex', alignItems: 'center' }} size='xs' appearance='link'>
-                                        <Icon icon='mdi:youtube' fontSize={20}
-                                            style={{ marginLeft: 10 }} />
-                                    </Button> : null
-                            }
-                            {
-                                unidad?.contacto ?
-                                    <Button onClick={() => {
+
+
+                            {unidad?.contacto && (
+                                <Button
+                                    onClick={() => {
                                         const whatsappUrl = `https://wa.me/591${unidad.contacto}`;
                                         window.open(whatsappUrl, '_blank');
-                                    }} appearance='link'>
-                                        <Icon
-                                            icon='mage:whatsapp-filled' fontSize={20}
-                                        />
-                                    </Button>
-                                    : null
-                            }
+                                    }}
+                                    appearance='link'
+                                    aria-label="Contacto por WhatsApp"
+                                >
+                                    <Icon icon='mage:whatsapp-filled' fontSize={20} />
+                                </Button>
+                            )}
+
                         </Stack>
                     </Box>
             }
