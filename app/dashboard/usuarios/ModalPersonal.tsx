@@ -1,16 +1,14 @@
 'use client';
 import { Titulo } from "@/app/componentes/Textos";
 import { useModal } from "@/providers/ModalProvider";
-import { Grid, Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 import { Persona } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
-import { DatePickerBox } from "@/app/componentes/Datos";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Button, Modal, Form, Input, InputNumber, DatePicker, SelectPicker } from "rsuite";
 import { parseLetter, toUpperCase } from "@/utils/data";
-import { text } from "node:stream/consumers";
 
 interface Props {
     Persona: Persona;
@@ -35,12 +33,11 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
                 onClose={() => { setPersona(null) }}
             >
                 <Modal.Header>
-                    <Titulo mb={2}>
+                    <Titulo>
                         Modificar Personal
                     </Titulo>
                 </Modal.Header>
-                <Modal.Body style={{ padding: 12 }}>
-
+                <Modal.Body style={{ padding: "0 10px" }}>
                     <Controller
                         name="nombre"
                         control={control}
@@ -127,6 +124,7 @@ const ModalPersonal = ({ Persona, setPersona, setPersonas, setPrevPersonas }: Pr
                                 <SelectPicker
                                     {...field}
                                     size="lg"
+                                    placement="auto"
                                     defaultValue={field.value}
                                     cleanable={false}
                                     style={{ marginBottom: 10, width: "100%" }}

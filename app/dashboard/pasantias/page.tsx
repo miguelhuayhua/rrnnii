@@ -20,10 +20,12 @@ import PasantiaComponent from "../componentes/items/Pasantia";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { IoSearch } from "react-icons/io5";
 import { Button, Input, InputGroup } from "rsuite";
-import PasantiasPDF from "./PDF";
-import { pdf } from "@react-pdf/renderer";
+import dynamic from "next/dynamic";
+const BotonDescargar = dynamic(() => import("./Button"), {
+    ssr: false, // Deshabilita la renderización en el servidor
+});
 export default function Page() {
-    const [opcion, setOpcion] = useState('todo');
+    const [opcion, setOpcion] = useState('vigente');
     const [Pasantias, setPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
     const [prevPasantias, setPrevPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
     const [Pasantia, setPasantia] = useState<any>(null);
@@ -102,24 +104,8 @@ export default function Page() {
                     }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
+                <BotonDescargar Pasantias={Pasantias} opcion={opcion} />
 
-                <Button appearance='subtle'
-                    onClick={() => {
-                        pdf(<PasantiasPDF
-                            Pasantias={Pasantias as any} // Reemplaza `any` con el tipo adecuado si lo conoces
-                            modo={opcion}
-                        />).toBlob().then(res => {
-                            const url = URL.createObjectURL(res);
-                            const a = document.createElement('a');
-                            a.download = "listado-pasantias-" + dayjs().format('DD-MM-YYYY_HH-mm-ss') + ".pdf"; // Ajusta el nombre del archivo
-                            a.href = url;
-                            a.click();
-                            a.remove();
-                        });
-                    }}
-                >
-                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
-                </Button>
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
@@ -205,7 +191,7 @@ export default function Page() {
                             Pasantias.length > 0 ?
 
                                 Pasantias.map(value => (
-                                    <Grid item xs={12} lg={6} key={value.id}>
+                                    <Grid item xs={12} key={value.id}>
                                         <PasantiaComponent
                                             setPasantia={setPasantia}
                                             setPasantias={setPasantias}

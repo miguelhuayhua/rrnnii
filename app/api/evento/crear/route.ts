@@ -10,7 +10,7 @@ const POST = async (request: NextRequest) => {
             await prisma.acciones.create({ data: { tabla: 'evento', Usuario: { connect: { usuario: token.name } }, tipo: 'crear' } });
             let form = await request.formData() as any;
             const imagen = form.get("imagen");
-            const doc = form.get('doc');
+            const doc = form.get('documento');
             const formimg = new FormData();
             const formdoc = new FormData();
             formimg.append('file', imagen);

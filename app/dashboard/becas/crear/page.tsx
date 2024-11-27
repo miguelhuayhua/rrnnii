@@ -17,7 +17,6 @@ import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
 import { useEffect, useState } from "react";
 import Image from 'next/legacy/image';
-import { BoxSombra } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
@@ -30,7 +29,10 @@ import { red } from "@mui/material/colors";
 import { toUpperCase } from "@/utils/data";
 export default function Page() {
     const { control, handleSubmit, setValue, watch } = useForm<Beca & { Institucion: Institucion }>({
-        defaultValues: { titulo: '', descripcion: '', tipo: 'nacional' }, shouldFocusError: true
+        defaultValues: {
+            titulo: '', descripcion: '', tipo: 'nacional',
+            encargado: '', descripcionCorta: ''
+        }, shouldFocusError: true
     });
     const { openSnackbar } = useSnackbar();
     const router = useRouter();
@@ -61,7 +63,7 @@ export default function Page() {
             form.append('pdf', beca.pdf);
             form.append('descripcion', beca.descripcion);
             form.append('portada', portada);
-            form.append('documento', documento[0].blobFile);
+            form.append('documento', documento[0] ? documento[0].blobFile : '');
             form.append('continente', beca.continente);
             form.append('descripcioncorta', beca.descripcionCorta);
             form.append('pais', beca.pais);
@@ -112,7 +114,7 @@ export default function Page() {
                     Regresar
                 </BotonSimple>
                 <Grid container spacing={4} py={3}>
-                    <Grid item xs={12} sm={5} lg={4}>
+                    <Grid item xs={12} sm={5}>
                         <Panel shaded style={{ background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
@@ -124,7 +126,8 @@ export default function Page() {
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}
@@ -154,185 +157,181 @@ export default function Page() {
                         </Panel>
 
                     </Grid>
-                    <Grid item xs={12} sm={7} lg={8}>
+                    <Grid item xs={12} sm={7}>
                         <Panel shaded style={{ background: 'white' }}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} lg={6} >
-                                    <Controller
-                                        name="titulo"
-                                        control={control}
-                                        rules={{ required: 'Título no puede quedar vacío' }}
-                                        render={({ field, fieldState }) => (
-                                            <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Título del convenio</Form.ControlLabel>
-                                                <Input {...field} size='lg'
-                                                    onChange={text => field.onChange(toUpperCase(text))} />
-                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                    {fieldState.error?.message}
-                                                </Form.ErrorMessage>
-                                            </Form.Group>
-                                        )}
-                                    />
-                                    <Controller
-                                        name="descripcionCorta"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
-                                                <Input {...field}
-                                                    multiple
-                                                    style={{ maxHeight: 200 }}
-                                                    as='textarea'
-                                                    rows={3}
-                                                    size='lg' />
-                                            </Form.Group>
-                                        )}
-                                    />
-                                    <Controller
-                                        name="descripcion"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
-                                                <Editor
-                                                    value={field.value}
-                                                    modules={{
-                                                        toolbar: [
-                                                            [{ 'header': [2, 3, 4, 5, false] }],
-                                                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                            ['link'],
-                                                        ]
-                                                    }}
-                                                    preserveWhitespace
-                                                    className="editor"
-                                                    onChange={(value) => { field.onChange(value) }}
-                                                />
-                                            </Form.Group>
-                                        )}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} lg={6}>
-                                    <Controller
-                                        name="encargado"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Encargado</Form.ControlLabel>
-                                                <Input {...field} size='lg' />
-                                            </Form.Group>
-                                        )}
-                                    />
 
+                            <Controller
+                                name="titulo"
+                                control={control}
+                                rules={{ required: 'Título no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Título del convenio</Form.ControlLabel>
+                                        <Input {...field} size='lg'
+                                            onChange={text => field.onChange(toUpperCase(text))} />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+
+
+                            <Controller
+                                name="encargado"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Encargado</Form.ControlLabel>
+                                        <Input {...field} size='lg' />
+                                    </Form.Group>
+                                )}
+                            />
+
+                            <Controller
+                                name="Institucion.nombre"
+                                control={control}
+                                rules={{ required: 'Institución no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Institución</Form.ControlLabel>
+                                        <AutoComplete
+                                            onBlur={ev => field.onChange((ev.target as any).value! as any)}
+                                            size="lg"
+                                            placement="auto"
+                                            data={
+                                                instituciones.map((value: Institucion) => value.nombre)
+                                            } />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="termina"
+                                control={control}
+                                rules={{ required: 'Finalización no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group controlId="fecha">
+                                        <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
+                                        <DatePicker
+                                            placement="auto"
+                                            style={{ width: "100%", marginBottom: 10 }}
+                                            size="lg"
+                                            onChange={ev => {
+                                                field.onChange(dayjs(ev).format("DD/MM/YYYY"))
+                                            }} />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            {
+                                watch('tipo') != 'nacional' ?
                                     <Controller
-                                        name="Institucion.nombre"
+                                        name="pais"
                                         control={control}
-                                        rules={{ required: 'Institución no puede quedar vacío' }}
+                                        rules={{ required: 'País no puede quedar vacío' }}
                                         render={({ field, fieldState }) => (
-                                            <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Institución</Form.ControlLabel>
-                                                <AutoComplete
-                                                    onBlur={ev => field.onChange((ev.target as any).value! as any)}
-                                                    size="lg"
-                                                    data={
-                                                        instituciones.map((value: Institucion) => value.nombre)
-                                                    } />
-                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                    {fieldState.error?.message}
-                                                </Form.ErrorMessage>
-                                            </Form.Group>
-                                        )}
-                                    />
-                                    <Controller
-                                        name="termina"
-                                        control={control}
-                                        rules={{ required: 'Finalización no puede quedar vacío' }}
-                                        render={({ field, fieldState }) => (
-                                            <Form.Group controlId="fecha">
-                                                <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
-                                                <DatePicker
-                                                    placement="top"
-                                                    style={{ width: "100%", marginBottom: 10 }}
-                                                    size="lg"
-                                                    onChange={ev => {
-                                                        field.onChange(dayjs(ev).format("DD/MM/YYYY"))
-                                                    }} />
-                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                    {fieldState.error?.message}
-                                                </Form.ErrorMessage>
-                                            </Form.Group>
-                                        )}
-                                    />
-                                    {
-                                        watch('tipo') != 'nacional' ?
-                                            <Controller
-                                                name="pais"
-                                                control={control}
-                                                rules={{ required: 'País no puede quedar vacío' }}
-                                                render={({ field, fieldState }) => (
-                                                    <Form.Group controlId="pais">
-                                                        <Form.ControlLabel>País</Form.ControlLabel>
-                                                        <SelectPicker
-                                                            data={paises}
-                                                            size='lg'
-                                                            groupBy="continente"
-                                                            placement="top"
-                                                            labelKey="pais"
-                                                            valueKey="value"
-                                                            style={{
-                                                                width: "100%",
-                                                                marginBottom: 10
-                                                            }}
-                                                            onChange={pais => {
-                                                                let p = paises.find(value => value.value == pais);
-                                                                setValue('continente', p?.continenteAbrev!);
-                                                                field.onChange(pais);
-                                                            }}
-                                                            renderMenuItem={(label, item) => (
-                                                                <div key={label?.toString()}>
-                                                                    <Icon style={{ marginRight: 5 }} icon={`flagpack:${(item?.value as any).toLowerCase()}`} />
-                                                                    {label}</div>
-                                                            )}
-                                                        />
-                                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                            {fieldState.error?.message}
-                                                        </Form.ErrorMessage>
-                                                    </Form.Group>
-                                                )}
-                                            />
-                                            : null
-                                    }
-                                    <Controller
-                                        name="tipo"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Form.Group controlId="tipo">
-                                                <Form.ControlLabel>Tipo de convenio</Form.ControlLabel>
+                                            <Form.Group controlId="pais">
+                                                <Form.ControlLabel>País</Form.ControlLabel>
                                                 <SelectPicker
-                                                    {...field}
-                                                    size="lg"
-                                                    cleanable={false}
-                                                    style={{ marginBottom: 10, width: "100%" }}
-                                                    data={[{ label: 'Nacional', value: 'nacional' },
-                                                    { label: 'Internacional', value: 'internacional' }
-                                                    ]}
-                                                    searchable={false}
+                                                    data={paises}
+                                                    size='lg'
+                                                    groupBy="continente"
+                                                    placement="auto"
+                                                    labelKey="pais"
+                                                    valueKey="value"
+                                                    style={{
+                                                        width: "100%",
+                                                        marginBottom: 10
+                                                    }}
+                                                    onChange={pais => {
+                                                        let p = paises.find(value => value.value == pais);
+                                                        setValue('continente', p?.continenteAbrev!);
+                                                        field.onChange(pais);
+                                                    }}
+                                                    renderMenuItem={(label, item) => (
+                                                        <div key={label?.toString()}>
+                                                            <Icon style={{ marginRight: 5 }} icon={`flagpack:${(item?.value as any).toLowerCase()}`} />
+                                                            {label}</div>
+                                                    )}
                                                 />
+                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                                    {fieldState.error?.message}
+                                                </Form.ErrorMessage>
                                             </Form.Group>
                                         )}
                                     />
-                                </Grid>
-                                <Grid item xs={6} mx='auto'>
-                                    <Button
-                                        onClick={handleSubmit(onSubmit)}
-                                        appearance="primary"
-                                        block
-                                        style={{ background: red[700] }}
-                                        size='lg'>
-                                        Crear Beca
-                                    </Button>
-                                </Grid>
-                            </Grid>
+                                    : null
+                            }
+                            <Controller
+                                name="tipo"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group controlId="tipo">
+                                        <Form.ControlLabel>Tipo de convenio</Form.ControlLabel>
+                                        <SelectPicker
+                                            {...field}
+                                            size="lg"
+                                            placement="auto"
+                                            cleanable={false}
+                                            style={{ marginBottom: 10, width: "100%" }}
+                                            data={[{ label: 'Nacional', value: 'nacional' },
+                                            { label: 'Internacional', value: 'internacional' }
+                                            ]}
+                                            searchable={false}
+                                        />
+                                    </Form.Group>
+                                )}
+                            /><Controller
+                                name="descripcionCorta"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                        <Input {...field}
+                                            multiple
+                                            style={{ maxHeight: 200 }}
+                                            as='textarea'
+                                            rows={3}
+                                            size='lg' />
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="descripcion"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Descripción</Form.ControlLabel>
+                                        <Editor
+                                            value={field.value}
+                                            modules={{
+                                                toolbar: [
+                                                    [{ 'header': [2, 3, 4, 5, false] }],
+                                                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                    ['link'],
+                                                ]
+                                            }}
+                                            preserveWhitespace
+                                            className="editor"
+                                            onChange={(value) => { field.onChange(value) }}
+                                        />
+                                    </Form.Group>
+                                )}
+                            />
+                            <Button
+                                onClick={handleSubmit(onSubmit)}
+                                appearance="primary"
+                                block
+                                style={{ background: red[700] }}
+                                size='lg'>
+                                Crear Beca
+                            </Button>
                         </Panel>
                     </Grid>
                 </Grid>

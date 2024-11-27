@@ -19,11 +19,13 @@ import { ChipBox } from "@/app/componentes/Mostrar";
 import 'dayjs/locale/es';
 import { Button, Input, InputGroup } from "rsuite";
 import xlsx from 'json-as-xlsx';
-import EventosPDF from "./PDF";
-import { pdf } from "@react-pdf/renderer";
+import dynamic from "next/dynamic";
+const BotonDescargar = dynamic(() => import("./Button"), {
+    ssr: false, // Deshabilita la renderización en el servidor
+});
 dayjs.locale('es');
 export default function Page() {
-    const [opcion, setOpcion] = useState('todo');
+    const [opcion, setOpcion] = useState('vigente');
     const [eventos, setEventos] = useState<Evento[]>([]);
     const [prevEventos, setPrevEventos] = useState<Evento[]>([]);
     const [evento, setEvento] = useState<any>(null);
@@ -52,7 +54,7 @@ export default function Page() {
             </Titulo>
             <Stack direction='row' my={2} spacing={1} >
                 <Button appearance="primary"
-                    onClick={() => router.push('/dashboard/evento/crear')}>
+                    onClick={() => router.push('/dashboard/eventos/crear')}>
                     Añadir evento
                 </Button>
                 <Button
@@ -94,20 +96,7 @@ export default function Page() {
                 }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle' onClick={() => {
-                    pdf(<EventosPDF modo={opcion} Eventos={eventos} />)
-                        .toBlob()
-                        .then((res) => {
-                            const url = URL.createObjectURL(res);
-                            const a = document.createElement('a');
-                            a.download = `listado-eventos-${dayjs().format('DD-MM-YYYY_HH-mm-ss')}.pdf`;
-                            a.href = url;
-                            a.click();
-                            a.remove();
-                        });
-                }}>
-                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
-                </Button>
+                <BotonDescargar Eventos={eventos} opcion={opcion} />
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}
@@ -189,7 +178,7 @@ export default function Page() {
                         }} /> : <Grid container spacing={2}>
                         {
                             eventos.map(value => (
-                                <Grid key={value.id} item xs={12} lg={6}>
+                                <Grid key={value.id} item xs={12}>
                                     <EventoComponent
                                         setEvento={setEvento}
                                         setEventos={setEventos}

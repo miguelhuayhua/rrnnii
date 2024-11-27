@@ -123,7 +123,7 @@ const SideBar = () => {
                             onClick={() => { setMove(!move); }}
                             style={{
                                 position: 'fixed',
-                                top: 12, right: 70, zIndex: 1000,
+                                top: 12, right: 70, zIndex: 210,
 
                             }}>
                             <Icon icon='ci:menu-alt-05' fontSize={35} />

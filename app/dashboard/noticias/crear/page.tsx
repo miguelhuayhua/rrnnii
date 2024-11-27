@@ -101,7 +101,8 @@ export default function Page() {
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}
@@ -121,59 +122,53 @@ export default function Page() {
                     </Grid>
                     <Grid item xs={12} sm={7} lg={8}>
                         <Panel shaded style={{ background: 'white' }} >
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} lg={6}>
-                                    <Controller
-                                        name="titulo"
-                                        control={control}
-                                        rules={{ required: 'Título no puede quedar vacío' }}
-                                        render={({ field, fieldState }) => (
-                                            <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Título de noticia</Form.ControlLabel>
-                                                <Input {...field} size='lg' />
-                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                    {fieldState.error?.message}
-                                                </Form.ErrorMessage>
-                                            </Form.Group>
-                                        )}
-                                    />
 
-                                </Grid>
-                                <Grid item xs={12} lg={6}>
-                                    <Controller
-                                        name="descripcion"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Form.Group >
-                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
-                                                <Editor
-                                                    value={field.value}
-                                                    modules={{
-                                                        toolbar: [
-                                                            [{ 'header': [2, 3, 4, 5, false] }],
-                                                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                            ['link'],
-                                                        ]
-                                                    }}
-                                                    preserveWhitespace
-                                                    className="editor"
-                                                    onChange={(value) => { field.onChange(value) }}
-                                                />
-                                            </Form.Group>
-                                        )}
-                                    />
-                                </Grid>
-                                <Grid item xs={6} mx='auto'>
-                                    <Button
-                                        size="lg"
-                                        style={{ background: red[700] }}
-                                        appearance="primary"
-                                        block
-                                        onClick={handleSubmit(onSubmit)}>
-                                        Crear noticia</Button>
-                                </Grid>
-                            </Grid>
+                            <Controller
+                                name="titulo"
+                                control={control}
+                                rules={{ required: 'Título no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Título de noticia</Form.ControlLabel>
+                                        <Input {...field} size='lg' />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+
+                            <Controller
+                                name="descripcion"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group >
+                                        <Form.ControlLabel>Descripción</Form.ControlLabel>
+                                        <Editor
+                                            value={field.value}
+                                            modules={{
+                                                toolbar: [
+                                                    [{ 'header': [2, 3, 4, 5, false] }],
+                                                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                    ['link'],
+                                                ]
+                                            }}
+                                            preserveWhitespace
+                                            className="editor"
+                                            onChange={(value) => { field.onChange(value) }}
+                                        />
+                                    </Form.Group>
+                                )}
+                            />
+                            <Button
+                                size="lg"
+                                style={{ background: red[700], marginTop: 10 }}
+                                appearance="primary"
+                                block
+                                onClick={handleSubmit(onSubmit)}>
+                                Crear noticia</Button>
+
                         </Panel>
                     </Grid>
                 </Grid>

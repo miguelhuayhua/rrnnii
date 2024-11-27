@@ -21,6 +21,7 @@ import { useSnackbar } from "@/providers/SnackbarProvider";
 import { Input, Panel, Text, Form, InputNumber, Button } from "rsuite";
 import axios from "axios";
 import { red } from "@mui/material/colors";
+import { toUpperCase } from "@/utils/data";
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Carrera>({
         defaultValues: { nombre: '', logo: '' }, shouldFocusError: true
@@ -102,8 +103,9 @@ export default function Page() {
                                         rules={{ required: 'Nombre no puede quedar vacío' }}
                                         render={({ field, fieldState }) => (
                                             <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Título del evento</Form.ControlLabel>
-                                                <Input {...field} size='lg' />
+                                                <Form.ControlLabel>Nombre de la carrera</Form.ControlLabel>
+                                                <Input {...field} size='lg'
+                                                    onChange={text => field.onChange(toUpperCase(text))} />
                                                 <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                                     {fieldState.error?.message}
                                                 </Form.ErrorMessage>

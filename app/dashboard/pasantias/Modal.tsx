@@ -58,7 +58,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
         form.append('pdf', pasantia.pdf);
         form.append('descripcion', pasantia.descripcion);
         form.append('portada', portada);
-        form.append('documento', documento);
+        form.append('documento', documento[0] ? documento[0].blobFile : '');
         form.append('descripcioncorta', pasantia.descripcionCorta);
         form.append('finalizacion', pasantia.finalizacion!);
         form.append('id', pasantia.id);
@@ -115,7 +115,8 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}
@@ -136,12 +137,18 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                 fileList={documento}
                                 autoUpload={false}
                                 action="/"
-                                onChange={setDocumento}
+                                onChange={files => {
+                                    setValue('pdf', 'file', { shouldDirty: true })
+                                    setDocumento(files);
+                                }}
                                 multiple={false}
                                 accept=".pdf, .doc, .docx"
                             >
                                 <Button size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
+
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
                             <Controller
                                 name="titulo"
                                 control={control}
@@ -265,7 +272,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <Controller
                                 name="descripcion"
                                 control={control}

@@ -37,7 +37,6 @@ export default function Page() {
     const { openModal } = useModal();
     const { openSnackbar } = useSnackbar();
     const onSubmit = (video: VideoType) => {
-        console.log(file[0])
         if (file[0]) {
             let formData = new FormData();
             formData.append('titulo', video.titulo);
@@ -94,7 +93,7 @@ export default function Page() {
 
                 <Grid container spacing={2} px={{ xs: 0, xl: 5 }} py={2}>
                     <Grid item xs={12} md={6}>
-                        <Panel shaded style={{ padding: 16, background: 'white' }}>
+                        <Panel shaded style={{ background: 'white' }}>
                             {videoURL && (
                                 <Video
                                     accentColor={blue[400]}
@@ -132,7 +131,7 @@ export default function Page() {
                         </Panel>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Panel shaded style={{ padding: 12, background: 'white' }}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <Controller
                                 name="titulo"
                                 control={control}
@@ -170,16 +169,18 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
+                            <Button
+                                block
+                                size="lg"
+                                style={{ marginTop: 10 }}
+                                appearance="primary"
+                                onClick={handleSubmit(onSubmit)}>
+                                Añadir video
+                            </Button>
                         </Panel>
+
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            size="lg"
-                            appearance="primary"
-                            onClick={handleSubmit(onSubmit)}>
-                            Añadir video
-                        </Button>
-                    </Grid>
+
                 </Grid>
             </Box>
             <Backdrop

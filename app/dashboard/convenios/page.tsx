@@ -20,11 +20,13 @@ import { Button, Input, InputGroup } from "rsuite";
 import { Icon } from '@iconify/react';
 import xlsx from 'json-as-xlsx';
 import { paises } from "@/utils/globals";
-import ConvenioPDF from "./PDF";
-import { pdf } from "@react-pdf/renderer";
+import dynamic from "next/dynamic";
+const BotonDescargar = dynamic(() => import("./Button"), {
+    ssr: false, // Deshabilita la renderización en el servidor
+});
 dayjs.locale('es');
 export default function Page() {
-    const [opcion, setOpcion] = useState('todo');
+    const [opcion, setOpcion] = useState('vigente');
     const [convenios, setConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
     const [convenio, setConvenio] = useState<any>(null);
     const [prevConvenios, setPrevConvenios] = useState<(Convenio & { Institucion: Institucion })[]>([]);
@@ -98,23 +100,7 @@ export default function Page() {
                 }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'
-                    onClick={() => {
-                        pdf(<ConvenioPDF
-                            Convenios={convenios as any} // Reemplaza `any` con el tipo adecuado si lo conoces
-                            modo={opcion} // Puedes reutilizar la lógica de `opcion` si es aplicable
-                        />).toBlob().then(res => {
-                            const url = URL.createObjectURL(res);
-                            const a = document.createElement('a');
-                            a.download = "listado-convenios-" + dayjs().format('DD-MM-YYYY_HH-mm-ss') + ".pdf"; // Ajusta el nombre del archivo
-                            a.href = url;
-                            a.click();
-                            a.remove();
-                        });
-                    }}
-                >
-                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
-                </Button>
+                <BotonDescargar Convenios={convenios} opcion={opcion} />
 
             </Stack>
             <Tabs
@@ -198,7 +184,7 @@ export default function Page() {
                         {
                             convenios.length > 0 ?
                                 convenios.map(value => (
-                                    <Grid key={value.id} item xs={12} lg={6}>
+                                    <Grid key={value.id} item xs={12}>
                                         <ConvenioComponent
                                             setConvenio={setConvenio}
                                             setConvenios={setConvenios}

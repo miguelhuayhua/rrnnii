@@ -21,8 +21,10 @@ import { fileDomain } from "@/utils/globals";
 import { red } from "@mui/material/colors";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { Button } from "rsuite";
-import InstitucionesPDF from "./PDF";
-import { pdf } from "@react-pdf/renderer";
+import dynamic from "next/dynamic";
+const BotonDescargar = dynamic(() => import("./Button"), {
+    ssr: false, // Deshabilita la renderización en el servidor
+});
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -94,22 +96,7 @@ export default function Page() {
                 }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'
-                    onClick={() => {
-                        pdf(<InstitucionesPDF modo={opcion} instituciones={instituciones} />)
-                            .toBlob()
-                            .then((res) => {
-                                const url = URL.createObjectURL(res);
-                                const a = document.createElement('a');
-                                a.download = `listado-instituciones-${dayjs().format('DD-MM-YYYY_HH-mm-ss')}.pdf`;
-                                a.href = url;
-                                a.click();
-                                a.remove();
-                            });
-                    }}
-                >
-                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
-                </Button>
+                <BotonDescargar Instituciones={instituciones} opcion={opcion} />
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}

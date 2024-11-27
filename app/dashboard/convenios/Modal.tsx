@@ -29,7 +29,7 @@ interface Props {
     setOpcion: any;
 }
 export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setConvenios, setPrevConvenios }: Props) {
-    const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } =
+    const { control, formState: { isDirty }, handleSubmit, setValue, watch } =
         useForm<Convenio & { Institucion: Institucion, ConvenioCarrera: ConvenioCarrera[], carreras: string[] }>({
             defaultValues: { ...Convenio, carreras: Convenio.ConvenioCarrera.map(value => value.carreraId) }, shouldFocusError: true
         });
@@ -124,7 +124,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden', cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}
@@ -145,12 +145,18 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                 fileList={documento}
                                 autoUpload={false}
                                 action="/"
-                                onChange={setDocumento}
+                                onChange={files => {
+                                    setValue('pdf', 'file', { shouldDirty: true })
+                                    setDocumento(files);
+                                }}
                                 multiple={false}
                                 accept=".pdf, .doc, .docx"
                             >
                                 <Button size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
+
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
                             <Controller
                                 name="titulo"
                                 control={control}
@@ -175,6 +181,9 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                         <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
                                         <Input {...field}
                                             multiple
+                                            style={{ maxHeight: 200 }}
+                                            as='textarea'
+                                            rows={3}
                                             size='lg' />
                                     </Form.Group>
                                 )}
@@ -189,6 +198,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                         <AutoComplete
                                             {...field}
                                             size='lg'
+                                            placement='auto'
                                             data={
                                                 instituciones.map((value: Institucion) => value.nombre)
                                             } />
@@ -213,6 +223,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                             labelKey="nombre"
                                             {...field}
                                             size="lg"
+                                            placement='auto'
                                             valueKey="id" data={carreras}
                                             renderMenuItem={(label, item) => (
                                                 <div style={{ display: 'flex', alignItems: 'center', height: 22 }}>
@@ -237,7 +248,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                         <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
                                         <DatePicker
                                             value={dayjs(field.value, 'DD/MM/YYYY').toDate()}
-                                            placement="top"
+                                            placement='auto'
                                             style={{ width: "100%", marginBottom: 10 }}
                                             size="lg"
                                             onChange={ev => {
@@ -262,8 +273,8 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                                     data={paises}
                                                     size='lg'
                                                     groupBy="continente"
-                                                    placement="top"
                                                     labelKey="pais"
+                                                    placement='auto'
                                                     valueKey="value"
                                                     style={{
                                                         width: "100%",
@@ -310,7 +321,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <Controller
                                 name="descripcion"
                                 control={control}

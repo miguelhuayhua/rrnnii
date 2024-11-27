@@ -19,11 +19,13 @@ import { Icon } from '@iconify/react';
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import xlsx from 'json-as-xlsx';
-import VideosPDF from "./PDF";
-import { pdf } from "@react-pdf/renderer";
+import dynamic from "next/dynamic";
+const BotonDescargar = dynamic(() => import("./Button"), {
+    ssr: false, // Deshabilita la renderización en el servidor
+});
 import { fileDomain } from "@/utils/globals";
 export default function Page() {
-    const [opcion, setOpcion] = useState('todo');
+    const [opcion, setOpcion] = useState('activo');
     const [videos, setVideos] = useState<Video[]>([]);
     const [prevVideos, setPrevVideos] = useState<Video[]>([]);
     const [video, setVideo] = useState<any>(null);
@@ -39,7 +41,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
-            <Breadcrumbs sx={{ my: 2 }} >
+            <Breadcrumbs sx={{ mt: 2, mb: 1 }} >
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -48,7 +50,7 @@ export default function Page() {
                 </Link>
                 <Negrita>Listado</Negrita>
             </Breadcrumbs>
-            <Titulo sx={{ mt: 1 }}>
+            <Titulo>
                 Videos
             </Titulo>
             <Stack direction='row' my={2} spacing={1} >
@@ -94,22 +96,7 @@ export default function Page() {
                 }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'
-                    onClick={() => {
-                        pdf(<VideosPDF videos={videos} modo="todo" />)
-                            .toBlob()
-                            .then((res) => {
-                                const url = URL.createObjectURL(res);
-                                const a = document.createElement('a');
-                                a.download = `listado-videos-${dayjs().format('DD-MM-YYYY_HH-mm-ss')}.pdf`;
-                                a.href = url;
-                                a.click();
-                                a.remove();
-                            });
-                    }}
-                >
-                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
-                </Button>
+                <BotonDescargar Videos={videos} opcion={opcion} />
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}

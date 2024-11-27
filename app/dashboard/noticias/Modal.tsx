@@ -49,7 +49,7 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
         formData.append('id', noticia.id);
         openModal({
             titulo: '¿Continuar?',
-            content: 'La imagen será editada',
+            content: 'La noticia será editada',
             callback: async () => {
                 setLoad(true);
                 let res = await axios.post('/api/noticia/modificar', formData);
@@ -91,7 +91,8 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}
@@ -115,7 +116,7 @@ export default function ModalNoticia({ setNoticia, Noticia, setNoticias, setPrev
                                 rules={{ required: 'Título no puede quedar vacío' }}
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
-                                        <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                        <Form.ControlLabel>Título de la noticia</Form.ControlLabel>
                                         <Input {...field} size='lg' />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}

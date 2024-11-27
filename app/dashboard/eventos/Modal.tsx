@@ -51,8 +51,8 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
         form.append('ubicacion', evento.ubicacion!);
         form.append('inicio', evento.inicio);
         form.append('descripcion', evento.descripcion);
+        form.append('documento', documento[0] ? documento[0].blobFile : '');
         form.append('imagen', portada);
-        form.append('doc', documento);
         form.append('id', evento.id)
         openModal({
             titulo: '¿Continuar?',
@@ -118,12 +118,17 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                 fileList={documento}
                                 autoUpload={false}
                                 action="/"
-                                onChange={setDocumento}
+                                onChange={files => {
+                                    setValue('pdf', 'file', { shouldDirty: true })
+                                    setDocumento(files);
+                                }}
                                 multiple={false}
                                 accept=".pdf, .doc, .docx"
                             >
                                 <Button size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
                             <Controller
                                 name="titulo"
                                 control={control}
@@ -147,6 +152,7 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                         <SelectPicker
                                             {...field}
                                             size="lg"
+                                            placement='auto'
                                             cleanable={false}
                                             style={{ marginBottom: 10, width: "100%" }}
                                             data={[{ label: 'Online', value: 'online' },
@@ -180,7 +186,7 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                     <Form.Group controlId="fecha">
                                         <Form.ControlLabel>Comienzo</Form.ControlLabel>
                                         <DatePicker
-                                            placement="top"
+                                            placement="auto"
                                             block
                                             value={dayjs(field.value, 'DD/MM/YYYY').toDate()}
                                             style={{ marginBottom: 10 }}
@@ -208,7 +214,7 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                     /> : null
                             }
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <Controller
                                 name="descripcion"
                                 control={control}

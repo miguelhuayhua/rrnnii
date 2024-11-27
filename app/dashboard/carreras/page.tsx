@@ -35,7 +35,7 @@ export default function Page() {
     }, []);
     return (
         <Box px={{ xs: 1, md: 2, lg: 5 }} >
-            <Breadcrumbs sx={{ my: 2 }}>
+            <Breadcrumbs sx={{ mt: 2, mb: 1 }}>
                 <Link style={{ textDecoration: 'none' }} href="/dashboard">
                     <Normal>Principal</Normal>
                 </Link>
@@ -44,7 +44,7 @@ export default function Page() {
                 </Link>
                 <Negrita>Listado</Negrita>
             </Breadcrumbs>
-            <Titulo sx={{ mt: 1 }}>
+            <Titulo>
                 Carreras
             </Titulo>
             <Stack direction='row' my={2} spacing={2}>

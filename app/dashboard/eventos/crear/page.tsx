@@ -1,16 +1,12 @@
 "use client";
-import { BotonFilled, BotonSimple } from "@/app/componentes/Botones";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import {
     Box, Breadcrumbs, Grid,
-    Backdrop, CircularProgress, MenuItem
+    Backdrop, CircularProgress
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MdArrowLeft, MdOutlineAttachFile } from "react-icons/md";
-import { BoxSombra } from "../../componentes/Mostrar";
-import { DatePickerBox, InputBox } from "@/app/componentes/Datos";
-import { BsFileEarmarkPdfFill, BsImageAlt } from "react-icons/bs";
+import { MdArrowLeft } from "react-icons/md";
 import { Controller, useForm } from "react-hook-form";
 import { Evento } from "@prisma/client";
 import 'react-quill/dist/quill.snow.css';
@@ -20,18 +16,16 @@ import { useModal } from "@/providers/ModalProvider";
 import { axiosInstance } from "@/globals";
 import { useState } from "react";
 import Image from 'next/legacy/image';
-import { ChipBox } from "@/app/componentes/Mostrar";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import dynamic from "next/dynamic";
 import EditorSkeleton from "@/app/skeletons/EditorSkeleton";
-import { grey, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { Icon } from '@iconify/react';
-import { IoMdLink } from "react-icons/io";
 import { Uploader, Text, Button, Panel, Form, Input, SelectPicker, DatePicker } from "rsuite";
 import dayjs from "dayjs";
 
 export default function Page() {
-    const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Evento>({
+    const { control, handleSubmit, setValue, watch } = useForm<Evento>({
         defaultValues: {
             titulo: '', tipo: 'online',
             ubicacion: '', descripcion: '', inicio: '', link: '', pdf: ''
@@ -62,10 +56,10 @@ export default function Page() {
             form.append('pdf', evento.pdf);
             form.append('ubicacion', evento.ubicacion!);
             form.append('link', evento.link!);
+            form.append('documento', documento[0] ? documento[0].blobFile : '');
             form.append('inicio', evento.inicio);
             form.append('descripcion', evento.descripcion);
             form.append('imagen', portada);
-            form.append('doc', documento[0].blobFile);
             openModal({
                 titulo: '¿Continuar?',
                 content: 'Un nuevo evento se agregará',
@@ -108,7 +102,7 @@ export default function Page() {
                 </Button>
 
                 <Grid container spacing={4} py={4}>
-                    <Grid item xs={12} sm={5} lg={4}>
+                    <Grid item xs={12} sm={5}>
                         <Panel shaded style={{ background: 'white' }}>
                             <div style={{
                                 aspectRatio: 1,
@@ -147,135 +141,129 @@ export default function Page() {
                             </Uploader>
                         </Panel>
                     </Grid>
-                    <Grid item xs={12} sm={7} lg={8}>
+                    <Grid item xs={12} sm={7}>
                         <Panel shaded style={{ background: 'white' }}>
-                            <Grid container spacing={4}>
-                                <Grid item xs={12} lg={6}>
+                            <Controller
+                                name="titulo"
+                                control={control}
+                                rules={{ required: 'Título no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                        <Input {...field} size='lg' />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            <Controller
+                                name="tipo"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group controlId="tipo">
+                                        <Form.ControlLabel>Modalidad</Form.ControlLabel>
+                                        <SelectPicker
+                                            {...field}
+                                            size="lg"
+                                            placement="auto"
+                                            cleanable={false}
+                                            style={{ marginBottom: 10, width: "100%" }}
+                                            data={[{ label: 'Online', value: 'online' },
+                                            { label: 'Presencial', value: 'presencial' }
+                                            ]}
+                                            searchable={false}
+                                        />
+                                    </Form.Group>
+
+                                )}
+                            />
+                            {
+                                watch('tipo') == 'presencial' ?
+
                                     <Controller
-                                        name="titulo"
+                                        name="ubicacion"
                                         control={control}
-                                        rules={{ required: 'Título no puede quedar vacío' }}
-                                        render={({ field, fieldState }) => (
+                                        render={({ field }) => (
                                             <Form.Group style={{ marginBottom: 10 }}>
-                                                <Form.ControlLabel>Título del evento</Form.ControlLabel>
-                                                <Input {...field} size='lg' />
-                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                    {fieldState.error?.message}
-                                                </Form.ErrorMessage>
+                                                <Form.ControlLabel>Ubicación</Form.ControlLabel>
+                                                <Input {...field} value={field.value!} size='lg' />
                                             </Form.Group>
                                         )}
-                                    />
+                                    /> : null
+                            }
+                            <Controller
+                                name="inicio"
+                                control={control}
+                                rules={{ required: 'Comienzo no puede quedar vacío' }}
+                                render={({ field, fieldState }) => (
+                                    <Form.Group controlId="fecha">
+                                        <Form.ControlLabel>Comienzo</Form.ControlLabel>
+                                        <DatePicker
+                                            placement="auto"
+                                            block
+                                            style={{ marginBottom: 10 }}
+                                            size="lg"
+                                            onChange={ev => {
+                                                field.onChange(dayjs(ev).format("DD/MM/YYYY"))
+                                            }} />
+                                        <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
+                                            {fieldState.error?.message}
+                                        </Form.ErrorMessage>
+                                    </Form.Group>
+                                )}
+                            />
+                            {
+                                watch('tipo') == 'online' ?
                                     <Controller
-                                        name="descripcion"
+                                        name="link"
                                         control={control}
                                         render={({ field }) => (
-                                            <Form.Group >
-                                                <Form.ControlLabel>Descripción</Form.ControlLabel>
-                                                <Editor
-                                                    value={field.value}
-                                                    modules={{
-                                                        toolbar: [
-                                                            [{ 'header': [2, 3, 4, 5, false] }],
-                                                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                                                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                                            ['link'],
-                                                        ]
-                                                    }}
-                                                    preserveWhitespace
-                                                    className="editor"
-                                                    onChange={(value) => { field.onChange(value) }}
-                                                />
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Link de acceso</Form.ControlLabel>
+                                                <Input {...field} value={field.value!} size='lg' />
                                             </Form.Group>
                                         )}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} lg={6}>
+                                    /> : null
+                            }
+                            <Controller
+                                name="descripcion"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group >
+                                        <Form.ControlLabel>Descripción</Form.ControlLabel>
+                                        <Editor
+                                            value={field.value}
+                                            modules={{
+                                                toolbar: [
+                                                    [{ 'header': [2, 3, 4, 5, false] }],
+                                                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                                    ['link'],
+                                                ]
+                                            }}
+                                            preserveWhitespace
+                                            className="editor"
+                                            onChange={(value) => { field.onChange(value) }}
+                                        />
+                                    </Form.Group>
+                                )}
+                            />
 
-                                    <Controller
-                                        name="tipo"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Form.Group controlId="tipo">
-                                                <Form.ControlLabel>Modalidad</Form.ControlLabel>
-                                                <SelectPicker
-                                                    {...field}
-                                                    size="lg"
-                                                    cleanable={false}
-                                                    style={{ marginBottom: 10, width: "100%" }}
-                                                    data={[{ label: 'Online', value: 'online' },
-                                                    { label: 'Presencial', value: 'presencial' }
-                                                    ]}
-                                                    searchable={false}
-                                                />
-                                            </Form.Group>
+                            <Button
+                                size="lg"
+                                block
+                                style={{ background: red[700], marginTop: 10 }}
+                                appearance="primary"
+                                onClick={handleSubmit(onSubmit)}>
+                                Crear Evento
+                            </Button>
 
-                                        )}
-                                    />
-                                    {
-                                        watch('tipo') == 'presencial' ?
-
-                                            <Controller
-                                                name="ubicacion"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Form.Group style={{ marginBottom: 10 }}>
-                                                        <Form.ControlLabel>Ubicación</Form.ControlLabel>
-                                                        <Input {...field} value={field.value!} size='lg' />
-                                                    </Form.Group>
-                                                )}
-                                            /> : null
-                                    }
-                                    <Controller
-                                        name="inicio"
-                                        control={control}
-                                        rules={{ required: 'Comienzo no puede quedar vacío' }}
-                                        render={({ field, fieldState }) => (
-                                            <Form.Group controlId="fecha">
-                                                <Form.ControlLabel>Comienzo</Form.ControlLabel>
-                                                <DatePicker
-                                                    placement="top"
-                                                    block
-                                                    style={{ marginBottom: 10 }}
-                                                    size="lg"
-                                                    onChange={ev => {
-                                                        field.onChange(dayjs(ev).format("DD/MM/YYYY"))
-                                                    }} />
-                                                <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
-                                                    {fieldState.error?.message}
-                                                </Form.ErrorMessage>
-                                            </Form.Group>
-                                        )}
-                                    />
-                                    {
-                                        watch('tipo') == 'online' ?
-                                            <Controller
-                                                name="link"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Form.Group style={{ marginBottom: 10 }}>
-                                                        <Form.ControlLabel>Link de acceso</Form.ControlLabel>
-                                                        <Input {...field} value={field.value!} size='lg' />
-                                                    </Form.Group>
-                                                )}
-                                            /> : null
-                                    }
-                                </Grid>
-                                <Grid item xs={6} mx='auto'>
-                                    <Button
-                                        size="lg"
-                                        block
-                                        style={{ background: red[700] }}
-                                        appearance="primary"
-                                        onClick={handleSubmit(onSubmit)}>
-
-                                        Crear Evento</Button>
-                                </Grid>
-                            </Grid>
                         </Panel>
                     </Grid>
 
-                </Grid>
-            </Box>
+                </Grid >
+            </Box >
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
                 open={load}

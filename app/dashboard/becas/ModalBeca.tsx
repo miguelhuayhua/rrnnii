@@ -59,7 +59,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
         form.append('pdf', beca.pdf);
         form.append('descripcion', beca.descripcion);
         form.append('portada', portada);
-        form.append('documento', documento);
+        form.append('documento', documento[0] ? documento[0].blobFile : '');
         form.append('institucion', beca.Institucion.nombre);
         form.append('encargado', beca.encargado);
         form.append('descripcioncorta', beca.descripcionCorta);
@@ -112,7 +112,8 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}
@@ -128,18 +129,19 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                             <Text
                                 style={{ margin: '15px 0' }}
                                 size='sm' align='center'>Permitido: .png, .jpeg, .jpg</Text>
+                            <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
                             <Uploader
                                 fileList={documento}
                                 autoUpload={false}
                                 action="/"
-                                onChange={setDocumento}
+                                onChange={files => {
+                                    setValue('pdf', 'file', { shouldDirty: true })
+                                    setDocumento(files);
+                                }}
                                 multiple={false}
                                 accept=".pdf, .doc, .docx"
                             >
-                                <>
-                                    <Negrita sx={{ mt: 2, mb: 1 }}>Documento respaldo</Negrita>
-                                    <Button size='lg' block>Seleccionar archivo...</Button>
-                                </>
+                                <Button size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
                             <Controller
                                 name="titulo"

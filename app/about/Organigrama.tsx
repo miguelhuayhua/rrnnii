@@ -16,7 +16,7 @@ export default function Organigrama({ personal }: Props) {
     useEffect(() => {
         if (personal) {
             let director = personal.find(value => value.cargo == 'jefe');
-            let secre = personal.find(value => value.cargo == 'secre');
+            let secre = personal.find(value => value.cargo == 'secretario');
             let tecnico = personal.find(value => value.cargo == 'tecnico');
             setNodes([
                 {
@@ -47,8 +47,8 @@ export default function Organigrama({ personal }: Props) {
                     position: { x: 50, y: 340 }, // Alineado en x, sólo cambia en y
                 },
                 {
-                    id: 'secre',
-                    data: { nombre: `${secre?.nombre || ''} ${secre?.paterno || ''} ${secre?.materno || ''}`, cargo: 'secre' },
+                    id: 'secretario',
+                    data: { nombre: `${secre?.nombre || ''} ${secre?.paterno || ''} ${secre?.materno || ''}`, cargo: 'secretario' },
                     type: 'Nodo',
                     position: { x: 250, y: 340 }, // Continúa en línea recta hacia abajo
                 }
@@ -71,7 +71,7 @@ export default function Organigrama({ personal }: Props) {
                 {
                     id: 'edge2',
                     source: 'jefe',
-                    target: 'secre',
+                    target: 'secretario',
                     type: 'smoothstep',
                     animated: true,
                 }

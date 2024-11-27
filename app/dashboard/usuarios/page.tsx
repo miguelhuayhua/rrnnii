@@ -111,6 +111,7 @@ export default function Main() {
                     {
                         CI: value.ci,
                         "Datos personales": `${value.nombre} ${value.paterno} ${value.materno}`,
+                        "Cargo": value.cargo,
                         "Creado el": (
                             <Box minWidth={90} py={1}>
                                 <Negrita sx={{ fontSize: 13 }}>
@@ -136,7 +137,7 @@ export default function Main() {
                                         onClick={() => {
                                             setPersonaId(value.id);
                                         }}>
-                                        <FaUser />
+                                        <FaUser fontSize={19} />
                                     </Button>
                                     <SwitchBox checked={value.estado}
                                         onChange={(ev, checked) => {

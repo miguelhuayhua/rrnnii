@@ -56,7 +56,7 @@ export default function Page() {
         onFilesSuccessfullySelected: ({ plainFiles }) => {
             setValue('imagen', URL.createObjectURL(plainFiles[0]));
             setPortada(plainFiles[0]);
-            openSnackbar('Imagen modificada con éxito');
+            openSnackbar('Imagen actualizada con éxito');
         }
     });
 
@@ -73,7 +73,7 @@ export default function Page() {
             form.append('pdf', convenio.pdf);
             form.append('descripcion', convenio.descripcion);
             form.append('portada', portada);
-            form.append('documento', documento[0].blobFile);
+            form.append('documento', documento.legth > 0 ? documento[0].blobFile : '');
             form.append('continente', convenio.continente);
             form.append('pais', convenio.pais);
             form.append('descripcioncorta', convenio.descripcionCorta);
@@ -141,7 +141,8 @@ export default function Page() {
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}
@@ -163,7 +164,6 @@ export default function Page() {
                                 action="/"
                                 onChange={setDocumento}
                                 accept=".pdf, .doc, .docx"
-
                             >
                                 <Button style={{ zIndex: 2000 }}
                                     size='lg' block>Seleccionar archivo...</Button>
@@ -173,7 +173,6 @@ export default function Page() {
                     <Grid item xs={12} sm={7}>
                         <Panel shaded style={{ background: 'white' }}
                             as='form' onSubmit={handleSubmit(onSubmit)}>
-
                             <Controller
                                 name="titulo"
                                 control={control}
@@ -189,21 +188,7 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
-                            <Controller
-                                name="descripcionCorta"
-                                control={control}
-                                render={({ field }) => (
-                                    <Form.Group style={{ marginBottom: 10 }}>
-                                        <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
-                                        <Input {...field}
-                                            multiple
-                                            style={{ maxHeight: 200 }}
-                                            as='textarea'
-                                            rows={3}
-                                            size='lg' />
-                                    </Form.Group>
-                                )}
-                            />
+
                             <Controller
                                 name="Institucion.nombre"
                                 control={control}
@@ -231,7 +216,7 @@ export default function Page() {
                                 }}
                                 render={({ field, fieldState }) => (
                                     <Form.Group controlId="carrera">
-                                        <Form.ControlLabel>Carrera</Form.ControlLabel>
+                                        <Form.ControlLabel htmlFor="carrera">Carrera</Form.ControlLabel>
                                         <TagPicker
                                             id='carrera'
                                             style={{ width: "100%", marginBottom: 10 }}
@@ -332,7 +317,21 @@ export default function Page() {
                                     />
                                     : null
                             }
-
+                            <Controller
+                                name="descripcionCorta"
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Group style={{ marginBottom: 10 }}>
+                                        <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                        <Input {...field}
+                                            multiple
+                                            style={{ maxHeight: 200 }}
+                                            as='textarea'
+                                            rows={3}
+                                            size='lg' />
+                                    </Form.Group>
+                                )}
+                            />
                             <Controller
                                 name="descripcion"
                                 control={control}

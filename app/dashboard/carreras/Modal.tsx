@@ -87,7 +87,7 @@ export default function ModalCarrera({ setCarrera, Carrera,
                         Editar {Carrera.nombre}
                     </Titulo>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={{ padding: "0 10px" }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <div style={{
@@ -124,7 +124,7 @@ export default function ModalCarrera({ setCarrera, Carrera,
                                 rules={{ required: 'Nombre no puede quedar vacío' }}
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
-                                        <Form.ControlLabel>Título del evento</Form.ControlLabel>
+                                        <Form.ControlLabel>Nombre de la carrera</Form.ControlLabel>
                                         <Input {...field} size='lg' />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}

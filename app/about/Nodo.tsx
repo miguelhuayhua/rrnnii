@@ -12,7 +12,7 @@ const Nodo = (({ data }: any) => {
                 type="source"
 
                 position={Position.Bottom}
-                style={{ opacity: (data.cargo == 'tecnico' || data.cargo == 'secre') ? 0 : 1 }} // Ajusta el tamaño a 0 para ocultar
+                style={{ opacity: (data.cargo == 'tecnico' || data.cargo == 'secretario') ? 0 : 1 }} // Ajusta el tamaño a 0 para ocultar
                 id="bottom"
             />
             <Handle
@@ -28,7 +28,7 @@ const Nodo = (({ data }: any) => {
                         color: 'white',
                         textAlign: 'center', fontWeight: 800
                     }}>
-                        {data.cargo == 'secre' ? 'Secretario(a)' : data.cargo == 'tecnico' ? 'Técnico' : data.cargo == 'jefe' ? 'Jefe de Unidad' : 'Rectorado'}
+                        {data.cargo == 'secretario' ? 'Secretario(a)' : data.cargo == 'tecnico' ? 'Técnico' : data.cargo == 'jefe' ? 'Jefe de Unidad' : 'Rectorado'}
                     </Negrita>
                 </Box>
                 <Divider />
