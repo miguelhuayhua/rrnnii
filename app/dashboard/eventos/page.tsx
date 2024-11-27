@@ -18,6 +18,9 @@ import EventoComponent from "../componentes/items/Evento";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import 'dayjs/locale/es';
 import { Button, Input, InputGroup } from "rsuite";
+import xlsx from 'json-as-xlsx';
+import EventosPDF from "./PDF";
+import { pdf } from "@react-pdf/renderer";
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -56,7 +59,7 @@ export default function Page() {
                     appearance="subtle"
                     onClick={() => {
                         setLoad(true);
-                        axios.post('/api/evento/todo', { opcion }).then(res => {
+                        axios.post('/api/evento/todo', {}).then(res => {
                             setEventos(res.data);
                             setPrevEventos(res.data);
                             setOpcion('todo');
@@ -65,10 +68,44 @@ export default function Page() {
                     }}>
                     <Icon icon='nrk:reload' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle' onClick={() => {
+                    let data = [
+                        {
+                            sheet: "Eventos",
+                            columns: [
+                                { label: "ID", value: "id" },
+                                { label: "Título", value: (row: any) => row.titulo },
+                                { label: "Ubicación", value: (row: any) => row.ubicacion || "No especificada" },
+                                { label: "Inicio", value: (row: any) => row.inicio },
+                                { label: "Tipo", value: (row: any) => row.tipo },
+                                { label: "Estado", value: (row: any) => (row.estado ? "Activo" : "Inactivo") },
+                                { label: "Link de reunion", value: (row: any) => row.link || "Sin enlace" },
+                                { label: "Visualizaciones", value: (row: any) => row.conteo },
+                                { label: "Enlace", value: (row: any) => `https://rrnnii.upea.bo/eventos/${row.id}` },
+                            ],
+                            content: eventos,
+                        },
+                    ];
+                    let settings = {
+                        fileName: `listado-de-eventos-${dayjs().format("DD-MM-YYYY_HH-mm-ss")}`,
+                        writeMode: "writeFile",
+                    };
+                    xlsx(data, settings);
+                }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle' onClick={() => {
+                    pdf(<EventosPDF modo={opcion} Eventos={eventos} />)
+                        .toBlob()
+                        .then((res) => {
+                            const url = URL.createObjectURL(res);
+                            const a = document.createElement('a');
+                            a.download = `listado-eventos-${dayjs().format('DD-MM-YYYY_HH-mm-ss')}.pdf`;
+                            a.href = url;
+                            a.click();
+                            a.remove();
+                        });
+                }}>
                     <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>

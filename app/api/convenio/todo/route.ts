@@ -6,7 +6,8 @@ const POST = async (request: NextRequest) => {
     if (token?.name) {
         try {
             let convenios = await prisma.convenio.findMany({
-                include: { Institucion: true, ConvenioCarrera: true }, orderBy: {
+                include: { Institucion: true, ConvenioCarrera: { include: { Carrera: true } } },
+                orderBy: {
                     createdAt: 'desc'
                 }
             });

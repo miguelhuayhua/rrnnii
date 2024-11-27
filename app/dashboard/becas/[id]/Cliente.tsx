@@ -11,7 +11,7 @@ import Image from 'next/legacy/image';
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { Icon } from '@iconify/react';
 import { useState } from "react";
-import { green, red } from "@mui/material/colors";
+import { green, grey, red } from "@mui/material/colors";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TabBox } from "../../componentes/Mostrar";
 import { IoCalendar } from "react-icons/io5";
@@ -162,9 +162,22 @@ export default function Cliente({ Beca }: Props) {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Panel shaded style={{ fontSize: 16, background: 'white' }}>
-                                        {
-                                            parse(Beca.descripcion)
-                                        }
+                                        <Box sx={{
+                                            fontSize: 17.5, fontWeight: 300,
+                                            textAlign: 'justify',
+                                            p: {
+                                                color: grey[900],
+                                            },
+                                            "h2, h3, h4": { color: red[500] },
+                                            li: {
+                                                listStyleType: 'square', "::marker": {
+                                                    color: red[500], fontSize: 25
+                                                }
+                                            }
+                                        }}>  {
+                                                parse(Beca.descripcion)
+                                            }
+                                        </Box>
                                     </Panel>
                                 </Grid>
                             </> : null

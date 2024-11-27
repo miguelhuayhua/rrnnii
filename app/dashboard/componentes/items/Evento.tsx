@@ -71,9 +71,9 @@ const EventoComponent = ({ Evento, setEvento,
                                 </Button> : null
                         }
                         <SwitchBox checked={Evento.estado} onChange={(ev, checked) => {
-                            axios.post('/api/convenio/estado', { estado: checked, id: Evento.id }).then(res => {
+                            axios.post('/api/evento/estado', { estado: checked, id: Evento.id }).then(res => {
                                 openSnackbar(res.data.mensaje);
-                                axios.post('/api/convenio/todo', {}).then(res => {
+                                axios.post('/api/evento/todo', {}).then(res => {
                                     setEventos(res.data);
                                     setPrevEventos(res.data);
                                     setOpcion('todo');

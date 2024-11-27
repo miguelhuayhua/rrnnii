@@ -12,6 +12,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
 dayjs.locale('es');
+import xlsx from 'json-as-xlsx';
 import { Icon } from '@iconify/react';
 import { red } from "@mui/material/colors";
 import axios from "axios";
@@ -19,6 +20,8 @@ import PasantiaComponent from "../componentes/items/Pasantia";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { IoSearch } from "react-icons/io5";
 import { Button, Input, InputGroup } from "rsuite";
+import PasantiasPDF from "./PDF";
+import { pdf } from "@react-pdf/renderer";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [Pasantias, setPasantias] = useState<(Pasantia & { Institucion: Institucion })[]>([]);
@@ -66,10 +69,55 @@ export default function Page() {
                     }}>
                     <Icon icon='nrk:reload' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle'
+                    onClick={() => {
+                        console.log(Pasantias)
+                        let data = [
+                            {
+                                sheet: "Hoja 1",
+                                columns: [
+                                    { label: "ID", value: "id" },
+                                    { label: "Título", value: (row: any) => row.titulo },
+                                    { label: "Descripción Corta", value: (row: any) => row.descripcionCorta },
+                                    { label: "Modalidad", value: (row: any) => row.modalidad == 'more' ? 'Más de 6 meses' : row.modalidad + 'meses' },
+                                    { label: "Estado", value: (row: any) => row.estado ? "Activo" : "Inactivo" },
+                                    { label: "Fecha de Finalización", value: (row: any) => row.finalizacion || "Sin fecha" },
+                                    { label: "Institución", value: (row: any) => row.Institucion?.nombre || "Sin institución" },
+                                    {
+                                        label: "Carreras Asociadas", value: (row: any) =>
+                                            row.PasantiaCarrera.map((pc: any) => pc.Carrera?.nombre || "Carrera desconocida").join(", ")
+                                    },
+                                    { label: "Conteo", value: (row: any) => row.conteo },
+                                    { label: "Enlace", value: (row: any) => `https://rrnnii.upea.bo/pasantias/${row.id}` },
+                                ],
+                                content: Pasantias, // Array con los datos de pasantías
+                            },
+                        ];
+
+                        let settings = {
+                            fileName: `listado-de-pasantias-${dayjs().format("DD-MM-YYYY_HH-mm-ss")}`, // Nombre del archivo con fecha y hora
+                            writeMode: "writeFile", // Opciones: 'WriteFile' o 'write'
+                        };
+                        xlsx(data, settings);
+                    }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+
+                <Button appearance='subtle'
+                    onClick={() => {
+                        pdf(<PasantiasPDF
+                            Pasantias={Pasantias as any} // Reemplaza `any` con el tipo adecuado si lo conoces
+                            modo={opcion}
+                        />).toBlob().then(res => {
+                            const url = URL.createObjectURL(res);
+                            const a = document.createElement('a');
+                            a.download = "listado-pasantias-" + dayjs().format('DD-MM-YYYY_HH-mm-ss') + ".pdf"; // Ajusta el nombre del archivo
+                            a.href = url;
+                            a.click();
+                            a.remove();
+                        });
+                    }}
+                >
                     <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>

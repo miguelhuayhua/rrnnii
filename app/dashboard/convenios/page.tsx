@@ -11,14 +11,17 @@ import ModalConvenio from "./Modal";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
-import { TbReload } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import ConvenioComponent from "../componentes/items/Convenio";
 import { IoSearch } from "react-icons/io5";
 import { Button, Input, InputGroup } from "rsuite";
 import { Icon } from '@iconify/react';
+import xlsx from 'json-as-xlsx';
+import { paises } from "@/utils/globals";
+import ConvenioPDF from "./PDF";
+import { pdf } from "@react-pdf/renderer";
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -66,12 +69,53 @@ export default function Page() {
                     }}>
                     <Icon icon='nrk:reload' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle' onClick={() => {
+                    let data = [
+                        {
+                            sheet: "Hoja 1",
+                            columns: [
+                                { label: "ID", value: "id" },
+                                { label: "Título", value: (row: any) => row.titulo },
+                                { label: "Descripción Corta", value: (row: any) => row.descripcionCorta },
+                                { label: "Estado del Convenio", value: (row: any) => row.estado ? "Activo" : "Inactivo" },
+                                { label: "Tipo de Convenio", value: (row: any) => "Convenio " + row.tipo },
+                                { label: "País", value: (row: any) => paises.find(pais => pais.value === row.pais)?.pais || "Desconocido" },
+                                { label: "Continente", value: (row: any) => row.continente || "No especificado" },
+                                { label: "Fecha de Finalización", value: (row: any) => row.finalizacion || "Sin fecha" },
+                                { label: "Institución", value: (row: any) => row.Institucion?.nombre || "Sin institución" },
+                                { label: "Visualizaciones", value: (row: any) => row.conteo },
+                                { label: "Número de Carreras Asociadas", value: (row: any) => row.ConvenioCarrera.length },
+                                { label: "Enlace", value: (row: any) => `https://rrnnii.upea.bo/convenios/${row.id}` },
+                            ],
+                            content: convenios,
+                        },
+                    ];
+                    let settings = {
+                        fileName: `listado-de-convenios-${dayjs().format("DD-MM-YYYY_HH-mm-ss")}`, // Nombre del archivo con fecha y hora formateada
+                        writeMode: "writeFile", // Opciones: 'WriteFile' o 'write'
+                    };
+                    xlsx(data, settings);
+                }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle'
+                    onClick={() => {
+                        pdf(<ConvenioPDF
+                            Convenios={convenios as any} // Reemplaza `any` con el tipo adecuado si lo conoces
+                            modo={opcion} // Puedes reutilizar la lógica de `opcion` si es aplicable
+                        />).toBlob().then(res => {
+                            const url = URL.createObjectURL(res);
+                            const a = document.createElement('a');
+                            a.download = "listado-convenios-" + dayjs().format('DD-MM-YYYY_HH-mm-ss') + ".pdf"; // Ajusta el nombre del archivo
+                            a.href = url;
+                            a.click();
+                            a.remove();
+                        });
+                    }}
+                >
                     <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
+
             </Stack>
             <Tabs
                 sx={{ mb: 2, background: 'white', borderRadius: 3, boxShadow: '2px 2px 8px #21212122' }}

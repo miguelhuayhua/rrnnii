@@ -1,141 +1,166 @@
 import React from 'react';
-import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image, Link } from '@react-pdf/renderer';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import { Beca, ParticipanteBeca } from '@prisma/client';
 dayjs.locale('es');
 const styles = StyleSheet.create({
     negrita: {
-        fontSize: 13,
-        color: '#222',
-        fontFamily: 'Helvetica-Bold'
-    },
-    titulo: {
-        fontSize: 18,
-        color: '#222',
-        fontFamily: 'Helvetica-Bold'
+        fontSize: 11,
+        color: '#212121',
+        fontFamily: 'Helvetica-Bold',
+        textAlign: 'center'
     },
     normal: {
-        fontSize: 13,
-        fontFamily: 'Helvetica'
-    },
-    textoInfo: {
-        color: 'gray',
-        fontSize: 9,
-        marginVertical: 1
+        fontSize: 11,
+        fontFamily: 'Helvetica',
+        textAlign: 'center'
     },
     celda: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 10
+        padding: 5,
+        borderBottom: '1px solid #212121',
+        borderLeft: '1px solid #212121'
     }
 });
 
 interface Props {
-    Becas: (Beca & { Participantes: ParticipanteBeca[] })[]
+    Becas: (Beca & { Participantes: ParticipanteBeca[] })[],
+    modo: string;
 }
-const BecaPDF = ({ Becas }: Props) => {
+const BecaPDF = ({ Becas, modo }: Props) => {
     return (
         <Document author='rrnnii'
             creationDate={new Date()}
             language='es'
             creator='rrnnii'
         >
-            <Page size="LETTER" style={{ padding: 20 }} orientation='landscape'>
-                <Text style={styles.textoInfo}>
-                    Generado el: {dayjs().format('DD [de] MMMM [del] YYYY [a las] HH:mm:ss')}
-                </Text>
-                <View style={{
-                    display: 'flex',
-                    justifyContent: 'center', alignItems: 'center',
-                    width: "100%", marginTop: 10
-                }}>
-                    <Image fixed source='/assets/head.png' style={{
-                        width: 700, height: 70,
+            <Page size="LETTER" style={{ padding: 25 }} orientation='landscape'>
+                <Image fixed
+                    src='/logorrnnii.png'
+                    style={{
+                        position: 'absolute',
+                        left: "33%", right: 0, top: "33%", bottom: 0,
+                        margin: 'auto',
+                        width: 260,
+                        height: 260,
+                        opacity: 0.05
                     }} />
+                <View style={{ display: 'flex', justifyContent: 'center', width: "100%" }}>
+                    <Image fixed src='/cabecera.png' style={{ width: "80%", height: 70, marginLeft: 70 }} />
                 </View>
-                <Text style={{
-                    ...styles.titulo, marginTop: 10,
-                    textAlign: 'center', paddingHorizontal: 20
+                <View fixed style={{
+                    display: 'flex', flexDirection: 'row',
+                    borderTop: '1px solid #212121', borderRight: "1px solid #212121",
+                    marginTop: 20
                 }}>
-                    Listado de Becas
-                </Text>
+                    <View style={{ ...styles.celda, width: "70%", paddingHorizontal: 20 }}>
+                        <Text style={{ ...styles.negrita, fontSize: 14 }}>
+                            Listado de Becas {modo == 'todo' ? '(Todas las becas)' :
+                                modo == 'activo' ? '(Becas activas)' :
+                                    modo == 'inactivo' ? '(Becas inactivas)' :
+                                        modo == 'concluido' ? '(Becas concluídas)' :
+                                            '(Becas Vigentes)'}
+                        </Text>
+                    </View>
+                    <View style={{ ...styles.celda, width: "30%" }}>
+                        <Text style={styles.negrita} render={({ pageNumber, totalPages }) => (
+                            `Pág. ${pageNumber} de ${totalPages}`
+                        )} />
+                        <Text style={{ ...styles.normal, fontSize: 9 }}>
+                            {dayjs().format('DD [de] MMMM [del] YYYY [a las] HH:mm:ss')}
+                        </Text>
+                    </View>
+                </View>
                 <View style={{
-                    border: '1px solid #ddd',
-                    marginVertical: 20, marginHorizontal: 20
+                    borderTop: '1px solid #212121',
+                    borderRight: '1px solid #212121',
                 }}>
                     <View style={{
                         display: 'flex', flexDirection: 'row',
-                        borderBottom: '1px solid #ddd'
                     }}>
-                        <View style={{ width: "5%", ...styles.celda }}>
+                        <View style={{ width: "5%", ...styles.celda, backgroundColor: '#ccc' }}>
                             <Text style={styles.negrita}>
                                 Nro.
                             </Text>
                         </View>
-                        <View style={{ width: "35%", ...styles.celda }}>
+                        <View style={{ width: "25%", ...styles.celda, backgroundColor: '#ccc' }}>
                             <Text style={styles.negrita}>
-                                Nombre completo
+                                Título de Beca
                             </Text>
                         </View>
-                        <View style={{ width: "22.5%", ...styles.celda }}>
+                        <View style={{ width: "5%", ...styles.celda, backgroundColor: '#ccc' }}>
                             <Text style={styles.negrita}>
-                                Registro universitario
+                                País
                             </Text>
                         </View>
-                        <View style={{ width: "22.5%", ...styles.celda }}>
+                        <View style={{ width: "8%", ...styles.celda, backgroundColor: '#ccc' }}>
                             <Text style={styles.negrita}>
-                                Cédula de identidad
+                                Participantes
                             </Text>
                         </View>
-                        <View style={{ width: "15%", ...styles.celda }}>
+                        <View style={{ width: "17%", ...styles.celda, backgroundColor: "#ccc" }}>
                             <Text style={styles.negrita}>
-                                Aceptado
+                                Descripción Corta
+                            </Text>
+                        </View>
+                        <View style={{ width: "15%", ...styles.celda, backgroundColor: "#ccc" }}>
+                            <Text style={styles.negrita}>
+                                Encargado
+                            </Text>
+                        </View>
+                        <View style={{ width: "25%", ...styles.celda, backgroundColor: "#ccc" }}>
+                            <Text style={styles.negrita}>
+                                Enlace
                             </Text>
                         </View>
                     </View>
                     {
                         Becas.map((value, i) => (
                             <View key={value.id} style={{
-                                display: 'flex', flexDirection: 'row',
-                                borderBottom: '1px solid #ddd',
-                                borderRadius: 2
+                                display: 'flex', flexDirection: 'row'
                             }}>
                                 <View style={{ width: "5%", ...styles.celda }}>
                                     <Text style={styles.normal}>
                                         {i + 1}
                                     </Text>
                                 </View>
-                                <View style={{ width: "35%", ...styles.celda }}>
+                                <View style={{ width: "25%", ...styles.celda }}>
                                     <Text style={styles.normal}>
-                                        {value.titulo.toUpperCase()}
+                                        {value.titulo}
                                     </Text>
                                 </View>
-                                <View style={{ width: "22.5%", ...styles.celda }}>
+                                <View style={{ width: "5%", ...styles.celda }}>
                                     <Text style={styles.normal}>
-                                        {value.encargado}
+                                        {value.pais}
                                     </Text>
                                 </View>
-                                <View style={{ width: "22.5%", ...styles.celda }}>
+                                <View style={{ width: "8%", ...styles.celda }}>
                                     <Text style={styles.normal}>
-                                        {value.conteo}
+                                        {value.Participantes.length}
+                                    </Text>
+                                </View>
+                                <View style={{ width: "17%", ...styles.celda }}>
+                                    <Text style={styles.normal}>
+                                        {value.descripcionCorta}
                                     </Text>
                                 </View>
                                 <View style={{ width: "15%", ...styles.celda }}>
                                     <Text style={styles.normal}>
-                                        {
-                                            value.estado ? 'Activo' : 'Inactivo'
-                                        }
+                                        {value.encargado}
                                     </Text>
+                                </View>
+                                <View style={{ width: "25%", ...styles.celda }}>
+                                    <Link href={`https://rrnnii.upea.bo/becas/${value.id}`} style={styles.normal}>
+                                        {`https://rrnnii.upea.bo/becas/${value.id}`}
+                                    </Link>
                                 </View>
                             </View>
                         ))
                     }
                 </View>
-                <Text style={{ position: 'absolute', bottom: 10, right: 10, fontSize: 10, color: '#888' }} render={({ pageNumber, totalPages }) => (
-                    `${pageNumber} / ${totalPages}`
-                )} fixed />
             </Page>
         </Document>
     );

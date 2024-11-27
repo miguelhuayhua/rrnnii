@@ -7,15 +7,18 @@ const POST = async (request: NextRequest) => {
         try {
             let { estado, id } = await request.json();
 
-            await prisma.beca.update({
-                data: { estado }, where: { id }
+            await prisma.evento.update({
+                data: {
+                    estado
+                },
+                where: { id }
             });
-            return Response.json({ error: false, mensaje: `Beca ${estado ? 'Activada' : 'Desactivada'}` });
+            return Response.json({ error: false, mensaje: `Evento ${estado ? 'Activado' : 'Desactivado'}` });
         } catch (error) {
             console.log(error)
             return Response.json({
                 error: true,
-                mensaje: 'Error al modificar el estado'
+                mensaje: 'Error al modificar estado'
             });
         }
     }

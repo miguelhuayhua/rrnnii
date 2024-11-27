@@ -32,7 +32,10 @@ import dayjs from "dayjs";
 
 export default function Page() {
     const { control, formState: { errors }, handleSubmit, setValue, watch } = useForm<Evento>({
-        defaultValues: { titulo: '', tipo: 'online', descripcion: '', inicio: '', link: '', pdf: '' }, shouldFocusError: true
+        defaultValues: {
+            titulo: '', tipo: 'online',
+            ubicacion: '', descripcion: '', inicio: '', link: '', pdf: ''
+        }, shouldFocusError: true
     });
     const [load, setLoad] = useState(false);
     const [portada, setPortada] = useState<any>('');
@@ -57,6 +60,7 @@ export default function Page() {
             form.append('titulo', evento.titulo);
             form.append('tipo', evento.tipo);
             form.append('pdf', evento.pdf);
+            form.append('ubicacion', evento.ubicacion!);
             form.append('link', evento.link!);
             form.append('inicio', evento.inicio);
             form.append('descripcion', evento.descripcion);
@@ -207,6 +211,20 @@ export default function Page() {
 
                                         )}
                                     />
+                                    {
+                                        watch('tipo') == 'presencial' ?
+
+                                            <Controller
+                                                name="ubicacion"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Form.Group style={{ marginBottom: 10 }}>
+                                                        <Form.ControlLabel>Ubicación</Form.ControlLabel>
+                                                        <Input {...field} value={field.value!} size='lg' />
+                                                    </Form.Group>
+                                                )}
+                                            /> : null
+                                    }
                                     <Controller
                                         name="inicio"
                                         control={control}

@@ -36,6 +36,7 @@ const POST = async (request: NextRequest) => {
                     pdf: resdoc.data.path,
                     imagen: resimage.data.path,
                     tipo: form.get('tipo'),
+                    ubicacion:form.get('ubicacion'),
                     link: form.get('link'),
                     inicio: form.get('inicio')
                 }

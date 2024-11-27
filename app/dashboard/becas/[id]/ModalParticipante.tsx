@@ -1,21 +1,15 @@
 'use client';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
-import { IoClose } from "react-icons/io5";
-import { Backdrop, CircularProgress, Grid, LinearProgress } from '@mui/material';
-import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
+import { Backdrop, CircularProgress, Grid } from '@mui/material';
 import { Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
-import { InputBox } from '@/app/componentes/Datos';
 import { useModal } from '@/providers/ModalProvider';
 import { Archivo, ParticipanteBeca, } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { Button, Form, Input, InputNumber, List, Modal, Panel, Stack } from 'rsuite';
+import { Button, Form, Input, InputNumber, List, Modal, Panel } from 'rsuite';
 import { parseLetter } from '@/utils/data';
-import { useSnackbar } from '@/providers/SnackbarProvider';
 import { fileDomain } from '@/utils/globals';
 import Link from 'next/link';
 interface Props {

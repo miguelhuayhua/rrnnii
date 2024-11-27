@@ -28,6 +28,7 @@ import {
 } from "rsuite";
 import dayjs from "dayjs";
 import { red } from "@mui/material/colors";
+import { toUpperCase } from "@/utils/data";
 export default function Page() {
     const { control, handleSubmit, watch, setValue } = useForm<Pasantia & { Institucion: Institucion, carreras: string[] }>({
         defaultValues: { modalidad: '3', titulo: '', descripcion: '', Institucion: { nombre: '' }, carreras: [] }, shouldFocusError: true
@@ -168,10 +169,25 @@ export default function Page() {
                                         render={({ field, fieldState }) => (
                                             <Form.Group style={{ marginBottom: 10 }}>
                                                 <Form.ControlLabel>Título de la pasantía</Form.ControlLabel>
-                                                <Input {...field} size='lg' />
+                                                <Input {...field} size='lg' onChange={text => field.onChange(toUpperCase(text))} />
                                                 <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                                     {fieldState.error?.message}
                                                 </Form.ErrorMessage>
+                                            </Form.Group>
+                                        )}
+                                    />
+                                    <Controller
+                                        name="descripcionCorta"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
+                                                <Input {...field}
+                                                    multiple
+                                                    style={{ maxHeight: 200 }}
+                                                    as='textarea'
+                                                    rows={3}
+                                                    size='lg' />
                                             </Form.Group>
                                         )}
                                     />

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { Video, Video as VideoType } from '@prisma/client';
 import { Titulo } from '@/app/componentes/Textos';
@@ -12,11 +12,14 @@ interface Props {
     video: Video;
 }
 import parser from 'html-react-parser';
+import axios from 'axios';
 
 export default function ModalVideo({ setVideo, video }: Props) {
-
-
-
+    useEffect(() => {
+        if (video) {
+            axios.post('/api/video/count', { id: video.id });
+        }
+    }, []);
     return (
         <>
             <Modal

@@ -175,7 +175,7 @@ export default function ModalConvenio({ setConvenio, setOpcion, Convenio, setCon
                                         <Form.ControlLabel>Descripción Corta</Form.ControlLabel>
                                         <Input {...field}
                                             multiple
-                                            onChange={text => field.onChange(toUpperCase(text))} size='lg' />
+                                            size='lg' />
                                     </Form.Group>
                                 )}
                             />

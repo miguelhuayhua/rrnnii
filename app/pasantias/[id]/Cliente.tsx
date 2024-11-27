@@ -57,7 +57,7 @@ export default function Cliente({ value }: Props) {
                                 textAlign: 'center',
                                 color: 'white', fontSize: 17
                             }}>
-                                {value.titulo}
+                                {value.descripcionCorta}
                             </Normal>
                             <Box p={2} position='relative' display='flex' mt={2}>
                                 <Box sx={{ background: '#FFFFFF66', height: "100%", width: "100%", position: 'absolute', top: 0, left: 0 }} />
@@ -71,7 +71,6 @@ export default function Cliente({ value }: Props) {
                                     <Normal sx={{ ml: 1, fontSize: 18, color: 'white' }}>
                                         {value.Institucion.nombre}
                                     </Normal>
-
                                 </Box>
                                 <Box bgcolor={red[50]} ml={4} p={2} borderTop={`5px solid ${red[700]}`}>
                                     <Normal sx={{ color: 'black' }}>

@@ -1,20 +1,25 @@
 import { NextRequest } from "next/server";
 import { prisma } from "../../client";
+import { getToken } from "next-auth/jwt";
 const POST = async (request: NextRequest) => {
-    let { estado, id } = await request.json();
-    try {
-        await prisma.persona.update({
-            data: { estado },
-            where: { id }
-        });
-        return Response.json({ error: false, mensaje: `Personal ${estado ? 'Activado' : 'Desactivado'}` });
-    } catch (error) {
-        console.log(error)
-        return Response.json({
-            error: true,
-            mensaje: 'Error al modificar estado'
-        });
+    const token = await getToken({ secret: process.env.NEXTAUTH_SECRET as string, req: request });
+    if (token?.name) {
+        try {
+            let { estado, id } = await request.json();
+            await prisma.persona.update({
+                data: { estado },
+                where: { id }
+            });
+            return Response.json({ error: false, mensaje: `Personal ${estado ? 'Activado' : 'Desactivado'}` });
+        } catch (error) {
+            console.log(error)
+            return Response.json({
+                error: true,
+                mensaje: 'Error al modificar estado'
+            });
+        }
     }
+    else return Response.error();
 }
 
 export { POST };

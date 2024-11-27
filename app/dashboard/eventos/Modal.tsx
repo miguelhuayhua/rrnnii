@@ -48,6 +48,7 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
         form.append('tipo', evento.tipo);
         form.append('pdf', evento.pdf);
         form.append('link', evento.link!);
+        form.append('ubicacion', evento.ubicacion!);
         form.append('inicio', evento.inicio);
         form.append('descripcion', evento.descripcion);
         form.append('imagen', portada);
@@ -157,6 +158,20 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
 
                                 )}
                             />
+                            {
+                                watch('tipo') == 'presencial' ?
+
+                                    <Controller
+                                        name="ubicacion"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Form.Group style={{ marginBottom: 10 }}>
+                                                <Form.ControlLabel>Ubicación</Form.ControlLabel>
+                                                <Input {...field} value={field.value!} size='lg' />
+                                            </Form.Group>
+                                        )}
+                                    /> : null
+                            }
                             <Controller
                                 name="inicio"
                                 control={control}

@@ -1,6 +1,6 @@
 "use client";
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
-import { Box, Breadcrumbs, Grid, Stack, Tabs, CircularProgress } from "@mui/material";
+import { Box, Breadcrumbs, Stack, Tabs, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { TabBox } from "../componentes/Mostrar";
 import { useEffect, useState } from "react";
@@ -8,17 +8,20 @@ import { useRouter } from "next/navigation";
 import { Video } from "@prisma/client";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbReload } from "react-icons/tb";
-import { blue, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import axios from "axios";
 import { ChipBox } from "@/app/componentes/Mostrar";
-import { IoSearch } from "react-icons/io5";
-import { Button, Input, InputGroup } from "rsuite";
+import { Button } from "rsuite";
 import ModalVideo from "./Modal";
 import Tabla from "../componentes/Tabla";
 import dayjs from "dayjs";
+import { Icon } from '@iconify/react';
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
-
+import xlsx from 'json-as-xlsx';
+import VideosPDF from "./PDF";
+import { pdf } from "@react-pdf/renderer";
+import { fileDomain } from "@/utils/globals";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const [videos, setVideos] = useState<Video[]>([]);
@@ -48,7 +51,7 @@ export default function Page() {
             <Titulo sx={{ mt: 1 }}>
                 Videos
             </Titulo>
-            <Stack direction='row' my={2} spacing={2} >
+            <Stack direction='row' my={2} spacing={1} >
                 <Button size='lg' appearance="primary"
                     onClick={() => router.push('/dashboard/videos/crear')}>
                     Añadir video
@@ -66,6 +69,46 @@ export default function Page() {
                         });
                     }}>
                     <TbReload fontSize={22} />
+                </Button>
+                <Button appearance='subtle' onClick={() => {
+                    let data = [
+                        {
+                            sheet: "Videos",
+                            columns: [
+                                { label: "ID", value: "id" },
+                                { label: "Título", value: (row: any) => row.titulo },
+                                { label: "Creado el", value: (row: any) => row.createdAt },
+                                { label: "Estado", value: (row: any) => (row.estado ? "Activo" : "Inactivo") },
+                                { label: "Descripción", value: (row: any) => row.descripcion || "No disponible" },
+                                { label: "Video", value: (row: any) => fileDomain + row.video || "No disponible" },
+                                { label: "Vistas", value: (row: any) => row.conteo },
+                            ],
+                            content: videos,
+                        },
+                    ];
+                    let settings = {
+                        fileName: `listado-de-videos-${dayjs().format("DD-MM-YYYY_HH-mm-ss")}`,
+                        writeMode: "writeFile",
+                    };
+                    xlsx(data, settings);
+                }}>
+                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                </Button>
+                <Button appearance='subtle'
+                    onClick={() => {
+                        pdf(<VideosPDF videos={videos} modo="todo" />)
+                            .toBlob()
+                            .then((res) => {
+                                const url = URL.createObjectURL(res);
+                                const a = document.createElement('a');
+                                a.download = `listado-videos-${dayjs().format('DD-MM-YYYY_HH-mm-ss')}.pdf`;
+                                a.href = url;
+                                a.click();
+                                a.remove();
+                            });
+                    }}
+                >
+                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
             <Tabs

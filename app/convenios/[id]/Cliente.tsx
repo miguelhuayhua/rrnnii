@@ -59,7 +59,7 @@ export default function Cliente({ value }: Props) {
                                 textAlign: 'center',
                                 color: 'white', fontSize: 17
                             }}>
-                                {value.titulo}
+                                {value.descripcionCorta}
                             </Normal>
                             <Breadcrumbs
                                 color="white" sx={{

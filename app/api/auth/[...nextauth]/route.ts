@@ -19,7 +19,8 @@ const handler = NextAuth({
                 const data = await prisma.usuario.findUnique({
                     where: {
                         usuario,
-                        estado: true
+                        estado: true,
+                        Persona: { estado: true }
                     }
                 });
 

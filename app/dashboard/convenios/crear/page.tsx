@@ -200,7 +200,7 @@ export default function Page() {
                                             style={{ maxHeight: 200 }}
                                             as='textarea'
                                             rows={3}
-                                            onChange={text => field.onChange(toUpperCase(text))} size='lg' />
+                                            size='lg' />
                                     </Form.Group>
                                 )}
                             />

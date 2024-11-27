@@ -37,6 +37,7 @@ const POST = async (request: NextRequest) => {
                     tipo: form.get('tipo'),
                     link: form.get('link'),
                     inicio: form.get('inicio'),
+                    ubicacion: form.get('ubicacion'),
                     ...imagen ? ({ imagen: resimage.data.path }) : null,
                     ...doc ? ({ pdf: resdoc.data.path }) : null
                 },

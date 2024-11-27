@@ -17,6 +17,9 @@ import NoticiaComponent from "../componentes/items/Noticia";
 import { Button, Input, InputGroup } from "rsuite";
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
+import NoticiasPDF from "./PDF";
+import { pdf } from "@react-pdf/renderer";
+import xlsx from 'json-as-xlsx';
 dayjs.locale('es');
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -64,11 +67,48 @@ export default function Page() {
                     }}>
                     <Icon icon='nrk:reload' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
-                    <Icon icon='fa-regular:file-excel' fontSize={22} />
+                <Button
+                    appearance="subtle"
+                    onClick={() => {
+                        let data = [
+                            {
+                                sheet: "Noticias",
+                                columns: [
+                                    { label: "ID", value: "id" },
+                                    { label: "Título", value: (row: any) => row.titulo },
+                                    { label: "Creado", value: (row: any) => row.createdAt },
+                                    { label: "Estado", value: (row: any) => (row.estado ? "Activo" : "Inactivo") },
+                                    { label: "Imagen", value: (row: any) => row.imagen || "Sin imagen" },
+                                    { label: "Enlace", value: (row: any) => `https://rrnnii.upea.bo/noticias/${row.id}` },
+                                ],
+                                content: noticias,
+                            },
+                        ];
+                        let settings = {
+                            fileName: `listado-de-noticias-${dayjs().format("DD-MM-YYYY_HH-mm-ss")}`,
+                            writeMode: "writeFile",
+                        };
+                        xlsx(data, settings);
+                    }}
+                >
+                    <Icon icon="fa-regular:file-excel" fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
-                    <Icon icon='fa-regular:file-pdf' fontSize={22} />
+                <Button
+                    appearance="subtle"
+                    onClick={() => {
+                        pdf(<NoticiasPDF modo={opcion} Noticias={noticias} />)
+                            .toBlob()
+                            .then((res) => {
+                                const url = URL.createObjectURL(res);
+                                const a = document.createElement("a");
+                                a.download = `listado-noticias-${dayjs().format("DD-MM-YYYY_HH-mm-ss")}.pdf`;
+                                a.href = url;
+                                a.click();
+                                a.remove();
+                            });
+                    }}
+                >
+                    <Icon icon="fa-regular:file-pdf" fontSize={22} />
                 </Button>
             </Stack>
             <Tabs

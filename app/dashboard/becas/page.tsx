@@ -10,6 +10,7 @@ import { Beca } from "@prisma/client";
 import { Icon } from '@iconify/react';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import dayjs from "dayjs";
+import xlsx from 'json-as-xlsx';
 import { red } from "@mui/material/colors";
 import axios from "axios";
 import ModalBeca from "./ModalBeca";
@@ -17,6 +18,9 @@ import { ChipBox } from "@/app/componentes/Mostrar";
 import BecaComponent from "../componentes/items/Beca";
 import { IoSearch } from "react-icons/io5";
 import { Button, Input, InputGroup } from "rsuite";
+import { paises } from "@/utils/globals";
+import { pdf } from "@react-pdf/renderer";
+import BecaPDF from "./Pdf";
 
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
@@ -64,10 +68,53 @@ export default function Page() {
                     }}>
                     <Icon icon='nrk:reload' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle'
+                    onClick={() => {
+                        let data = [
+                            {
+                                sheet: "Hoja 1",
+                                columns: [
+                                    { label: "ID", value: "id" },
+                                    { label: "Título", value: (row: any) => row.titulo },
+                                    { label: "Descripción Corta", value: (row: any) => row.descripcionCorta },
+                                    { label: "Estado de la Beca", value: (row: any) => row.estado ? "Activo" : "Inactivo" },
+                                    { label: "Tipo de Beca", value: (row: any) => "Beca " + row.tipo },
+                                    { label: "País", value: (row: any) => paises.find(pais => pais.value === row.pais)?.pais || "Desconocido" },
+                                    { label: "Continente", value: (row: any) => row.continente || "No especificado" },
+                                    { label: "Fecha de Expiración", value: (row: any) => row.termina },
+                                    { label: "Encargado", value: (row: any) => row.encargado || "Sin encargado" },
+                                    { label: "Número de Participantes", value: (row: any) => row.Participantes.length },
+                                    { label: "Institución", value: (row: any) => row.Institucion?.nombre || "Sin institución" },
+                                    { label: "Conteo", value: (row: any) => row.conteo },
+                                    { label: "Enlace", value: (row: any) => `https://rrnnii.upea.bo/becas/${row.id}` },
+                                ],
+                                content: becas
+                            }
+                        ]
+                        let settings = {
+                            fileName: "listado-de-becas" + dayjs().format('DD/MM/YYYY - HH:mm:ss'), // Name of the resulting spreadsheet
+                            writeMode: "writeFile", // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+                        }
+                        xlsx(data as any, settings);
+                    }}
+                >
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle'
+                    onClick={() => {
+                        pdf(<BecaPDF
+                            Becas={becas as any}
+                            modo={opcion}
+                        />).toBlob().then(res => {
+                            let url = URL.createObjectURL(res);
+                            let a = document.createElement('a');
+                            a.download = "listado-becas" + dayjs().format('DD/MM/YYYY - HH:mm:ss');
+                            a.href = url;
+                            a.click();
+                            a.remove();
+                        });
+                    }}
+                >
                     <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>

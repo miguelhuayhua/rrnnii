@@ -12,15 +12,17 @@ import Image from 'next/legacy/image';
 import dayjs from "dayjs";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Tabla from "../componentes/Tabla";
-import { TbReload } from "react-icons/tb";
 import { SwitchBox } from "@/app/componentes/Datos";
 import { useSnackbar } from "@/providers/SnackbarProvider";
 import axios from "axios";
+import xlsx from 'json-as-xlsx';
 import { Icon } from '@iconify/react';
 import { fileDomain } from "@/utils/globals";
 import { red } from "@mui/material/colors";
 import { ChipBox } from "@/app/componentes/Mostrar";
 import { Button } from "rsuite";
+import InstitucionesPDF from "./PDF";
+import { pdf } from "@react-pdf/renderer";
 export default function Page() {
     const [opcion, setOpcion] = useState('todo');
     const { openSnackbar } = useSnackbar();
@@ -62,14 +64,50 @@ export default function Page() {
                             setInstituciones(res.data);
                             setPrevInstituciones(res.data);
                             setOpcion('todo');
+                            setLoad(false);
                         });
                     }}>
                     <Icon icon='nrk:reload' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle' onClick={() => {
+                    let data = [
+                        {
+                            sheet: "Instituciones",
+                            columns: [
+                                { label: "ID", value: "id" },
+                                { label: "Nombre", value: (row: any) => row.nombre },
+                                { label: "Creado el", value: (row: any) => row.createdAt },
+                                { label: "Estado", value: (row: any) => (row.estado ? "Activo" : "Inactivo") },
+                                { label: "Ubicación", value: (row: any) => row.ubicacion },
+                                { label: "Contacto", value: (row: any) => row.contacto || "Sin contacto" },
+                                { label: "Video", value: (row: any) => row.video || "No disponible" },
+                                { label: "Web", value: (row: any) => row.web || "No disponible" },
+                            ],
+                            content: instituciones,
+                        },
+                    ];
+                    let settings = {
+                        fileName: `listado-de-instituciones-${dayjs().format("DD-MM-YYYY_HH-mm-ss")}`,
+                        writeMode: "writeFile",
+                    };
+                    xlsx(data, settings);
+                }}>
                     <Icon icon='fa-regular:file-excel' fontSize={22} />
                 </Button>
-                <Button appearance='subtle'>
+                <Button appearance='subtle'
+                    onClick={() => {
+                        pdf(<InstitucionesPDF modo={opcion} instituciones={instituciones} />)
+                            .toBlob()
+                            .then((res) => {
+                                const url = URL.createObjectURL(res);
+                                const a = document.createElement('a');
+                                a.download = `listado-instituciones-${dayjs().format('DD-MM-YYYY_HH-mm-ss')}.pdf`;
+                                a.href = url;
+                                a.click();
+                                a.remove();
+                            });
+                    }}
+                >
                     <Icon icon='fa-regular:file-pdf' fontSize={22} />
                 </Button>
             </Stack>
