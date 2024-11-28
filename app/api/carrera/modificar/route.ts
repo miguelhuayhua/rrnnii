@@ -13,7 +13,7 @@ const POST = async (request: NextRequest) => {
             let resimage = await axios.post(fileDomain + '/upload', formimg, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'modo': 'pasantia',
+                    'modo': 'carrera',
                     'tipo': 'img'
                 }
             });

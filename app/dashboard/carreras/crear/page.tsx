@@ -75,7 +75,8 @@ export default function Page() {
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}

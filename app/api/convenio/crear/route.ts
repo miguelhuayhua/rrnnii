@@ -64,6 +64,7 @@ const POST = async (request: NextRequest) => {
                         imagen: resimage.data.path,
                         finalizacion: form.get('finalizacion'),
                         tipo: form.get('tipo'),
+                        descripcionCorta: form.get('descripcioncorta'),
                         pais: form.get('tipo') == 'nacional' ? 'BO' : form.get('pais'),
                         continente: form.get('tipo') == 'nacional' ? 'SA' : form.get('continente'),
                         Institucion: {

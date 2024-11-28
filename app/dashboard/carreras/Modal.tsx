@@ -1,22 +1,14 @@
 'use client';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import React, { useState } from 'react';
-import { Box, Grid, Backdrop, CircularProgress } from '@mui/material';
+import { Grid, Backdrop, CircularProgress } from '@mui/material';
 import { Carrera } from '@prisma/client';
-import { BotonFilled, BotonSimple } from '@/app/componentes/Botones';
-import { Normal, Titulo } from '@/app/componentes/Textos';
+import { Titulo } from '@/app/componentes/Textos';
 import { Controller, useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
 import { useFilePicker } from 'use-file-picker';
-import { BsImageAlt } from 'react-icons/bs';
-import { InputBox } from '@/app/componentes/Datos';
-import { axiosInstance } from '@/globals';
 import { useModal } from '@/providers/ModalProvider';
 import Image from 'next/legacy/image';
-import { grey } from '@mui/material/colors';
 import { useSnackbar } from '@/providers/SnackbarProvider';
-import { IoClose } from 'react-icons/io5';
 import axios from 'axios';
 import { Icon } from '@iconify/react';
 import { Modal, Input, Button, Form, Text, InputNumber } from 'rsuite';
@@ -31,7 +23,7 @@ export default function ModalCarrera({ setCarrera, Carrera,
     setCarreras, setPrevCarreras
 }: Props) {
 
-    const { control, formState: { errors, isDirty }, handleSubmit, setValue, watch } = useForm<Carrera>({
+    const { control, formState: { isDirty }, handleSubmit, setValue, watch } = useForm<Carrera>({
         defaultValues: Carrera, shouldFocusError: true
     });
     const [load, setLoad] = useState(false);
@@ -100,7 +92,8 @@ export default function ModalCarrera({ setCarrera, Carrera,
                                 alignItems: 'center',
                                 transition: 'color 0.25s',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                cursor: 'pointer'
                             }}
                                 className='drop'
                                 onClick={() => openFilePicker()}

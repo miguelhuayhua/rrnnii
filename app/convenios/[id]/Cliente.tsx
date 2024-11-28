@@ -1,7 +1,7 @@
 'use client';
 import { Negrita, Normal, Titulo } from "@/app/componentes/Textos";
 import { Avatar, Box, Breadcrumbs, Grid, Stack } from "@mui/material";
-import { Carrera, Convenio, ConvenioCarrera, Institucion } from "@prisma/client";
+import { Carrera, Convenio, ConvenioCarrera, Institucion, Unidad } from "@prisma/client";
 import Image from 'next/legacy/image';
 import { Icon } from '@iconify/react';
 import parse from 'html-react-parser';
@@ -25,9 +25,13 @@ import { compartirEnFacebook, compartirEnlaceEnWhatsApp, compartirEnX } from "@/
 dayjs.locale('es');
 export default function Cliente({ value }: Props) {
     const [convenios, setConvenios] = useState([]);
+    const [unidad, setUnidad] = useState<Partial<Unidad>>();
     useEffect(() => {
         axios.post('/api/convenio/listar', { id: value.id, skip: 0, take: 5 }).then(res => {
             setConvenios(res.data);
+        });
+        axios.post('/api/unidad/x').then(res => {
+            setUnidad(res.data);
         });
     }, []);
     return (
@@ -118,7 +122,7 @@ export default function Cliente({ value }: Props) {
                         <Stack spacing={2}>
                             <Link
                                 target='_blank'
-                                href={`https://wa.me/${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}`}>
+                                href={`https://wa.me/${value.Institucion.contacto ? `${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}` : `591${unidad?.contacto}`}`}>
                                 <Button block
                                     appearance="primary" size='lg'>
                                     Contactarme
@@ -362,7 +366,7 @@ export default function Cliente({ value }: Props) {
                     {
                         convenios.length == 0 ?
                             <Grid item xs={12} >
-                                <Normal sx={{ textAlign: 'center' }}>No se encontraron más convenios disponibles</Normal>
+                                <Normal sx={{ textAlign: 'center', mb: 2 }}>No se encontraron más convenios disponibles</Normal>
                             </Grid> :
                             convenios.map((value: Convenio) => (
                                 <Grid key={value.id} item xs={12} my={2}>
@@ -388,7 +392,7 @@ export default function Cliente({ value }: Props) {
                     <Grid item xs={6}>
                         <Link style={{ borderRadius: 0 }}
                             target='_blank'
-                            href={`https://wa.me/${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}`}>
+                            href={`https://wa.me/${value.Institucion.contacto ? `${paises.find(pais => pais.value == value.pais)?.codigoTelefono}${value.Institucion.contacto}` : `591${unidad?.contacto}`}`}>
                             <Button block style={{ borderRadius: 0 }}
                                 appearance="primary" size='lg'>
                                 Contactarme

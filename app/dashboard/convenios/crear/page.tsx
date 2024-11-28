@@ -108,7 +108,7 @@ export default function Page() {
     }, []);
     return (
         <>
-            <Box px={{ xs: 1, md: 2, lg: 5 }}>
+            <Box px={{ xs: 1, md: 2, lg: 5 }} mb={2}>
                 <Breadcrumbs sx={{ my: 1, mt: 2 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
@@ -332,6 +332,12 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
+
+
+                        </Panel>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <Controller
                                 name="descripcion"
                                 control={control}
@@ -355,17 +361,17 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
-                            <Button
-                                size="lg"
-                                block
-                                style={{ background: red[700] }}
-                                appearance="primary"
-                                onClick={handleSubmit(onSubmit)}>
-                                Crear Convenio</Button>
 
                         </Panel>
                     </Grid>
                 </Grid>
+                <Button
+                    size="lg"
+                    style={{ width: "50%", display: 'block', margin: '0 auto' }}
+                    appearance="primary"
+                    onClick={handleSubmit(onSubmit)}>
+                    Crear Convenio</Button>
+
             </Box>
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}
