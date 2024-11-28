@@ -13,6 +13,7 @@ import ReactPlayer from 'react-player/lazy'
 import axios from 'axios';
 import { Uploader, Modal, Form, Button, Input } from 'rsuite';
 import { fileDomain } from '@/utils/globals';
+import { useSnackbar } from '@/providers/SnackbarProvider';
 interface Props {
     setVideo: any;
     video: VideoType;
@@ -23,36 +24,42 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
     const [load, setLoad] = useState(false);
     const { control, watch, formState: { isDirty }, handleSubmit,
         setValue } = useForm<VideoType>({
-            defaultValues: { ...video, video: '' }, shouldFocusError: true,
+            defaultValues: { ...video }, shouldFocusError: true,
         });
     const { openModal } = useModal();
     const [file, setFile] = useState<any>([]);
-
+    const { openSnackbar } = useSnackbar();
     const onSubmit = (video: VideoType) => {
-        let formData = new FormData();
-        formData.append('titulo', video.titulo);
-        formData.append('descripcion', video.descripcion);
-        formData.append('id', video.id);
-        formData.append('file', file[0] ? file[0].blobFile : '');
-        openModal({
-            titulo: '¿Continuar?',
-            content: 'El video será actualizado',
-            callback: async () => {
-                setLoad(true);
-                let res = await axios.post('/api/video/modificar', formData);
-                if (!res.data.error) {
-                    setVideo(null);
-                    axios.post('/api/video/todo', {}).then(res => {
-                        setVideos(res.data);
-                        setPrevVideos(res.data);
-                    });
+        if (watch('video') || video.video) {
+            let formData = new FormData();
+            formData.append('titulo', video.titulo);
+            formData.append('descripcion', video.descripcion);
+            formData.append('id', video.id);
+            formData.append('file', file[0] ? file[0].blobFile : '');
+            openModal({
+                titulo: '¿Continuar?',
+                content: 'El video será actualizado',
+                callback: async () => {
+                    setLoad(true);
+                    let res = await axios.post('/api/video/modificar', formData);
+                    if (!res.data.error) {
+                        setVideo(null);
+                        axios.post('/api/video/todo', {}).then(res => {
+                            setVideos(res.data);
+                            setPrevVideos(res.data);
+                        });
+                    }
+                    setLoad(false);
+                    return res.data.mensaje;
                 }
-                setLoad(false);
-                return res.data.mensaje;
-            }
-        });
+            });
+        }
+        else {
+            openSnackbar('Por favor introduzca el video solicitado');
+        }
 
     }
+
     const handleFileChange = (fileList: any) => {
         setFile(fileList);
 
@@ -71,6 +78,7 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
                 open={!!video}
                 onClose={() => { setVideo(null) }}
             >
+
                 <Modal.Header>
                     <Titulo mb={2}>
                         Editar {video.titulo}
@@ -79,13 +87,17 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
                 <Modal.Body>
                     <Grid p={2} container spacing={4} component='form' onSubmit={handleSubmit(onSubmit)}>
                         <Grid item xs={12} md={6}>
-                            <ReactPlayer
-                                controls
-                                muted
-                                playing
-                                loop
-                                width="100%"
-                                url={`${watch('video') || fileDomain + video.video}`} />
+                            {
+                                (watch('video') || video.video) ?
+                                    <ReactPlayer
+                                        controls
+                                        muted
+                                        playing
+                                        loop
+                                        width="100%"
+                                        url={`${watch('video').includes('blob') ? watch('video') : (watch('video') ? fileDomain + watch('video') : fileDomain + video.video)}`} />
+                                    : null
+                            }
                             <Uploader
                                 fileList={file}
                                 multiple={false}
@@ -103,7 +115,7 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
                                         borderRadius: 12,
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center'
+                                        justifyContent: 'center',
                                     }}
                                 >
                                     <Normal sx={{ textAlign: 'center' }}>
@@ -119,7 +131,7 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
                                 rules={{ required: 'Título no puede quedar vacío' }}
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
-                                        <Form.ControlLabel>Título de la pasantía</Form.ControlLabel>
+                                        <Form.ControlLabel>Título del video</Form.ControlLabel>
                                         <Input {...field} size='lg' />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
@@ -167,6 +179,29 @@ export default function ModalVideo({ setVideo, video, setVideos, setPrevVideos }
                             </Button>
                             : null
                     }
+                    <Button
+                        size='lg'
+                        onClick={() => {
+                            openModal({
+                                titulo: '¿Está seguro?',
+                                content: 'El contenido de eliminará y el video se desactivará',
+                                async callback() {
+                                    setLoad(true);
+                                    let res = await axios.post('/api/video/borrar', { id: video.id, path: video.video });
+                                    setValue('video', '');
+                                    axios.post('/api/video/todo', {}).then(res => {
+                                        setVideos(res.data);
+                                        setVideo(null);
+                                        setPrevVideos(res.data);
+                                        setLoad(false);
+                                    });
+                                    return res.data.mensaje;
+                                }
+                            })
+                        }}
+                        appearance='ghost'>
+                        Eliminar multimedia
+                    </Button>
                 </Modal.Footer>
             </Modal >
             <Backdrop

@@ -9,7 +9,7 @@ const Normal = styled(Typography)(() =>
 const Titulo = styled(Typography)(({ theme }) =>
 ({
     color: '#212b36',
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: 800,
     [theme.breakpoints.down('sm')]: {
         fontSize: 24

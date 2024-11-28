@@ -95,7 +95,7 @@ export default function Page() {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-            <Box px={{ xs: 1, md: 2, lg: 5 }}>
+            <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
                 <Breadcrumbs sx={{ my: 2 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
@@ -166,7 +166,7 @@ export default function Page() {
                                 rules={{ required: 'Título no puede quedar vacío' }}
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
-                                        <Form.ControlLabel>Título del convenio</Form.ControlLabel>
+                                        <Form.ControlLabel>Título de la beca</Form.ControlLabel>
                                         <Input {...field} size='lg'
                                             onChange={text => field.onChange(toUpperCase(text))} />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
@@ -272,7 +272,7 @@ export default function Page() {
                                 control={control}
                                 render={({ field }) => (
                                     <Form.Group controlId="tipo">
-                                        <Form.ControlLabel>Tipo de convenio</Form.ControlLabel>
+                                        <Form.ControlLabel>Tipo de beca</Form.ControlLabel>
                                         <SelectPicker
                                             {...field}
                                             size="lg"
@@ -301,6 +301,11 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
+
+                        </Panel>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <Controller
                                 name="descripcion"
                                 control={control}
@@ -324,17 +329,18 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
-                            <Button
-                                onClick={handleSubmit(onSubmit)}
-                                appearance="primary"
-                                block
-                                style={{ background: red[700] }}
-                                size='lg'>
-                                Crear Beca
-                            </Button>
+
                         </Panel>
                     </Grid>
                 </Grid>
+                <Button
+                    onClick={handleSubmit(onSubmit)}
+                    appearance="primary"
+                    block
+                    style={{ display: 'block', width: "50%", margin: '0 auto' }}
+                    size='lg'>
+                    Crear Beca
+                </Button>
             </Box>
         </>
     )

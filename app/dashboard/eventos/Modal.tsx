@@ -188,6 +188,11 @@ export default function ModalEvento({ setEvento, Evento, setEventos, setPrevEven
                                         <DatePicker
                                             placement="auto"
                                             block
+                                            shouldDisableDate={(date) => {
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0); // Aseguramos que el tiempo sea 00:00:00 para comparar solo fechas
+                                                return date < today; // Deshabilita las fechas anteriores a hoy
+                                            }}
                                             value={dayjs(field.value, 'DD/MM/YYYY').toDate()}
                                             style={{ marginBottom: 10 }}
                                             size="lg"

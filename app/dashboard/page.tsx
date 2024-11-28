@@ -5,13 +5,13 @@ import axios from "axios";
 import { Icon } from '@iconify/react';
 import { Negrita, Normal, Titulo } from "../componentes/Textos";
 import { useSession } from "next-auth/react";
-import { Box, Divider, Grid, Stack } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import { BoxSombra } from "../componentes/Mostrar";
 import { BarChart, LineChart, Line, Bar, ResponsiveContainer, Tooltip, PieChart, Pie, Cell, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
-import { blue, green, grey, red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 import CountUp from "react-countup";
 import Tabla from "./componentes/Tabla";
-import { BotonFilled, BotonOutline, BotonSimple } from "../componentes/Botones";
+import { BotonOutline } from "../componentes/Botones";
 import { useRouter } from "next/navigation";
 import Image from 'next/legacy/image';
 import { Institucion } from "@prisma/client";
@@ -307,7 +307,7 @@ export default function Page() {
                     </BoxSombra>
                 </Grid>
 
-                <Grid item xs={12} lg={4}>
+                <Grid item xs={12} md={6}>
                     <BoxSombra p={2} >
                         <Negrita sx={{ fontSize: 18 }}>
                             Publicaciones con mayor demanda
@@ -349,7 +349,7 @@ export default function Page() {
                         </ResponsiveContainer>
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={4}>
+                <Grid item xs={12} md={6}>
                     <BoxSombra >
                         <Box px={2} pt={2}>
                             <Negrita sx={{ fontSize: 18 }}>
@@ -380,7 +380,7 @@ export default function Page() {
                         />
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} sm={6} lg={4}>
+                <Grid item xs={12} md={6} mx='auto'>
                     <BoxSombra position='relative' >
                         <Box px={2} pt={2} pr={11}>
                             <Negrita sx={{ fontSize: 18 }}>
@@ -437,6 +437,6 @@ export default function Page() {
                 </Grid>
             </Grid>
 
-        </Box>
+        </Box >
     )
 }

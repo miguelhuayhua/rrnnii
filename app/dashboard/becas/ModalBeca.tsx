@@ -101,7 +101,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                 </Modal.Header>
                 <Modal.Body style={{ padding: "0 10px" }}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={5}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -143,13 +143,16 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                             >
                                 <Button size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
+
+                        </Grid>
+                        <Grid item xs={12} sm={7}>
                             <Controller
                                 name="titulo"
                                 control={control}
                                 rules={{ required: 'Título no puede quedar vacío' }}
                                 render={({ field, fieldState }) => (
                                     <Form.Group style={{ marginBottom: 10 }}>
-                                        <Form.ControlLabel>Título del convenio</Form.ControlLabel>
+                                        <Form.ControlLabel>Título de la beca</Form.ControlLabel>
                                         <Input {...field} size='lg' onChange={text => field.onChange(toUpperCase(text))} />
                                         <Form.ErrorMessage show={!!fieldState.error} placement="bottomStart">
                                             {fieldState.error?.message}
@@ -191,7 +194,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                         <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
                                         <DatePicker
                                             value={dayjs(field.value, 'DD/MM/YYYY').toDate()}
-                                            placement="top"
+                                            placement="auto"
                                             style={{ width: "100%", marginBottom: 10 }}
                                             size="lg"
                                             onChange={ev => {
@@ -213,6 +216,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                         <AutoComplete
                                             onBlur={ev => field.onChange((ev.target as any).value! as any)}
                                             size="lg"
+                                            placement='auto'
                                             value={field.value}
                                             data={
                                                 instituciones.map((value: Institucion) => value.nombre)
@@ -236,7 +240,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                                     data={paises}
                                                     size='lg'
                                                     groupBy="continente"
-                                                    placement="top"
+                                                    placement="auto"
                                                     labelKey="pais"
                                                     valueKey="value"
                                                     style={{
@@ -267,7 +271,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                 control={control}
                                 render={({ field }) => (
                                     <Form.Group controlId="tipo">
-                                        <Form.ControlLabel>Tipo de convenio</Form.ControlLabel>
+                                        <Form.ControlLabel>Tipo de beca</Form.ControlLabel>
                                         <SelectPicker
                                             {...field}
                                             size="lg"
@@ -282,7 +286,7 @@ export default function ModalBeca({ setBeca, Beca, setBecas, setPrevBecas }: Pro
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <Controller
                                 name="descripcion"
                                 control={control}

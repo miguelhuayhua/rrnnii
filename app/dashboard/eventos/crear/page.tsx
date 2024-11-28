@@ -13,7 +13,6 @@ import 'react-quill/dist/quill.snow.css';
 const Editor = dynamic(() => import('react-quill').then((module) => module.default), { ssr: false, loading: () => (<EditorSkeleton />) });
 import { useFilePicker } from 'use-file-picker';
 import { useModal } from "@/providers/ModalProvider";
-import { axiosInstance } from "@/globals";
 import { useState } from "react";
 import Image from 'next/legacy/image';
 import { useSnackbar } from "@/providers/SnackbarProvider";
@@ -23,6 +22,7 @@ import { red } from "@mui/material/colors";
 import { Icon } from '@iconify/react';
 import { Uploader, Text, Button, Panel, Form, Input, SelectPicker, DatePicker } from "rsuite";
 import dayjs from "dayjs";
+import axios from "axios";
 
 export default function Page() {
     const { control, handleSubmit, setValue, watch } = useForm<Evento>({
@@ -65,7 +65,7 @@ export default function Page() {
                 content: 'Un nuevo evento se agregará',
                 callback: async () => {
                     setLoad(true);
-                    let res = await axiosInstance.post('/api/evento/crear', form);
+                    let res = await axios.post('/api/evento/crear', form);
                     if (!res.data.error) {
                         router.back();
                         router.refresh();
@@ -81,7 +81,7 @@ export default function Page() {
     }
     return (
         <>
-            <Box px={{ xs: 1, md: 2, lg: 5 }}>
+            <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
                 <Breadcrumbs sx={{ my: 2 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
@@ -202,6 +202,11 @@ export default function Page() {
                                         <DatePicker
                                             placement="auto"
                                             block
+                                            shouldDisableDate={(date) => {
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0); // Aseguramos que el tiempo sea 00:00:00 para comparar solo fechas
+                                                return date < today; // Deshabilita las fechas anteriores a hoy
+                                            }}
                                             style={{ marginBottom: 10 }}
                                             size="lg"
                                             onChange={ev => {
@@ -226,11 +231,17 @@ export default function Page() {
                                         )}
                                     /> : null
                             }
+
+
+                        </Panel>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <Controller
                                 name="descripcion"
                                 control={control}
                                 render={({ field }) => (
-                                    <Form.Group >
+                                    <Form.Group style={{ marginBottom: 10 }} >
                                         <Form.ControlLabel>Descripción</Form.ControlLabel>
                                         <Editor
                                             value={field.value}
@@ -250,19 +261,18 @@ export default function Page() {
                                 )}
                             />
 
-                            <Button
-                                size="lg"
-                                block
-                                style={{ background: red[700], marginTop: 10 }}
-                                appearance="primary"
-                                onClick={handleSubmit(onSubmit)}>
-                                Crear Evento
-                            </Button>
 
                         </Panel>
                     </Grid>
-
                 </Grid >
+                <Button
+                    size="lg"
+                    block
+                    style={{ display: 'block', margin: '0px auto', width: "50%" }}
+                    appearance="primary"
+                    onClick={handleSubmit(onSubmit)}>
+                    Crear Evento
+                </Button>
             </Box >
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}

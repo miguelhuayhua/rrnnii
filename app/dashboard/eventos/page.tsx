@@ -64,7 +64,7 @@ export default function Page() {
                         axios.post('/api/evento/todo', {}).then(res => {
                             setEventos(res.data);
                             setPrevEventos(res.data);
-                            setOpcion('todo');
+                            setOpcion('vigente');
                             setLoad(false);
                         });
                     }}>

@@ -104,7 +104,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                 </Modal.Header>
                 <Modal.Body>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} mx='auto' sm={6}>
+                        <Grid item xs={12} mx='auto' sm={5}>
                             <div style={{
                                 aspectRatio: 1,
                                 border: `1px dashed #aaa`,
@@ -148,7 +148,7 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                             </Uploader>
 
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={7}>
                             <Controller
                                 name="titulo"
                                 control={control}
@@ -262,6 +262,11 @@ export default function ModalPasantia({ setPasantia, Pasantia, setPasantias, set
                                             placement="top"
                                             style={{ width: "100%", marginBottom: 10 }}
                                             size="lg"
+                                            shouldDisableDate={(date) => {
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0); // Aseguramos que el tiempo sea 00:00:00 para comparar solo fechas
+                                                return date < today; // Deshabilita las fechas anteriores a hoy
+                                            }}
                                             onChange={ev => {
                                                 field.onChange(dayjs(ev).format("DD/MM/YYYY"))
                                             }} />

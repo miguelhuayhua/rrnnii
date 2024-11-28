@@ -184,7 +184,7 @@ const Cliente = () => {
                 </Grid>
             </Box>
             <Box mt={4}
-                px={{ xs: 1, sm: 10, md: 20, lg: 40, xl: 60 }}
+                px={{ xs: 1, sm: 10, md: 20, lg: 40, xl: 50 }}
                 display='flex' flexDirection='column' alignItems='center'>
                 {
                     Convenios.length > 0 ?

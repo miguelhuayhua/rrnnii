@@ -95,7 +95,7 @@ export default function Page() {
     }, []);
     return (
         <>
-            <Box px={{ xs: 1, md: 2, lg: 5 }}>
+            <Box px={{ xs: 1, md: 2, lg: 5 }} pb={2}>
                 <Breadcrumbs sx={{ mb: 1, mt: 2 }}>
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
@@ -254,9 +254,14 @@ export default function Page() {
                                     <Form.Group controlId="fecha">
                                         <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
                                         <DatePicker
-                                            placement="top"
+                                            placement="auto"
                                             style={{ width: "100%", marginBottom: 10 }}
                                             size="lg"
+                                            shouldDisableDate={(date) => {
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0); // Aseguramos que el tiempo sea 00:00:00 para comparar solo fechas
+                                                return date < today; // Deshabilita las fechas anteriores a hoy
+                                            }}
                                             onChange={ev => {
                                                 field.onChange(dayjs(ev).format("DD/MM/YYYY"))
                                             }} />
@@ -281,6 +286,12 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
+
+
+                        </Panel>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Panel shaded style={{ background: 'white' }}>
                             <Controller
                                 name="descripcion"
                                 control={control}
@@ -304,15 +315,16 @@ export default function Page() {
                                     </Form.Group>
                                 )}
                             />
-                            <Button size='lg'
-                                block appearance='primary'
-                                style={{ background: red[700] }}
-                                onClick={handleSubmit(onSubmit)} >
-                                Crear Pasantia
-                            </Button>
+
                         </Panel>
                     </Grid>
                 </Grid>
+                <Button size='lg'
+                    block appearance='primary'
+                    style={{ display: 'block', width: "50%", margin: '0 auto' }}
+                    onClick={handleSubmit(onSubmit)} >
+                    Crear Pasantia
+                </Button>
             </Box>
             <Backdrop
                 sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1000 })}

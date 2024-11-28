@@ -73,7 +73,7 @@ export default function Page() {
             form.append('pdf', convenio.pdf);
             form.append('descripcion', convenio.descripcion);
             form.append('portada', portada);
-            form.append('documento', documento.legth > 0 ? documento[0].blobFile : '');
+            form.append('documento', documento[0] ? documento[0].blobFile : '');
             form.append('continente', convenio.continente);
             form.append('pais', convenio.pais);
             form.append('descripcioncorta', convenio.descripcionCorta);
@@ -165,7 +165,7 @@ export default function Page() {
                                 onChange={setDocumento}
                                 accept=".pdf, .doc, .docx"
                             >
-                                <Button style={{ zIndex: 2000 }}
+                                <Button
                                     size='lg' block>Seleccionar archivo...</Button>
                             </Uploader>
                         </Panel>
@@ -199,6 +199,7 @@ export default function Page() {
                                         <AutoComplete
                                             onBlur={ev => field.onChange((ev.target as any).value! as any)}
                                             size="lg"
+                                            placement="auto"
                                             data={
                                                 instituciones.map((value: Institucion) => value.nombre)
                                             } />
@@ -222,6 +223,8 @@ export default function Page() {
                                             style={{ width: "100%", marginBottom: 10 }}
                                             labelKey="nombre"
                                             {...field}
+                                            placement='auto'
+                                            searchable={true}
                                             size="lg"
                                             valueKey="id" data={carreras}
                                             renderMenuItem={(label, item) => (
@@ -246,9 +249,14 @@ export default function Page() {
                                     <Form.Group controlId="fecha">
                                         <Form.ControlLabel>Fecha de finalización</Form.ControlLabel>
                                         <DatePicker
-                                            placement="top"
+                                            placement="auto"
                                             style={{ width: "100%", marginBottom: 10 }}
                                             size="lg"
+                                            shouldDisableDate={(date) => {
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0); // Aseguramos que el tiempo sea 00:00:00 para comparar solo fechas
+                                                return date < today; // Deshabilita las fechas anteriores a hoy
+                                            }}
                                             onChange={ev => {
                                                 field.onChange(dayjs(ev).format("DD/MM/YYYY"))
                                             }} />
@@ -267,6 +275,7 @@ export default function Page() {
                                         <SelectPicker
                                             {...field}
                                             size="lg"
+                                            placement="auto"
                                             cleanable={false}
                                             style={{ marginBottom: 10, width: "100%" }}
                                             data={[{ label: 'Nacional', value: 'nacional' },
@@ -291,7 +300,8 @@ export default function Page() {
                                                     data={paises}
                                                     size='lg'
                                                     groupBy="continente"
-                                                    placement="top"
+                                                    placement="auto"
+                                                    searchable
                                                     labelKey="pais"
                                                     valueKey="value"
                                                     style={{

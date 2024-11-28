@@ -129,7 +129,7 @@ export default function Page() {
                                     <Form.Group controlId="fecha">
                                         <Form.ControlLabel>Fecha de nacimiento</Form.ControlLabel>
                                         <DatePicker
-                                            placement="top"
+                                            placement="auto"
                                             style={{ width: "100%", marginBottom: 10 }}
                                             size="lg"
                                             // Deshabilitar fechas futuras
@@ -156,6 +156,7 @@ export default function Page() {
                                             size="lg"
                                             defaultValue={field.value}
                                             cleanable={false}
+                                            placement="auto"
                                             style={{ marginBottom: 10, width: "100%" }}
                                             data={[{ label: 'Jefe de unidad', value: 'jefe' },
                                             { label: 'Técnico', value: 'tecnico' },
@@ -243,9 +244,9 @@ export default function Page() {
                                             defaultValue={field.value}
                                             cleanable={false}
                                             style={{ marginBottom: 10, width: "100%" }}
-                                            data={[{ label: 'Jefe de unidad', value: 'jefe' },
-                                            { label: 'Administrador', value: 'admin' },
-                                            { label: 'Usuario', value: 'usuario' }
+                                            data={[
+                                                { label: 'Administrador', value: 'admin' },
+                                                { label: 'Usuario', value: 'usuario' }
                                             ]}
                                             searchable={false}
                                         />

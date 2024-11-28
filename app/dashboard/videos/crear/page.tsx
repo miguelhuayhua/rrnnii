@@ -72,7 +72,7 @@ export default function Page() {
     return (
         <>
             <Box px={{ xs: 1, md: 2, lg: 5 }}>
-                <Breadcrumbs sx={{ mb: 1 }} >
+                <Breadcrumbs sx={{ mb: 1, mt: 2 }} >
                     <Link style={{ textDecoration: 'none' }} href="/dashboard">
                         <Normal>Principal</Normal>
                     </Link>
@@ -120,7 +120,8 @@ export default function Page() {
                                         borderRadius: 12,
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center'
+                                        justifyContent: 'center',
+                                        
                                     }}
                                 >
                                     <Normal sx={{ textAlign: 'center' }}>

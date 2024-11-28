@@ -79,7 +79,7 @@ export default function ModalInstitucion({ setInstitucion, Institucion, setInsti
                         Editar {Institucion.nombre}
                     </Titulo>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={{padding:'0 16px'}}>
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={6}>
                             <div style={{
