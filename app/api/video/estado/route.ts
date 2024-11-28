@@ -9,7 +9,7 @@ const POST = async (request: NextRequest) => {
             },
             where: { id }
         });
-        return Response.json({ error: false, mensaje: `Video ${estado ? 'Activada' : 'Desactivada'}` });
+        return Response.json({ error: false, mensaje: `Video ${estado ? 'Activado' : 'Desactivado'}` });
     } catch (error) {
         console.log(error)
         return Response.json({
