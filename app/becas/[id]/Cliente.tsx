@@ -331,7 +331,7 @@ export default function Cliente({ value }: Props) {
                                     }}>
                                         <Icon icon='hugeicons:teacher' fontSize={40}
                                             style={{ marginRight: 20 }} />
-                                        {value.encargado}
+                                        {value.encargado ||'No proporcionado aún'}
                                     </Titulo>
 
                                 </Box>

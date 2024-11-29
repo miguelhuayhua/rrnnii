@@ -39,7 +39,7 @@ const POST = async (request: NextRequest) => {
                         pdf: resdoc.data.path,
                         imagen: resimage.data.path,
                         modalidad: form.get('modalidad'),
-                        descripcionCorta: form.get('descripcionCorta'),
+                        descripcionCorta: form.get('descripcioncorta'),
                         finalizacion: form.get('finalizacion'),
                         Institucion: { connect: { nombre: institucion } },
                         PasantiaCarrera: {
@@ -58,7 +58,7 @@ const POST = async (request: NextRequest) => {
                         pdf: resdoc.data.path,
                         imagen: resimage.data.path,
                         modalidad: form.get('modalidad'),
-                        descripcionCorta: form.get('descripcionCorta'),
+                        descripcionCorta: form.get('descripcioncorta'),
                         finalizacion: form.get('finalizacion'),
                         Institucion: { create: { nombre: institucion, logo: '' } },
                         PasantiaCarrera: {

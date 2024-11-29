@@ -380,7 +380,7 @@ export default function Page() {
                         />
                     </BoxSombra>
                 </Grid>
-                <Grid item xs={12} md={6} mx='auto'>
+                <Grid item xs={12} lg={6} mx='auto'>
                     <BoxSombra position='relative' >
                         <Box px={2} pt={2} pr={11}>
                             <Negrita sx={{ fontSize: 18 }}>

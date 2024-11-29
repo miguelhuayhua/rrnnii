@@ -235,7 +235,7 @@ const POST = async (request: NextRequest) => {
                     })),
             ];
             const Instituciones = await prisma.institucion.findMany({
-                orderBy: { id: 'desc' }
+                orderBy: { id: 'desc' }, where: { estado: true }
             })
             return Response.json({
                 conteoPais: resultadoPorPais, mayorVisto: conteoGeneral,
