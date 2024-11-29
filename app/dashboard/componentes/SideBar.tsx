@@ -50,7 +50,7 @@ const SideBar = () => {
             bgcolor='white'
             pt={2}
             top={0} borderRight={{ xs: 'none', md: '1px solid #ccc' }}
-            width={300} minWidth={95} overflow={'scroll'} height={"100vh"} zIndex={20}>
+            width={300} minWidth={95} overflow={'scroll'} height={"100vh"} zIndex={2}>
             <SideBarItem onclick={() => {
                 router.push('/dashboard/');
                 setMove(false);

@@ -41,7 +41,7 @@ export default function ModalLogin({ open, setOpen }: Props) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 2001 // Asegura que esté al frente
+                zIndex: 2001 ,// Asegura que esté al frente
             }}
             open={!!open}
             onClose={() => { setOpen(false) }}
