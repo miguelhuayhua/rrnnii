@@ -56,7 +56,7 @@ export default function Home() {
                         }}
                     >
                         Los convenios realizados promueven una variedad de actividades en instituciones del exterior como nacionales,
-                        con el objetivo de fomentar intercambios culturales y favorecer la colaboración entre docentes, investigadores y estudiantes.
+                        con el objetivo de fomentar intercambios culturales.
                     </Typography>
                     <Suspense>
                         <Cliente />

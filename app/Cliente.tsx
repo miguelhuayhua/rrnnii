@@ -203,7 +203,7 @@ const Cliente = () => {
                 </Grid>
 
             </Box>
-            <Grid container bgcolor='#fff' px={2} py={5} borderTop={`1px solid ${grey[400]}`}>
+            <Grid container   bgcolor='#fff'  py={5} borderTop={`1px solid ${grey[400]}`}>
                 <Grid item xs={6} position='relative' px={{ xs: 2, md: 5, lg: 10 }}>
                     <Imagen alt="" width={100} height={80} src='/revista.png' layout='responsive' />
                 </Grid>
@@ -226,7 +226,7 @@ const Cliente = () => {
                         Explorar Convenios
                     </Button>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} mt={5}>
                     <Negrita textAlign='end'>
                         CONOCE EL MUNDO
                     </Negrita>

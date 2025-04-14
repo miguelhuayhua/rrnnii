@@ -4,12 +4,12 @@ const nextConfig = {
         serverComponentsExternalPackages: ['@react-pdf/renderer'],
     },
     images: {
+        unoptimized: true,
         remotePatterns: [
+
             {
-                hostname: 'localhost'
-            },
-            {
-                hostname: '**'
+                hostname: 'rrnniifile.upea.bo',
+                protocol: 'https',
             }
         ]
     }

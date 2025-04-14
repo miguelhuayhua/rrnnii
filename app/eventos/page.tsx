@@ -53,7 +53,7 @@ export default function Home() {
                             px: { xs: 2, sm: 10, md: 20, lg: 30, xl: 50 }
                         }}
                     >
-                        La Unidad de Relaciones Internacionales de la UPEA organiza eventos que promueven la internacionalización, como ferias de movilidad, conferencias, talleres y convenios académicos, fortaleciendo el intercambio cultural y académico.
+                        La Unidad de Relaciones Internacionales de la UPEA organiza eventos que promueven la internacionalización, como ferias de movilidad, conferencias, talleres y convenios académicos, fortaleciendo el intercambio cultural.
                     </Typography>
                     <Suspense>
                         <Cliente />
